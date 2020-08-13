@@ -13,7 +13,9 @@
           <label class="font-medium text-sm">Password</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border" type="password" placeholder="e.g. your password"/>
         </div>
-        <button class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-sm font-semibold">Sign up</button>
+        <nuxt-link to="/dashboard">
+          <button type="button" class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-sm font-semibold">Sign up</button>
+        </nuxt-link>
       </form>
     </section>
     <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.</br>Copyright ©2020 Neutron Creative Inc.</section>
