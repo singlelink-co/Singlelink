@@ -4,26 +4,27 @@
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Themes</h2>
       <div class="flex flex-row">
-        <div class="rounded nc-theme active">
-          <div class="nc-inner">
-            <div class="nc-bottom-inner"></div>
+        <div class="rounded nc-theme active bg-gray-200">
+          <div class="nc-inner bg-white">
+            <div class="nc-bottom-inner bg-gray-600"></div>
           </div>
         </div>
-        <div class="rounded nc-theme">
-          <div class="nc-inner">
-            <div class="nc-bottom-inner"></div>
+        <div class="rounded nc-theme bg-indigo-500">
+          <div class="nc-inner bg-white">
+            <div class="nc-bottom-inner bg-gray-500"></div>
           </div>
         </div>
-        <div class="rounded nc-theme">
-          <div class="nc-inner">
-            <div class="nc-bottom-inner"></div>
+        <div class="rounded nc-theme bg-blue-800">
+          <div class="nc-inner bg-blue-500">
+            <div class="nc-bottom-inner bg-white"></div>
           </div>
         </div>
       </div>
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom CSS</h2>
-      <textarea rows="5" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" placeholder="e.g. a { color: rgba(0,0,0,.8); }"></textarea>
+      <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border" placeholder="e.g. a { color: rgba(0,0,0,.8); }"></textarea>
+      <button type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
     </div>
   </section>
 </template>
@@ -36,7 +37,7 @@
     width: 80px
     height: 80px
     margin-right: 10px
-    background: rgba(0,0,0,.15)
+
     cursor: pointer
     &.active
       box-shadow: inset 0 0 2px 2px #5353EC
@@ -44,14 +45,12 @@
       width: 40px
       height: 40px
       border-radius: 40px
-      background: rgba(0,0,0,.15)
       display: flex
       flex-direction: column
       overflow: hidden
       .nc-bottom-inner
         width: 100%
         height: 15px
-        background: rgba(0,0,0,.15)
         margin-top: auto
     &:hover
       transform: scale(1.02)

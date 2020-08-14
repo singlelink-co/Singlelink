@@ -31,7 +31,7 @@
             </select>
           </div>
         </div>
-        <button type="button" @click="attempt_login" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
+        <button type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
     </div>
     <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
