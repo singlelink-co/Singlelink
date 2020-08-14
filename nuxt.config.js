@@ -11,6 +11,13 @@ export default {
   */
   target: 'static',
   /*
+  ** Hosting 404 Hotfix
+  ** See https://ko.nuxtjs.org/faq/netlify-deployment/
+  */
+  generate: {
+    fallback: true
+  },
+  /*
   ** Headers of the page
   ** See https://nuxtjs.org/api/configuration-head
   */

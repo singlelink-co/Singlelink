@@ -1,6 +1,6 @@
 <template>
-  <div class="flex w-11/12 min-h-screen bg-gray-100 justify-center">
-    <section class="flex flex-col p-8 items-center text-center max-w-md">
+  <div class="flex min-h-screen w-screen bg-gray-100 justify-center">
+    <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-md">
       <img class="nc-avatar mb-2" src="https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"/>
       <h1 class="text-gray-800 font-semibold text-2xl">Lyle Kauffman</h1>
       <h3 class="text-gray-600 mb-4">Stanford alumni, currently building FundHippo</h3>

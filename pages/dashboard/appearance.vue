@@ -1,7 +1,7 @@
 <template>
-  <section class="flex flex-col p-8 items-center justify-center">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Apperance</h1>
-    <div class="flex flex-col p-6 bg-gray-100 rounded w-full">
+  <section class="flex flex-col p-8 items-center bg-gray-100 flex-grow">
+    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Appearance</h1>
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Themes</h2>
       <div class="flex flex-row">
         <div class="rounded nc-theme active">

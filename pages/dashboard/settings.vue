@@ -1,10 +1,10 @@
 <template>
-  <section class="flex flex-col p-8 items-center justify-center">
+  <section class="flex flex-col p-8 items-center flex-grow bg-gray-100">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Settings</h1>
-    <div class="flex flex-col p-6 bg-gray-100 rounded w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Profile details</h2>
       <form class="flex flex-col">
-        <div class="flex flex-row mb-4">
+        <div class="flex flex-row mb-3">
           <div class="flex flex-col w-1/2 mr-4">
             <label class="font-medium text-sm text-gray-800" for="name">Full Name</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="name" type="text" placeholder="e.g. Jane Doe" v-model="name"/>
@@ -14,11 +14,29 @@
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="email" type="email" placeholder="e.g. jane@gmail.com" v-model="email"/>
           </div>
         </div>
+        <div class="flex flex-row mb-6">
+          <div class="flex flex-col w-1/2 mr-3">
+            <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="handle" type="text" placeholder="e.g. janedoe" v-model="name"/>
+          </div>
+          <div class="flex flex-col w-1/2">
+            <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
+            <select class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="visibility">
+              <option>Unpublished, not viewable</option>
+              <option>Public, no sensitive content (Most used)</option>
+              <option>Public, sensitive content warning</option>
+            </select>
+          </div>
+        </div>
         <button type="button" @click="attempt_login" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
     </div>
-    <div class="flex flex-col p-6 bg-gray-100 rounded w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Account management</h2>
+    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-1/2">
+        <h2 class="text-gray-800 font-semibold text-lg w-full">Delete your account</h2>
+        <p class="text-gray-600 font-medium">Done with Singlelink? Click the button on your right to delete your account and all related info.</p>
+      </div>
+      <button type="button" @click="attempt_login" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete your account</button>
     </div>
   </section>
 </template>
