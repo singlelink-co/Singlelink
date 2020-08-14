@@ -24,8 +24,8 @@
       </div>
       <Nuxt/>
     </section>
-    <section class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0">
-      <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto" style="height: 58px;">
+    <section class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100">
+      <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white" style="height: 57px;">
         <p class="font-medium mr-2 text-gray-800">Your Singlelink:</p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline" href="https://singlelink.co/u/jimbisenius/">https://singlelink.co/u/jimbisenius/</a>
       </div>
