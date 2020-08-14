@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col p-8 items-center bg-gray-100 flex-grow">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Appearance</h1>
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full">
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Themes</h2>
       <div class="flex flex-row">
         <div class="rounded nc-theme active">
@@ -20,6 +20,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full">
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom CSS</h2>
+      <textarea rows="5" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" placeholder="e.g. a { color: rgba(0,0,0,.8); }"></textarea>
     </div>
   </section>
 </template>

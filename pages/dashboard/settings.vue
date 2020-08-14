@@ -17,7 +17,10 @@
         <div class="flex flex-row mb-6">
           <div class="flex flex-col w-1/2 mr-3">
             <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="handle" type="text" placeholder="e.g. janedoe" v-model="name"/>
+            <div class="flex flex-row rounded border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
+              <span class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0">singlelink.co/u/</span>
+              <input class="p-2 flex-grow" id="handle" type="text" placeholder="e.g. janedoe" v-model="name"/>
+            </div>
           </div>
           <div class="flex flex-col w-1/2">
             <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
