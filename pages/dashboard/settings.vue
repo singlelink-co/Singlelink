@@ -39,7 +39,7 @@
         <h2 class="text-gray-800 font-semibold text-lg w-full">Reset your password</h2>
         <p class="text-gray-600 font-medium">Forgot your password? Click the button to the right to have a reset link sent to your account email.</p>
       </div>
-      <button type="button" @click="" class="ml-2 flex p-3 text-sm text-white text-center bg-blue-600 hover:bg-blue-700 rounded font-semibold w-1/3 justify-center align-center">Request reset link</button>
+      <button type="button" @click="open_info_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-blue-600 hover:bg-blue-700 rounded font-semibold w-1/3 justify-center align-center">Request reset link</button>
     </div>
     <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-1/2">
@@ -55,6 +55,13 @@
         <button @click="attempt_delete" type="button" class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold">Yes, delete my account</button>
       </div>
     </div>
+    <div v-if="info_modal" @click="close_info_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
+      <div v-on:click.stop class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg">
+        <h2 class="text-gray-800 font-semibold text-xl">Password reset requested</h2>
+        <p class="text-gray-600 text-sm">A password reset link has been sent to your account email inbox successfully. Make sure to check your spam folder.</p>
+        <button @click="close_info_modal" type="button" class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">Close</button>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -63,10 +70,17 @@ export default {
   layout: 'dashboard',
   data: function () {
     return {
+      info_modal: false,
       modal: false
     };
   },
   methods: {
+    open_info_modal: function() {
+      return this.info_modal = true;
+    },
+    close_info_modal: function() {
+      return this.info_modal = false;
+    },
     open_modal: function() {
       return this.modal = true;
     },
