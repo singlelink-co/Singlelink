@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col p-8 items-center flex-grow bg-gray-100">
+  <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-scroll">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Settings</h1>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Profile details</h2>
@@ -33,6 +33,13 @@
         </div>
         <button type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
+    </div>
+    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-1/2">
+        <h2 class="text-gray-800 font-semibold text-lg w-full">Reset your password</h2>
+        <p class="text-gray-600 font-medium">Forgot your password? Click the button to the right to have a reset link sent to your account email.</p>
+      </div>
+      <button type="button" @click="" class="ml-2 flex p-3 text-sm text-white text-center bg-blue-600 hover:bg-blue-700 rounded font-semibold w-1/3 justify-center align-center">Request reset link</button>
     </div>
     <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-1/2">
