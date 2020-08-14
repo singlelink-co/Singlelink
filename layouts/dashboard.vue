@@ -30,7 +30,7 @@
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline" href="https://singlelink.co/u/jimbisenius/">https://singlelink.co/u/jimbisenius/</a>
       </div>
       <div class="phone-display">
-        <iframe src="http://localhost:8080/u/i-write-garbage-code"></iframe>
+        <iframe src="/u/i-write-garbage-code"></iframe>
       </div>
     </section>
   </div>
