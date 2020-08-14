@@ -52,17 +52,17 @@ export default {
       email: '',
       password: '',
       error: null
-    }
+    };
   },
   methods: {
     attempt_login () {
-      if (!this.email) { this.error = 'Email address is required to login.'; return }
-      if (!this.password) { this.error = 'Password is required to login.'; return }
-      this.$router.push('/dashboard')
+      if (!this.email) return this.error = 'Email address is required to login.';
+      if (!this.password) return this.error = 'Password is required to login.';
+      this.$router.push('/dashboard');
     },
     clear_errors: () => {
-      this.error = null
+      this.error = null;
     }
   }
-}
+};
 </script>

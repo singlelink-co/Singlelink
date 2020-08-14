@@ -1,6 +1,6 @@
 <template>
   <section class="flex flex-col p-8 items-center justify-center">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full">Blocks</h1>
+    <h1 class="text-gray-800 font-semibold text-2xl w-full">Apperance</h1>
   </section>
 </template>
 
