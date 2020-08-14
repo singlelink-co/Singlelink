@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-row w-screen h-screen">
     <section class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0" style="width: 70px; max-width: 70px;">
-      <img src="/Icon.svg" class="mb-auto" style="width: 35px;"/>
-      <img style="width: 100%; border-radius: 100px; cursor: pointer;" src="https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"/>
+      <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
+      <img style="margin-top: auto; width: 100%; border-radius: 100px; cursor: pointer;" src="https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"/>
     </section>
     <section class="flex flex-col flex-grow">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">

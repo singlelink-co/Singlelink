@@ -56,9 +56,11 @@ export default {
   },
   methods: {
     attempt_login () {
-      if (!this.email) return this.error = 'Email address is required to login.';
-      if (!this.password) return this.error = 'Password is required to login.';
+      this.$nuxt.$loading.start();
+      if (!this.email){ this.error = 'Email address is required to login.'; return this.$nuxt.$loading.finish(); }
+      if (!this.password) { this.error = 'Password is required to login.'; return this.$nuxt.$loading.finish(); }
       this.$router.push('/dashboard');
+      return this.$nuxt.$loading.finish();
     },
     clear_errors: () => {
       this.error = null;

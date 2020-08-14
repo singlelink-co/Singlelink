@@ -39,13 +39,40 @@
         <h2 class="text-gray-800 font-semibold text-lg w-full">Delete your account</h2>
         <p class="text-gray-600 font-medium">Done with Singlelink? Click the button on your right to delete your account and all related info.</p>
       </div>
-      <button type="button" @click="attempt_login" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete your account</button>
+      <button type="button" @click="open_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete your account</button>
+    </div>
+    <div v-if="modal" @click="close_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
+      <div v-on:click.stop class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg">
+        <h2 class="text-gray-800 font-semibold text-xl">Are you sure?</h2>
+        <p class="text-gray-600 text-sm">Deleting your account is irreversible, please confirm to continue.</p>
+        <button @click="attempt_delete" type="button" class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold">Yes, delete my account</button>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  layout: 'dashboard'
+  layout: 'dashboard',
+  data: function () {
+    return {
+      modal: false
+    };
+  },
+  methods: {
+    open_modal: function() {
+      return this.modal = true;
+    },
+    close_modal: function() {
+      return this.modal = false;
+    },
+    attempt_delete: function() {
+      //this.close_modal();
+      this.$nuxt.$loading.start();
+      this.$router.push('/');
+      this.$nuxt.$loading.finish();
+      return;
+    }
+  }
 };
 </script>
