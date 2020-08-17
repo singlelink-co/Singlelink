@@ -5,12 +5,12 @@
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
       <a :href="link.url" v-for="link in links" class="w-full">
-        <div class="nc-link sl-item">
+        <div class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item">
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
         </div>
       </a>
       <div v-html="profile.custom_html"></div>
-      <style type="text/css" v-if="theme">
+      <component is="style" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};
         }
@@ -27,8 +27,26 @@
         .sl-label {
         color: {{ theme.colors.text.secondary }};
         }
-      </style>
-      <style type="text/css">{{ profile.custom_css || null }}</style>
+      </component>
+      <component is="style">{{ profile.custom_css || null }}</component>
+      <component is="style">
+        .nc-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 1000px;
+        }
+        .nc-link {
+        @apply rounded shadow bg-white p-4 w-full font-medium mb-3;
+        cursor: pointer;
+        transition: .15s ease-in-out;
+        }
+        .nc-link:hover {
+        transform: scale(1.02);
+        }
+        .nc-link:active {
+        transform: scale(1);
+        }
+      </component>
     </section>
   </div>
 </template>
@@ -89,9 +107,9 @@
     border-radius: 1000px
 
   .nc-link
-    @apply rounded shadow bg-white p-4 w-full font-medium mb-3
     cursor: pointer
     transition: .15s ease-in-out
+    overflow: hidden
     &:hover
       transform: scale(1.02)
     &:active
