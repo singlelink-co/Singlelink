@@ -17,7 +17,13 @@
           <p class="text-gray-600 text-sm" v-if="modal_intent == 'save'">Fill out the form below to add a new link to your page.</p>
           <p class="text-gray-600 text-sm" v-if="modal_intent == 'edit'">Fill out the form below to edit & save your link changes.</p>
         </div>
-        <form class="p-6 pt-4 bg-gray-100">
+        <form class="p-6 pt-4 bg-gray-100 w-full">
+          <div v-if="this.error" class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm">
+            <img style="width: 12px;" src="/caution.svg">
+            <div class="flex flex-col ml-2">
+              {{ this.error }}
+            </div>
+          </div>
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="label">Label</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="label" type="text" placeholder="e.g. My Calendar" v-model="pending_link.label"/>
@@ -54,7 +60,8 @@ export default {
         label: '',
         link: ''
       },
-      user: null
+      user: null,
+      error: null
     };
   },
   computed: {
@@ -107,8 +114,7 @@ export default {
       this.modal = false;
     },
     save_and_close: function() {
-      this.add_new_link();
-      this.close_modal();
+      this.add_new_link(true);
     },
     save_and_continue: function() {
       this.add_new_link();
@@ -149,9 +155,10 @@ export default {
           console.log(error);
         });
     },
-    add_new_link: function () {
-      if(!this.pending_link.label) return alert('Link label required');
-      if(!this.pending_link.url) return alert('Link URL required');
+    clear_errors: function() {this.error = null;},
+    add_new_link: function (close) {
+      if(!this.pending_link.label) return this.error = 'Link label required';
+      if(!this.pending_link.url) return this.error = 'Link URL required';
       this.$axios.post('/link/create', {
         label: this.pending_link.label,
         url: this.pending_link.url,
@@ -163,6 +170,7 @@ export default {
           this.links.push(response.data);
           this.refresh_preview();
           this.clear_pending();
+          if(close) this.close_modal();
         })
         .catch((error) => {
           console.log('Error adding new link to profile');
@@ -170,6 +178,7 @@ export default {
         });
     },
     clear_pending: function () {
+      this.clear_errors();
       this.pending_link = {
         label: '',
         url: '',
