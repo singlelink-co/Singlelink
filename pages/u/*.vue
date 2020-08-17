@@ -28,7 +28,7 @@
         color: {{ theme.colors.text.secondary }};
         }
       </style>
-      <style type="text/css" v-if="profile.custom_css">{{ profile.custom_css }}</style>
+      <style type="text/css">{{ profile.custom_css || null }}</style>
     </section>
   </div>
 </template>
