@@ -89,7 +89,7 @@
     border-radius: 1000px
 
     .nc-link
-    @apply rounded shadow bg-white p-4 w-full font-medium mb-3
+      @apply rounded shadow bg-white p-4 w-full font-medium mb-3
       cursor: pointer
       transition: .15s ease-in-out
       &:hover
