@@ -244,7 +244,7 @@ export default {
           console.log(response);
           if(response.active_profile.theme) this.active_theme = response.active_profile.theme;
           if(response.active_profile.custom_css) this.custom_css = response.active_profile.custom_css;
-          if(response.active_profile.custom_html) this.custom_css = response.active_profile.custom_html;
+          if(response.active_profile.custom_html) this.custom_html = response.active_profile.custom_html;
         })
         .catch((error) => {
           console.log('Error fetching user data');
