@@ -9,6 +9,7 @@
           <span class="font-medium text-gray-900">{{ link.label }}</span>
         </div>
       </a>
+      <div v-html="profile.custom_html"></div>
       <style type="text/css" v-if="profile.custom_css">{{ profile.custom_css }}</style>
     </section>
   </div>
@@ -16,9 +17,20 @@
 
 <script>
   export default {
+    /*head: function() {
+      return {
+        title: this.profile.headline || this.user.name || '',
+        meta: {
+          hid: 'description',
+
+        }
+      };
+    },*/
     data: function() {
       return {
         profile: {
+          custom_css: null,
+          custom_html: null,
           image_url: null,
           headline: null,
           subtitle: null,
