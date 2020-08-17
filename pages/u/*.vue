@@ -1,15 +1,33 @@
 <template>
-  <div class="flex min-h-screen w-screen bg-gray-100 justify-center w-full">
+  <div class="flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
       <img class="nc-avatar mb-2" v-if="profile.image_url || user.avatar_url || user.hash" :src="profile.image_url || user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
-      <h1 class="text-gray-800 font-semibold text-2xl">{{ profile.headline || user.name }}</h1>
-      <h3 class="text-gray-600 mb-4">{{ profile.subtitle }}</h3>
+      <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
+      <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
       <a :href="link.url" v-for="link in links" class="w-full">
-        <div class="nc-link">
-          <span class="font-medium text-gray-900">{{ link.label }}</span>
+        <div class="nc-link sl-item">
+          <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
         </div>
       </a>
       <div v-html="profile.custom_html"></div>
+      <style type="text/css" v-if="theme">
+        .sl-headline {
+        color: {{ theme.colors.text.primary }};
+        }
+        .sl-subtitle {
+          opacity: .85;
+        color: {{ theme.colors.text.primary }};
+        }
+        .sl-bg {
+        background: {{ theme.colors.fill.primary }};
+        }
+        .sl-item {
+        background: {{ theme.colors.fill.secondary }};
+        }
+        .sl-label {
+        color: {{ theme.colors.text.secondary }};
+        }
+      </style>
       <style type="text/css" v-if="profile.custom_css">{{ profile.custom_css }}</style>
     </section>
   </div>
@@ -17,20 +35,11 @@
 
 <script>
   export default {
-    /*head: function() {
-      return {
-        title: this.profile.headline || this.user.name || '',
-        meta: {
-          hid: 'description',
-
-        }
-      };
-    },*/
     data: function() {
       return {
         profile: {
-          custom_css: null,
           custom_html: null,
+          custom_css: null,
           image_url: null,
           headline: null,
           subtitle: null,
@@ -44,6 +53,7 @@
           hash: null,
           avatar_url: null
         },
+        theme: null,
         links: null,
         failed: false
       };
@@ -52,20 +62,22 @@
       this.$axios.$post('/profile/fetch', {
         handle: window.location.pathname.replace('/u/','')
       })
-      .then((response) => {
-        console.log('Profile fetched successfully');
-        console.log(response);
-        this.profile = response.profile;
-        this.links = response.links.sort(function (a, b) {
-          return a.order - b.order;
+        .then((response) => {
+          console.log('Profile fetched successfully');
+          console.log(response);
+          this.profile = response.profile;
+          this.links = response.links.sort(function (a, b) {
+            return a.order - b.order;
+          });
+          this.user = response.user;
+          this.theme = response.theme || null;
+          console.log(response.theme);
+        })
+        .catch((error) => {
+          console.log('Error fetching profile');
+          console.log(error);
+          this.failed = true;
         });
-        this.user = response.user;
-      })
-      .catch((error) => {
-        console.log('Error fetching profile');
-        console.log(error);
-        this.failed = true;
-      });
     }
   };
 </script>
@@ -76,13 +88,13 @@
     height: 60px
     border-radius: 1000px
 
-  .nc-link
+    .nc-link
     @apply rounded shadow bg-white p-4 w-full font-medium mb-3
-    cursor: pointer
-    transition: .15s ease-in-out
-    &:hover
-      transform: scale(1.02)
-    &:active
-      transform: scale(1)
+      cursor: pointer
+      transition: .15s ease-in-out
+      &:hover
+        transform: scale(1.02)
+      &:active
+        transform: scale(1)
 
 </style>
