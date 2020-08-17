@@ -2,7 +2,7 @@
   <div class="flex flex-row w-screen h-screen">
     <section class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0" style="width: 70px; max-width: 70px;">
       <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
-      <img style="margin-top: auto; width: 100%; border-radius: 100px; cursor: pointer;" src="https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"/>
+      <img style="margin-top: auto; width: 100%; border-radius: 100px; cursor: pointer;" v-if="user" :src="user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
     </section>
     <section class="flex flex-col flex-grow">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
@@ -27,10 +27,10 @@
     <section class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white" style="height: 57px;">
         <p class="font-medium mr-2 text-gray-800">Your Singlelink:</p>
-        <a class="text-indigo-600 hover:text-indigo-700 hover:underline" href="https://singlelink.co/u/jimbisenius/">https://singlelink.co/u/jimbisenius/</a>
+        <a class="text-indigo-600 hover:text-indigo-700 hover:underline" :href="profile_url">{{ profile_url }}</a>
       </div>
       <div class="phone-display">
-        <iframe src="/u/i-write-garbage-code"></iframe>
+        <iframe id="preview-frame" :src="preview_url"></iframe>
       </div>
     </section>
   </div>
@@ -87,8 +87,27 @@ html {
   export default {
     data: () => {
       return {
-        active: 'dashboard'
+        active: 'dashboard',
+        user: null
       };
+    },
+    computed: {
+      profile_url: function() {
+        try {
+          return window.location.origin + '/u/' + this.user.active_profile.handle;
+        } catch(err) {
+          console.log(err);
+          return 'https://singlelink.co/';
+        }
+      },
+      preview_url: function() {
+        try {
+          return window.location.origin + '/u-preview/' + this.user.active_profile.handle;
+        } catch(err) {
+          console.log(err);
+          return 'https://singlelink.co/';
+        }
+      }
     },
     methods: {
       get_active_styles (page) {
@@ -111,10 +130,25 @@ html {
         } catch (err) {
           console.log(err);
         }
+      },
+      fetch_user_data: function() {
+        this.$axios.$post('/user/fetch', {
+          token : this.$store.getters['auth/get_token']
+        })
+          .then((response) => {
+            console.log('Fetched user data successfully');
+            console.log(response);
+            this.user = response;
+          })
+          .catch((error) => {
+            console.log('Error fetching user data');
+            console.log(error);
+          });
       }
     },
     mounted: function() {
       this.set_active();
+      this.fetch_user_data();
     },
     watch: {
       $route () {

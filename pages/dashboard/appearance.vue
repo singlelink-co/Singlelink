@@ -23,8 +23,8 @@
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom CSS</h2>
-      <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border" placeholder="e.g. a { color: rgba(0,0,0,.8); }"></textarea>
-      <button type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
+      <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border" placeholder="e.g. a { color: rgba(0,0,0,.8); }" v-model="custom_css"></textarea>
+      <button @click="save_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
     </div>
   </section>
 </template>
@@ -61,6 +61,49 @@
 
 <script>
 export default {
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: 'authenticated',
+  data: function() {
+    return {
+      custom_css: ''
+    };
+  },
+  mounted: function() {
+    this.fetch_user_data();
+  },
+  methods: {
+    refresh_preview: function() {
+      document.getElementById('preview-frame').src = document.getElementById('preview-frame').src;
+    },
+    fetch_user_data: function() {
+      this.$axios.$post('/user/fetch', {
+        token : this.$store.getters['auth/get_token']
+      })
+        .then((response) => {
+          console.log('Fetched user data successfully');
+          console.log(response);
+          if(response.active_profile.custom_css) this.custom_css = response.active_profile.custom_css;
+        })
+        .catch((error) => {
+          console.log('Error fetching user data');
+          console.log(error);
+        });
+    },
+    save_changes: function() {
+      this.$axios.$post('/profile/update', {
+        token: this.$store.getters['auth/get_token'],
+        custom_css: this.custom_css
+      })
+        .then((response) => {
+          console.log('Successfully saved changes');
+          console.log(response);
+          this.refresh_preview();
+        })
+        .catch((error) => {
+          console.log('Error saving changes');
+          console.log(error);
+        });
+    },
+  }
 };
 </script>

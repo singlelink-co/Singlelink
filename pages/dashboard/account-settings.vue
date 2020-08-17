@@ -1,17 +1,17 @@
 <template>
   <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Profile settings</h1>
+    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Settings</h1>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Details</h2>
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Profile details</h2>
       <form class="flex flex-col">
         <div class="flex flex-row mb-3">
           <div class="flex flex-col w-1/2 mr-4">
-            <label class="font-medium text-sm text-gray-800" for="name">Headline</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="name" type="text" placeholder="e.g. Jane Doe, 21" v-model="user.active_profile.headline"/>
+            <label class="font-medium text-sm text-gray-800" for="name">Full Name</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="name" type="text" placeholder="e.g. Jane Doe" v-model="user.name"/>
           </div>
           <div class="flex flex-col w-1/2">
-            <label class="font-medium text-sm text-gray-800" for="email">Subtitle</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="email" type="email" placeholder="e.g. Developer at Neutron from Raleigh NC" v-model="user.active_profile.subtitle"/>
+            <label class="font-medium text-sm text-gray-800" for="email">Email Address</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="email" type="email" placeholder="e.g. jane@gmail.com" v-model="user.email"/>
           </div>
         </div>
         <div class="flex flex-row mb-6">
@@ -24,20 +24,27 @@
           </div>
           <div class="flex flex-col w-1/2">
             <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
-            <select class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="visibility" v-model="user.active_profile.visibility">
+            <select class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="visibility" v-model="this.user.active_profile.visibility">
               <option value="unpublished">Unpublished, not viewable</option>
               <option value="published">Public, no sensitive content (Most used)</option>
               <option value="published-18+">Public, sensitive content warning</option>
             </select>
           </div>
         </div>
-        <button @click="save_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
+        <button type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
     </div>
     <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-1/2">
-        <h2 class="text-gray-800 font-semibold text-lg w-full">Delete this profile</h2>
-        <p class="text-gray-600 font-medium">Done with this profile? Click the button on your right to delete this profile and all related content.</p>
+        <h2 class="text-gray-800 font-semibold text-lg w-full">Reset your password</h2>
+        <p class="text-gray-600 font-medium">Forgot your password? Click the button to the right to have a reset link sent to your account email.</p>
+      </div>
+      <button type="button" @click="open_info_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-blue-600 hover:bg-blue-700 rounded font-semibold w-1/3 justify-center align-center">Request reset link</button>
+    </div>
+    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-1/2">
+        <h2 class="text-gray-800 font-semibold text-lg w-full">Delete your account</h2>
+        <p class="text-gray-600 font-medium">Done with Singlelink? Click the button on your right to delete your account and all related info.</p>
       </div>
       <button type="button" @click="open_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete your account</button>
     </div>
@@ -66,13 +73,10 @@ export default {
     return {
       info_modal: false,
       modal: false,
-      original_handle: '',
       user: {
         name: '',
         email: '',
         active_profile: {
-          headline: '',
-          subtitle: '',
           handle: '',
           visibility: ''
         }
@@ -83,28 +87,6 @@ export default {
     this.fetch_user_data();
   },
   methods: {
-    refresh_preview: function() {
-      document.getElementById('preview-frame').src = document.getElementById('preview-frame').src;
-    },
-    save_changes: function() {
-      this.$axios.$post('/profile/update', {
-        token: this.$store.getters['auth/get_token'],
-        headline: this.user.active_profile.headline || null,
-        subtitle: this.user.active_profile.subtitle || null,
-        handle: this.user.active_profile.handle || null,
-        visibility: this.user.active_profile.visibility || null,
-      })
-      .then((response) => {
-        console.log('Successfully saved changes');
-        console.log(response);
-        if(this.user.active_profile.handle != this.original_handle) return location.reload();
-        this.refresh_preview();
-      })
-      .catch((error) => {
-        console.log('Error saving changes');
-        console.log(error);
-      });
-    },
     open_info_modal: function() {
       return this.info_modal = true;
     },
@@ -132,7 +114,6 @@ export default {
           console.log('Fetched user data successfully');
           console.log(response);
           this.user = response;
-          this.original_handle = this.user.active_profile.handle;
         })
         .catch((error) => {
           console.log('Error fetching user data');

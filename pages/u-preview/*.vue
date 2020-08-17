@@ -16,9 +16,11 @@
 
 <script>
   export default {
+    middleware: 'authenticated',
     data: function() {
       return {
         profile: {
+          custom_css: null,
           image_url: null,
           headline: null,
           subtitle: null,
@@ -37,8 +39,8 @@
       };
     },
     mounted: function() {
-      this.$axios.$post('/profile/fetch', {
-        handle: window.location.pathname.replace('/u/','')
+      this.$axios.$post('/profile/fetch-preview', {
+        token: this.$store.getters['auth/get_token']
       })
       .then((response) => {
         console.log('Profile fetched successfully');

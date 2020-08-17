@@ -45,7 +45,9 @@
 </style>
 
 <script>
-export default {
+  import Cookies from "~/middleware/utils";
+
+  export default {
   name: 'Login',
   data: () => {
     return {
@@ -54,13 +56,30 @@ export default {
       error: null
     };
   },
+    middleware: 'unauthenticated',
   methods: {
     attempt_login () {
       this.$nuxt.$loading.start();
       if (!this.email){ this.error = 'Email address is required to login.'; return this.$nuxt.$loading.finish(); }
       if (!this.password) { this.error = 'Password is required to login.'; return this.$nuxt.$loading.finish(); }
-      this.$router.push('/dashboard');
-      return this.$nuxt.$loading.finish();
+      this.$axios.post('/user/login', {
+        email: this.email,
+        password: this.password
+      })
+        .then((response) => {
+          console.log('Login successful');
+          console.log(response);
+          Cookies.setCookie('singlelink_token', response.data.token, 7);
+          this.$store.commit('auth/login', response.data.token);
+          this.$nuxt.$loading.finish();
+          return this.$router.push('/dashboard');
+        })
+        .catch((err) => {
+          console.log('Login failed');
+          console.log(this.error);
+          this.error = 'Your email or password is incorrect!';
+          return this.$nuxt.$loading.finish();
+        });
     },
     clear_errors: () => {
       this.error = null;
