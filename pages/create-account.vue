@@ -16,6 +16,13 @@
           <input class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border" type="email" placeholder="e.g. jane@gmail.com" v-model="email"/>
         </div>
         <div class="flex flex-col mb-4">
+          <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
+          <div class="flex flex-row p-2 pt-0 pb-0 mt-2 text-sm border-solid border-gray-200 rounded-sm border">
+            <span class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0">{{ origin }}/u/</span>
+            <input class="p-2 flex-grow" id="handle" type="text" placeholder="e.g. janedoe" v-model="handle"/>
+          </div>
+        </div>
+        <div class="flex flex-col mb-4">
           <label class="font-medium text-sm">Password</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border" type="password" placeholder="e.g. your password" v-model="password"/>
         </div>
@@ -39,18 +46,26 @@
       return {
         email: '',
         password: '',
+        handle: '',
         error: null
       };
+    },
+    computed: {
+      origin: function() {
+        return window.location.origin;
+      }
     },
     middleware: 'unauthenticated',
     methods: {
       attempt_register () {
         this.$nuxt.$loading.start();
-        if (!this.email){ this.error = 'Email address is required to login.'; return this.$nuxt.$loading.finish(); }
-        if (!this.password) { this.error = 'Password is required to login.'; return this.$nuxt.$loading.finish(); }
+        if (!this.email){ this.error = 'Email address is required to register.'; return this.$nuxt.$loading.finish(); }
+        if (!this.email){ this.error = 'A unique handle is required to register.'; return this.$nuxt.$loading.finish(); }
+        if (!this.password) { this.error = 'A password is required to register.'; return this.$nuxt.$loading.finish(); }
         this.$axios.post('/user/create', {
           email: this.email,
-          password: this.password
+          handle: this.handle,
+          password: this.password,
         })
           .then((response) => {
             console.log('Created account successful');
@@ -63,7 +78,7 @@
           .catch((err) => {
             console.log('Creating account failed');
             console.log(this.error);
-            this.error = 'Failed to create account, due to email in use. Please try again with a different email address.';
+            this.error = 'Failed to create account, email or handle already in use. Please try again with a different email address.';
             return this.$nuxt.$loading.finish();
           });
       },
