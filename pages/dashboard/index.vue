@@ -10,29 +10,31 @@
       </draggable>
     </div>
     <div v-if="modal" @click="close_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
-      <div v-on:click.stop class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg">
-        <h2 class="text-gray-800 font-semibold text-xl" v-if="modal_intent == 'save'">Create new link</h2>
-        <h2 class="text-gray-800 font-semibold text-xl" v-if="modal_intent == 'edit'">Edit link</h2>
-        <p class="text-gray-600 text-sm" v-if="modal_intent == 'save'">Fill out the form below to add a new link to your page.</p>
-        <p class="text-gray-600 text-sm" v-if="modal_intent == 'edit'">Fill out the form below to edit & save your link changes.</p>
-        <form class="p-4 mt-2 bg-gray-100 rounded-sm">
-          <div class="flex flex-col mr-4 mb-3">
+      <div v-on:click.stop class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl">
+        <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+          <h2 class="text-gray-800 font-semibold text-xl" v-if="modal_intent == 'save'">Create new link</h2>
+          <h2 class="text-gray-800 font-semibold text-xl" v-if="modal_intent == 'edit'">Edit link</h2>
+          <p class="text-gray-600 text-sm" v-if="modal_intent == 'save'">Fill out the form below to add a new link to your page.</p>
+          <p class="text-gray-600 text-sm" v-if="modal_intent == 'edit'">Fill out the form below to edit & save your link changes.</p>
+        </div>
+        <form class="p-6 pt-4 bg-gray-100">
+          <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="label">Label</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="label" type="text" placeholder="e.g. My Calendar" v-model="pending_link.label"/>
           </div>
-          <div class="flex flex-col mr-4 mb-3">
+          <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="link" type="text" placeholder="e.g. Jane Doe" v-model="pending_link.url"/>
           </div>
-          <div class="flex flex-row mt-6" v-if="modal_intent == 'save'">
-            <button @click="save_and_close" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">Save and add link</button>
-            <button @click="save_and_continue" type="button" class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center">Save and continue</button>
-          </div>
-          <div class="flex flex-row mt-6" v-if="modal_intent == 'edit'">
-            <button @click="save_link_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">Save changes</button>
-            <button @click="close_modal" type="button" class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center">Close without saving</button>
-          </div>
         </form>
+        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0" v-if="modal_intent == 'save'">
+          <button @click="save_and_close" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">Save and add link</button>
+          <button @click="save_and_continue" type="button" class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center">Save and continue</button>
+        </div>
+        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0" v-if="modal_intent == 'edit'">
+          <button @click="save_link_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">Save changes</button>
+          <button @click="delete_link" type="button" class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center">Delete link</button>
+        </div>
       </div>
     </div>
   </section>
@@ -110,6 +112,23 @@ export default {
     },
     save_and_continue: function() {
       this.add_new_link();
+    },
+    delete_link: function() {
+      this.$axios.$post('/link/destroy', {
+        token : this.$store.getters['auth/get_token'],
+        target: this.pending_link._id,
+      })
+      .then((response) => {
+        console.log('Successfully destroyed link');
+        console.log(response);
+        this.links = response;
+        this.refresh_preview();
+        this.close_modal();
+      })
+        .catch((error) => {
+          console.log('Link destruction unsuccessful');
+          console.log(error);
+        });
     },
     save_link_changes: function() {
       this.$axios.$post('/link/update', {
