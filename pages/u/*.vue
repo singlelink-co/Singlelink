@@ -88,13 +88,13 @@
     height: 60px
     border-radius: 1000px
 
-    .nc-link
-      @apply rounded shadow bg-white p-4 w-full font-medium mb-3
-      cursor: pointer
-      transition: .15s ease-in-out
-      &:hover
-        transform: scale(1.02)
-      &:active
-        transform: scale(1)
+  .nc-link
+    @apply rounded shadow bg-white p-4 w-full font-medium mb-3
+    cursor: pointer
+    transition: .15s ease-in-out
+    &:hover
+      transform: scale(1.02)
+    &:active
+      transform: scale(1)
 
 </style>
