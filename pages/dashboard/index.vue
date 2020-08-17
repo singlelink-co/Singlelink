@@ -150,8 +150,8 @@ export default {
         });
     },
     add_new_link: function () {
-      if(!this.pending_link.label) alert('Link label required');
-      if(!this.pending_link.url) alert('Link URL required');
+      if(!this.pending_link.label) return alert('Link label required');
+      if(!this.pending_link.url) return alert('Link URL required');
       this.$axios.post('/link/create', {
         label: this.pending_link.label,
         url: this.pending_link.url,
