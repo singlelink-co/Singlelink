@@ -17,7 +17,7 @@
         </div>
         <div class="flex flex-col mb-4">
           <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
-          <div class="flex flex-row p-2 pt-0 pb-0 mt-2 text-sm border-solid border-gray-200 rounded-sm border">
+          <div class="flex flex-row p-2 pl-0 pt-0 pb-0 mt-2 text-sm border-solid border-gray-200 rounded-sm border">
             <span class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0">{{ origin }}/u/</span>
             <input class="p-2 flex-grow" id="handle" type="text" placeholder="e.g. janedoe" v-model="handle"/>
           </div>
@@ -52,7 +52,7 @@
     },
     computed: {
       origin: function() {
-        return window.location.origin;
+        return window.location.origin.replace('https://').replace('http://');
       }
     },
     middleware: 'unauthenticated',
@@ -78,7 +78,7 @@
           .catch((err) => {
             console.log('Creating account failed');
             console.log(this.error);
-            this.error = 'Failed to create account, email or handle already in use. Please try again with a different email address.';
+            this.error = 'Failed to create account, email or handle already in use. Try again with a different email address.';
             return this.$nuxt.$loading.finish();
           });
       },
