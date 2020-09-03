@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="flex flex-col w-full mb-6">
-          <label class="font-medium text-sm text-gray-800" for="visibility">Image URL</label>
+          <label class="font-medium text-sm text-gray-800" for="visibility">Avatar Image URL</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="image_url" type="text" placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg" v-model="user.active_profile.image_url"/>
         </div>
         <button @click="save_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
