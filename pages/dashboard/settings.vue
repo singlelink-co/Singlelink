@@ -14,7 +14,7 @@
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="email" type="email" placeholder="e.g. Developer at Neutron from Raleigh NC" v-model="user.active_profile.subtitle"/>
           </div>
         </div>
-        <div class="flex flex-row mb-6">
+        <div class="flex flex-row mb-4">
           <div class="flex flex-col w-1/2 mr-3">
             <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
             <div class="flex flex-row rounded border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
@@ -30,6 +30,10 @@
               <option value="published-18+">Public, sensitive content warning</option>
             </select>
           </div>
+        </div>
+        <div class="flex flex-col w-full mb-6">
+          <label class="font-medium text-sm text-gray-800" for="visibility">Image URL</label>
+          <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="image_url" type="text" placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg" v-model="user.active_profile.image_url"/>
         </div>
         <button @click="save_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
@@ -71,6 +75,7 @@ export default {
         name: '',
         email: '',
         active_profile: {
+          image_url: '',
           headline: '',
           subtitle: '',
           handle: '',
@@ -89,6 +94,7 @@ export default {
     save_changes: function() {
       this.$axios.$post('/profile/update', {
         token: this.$store.getters['auth/get_token'],
+        image_url: this.user.active_profile.image_url || null,
         headline: this.user.active_profile.headline || null,
         subtitle: this.user.active_profile.subtitle || null,
         handle: this.user.active_profile.handle || null,
