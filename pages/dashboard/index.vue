@@ -6,7 +6,10 @@
       </div>
       <button @click="open_modal('save')" type="button" class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">Add new link</button>
       <draggable v-model="sorted_links" :list="sorted_links" @change="update_link_order" class="flex flex-col w-full">
-        <div v-if="links && links.length > 0" v-for="link in sorted_links" :key="link._id" @click="edit_link(link)" class="flex flex-row text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer">{{ link.label }}</div>
+        <div v-if="links && links.length > 0" v-for="link in sorted_links" :key="link._id" @click="edit_link(link)" class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer">
+          {{ link.label }}
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-2">{{ link.subtitle }}</span>
+        </div>
       </draggable>
     </div>
     <div v-if="modal" @click="close_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
@@ -29,8 +32,16 @@
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="label" type="text" placeholder="e.g. My Calendar" v-model="pending_link.label"/>
           </div>
           <div class="flex flex-col mb-3">
+            <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle (optional)</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="subtitle" type="text" placeholder="e.g. A list of all my events and available times" v-model="pending_link.subtitle"/>
+          </div>
+          <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="link" type="text" placeholder="e.g. Jane Doe" v-model="pending_link.url"/>
+          </div>
+          <div class="flex flex-col mb-3">
+            <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
+            <textarea lines="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css" placeholder="e.g. Jane Doe" v-model="pending_link.custom_css"></textarea>
           </div>
         </form>
         <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0" v-if="modal_intent == 'save'">
@@ -58,7 +69,9 @@ export default {
       pending_link: {
         _id: '',
         label: '',
-        link: ''
+        subtitle: '',
+        link: '',
+        custom_css: '',
       },
       user: null,
       error: null
@@ -141,7 +154,9 @@ export default {
         token : this.$store.getters['auth/get_token'],
         target: this.pending_link._id,
         label: this.pending_link.label,
+        subtitle: this.pending_link.subtitle,
         url: this.pending_link.url,
+        custom_css: this.pending_link.custom_css,
       })
         .then((response) => {
           console.log('Successfully updated link');
@@ -161,7 +176,9 @@ export default {
       if(!this.pending_link.url) return this.error = 'Link URL required';
       this.$axios.post('/link/create', {
         label: this.pending_link.label,
+        subtitle: this.pending_link.subtitle,
         url: this.pending_link.url,
+        custom_css: this.pending_link.custom_css || '',
         token : this.$store.getters['auth/get_token']
       })
         .then((response) => {
@@ -181,7 +198,9 @@ export default {
       this.clear_errors();
       this.pending_link = {
         label: '',
+        subtitle: '',
         url: '',
+        custom_css: ''
       };
     },
     edit_link: function(link) {
@@ -190,7 +209,9 @@ export default {
       this.pending_link = {
         _id: link._id,
         label: link.label,
-        url: link.url
+        subtitle: link.subtitle || null,
+        custom_css: link.custom_css || null,
+        url: link.url,
       };
       this.open_modal('edit');
     },

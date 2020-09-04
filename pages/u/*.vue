@@ -5,8 +5,9 @@
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
       <a :href="link.url" v-for="link in links" class="w-full">
-        <div class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item">
+        <div class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item flex items-center justify-center flex-col">
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-2">{{ link.subtitle }}</span>
         </div>
       </a>
       <div v-html="profile.custom_html"></div>
