@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
+  <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
       <img class="nc-avatar mb-2" v-if="profile.image_url || user.avatar_url || user.hash" :src="profile.image_url || user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
