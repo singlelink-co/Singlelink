@@ -41,7 +41,7 @@
           </div>
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
-            <textarea lines="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css" placeholder="e.g. Jane Doe" v-model="pending_link.custom_css"></textarea>
+            <textarea lines="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css" placeholder="e.g. background: #5353EC;" v-model="pending_link.custom_css"></textarea>
           </div>
         </form>
         <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0" v-if="modal_intent == 'save'">
