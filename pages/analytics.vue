@@ -4,13 +4,14 @@
       <div class="w-11/12 max-w-6xl flex flex-col md:flex-row">
         <div class="flex flex-col md:mr-4 text-center justify-center md:justify-start md:text-left">
           <h1 class="text-3xl font-medium mb-2">Singlelink global analytics</h1>
-          <p class="text-lg text-gray-700">A public dashboard of all available Singlelink member analytics.</p>
+          <p class="text-lg text-gray-700 mb-2">A public dashboard of all available Singlelink member analytics.</p>
+          <span class="text-gray-500 mr-4 mb-4 md:mb-0">Last updated on {{ new Date().toLocaleString('en-US') }}</span>
         </div>
-        <div class="flex flex-col md:flex-row items-center justify-center md:ml-auto mt-4 md:mt-0">
-          <span class="text-gray-700 mr-4 mb-4 md:mb-0 text-center">Last updated on {{ new Date().toLocaleString('en-US') }}</span>
-          <n-link to="/dashboard">
-            <button class="p-2 pr-4 pl-4 bg-indigo-600 tracking-wide text-sm uppercase font-medium hover:bg-indigo-500 text-white rounded shadow">Return home</button>
-          </n-link>
+        <div class="flex flex-col items-center justify-center md:ml-auto mt-4 md:mt-0">
+            <button @click="refresh_data" class="w-full mb-2 p-2 pr-4 pl-4 bg-indigo-600 tracking-wide text-sm uppercase font-medium hover:bg-indigo-500 text-white rounded shadow">Refresh data</button>
+            <n-link to="/dashboard" class="w-full">
+              <button class="w-full p-2 pr-4 pl-4 bg-gray-100 tracking-wide text-sm uppercase font-medium hover:bg-gray-200 text-gray-600 rounded shadow">Return home</button>
+            </n-link>
         </div>
       </div>
     </section>
@@ -48,9 +49,14 @@
         analytics: {}
       };
     },
+    methods: {
+      refresh_data : async function () {
+        this.analytics = {};
+        this.analytics = await this.$axios.$get('/analytics/fetch');
+      }
+    },
     mounted: async function() {
       this.analytics = await this.$axios.$get('/analytics/fetch');
-      console.log(this.analytics);
     }
   };
 </script>
