@@ -36,7 +36,7 @@
       </section>
       <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row">
         <h2 class="text-xl font-medium mr-4">Total themes</h2>
-        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.users || 'Loading...' }}</p>
+        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.themes || 'Loading...' }}</p>
       </section>
     </div>
     </div>
