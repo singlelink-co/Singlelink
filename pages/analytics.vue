@@ -7,7 +7,7 @@
           <p class="text-lg text-gray-700">A public dashboard of all available Singlelink member analytics.</p>
         </div>
         <div class="flex flex-col md:flex-row items-center justify-center md:ml-auto mt-4 md:mt-0">
-          <span class="text-gray-700 mr-4 mb-4 md:mb-0">Last updated on {{ new Date().toLocaleString('en-US') }}</span>
+          <span class="text-gray-700 mr-4 mb-4 md:mb-0 text-center">Last updated on {{ new Date().toLocaleString('en-US') }}</span>
           <n-link to="/dashboard">
             <button class="p-2 pr-4 pl-4 bg-indigo-600 tracking-wide text-sm uppercase font-medium hover:bg-indigo-500 text-white rounded shadow">Return home</button>
           </n-link>
