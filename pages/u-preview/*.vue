@@ -28,6 +28,10 @@
         .sl-label {
         color: {{ theme.colors.text.secondary }};
         }
+        .sl-link-subtitle {
+        opacity: .85;
+        color: {{ theme.colors.text.secondary }};
+        }
       </component>
       <component is="style">{{ profile.custom_css || null }}</component>
       <component is="style">
