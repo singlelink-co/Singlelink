@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
-    <section v-if="profile.visibility=='published-18+' && age_verification" class="absolute top-0 left-0 right-0 bottom-0 z-10 flex flex-col items-center justify-center w-screen min-h-screen" style="box-shadow: rgba(0, 0, 0, .65) 0  0 10px 5px inset;">
-      <div class="flex flex-col w-full h-full items-center justify-center p-8" style="background:rgba(0,0,0,.65);backdrop-filter:saturate(180%) blur(5px)">
+    <section v-if="profile.visibility=='published-18+' && age_verification" class="fixed top-0 left-0 right-0 z-10 flex flex-col items-center justify-center w-screen h-screen" style="box-shadow: rgba(0, 0, 0, .65) 0  0 10px 5px inset;">
+      <div class="flex flex-col w-full h-full text-center items-center justify-center p-8" style="background:rgba(0,0,0,.65);backdrop-filter:saturate(180%) blur(5px)">
         <span class="text-white text-2xl mb-2">Warning: 18+ only</span>
         <span class="text-gray-200 text-lg mb-4">To continue, please confirm your age below.</span>
         <div class="flex flex-col">
