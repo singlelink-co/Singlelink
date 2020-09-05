@@ -20,7 +20,9 @@
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-2">{{ link.subtitle }}</span>
         </div>
       </a>
-      <div v-html="profile.custom_html"></div>
+      <div>
+        {{ profile.custom_html}}
+      </div>
       <component is="style" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};

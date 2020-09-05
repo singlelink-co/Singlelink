@@ -2,7 +2,21 @@
   <div class="flex flex-row w-screen h-screen">
     <section class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0" style="width: 70px; max-width: 70px;">
       <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
-      <img style="margin-top: auto; width: 100%; border-radius: 100px; cursor: pointer;" v-if="user" :src="user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
+      <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
+        <img @click="toggle_profile_select" v-if="user && profiles.length>=1" style="width: 100%; border-radius: 100px;" :src="user.active_profile.image_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
+        <ul v-if="profile_select" class="absolute bottom-0 rounded shadow bg-white border border-gray-200" style="left: 60px; width: 245px;">
+          <li v-for="profile in profiles" @click="select_profile(profile._id)" class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start">
+            <img class="mr-2 rounded-full" style="width: 100%;max-width: 35px;" :src="profile.image_url || 'https://www.gravatar.com/avatar/' + user.hash" />
+            <div class="flex flex-col">
+              <span class="text-sm font-medium capitalize">{{profile.handle}}</span>
+              <span class="text-xs text-gray-700">{{profile.headline}}</span>
+            </div>
+          </li>
+          <li @click="create_new_profile" class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-center">
+            <span class="text-xs text-gray-700">Create new</span>
+          </li>
+        </ul>
+      </div>
     </section>
     <section class="flex flex-col flex-grow">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
@@ -88,7 +102,9 @@ html {
     data: () => {
       return {
         active: 'dashboard',
-        user: null
+        user: null,
+        profiles: [],
+        profile_select: false,
       };
     },
     computed: {
@@ -110,6 +126,28 @@ html {
       }
     },
     methods: {
+      async create_new_profile() {
+        await this.$axios.$post('/profile/create', {
+          token : this.$store.getters['auth/get_token']
+        });
+        this.profile_select = false;
+        location.reload();
+      },
+      async select_profile(profile) {
+        this.user.active_profile = await this.$axios.$post('/user/set-active', {
+          token : this.$store.getters['auth/get_token'],
+          profile: profile
+        });
+        location.reload();
+      },
+      toggle_profile_select() {
+        this.profile_select = !this.profile_select;
+      },
+      async fetch_profiles() {
+        this.profiles = await this.$axios.$post('/profile/list', {
+          token : this.$store.getters['auth/get_token']
+        });
+      },
       get_active_styles (page) {
         if(page == this.active) return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600";
         return "hover:bg-indigo-100 hover:text-indigo-600 text-gray-700 nc-item-link";
@@ -149,6 +187,7 @@ html {
     mounted: function() {
       this.set_active();
       this.fetch_user_data();
+      this.fetch_profiles();
     },
     watch: {
       $route () {

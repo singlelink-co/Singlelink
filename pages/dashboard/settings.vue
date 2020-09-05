@@ -43,13 +43,13 @@
         <h2 class="text-gray-800 font-semibold text-lg w-full">Delete this profile</h2>
         <p class="text-gray-600 font-medium">Done with this profile? Click the button on your right to delete this profile and all related content.</p>
       </div>
-      <button type="button" @click="open_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete your account</button>
+      <button type="button" @click="open_modal" class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center">Delete this profile</button>
     </div>
     <div v-if="modal" @click="close_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
       <div v-on:click.stop class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg">
         <h2 class="text-gray-800 font-semibold text-xl">Are you sure?</h2>
-        <p class="text-gray-600 text-sm">Deleting your account is irreversible, please confirm to continue.</p>
-        <button @click="attempt_delete" type="button" class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold">Yes, delete my account</button>
+        <p class="text-gray-600 text-sm">Deleting this profile is irreversible, please confirm to continue.</p>
+        <button @click="attempt_delete" type="button" class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold">Yes, delete this profile</button>
       </div>
     </div>
     <div v-if="info_modal" @click="close_info_modal" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
@@ -123,12 +123,13 @@ export default {
     close_modal: function() {
       return this.modal = false;
     },
-    attempt_delete: function() {
-      //this.close_modal();
+    attempt_delete: async function() {
       this.$nuxt.$loading.start();
-      this.$router.push('/');
+      await this.$axios.$post('/profile/destroy', {
+        token : this.$store.getters['auth/get_token']
+      });
       this.$nuxt.$loading.finish();
-      return;
+      return location.replace('/dashboard');
     },
     fetch_user_data: function() {
       this.$axios.$post('/user/fetch', {
