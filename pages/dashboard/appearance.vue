@@ -172,6 +172,7 @@ export default {
         console.log('Themes fetched successfully');
         console.log(response);
         this.themes = response;
+
       })
       .catch((error) => {
         //this.error = 'Failed to fetch themes';

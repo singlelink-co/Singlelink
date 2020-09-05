@@ -20,7 +20,9 @@ export default function (context) {
         .catch((error) => {
           console.log('Error fetching self');
           console.log(error);
-          context.store.commit('auth/login', singlelink_token);
+          //context.store.commit('auth/login', singlelink_token);
+          context.store.commit('auth/login', null);
+          return location.replace('/');
           // verify token
         });
       // context.store.commit('user/set_user', response)

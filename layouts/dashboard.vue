@@ -25,7 +25,7 @@
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
         <n-link to="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="get_active_styles('dashboard')">
-            Blocks
+            Links
           </div>
         </n-link>
         <n-link to="/dashboard/appearance">
