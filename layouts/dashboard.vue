@@ -12,8 +12,11 @@
               <span class="text-xs text-gray-700">{{profile.headline}}</span>
             </div>
           </li>
-          <li @click="create_new_profile" class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-center">
-            <span class="text-xs text-gray-700">Create new</span>
+          <li class=" flex flex-row items-center justify-center">
+            <div class="flex flex-row items-center justify-center w-full">
+              <span @click="create_new_profile" class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700">Create new</span>
+              <span @click="attempt_logout" class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -126,6 +129,9 @@ html {
       }
     },
     methods: {
+      attempt_logout() {
+        return this.$nuxt.$router.push('/logout');
+      },
       async create_new_profile() {
         await this.$axios.$post('/profile/create', {
           token : this.$store.getters['auth/get_token']
