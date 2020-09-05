@@ -8,7 +8,7 @@
       <draggable v-model="sorted_links" :list="sorted_links" @change="update_link_order" class="flex flex-col w-full">
         <div v-if="links && links.length > 0" v-for="link in sorted_links" :key="link._id" @click="edit_link(link)" class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer">
           {{ link.label }}
-          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-2">{{ link.subtitle }}</span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </draggable>
     </div>

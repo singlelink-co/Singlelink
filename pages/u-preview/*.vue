@@ -7,7 +7,7 @@
       <a :href="link.url" v-for="link in links" class="w-full">
         <div class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col" :style="link.custom_css">
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
-          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-2">{{ link.subtitle }}</span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </a>
       <div v-html="profile.custom_html"></div>
