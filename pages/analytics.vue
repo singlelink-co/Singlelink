@@ -21,24 +21,34 @@
         <h2 class="text-xl font-medium mr-4">Total users</h2>
         <p class="text-xl text-indigo-600 ml-auto relative flex items-center justify-center">
           <span v-if="this.analytics.users && this.analytics.users >= 100" class="absolute top-0 text-2xl" style="left: -70px;">🤠🎉</span>
-          {{ analytics.users || 'Loading...' }}
+          {{ analytics.users || '...' }}
         </p>
       </section>
       <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row">
         <h2 class="text-xl font-medium mr-4">Profiles published</h2>
-        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.profiles_published || 'Loading...' }}</p>
+        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.profiles_published || '...' }}</p>
       </section>
     </div>
       <div class="flex flex-col md:flex-row mb-8">
       <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row md:mr-4 mb-8 md:mb-0">
         <h2 class="text-xl font-medium mr-4">Total links</h2>
-        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.links || 'Loading...' }}</p>
+        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.links || '...' }}</p>
       </section>
       <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row">
         <h2 class="text-xl font-medium mr-4">Total themes</h2>
-        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.themes || 'Loading...' }}</p>
+        <p class="text-xl text-indigo-600 ml-auto">{{ analytics.themes || '...' }}</p>
       </section>
     </div>
+      <div class="flex flex-col md:flex-row mb-8">
+        <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row md:mr-4 mb-8 md:mb-0">
+          <h2 class="text-xl font-medium mr-4">Hourly user growth rate</h2>
+          <p class="text-xl text-indigo-600 ml-auto">{{ hourly_growth_rate || '...' }}</p>
+        </section>
+        <section class="w-full md:w-1/2 rounded shadow bg-white p-8 overflow-hidden items-center flex flex-row">
+          <h2 class="text-xl font-medium mr-4">Linear year projection</h2>
+          <p class="text-xl text-indigo-600 ml-auto">{{ projected_users || '...' }}</p>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -46,17 +56,38 @@
   export default {
     data: function() {
       return {
-        analytics: {}
+        analytics: {},
+        hourly_growth_rate: null,
+        projected_users: null
       };
     },
     methods: {
       refresh_data : async function () {
         this.analytics = {};
+        this.hourly_growth_rate = null;
+        this.projected_users = null;
+
         this.analytics = await this.$axios.$get('/analytics/fetch');
-      }
+
+        this.compute_variables();
+      },
+      compute_variables: function() {
+        this.hourly_growth_rate = (this.analytics.users / this.time_difference(new Date(), new Date(1599035400 * 1000)));
+        this.projected_users = this.hourly_growth_rate * 24 * 365;
+
+        this.hourly_growth_rate = this.hourly_growth_rate.toFixed(1);
+        this.projected_users = this.projected_users.toFixed(0);
+      },
+      time_difference: function(dt2, dt1) {
+        var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= (60 * 60);
+        return Math.abs(Math.round(diff));
+      },
     },
     mounted: async function() {
       this.analytics = await this.$axios.$get('/analytics/fetch');
+
+      this.compute_variables();
     }
   };
 </script>
