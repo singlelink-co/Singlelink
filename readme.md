@@ -1,4 +1,4 @@
-<h1><img src="static/singlelink-brandmark.svg" style="width:240px;"/></h1>
+<h1 align="center"><img src="static/singlelink-brandmark.svg" style="width:240px;"/></h1>
 <p align="center">
 	<img src="https://img.shields.io/badge/beta-1.5.0-%2303d2d4" alt="Version">
 	<img src="https://img.shields.io/badge/license-GPL-%236ab04c" alt="License"/>
