@@ -27,8 +27,8 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#download">Download</a> •
+  <a href="#self-hosted-cloud-hosted">Self Hosted vs Cloud Hosted</a> •
+  <a href="#get-started">Get started</a> •
   <a href="#credits">Credits</a> •
   <a href="#related">Related</a> •
   <a href="#license">License</a>
@@ -36,9 +36,7 @@
 
 <img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
 
-<br>
-
-<h2>Key features</h2>
+<h2 id="key-features">Key features</h2>
 
 <ul>
     <li>Link management for unlimited links</li>
@@ -48,3 +46,10 @@
     <li>Custom domain support (coming soon)</li>
     <li>Self-hosted mode (coming soon)</li>
 </ul>
+
+<h2 id="how-to-use">Self Hosted vs Cloud Hosted</h2>
+> Should i sign up at singlelink.co, or should I host the application myself?
+> - Jane Doe
+Great question! When discussing the differences between self-hosted and cloud-hosted, there are a few large differences which make each environment ideal for different use-cases.
+
+<h2 id="get-started">Get started</h2>
