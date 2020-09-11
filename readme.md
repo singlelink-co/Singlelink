@@ -63,10 +63,10 @@ Great question! When discussing the differences between self-hosted and cloud-ho
 <h2 id="credits">Credits</h2>
 Singlelink was built by the following individuals.
 <ul>
-    <li>- Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
-    <li>- Andrew Boyle (<a target="_blank" href="https://twitter.com/drewzr1">@drewzr1</a>)</li>
-    <li>- Navid Kabir (<a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
-    <li>- Manuhe Abebe (<a target="_blank" href="https://twitter.com/manuhegabebe">@manuhegabebe</a>)</li>
+    <li>Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
+    <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/drewzr1">@drewzr1</a>)</li>
+    <li>Navid Kabir (<a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
+    <li>Manuhe Abebe (<a target="_blank" href="https://twitter.com/manuhegabebe">@manuhegabebe</a>)</li>
 </ul>
 Currently, Singlelink lacks contributors outside its founders at Neutron Creative, but, you can help.
 Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelink/issues">issues page</a> today and create your first pull request to get featured here!
