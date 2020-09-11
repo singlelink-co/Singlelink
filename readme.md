@@ -1,9 +1,7 @@
 <h1 align="center">
     <img src="static/singlelink-brandmark.svg" style="width:315px;"/>
     <br>
-    <span style="color:rgba(0,0,0,.75);font-size:12px;">
-        Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
-    </span>
+    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
 </h1>
 <p align="center">
 	<img src="https://img.shields.io/badge/beta-1.5.0-%2303d2d4" alt="Version">
