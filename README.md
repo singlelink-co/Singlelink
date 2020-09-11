@@ -1,4 +1,13 @@
-<p align="center"><a href="https://singlelink.co/"><img src="/assets/singlelink-brandmark.svg" width="320" alt="SingleLink Logo"/></a></p>
+<h1 align="center">
+  <br>
+  <a href="https://singlelink.co/"><img src="/assets/singlelink-brandmark.svg" width="220" alt="SingleLink"/></a>
+  <br>
+  Singlelink
+  <br>
+</h1>
+
+<h4 align="center">A free open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.</h4>
+
 <p align="center">
 	<img src="https://img.shields.io/badge/beta-1.1.0-%2303d2d4" alt="Version">
 	<img src="https://img.shields.io/badge/license-GPL-%236ab04c" alt="License"/>
