@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="static/singlelink-brandmark.svg" width="325"/>
+    <img src="static/singlelink-brandmark.svg" width="215"/>
     <br>
     Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
 </h1>
