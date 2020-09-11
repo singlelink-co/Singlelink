@@ -52,7 +52,7 @@
 
 <h2 id="get-started">Get started</h2>
 
-<h2 id="how-to-use">Self Hosted vs Cloud Hosted</h2>
+<h2 id="self-hosted-cloud-hosted">Self Hosted vs Cloud Hosted</h2>
 <blockquote>
     Should i sign up at singlelink.co, or should I host the application myself?
     <br>
@@ -61,7 +61,30 @@
 Great question! When discussing the differences between self-hosted and cloud-hosted, there are a few large differences which make each environment ideal for different use-cases.
 
 <h2 id="credits">Credits</h2>
-
+Singlelink was built by the following individuals.
+<ul>
+    <li>- Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
+    <li>- Andrew Boyle (<a target="_blank" href="https://twitter.com/drewzr1">@drewzr1</a>)</li>
+    <li>- Navid Kabir (<a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
+    <li>- Manuhe Abebe (<a target="_blank" href="https://twitter.com/manuhegabebe">@manuhegabebe</a>)</li>
+</ul>
+Currently, Singlelink lacks contributors outside its founders at Neutron Creative, but, you can help.
+Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelink/issues">issues page</a> today and create your first pull request to get featured here!
 <h2 id="related">Related</h2>
 
 <h2 id="license">License</h2>
+<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
+    Copyright (C) 2020  Neutron Creative Inc.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
