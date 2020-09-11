@@ -27,7 +27,7 @@
             </label>
           </div>
           <div class="text-sm leading-5">
-            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:underline">
+            <a href='mailto:support@neutroncreative.com?subject="I forgot my password"' class="font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:underline">
               Forgot your password?
             </a>
           </div>
@@ -45,24 +45,45 @@
 </style>
 
 <script>
-export default {
+  import Cookies from "~/middleware/utils";
+
+  export default {
   name: 'Login',
   data: () => {
     return {
       email: '',
       password: '',
       error: null
-    }
+    };
   },
+    middleware: 'unauthenticated',
   methods: {
     attempt_login () {
-      if (!this.email) { this.error = 'Email address is required to login.'; return }
-      if (!this.password) { this.error = 'Password is required to login.'; return }
-      this.$router.push('/dashboard')
+      this.$nuxt.$loading.start();
+      if (!this.email){ this.error = 'Email address is required to login.'; return this.$nuxt.$loading.finish(); }
+      if (!this.password) { this.error = 'Password is required to login.'; return this.$nuxt.$loading.finish(); }
+      this.$axios.post('/user/login', {
+        email: this.email,
+        password: this.password
+      })
+        .then((response) => {
+          console.log('Login successful');
+          console.log(response);
+          Cookies.setCookie('singlelink_token', response.data.token, 7);
+          this.$store.commit('auth/login', response.data.token);
+          this.$nuxt.$loading.finish();
+          return this.$router.push('/dashboard');
+        })
+        .catch((err) => {
+          console.log('Login failed');
+          console.log(this.error);
+          this.error = 'Your email or password is incorrect!';
+          return this.$nuxt.$loading.finish();
+        });
     },
     clear_errors: () => {
-      this.error = null
+      this.error = null;
     }
   }
-}
+};
 </script>
