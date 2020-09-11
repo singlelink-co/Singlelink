@@ -17,3 +17,12 @@
     </a>
 </h1>
 <img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
+<h2>Key features</h2>
+<ul>
+    <li>Link management for unlimited links</li>
+    <li>Unlimited profiles per account</li>
+    <li>Fully customizable profiles with custom CSS/HTML</li>
+    <li>Sensitive content warnings for profiles with NSFW content</li>
+    <li>Custom domain support (coming soon)</li>
+    <li>Self-hosted mode (coming soon)</li>
+</ul>
