@@ -51,28 +51,36 @@
 </ul>
 
 <h2 id="get-started">Get started</h2>
+
 <p>There are a few pre-requisites you need to have before hosting Singlelink, seen below.</p>
+
 <ul>
     <li>A NodeJS server (ex: $5/mo DigitalOcean Droplet)</li>
     <li>A MongoDB database (ex: Free MongoDB Atlas via GCP)</li>
     <li>A static file host (ex: Netlify GCDN)</li>
 </ul>
+
 <p>Once you have the following established, it's time to begin installing & configuring your local instance.</p>
+
 <h4>Installing Singlelink on your NodeJS Server</h4>
+
 ```bash
 git clone git@github.com:Neutron-Creative/Singlelink.git
 cd Singlelink/client
 npm install
 ```
 <h4>Installing Singlelink on your Static File Host</h4>
+
 ```bash
 git clone git@github.com:Neutron-Creative/Singlelink.git
 cd Singlelink/www
 npm run generate
 # Website can now be hosted directly from Singlelink/www/dist
 ```
+
 <h4>Creating your configuration file</h4>
 <p><b>NOTE:</b> this configuration profile should be the same across all Singlelink installation locations previously detailed.</p>
+
 ```bash
 cd Singlelink
 touch config.js
