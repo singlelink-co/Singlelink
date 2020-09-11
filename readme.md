@@ -6,6 +6,8 @@
     <br>
 </h1>
 
+<br>
+
 <h4 align="center">
     Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
 </h4>
@@ -33,6 +35,7 @@
   <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
+<br>
 
 <img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
 
