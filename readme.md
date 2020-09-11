@@ -1,7 +1,7 @@
 <h1 align="center">
     <img src="static/singlelink-brandmark.svg" width="215"/>
     <br>
-    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
+    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
     <br>
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
         <img src="https://img.shields.io/badge/beta-1.5.0-%2303d2d4" alt="Version">
@@ -17,6 +17,9 @@
     </a>
 </h1>
 <img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
+<br>
+Singlelink is hosted and made available for free by <a target="_blank" href="https://neutroncreative.com">Neutron Creative</a> at <a target="_blank" href="https://singlelink.co">singlelink.co</a>, but instructions are listed below if you prefer to self-host the software.
+<br>
 <h2>Key features</h2>
 <ul>
     <li>Link management for unlimited links</li>
