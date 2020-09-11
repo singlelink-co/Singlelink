@@ -8,6 +8,7 @@
 	<img src="https://img.shields.io/badge/build-untested-%23eb4d4b" alt="Build Status"/>
 	<img src="https://img.shields.io/badge/users-+100-%2330336b" alt="Users"/>
 </p>
-> Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
 
-<img src="https://ph-files.imgix.net/a8be8af3-2002-4176-bcb8-3e87bfda98d2.gif?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=635&h=380&fit=max&dpr=2" alt="Singlelink promotional graphic"/>
+Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_">MongoDB</a>.
+
+<img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
