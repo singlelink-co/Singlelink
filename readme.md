@@ -74,7 +74,7 @@ Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelin
 
 <h2 id="license">License</h2>
 <p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
-    Copyright (C) 2020  Neutron Creative Inc.
+    Copyright (C) 2020  Neutron Creative Inc.<br>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
