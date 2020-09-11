@@ -1,6 +1,8 @@
 <h1 align="center">
     <br>
+    <br>
     <a href="https://singlelink.co"><img src="static/singlelink-brandmark.svg" width="225"/></a>
+    <br>
     <br>
 </h1>
 
