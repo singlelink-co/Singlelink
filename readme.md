@@ -70,7 +70,9 @@ Singlelink was built by the following individuals.
 </ul>
 Currently, Singlelink lacks contributors outside its founders at Neutron Creative, but, you can help.
 Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelink/issues">issues page</a> today and create your first pull request to get featured here!
+
 <h2 id="related">Related</h2>
+<p><a target="_blank" href="https://singlelink.co">Singlelink</a> is Neutron Creative product, created and hosted free of charge in the mission of open-source. To learn more about our mission, visit <a href="https://neutroncreative.com" target="_blank">neutroncreative.com</a></p>
 
 <h2 id="license">License</h2>
 <p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
