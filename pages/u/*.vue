@@ -102,15 +102,16 @@
         return window.location.href = "https://singlelink.co";
       },
     },
-    /*head: {
+    head: {
       meta: [
+        { name: 'og:image', content: 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', '') } ,
         {
           hid: 'og:image',
-          property: 'og:image',
+          name: 'og:image',
           content: 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', '')
         }
       ],
-    },*/
+    },
     mounted: function() {
       this.$axios.$post('/profile/fetch', {
         handle: window.location.pathname.replace('/u/','')
@@ -131,7 +132,7 @@
           document.querySelector('meta[name="og:title"]').setAttribute("content", this.profile.headline + ' | Singlelink');
           document.querySelector('meta[name="og:description"]').setAttribute("content", this.profile.subtitle);
           document.querySelector('meta[name="description"]').setAttribute("content", this.profile.subtitle);
-          document.querySelector('meta[name="og:image"]').setAttribute("content", 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', ''));
+          //document.querySelector('meta[name="og:image"]').setAttribute("content", 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', ''));
         })
         .catch((error) => {
           console.log('Error fetching profile');
