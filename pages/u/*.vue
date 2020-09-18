@@ -87,6 +87,7 @@
           hash: null,
           avatar_url: null
         },
+        thumbnail: null,
         theme: null,
         links: null,
         failed: false,
@@ -99,29 +100,45 @@
       },
       reject_age_verification: function() {
         return window.location.href = "https://singlelink.co";
-      }
+      },
     },
+    /*head: {
+      meta: [
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', '')
+        }
+      ],
+    },*/
     mounted: function() {
       this.$axios.$post('/profile/fetch', {
         handle: window.location.pathname.replace('/u/','')
       })
         .then((response) => {
-          console.log('Profile fetched successfully');
-          console.log(response);
+          //console.log('Profile fetched successfully');
+          //console.log(response);
           this.profile = response.profile;
           this.links = response.links.sort(function (a, b) {
             return a.order - b.order;
           });
           this.user = response.user;
           this.theme = response.theme || null;
-          console.log(response.theme);
+          //console.log(response.theme);
+
+          document.title = this.profile.headline + ' | Singlelink';
+          document.description = this.profile.subtitle;
+          document.querySelector('meta[name="og:title"]').setAttribute("content", this.profile.headline + ' | Singlelink');
+          document.querySelector('meta[name="og:description"]').setAttribute("content", this.profile.subtitle);
+          document.querySelector('meta[name="description"]').setAttribute("content", this.profile.subtitle);
+          document.querySelector('meta[name="og:image"]').setAttribute("content", 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', ''));
         })
         .catch((error) => {
           console.log('Error fetching profile');
           console.log(error);
           this.failed = true;
         });
-    }
+    },
   };
 </script>
 
