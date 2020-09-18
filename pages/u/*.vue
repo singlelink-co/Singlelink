@@ -14,7 +14,7 @@
       <img class="nc-avatar mb-2" v-if="profile.image_url || user.avatar_url || user.hash" :src="profile.image_url || user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
-      <a :href="link.url" v-for="link in links" class="w-full">
+      <a :href="'https://api.singlelink.co/analytics/link/' + link._id" v-for="link in links" class="w-full">
         <div class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item flex items-center justify-center flex-col" :style="link.custom_css">
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
