@@ -95,7 +95,7 @@ echo "{'database':'','secret':'','port':80}" >> config.js
 Singlelink was built by the following individuals.
 <ul>
     <li>Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
-    <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/drewzr1">@drewzr1</a>)</li>
+    <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
     <li>Navid Kabir (<a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
     <li>Manuhe Abebe (<a target="_blank" href="https://twitter.com/manuhegabebe">@manuhegabebe</a>)</li>
 </ul>
