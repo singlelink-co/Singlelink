@@ -1,0 +1,31 @@
+{
+  "name": "singlelink",
+  "version": "0.9.0",
+  "description": "<p align=\"center\"><a href=\"https://singlelink.co/\"><img src=\"/assets/SingleLink-Brandmark.svg\" width=\"320\" alt=\"SingleLink Logo\"/></a></p> <p align=\"center\"> \t<img src=\"https://img.shields.io/badge/beta-0.9.0-%2303d2d4\" alt=\"Version\"> \t<img src=\"https://img.shields.io/badge/license-unlicensed-%236ab04c\" alt=\"License\"/> \t<img src=\"https://img.shields.io/badge/build-untested-%23eb4d4b\" alt=\"Build Status\"/> \t<img src=\"https://img.shields.io/badge/users-%3C100-%2330336b\" alt=\"Users\"/> </p> <p align=\"center\">Welcome to the SingleLink Github repository. Here you can browse the source, view open issues and monitor development.</p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neutron-Creative/SingleLink.git"
+  },
+  "author": "Neutron Creative Inc.",
+  "license": "GPL-V3",
+  "bugs": {
+    "url": "https://github.com/Neutron-Creative/SingleLink/issues"
+  },
+  "homepage": "https://github.com/Neutron-Creative/SingleLink#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "get-port": "^5.1.1",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "mongoose": "^5.10.0"
+  }
+}
