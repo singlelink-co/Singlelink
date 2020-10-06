@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Profile = mongoose.model('Profile');
-var Link = mongoose.model('Link');
+const Profile = mongoose.model('Profile');
+const Link = mongoose.model('Link');
 
 module.exports = (req, res) => {
     if(!req.user.active_profile) return res.status(400).send('You need an active profile to do this');

@@ -28,4 +28,4 @@ module.exports = {
     "vue/multiline-html-element-content-newline": "off",
     "semi": [2, "always"]
   }
-}
+};

@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Profile = mongoose.model('Profile');
+const Profile = mongoose.model('Profile');
 
 module.exports = (req, res) => {
     Profile.find({parent:req.user._id})

@@ -1,17 +1,17 @@
 // functions/middleware/auth.js
 
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
-var jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
 
-var config = global.config;
+const config = global.config;
 
 const User = mongoose.model('User');
 const Profile = mongoose.model('Profile');
 
 module.exports = function(req, res, next) {
-    var response = res;
-    if(req.query.token) req.body.token = req.query.token;
+  const response = res;
+  if(req.query.token) req.body.token = req.query.token;
     if(!req.body.token) return res.status(400).send('Missing token');
     jwt.verify(req.body.token, config.secret, function(err, decoded) {
         if(err) return res.status(400).send(err);

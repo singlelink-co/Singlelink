@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Theme = mongoose.model('Theme');
+const Theme = mongoose.model('Theme');
 
 module.exports = (req, res) => {
     if(!req.body.label) return res.status(400).send('Theme label required');

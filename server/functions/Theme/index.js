@@ -1,8 +1,8 @@
 // Third-party assets & dependencies
-var express = require('express');
-var mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
 
-var ThemeController = express();
+const ThemeController = express();
 
 // From here on out, require authentication
 ThemeController.use(require('../../middleware/auth'));

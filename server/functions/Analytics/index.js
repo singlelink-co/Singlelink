@@ -1,7 +1,7 @@
 // Third-party assets & dependancies
-var express = require('express');
+const express = require('express');
 
-var AnalyticsController = express();
+const AnalyticsController = express();
 
 // Routing
 AnalyticsController.get('/fetch', require('./fetch'));

@@ -1,8 +1,8 @@
 // Third-party assets & dependancies
-var express = require('express');
-var mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
 
-var ProfileController = express();
+const ProfileController = express();
 
 // Routing
 //ProfileController.all('/', require('./'));

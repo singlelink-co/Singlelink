@@ -1,44 +1,44 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var ProfileSchema = new mongoose.Schema({
-    handle: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    image_url: String,
-    headline: String,
-    subtitle: String,
-    social: [{
-        icon: String,
-        link: String,
-        alt: String,
-    }],
-    parent: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Profile',
-        required: true
-    },
-    members: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    visibility: {
-      type: String,
-      default: 'unpublished',
-      required: true,
-      enum: [
-          'unpublished',
-          'published',
-          'published-18+'
-      ]
-    },
-    custom_css: String,
-    custom_html: String,
-    theme: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Theme',
-    },
+const ProfileSchema = new mongoose.Schema({
+  handle: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  image_url: String,
+  headline: String,
+  subtitle: String,
+  social: [{
+    icon: String,
+    link: String,
+    alt: String,
+  }],
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profile',
+    required: true
+  },
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  visibility: {
+    type: String,
+    default: 'unpublished',
+    required: true,
+    enum: [
+      'unpublished',
+      'published',
+      'published-18+'
+    ]
+  },
+  custom_css: String,
+  custom_html: String,
+  theme: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Theme',
+  },
 });
 
 ProfileSchema.virtual('permissions').get(function() {

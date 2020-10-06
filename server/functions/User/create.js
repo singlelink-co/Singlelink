@@ -1,10 +1,10 @@
-var bcrypt = require('bcrypt-nodejs');
-var jwt = require('jsonwebtoken');
-var mongoose = require('mongoose');
-var md5 = require('md5');
+const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const md5 = require('md5');
 
-var User = mongoose.model('User');
-var Profile = mongoose.model('Profile');
+const User = mongoose.model('User');
+const Profile = mongoose.model('Profile');
 
 module.exports = (req, res) => {
     if(!req.body.email) return res.status(400).send('Missing email');

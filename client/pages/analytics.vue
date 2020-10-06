@@ -79,7 +79,7 @@
         this.projected_users = this.projected_users.toFixed(0);
       },
       time_difference: function(dt2, dt1) {
-        var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+        let diff = (dt2.getTime() - dt1.getTime()) / 1000;
         diff /= (60 * 60);
         return Math.abs(Math.round(diff));
       },

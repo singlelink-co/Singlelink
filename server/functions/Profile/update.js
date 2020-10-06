@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Profile = mongoose.model('Profile');
+const Profile = mongoose.model('Profile');
 
 module.exports = (req, res) => {
     req.user.active_profile.image_url = req.body.image_url || null;

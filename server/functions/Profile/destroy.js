@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Profile = mongoose.model('Profile');
+const Profile = mongoose.model('Profile');
 
 module.exports = async (req, res) => {
     if(!req.user.active_profile) return res.status(400).send('Active profile required');
