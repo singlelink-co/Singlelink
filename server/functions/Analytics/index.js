@@ -1,4 +1,4 @@
-// Third-party assets & dependancies
+// Third-party assets & dependencies
 const express = require('express');
 
 const AnalyticsController = express();
