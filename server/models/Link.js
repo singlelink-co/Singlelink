@@ -17,6 +17,7 @@ const LinkSchema = new mongoose.Schema({
     ref: 'Profile',
     required: true
   },
+  useDeepLink: false,
   custom_css: String,
   order: {
     type: Number,
