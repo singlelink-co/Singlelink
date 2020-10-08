@@ -11,7 +11,7 @@
     "url": "git+https://github.com/Neutron-Creative/SingleLink.git"
   },
   "author": "Neutron Creative Inc.",
-  "license": "GPL-V3",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Neutron-Creative/SingleLink/issues"
   },
@@ -28,6 +28,7 @@
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
-    "mongoose": "^5.10.0"
+    "mongoose": "^5.10.0",
+    "nc-deeplink": "^1.0.5"
   }
 }
