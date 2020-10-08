@@ -30,5 +30,8 @@
     "md5": "^2.3.0",
     "mongoose": "^5.10.0",
     "nc-deeplink": "^1.0.5"
+  },
+  "devDependencies": {
+    "@nuxt/types": "^2.14.6"
   }
 }
