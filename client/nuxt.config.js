@@ -1,10 +1,9 @@
-
 export default {
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
   */
-  mode: 'spa',
+  mode: 'universal',
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
@@ -28,28 +27,34 @@ export default {
   head: {
     title: 'Singlelink - A free & open-source Linktree alternative',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.' },
-      { name: 'og:image', content: 'https://singlelink.co/social-hero.png' },
-      { name: 'og:title', content: 'Singlelink - A free & open-source Linktree alternative' },
-      { name: 'og:description', content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.' },
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+      },
+      {name: 'og:image', content: 'https://singlelink.co/social-hero.png'},
+      {name: 'og:title', content: 'Singlelink - A free & open-source Linktree alternative'},
+      {
+        name: 'og:description',
+        content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+      },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
     ]
   },
   /*
   ** Global CSS
   */
-  css: [
-  ],
+  css: [],
   /*
   ** Plugins to load before mounting the App
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    { src: '~plugins/draggable.js', ssr: false }
+    {src: '~plugins/draggable.js', ssr: false}
   ],
   /*
   ** Auto import components
@@ -87,12 +92,12 @@ export default {
     extend(config, ctx) {
       if (ctx.dev && ctx.isClient) {
         config.module.rules.push({
-          enforce : 'pre',
-          test    : /\.(js|vue)$/,
-          loader  : 'eslint-loader',
-          exclude : /(node_modules)/,
-          options : {
-            fix : true
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/,
+          options: {
+            fix: true
           }
         });
       }
