@@ -35,15 +35,16 @@ const ProfileSchema = new mongoose.Schema({
   },
   custom_css: String,
   custom_html: String,
+  custom_domain: String,
   theme: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Theme',
   },
 });
 
-ProfileSchema.virtual('permissions').get(function() {
-    if(this.members) return this.members.push(this.parent);
-    return [this.parent];
+ProfileSchema.virtual('permissions').get(function () {
+  if (this.members) return this.members.push(this.parent);
+  return [this.parent];
 });
 
 module.exports = mongoose.model('Profile', ProfileSchema);

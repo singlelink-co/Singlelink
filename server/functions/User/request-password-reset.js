@@ -1,14 +1,10 @@
-const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const AWS = require('aws-sdk');
 
 const User = mongoose.model('User');
 
-let senderEmailAddress = global.config.senderEmailAddress;
-let awsRegion = global.config.aws.region;
-let awsAccessKey = global.config.aws.accessKey;
-let awsSecretKey = global.config.aws.secretKey;
+let senderEmailAddress = global.config.aws.senderEmailAddress;
 
 module.exports = (req, res) => {
   if (!req.body.email)
@@ -36,7 +32,7 @@ async function sendPasswordResetEmail(email) {
       email,
       passwordReset: true
     },
-    global.config.email,
+    global.config.secret,
     {
       expiresIn: '60m'
     }
@@ -75,7 +71,7 @@ Note: Do not reply to this email, as there is no inbox for it.`
           Data: 'Password Reset Request for SingleLink'
         }
       },
-      Source: global.config.senderEmailAddress
+      Source: senderEmailAddress
     };
 
     await new AWS.SES().sendEmail(emailParams).promise();

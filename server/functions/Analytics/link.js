@@ -1,4 +1,4 @@
-import {DeepLinker} from "nc-deeplink";
+const DeepLink = require("nc-deeplink");
 
 const mongoose = require('mongoose');
 const Link = mongoose.model('Link');
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
   if (link.useDeepLink) {
     const userAgent = req.get('user-agent');
-    const deepLink = DeepLinker.parseDeepLink(link.url, userAgent);
+    const deepLink = DeepLink.DeepLinker.parseDeepLink(link.url, userAgent);
 
     return res.redirect(deepLink);
   } else {
