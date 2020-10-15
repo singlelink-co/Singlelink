@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require("express-rate-limit");
+const AWS = require("aws-sdk");
 
 global.config = require('./config');
 
@@ -71,7 +72,6 @@ app.listen(port, () => {
 app.listen(sslPort, () => {
   console.log(`🔗 Singlelink API listening on SSL port 443`)
 });
-
 
 // const store = require('greenlock-storage-s3').create({
 //   accessKeyId: config.s3Bucket.accessKey,

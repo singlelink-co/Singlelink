@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Neutron-Creative/SingleLink#readme",
   "dependencies": {
     "@greenlock/manager": "^3.1.0",
+    "@root/greenlock-express": "^4.0.4",
     "acme-http-01-standalone": "^3.0.5",
     "aws-sdk": "^2.771.0",
     "axios": "^0.20.0",
