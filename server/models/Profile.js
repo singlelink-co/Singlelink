@@ -52,12 +52,12 @@ let Profile = mongoose.model('Profile', ProfileSchema);
 const profileEventEmitter = Profile.watch();
 
 profileEventEmitter.on('change', change => {
-  let customDomain = change.custom_domain;
+  if (change.fullDocument) {
+    let customDomain = change.fullDocument.custom_domain;
 
-  if (customDomain) {
-    proxy.register(customDomain, "127.0.0.1:4444");
-  } else {
-    proxy.unregister(customDomain, "127.0.0.1:4444");
+    if (customDomain) {
+      proxy.register(customDomain, "127.0.0.1:4444");
+    }
   }
 });
 

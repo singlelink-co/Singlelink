@@ -21,8 +21,6 @@ module.exports = (req, res) => {
       proxy.register(userDomain.host, "127.0.0.1:4444");
     } else if (req.user.custom_domain != null) {
       req.user.custom_domain = null;
-
-      proxy.unregister(userDomain.host, "127.0.0.1:4444");
     }
   }
 
