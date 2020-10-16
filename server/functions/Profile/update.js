@@ -18,7 +18,14 @@ module.exports = (req, res) => {
     if (req.body.custom_domain) {
       req.user.active_profile.custom_domain = userDomain.host;
 
-      proxy.register(userDomain.host, "127.0.0.1:4444");
+      proxy.register(userDomain.host, "127.0.0.1:4444", {
+        ssl: {
+          letsencrypt: {
+            email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
+            production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+          }
+        }
+      });
     } else if (req.user.custom_domain != null) {
       req.user.custom_domain = null;
     }
