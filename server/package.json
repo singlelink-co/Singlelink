@@ -18,27 +18,21 @@
   },
   "homepage": "https://github.com/Neutron-Creative/SingleLink#readme",
   "dependencies": {
-    "@greenlock/manager": "^3.1.0",
-    "@root/greenlock-express": "^4.0.4",
-    "acme-http-01-standalone": "^3.0.5",
     "aws-sdk": "^2.771.0",
     "axios": "^0.20.0",
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-rate-limit": "^5.1.3",
-    "get-port": "^5.1.1",
-    "greenlock": "^4.0.4",
-    "greenlock-express": "^4.0.3",
-    "greenlock-storage-s3": "^1.1.3",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "mongoose": "^5.10.0",
-    "nc-deeplink": "^1.0.5"
+    "nc-deeplink": "^1.0.5",
+    "redbird": "^0.10.0"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.6"
+    "eslint": "^7.11.0"
   }
 }

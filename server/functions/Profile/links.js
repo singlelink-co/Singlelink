@@ -10,4 +10,4 @@ module.exports = (req, res) => {
             if(err) return res.send(err);
             return res.send(links);
         });
-}
+};

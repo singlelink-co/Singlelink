@@ -20,6 +20,6 @@ module.exports = (req, res) => {
                 if(err) return res.send(err);
                 res.send(links);
             });
-        })
-    })
-}
+        });
+    });
+};

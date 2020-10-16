@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -29,4 +29,4 @@ module.exports = (req, res) => {
             });
         });
     });
-}
+};

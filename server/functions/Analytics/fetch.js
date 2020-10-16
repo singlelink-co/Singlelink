@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt-nodejs');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
@@ -29,4 +27,4 @@ module.exports = async (req, res) => {
         links: links.length,
         themes: themes.length
     });
-}
+};

@@ -11,4 +11,4 @@ module.exports = async (req, res) => {
     req.user.active_profile = remaining_profiles[0];
     await req.user.save();
     return res.send(remaining_profiles[0]);
-}
+};

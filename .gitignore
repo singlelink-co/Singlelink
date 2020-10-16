@@ -96,3 +96,5 @@ sw.*
 
 # Vim swap files
 *.swp
+
+certs

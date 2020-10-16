@@ -15,5 +15,5 @@ module.exports = async (req, res) => {
         }
         links = await Link.find({parent:req.user.active_profile._id});
         return res.send(links);
-    })
-}
+    });
+};

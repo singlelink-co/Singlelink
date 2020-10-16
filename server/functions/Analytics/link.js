@@ -26,4 +26,4 @@ module.exports = async (req, res) => {
     return res.redirect(link.url);
   }
 
-}
+};

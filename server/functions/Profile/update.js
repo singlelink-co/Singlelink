@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const User = mongoose.model('User');
+
 module.exports = (req, res) => {
   req.user.active_profile.image_url = req.body.image_url || null;
   if (req.body.headline) req.user.active_profile.headline = req.body.headline;
@@ -9,12 +11,23 @@ module.exports = (req, res) => {
   if (typeof req.body.custom_css != 'undefined') req.user.active_profile.custom_css = req.body.custom_css || '';
   if (typeof req.body.custom_html != 'undefined') req.user.active_profile.custom_html = req.body.custom_html || '';
 
-  if (req.body.custom_domain) {
-    req.user.active_profile.custom_domain = req.body.custom_domain;
+  let userDomain = new URL(req.body.custom_domain);
+  let apiDomain = new URL(config.apiDomain);
+
+  if (userDomain.host !== apiDomain.host) {
+    if (req.body.custom_domain) {
+      req.user.active_profile.custom_domain = userDomain.host;
+
+      proxy.register(userDomain.host, "127.0.0.1:4444");
+    } else if (req.user.custom_domain != null) {
+      req.user.custom_domain = null;
+
+      proxy.unregister(userDomain.host, "127.0.0.1:4444");
+    }
   }
 
   req.user.active_profile.save((err, profile) => {
     if (err) return res.send(err);
     res.send(profile);
-  })
-}
+  });
+};

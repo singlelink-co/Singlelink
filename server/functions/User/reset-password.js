@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -31,9 +31,9 @@ module.exports = (req, res) => {
           error: "Unable to reset password."
         });
 
-    })
+    });
   });
-}
+};
 
 /**
  * Changes a userId's password requiring only a password reset token.

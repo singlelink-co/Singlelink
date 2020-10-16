@@ -13,18 +13,18 @@ module.exports = async (req, res) => {
     let resolution = {
         x: final_size.x/scale,
         y: final_size.y/scale
-    }
+    };
     try {
         url = 'https://capture.neutroncreative.com/api/v1/capture?apiKey=' + global.config.capture_key + '&url=https://app.singlelink.co/u/' + req.params.handle + '&size=' + resolution.x + 'x' + resolution.y + '&crop=true&scale=' + scale;
         thumbnail = await axios.get(url, {
             responseType: "arraybuffer"
-        })
+        });
     } catch (err) {
         return res.send(err.message + '</br>' + url || 'Error!');
     } finally {
         //return res.send(btoa(thumbnail.data));
 
-        let thumbnail_img = "data:" + thumbnail.headers["content-type"] + ";base64," + Buffer.from(thumbnail.data).toString('base64')
+        let thumbnail_img = "data:" + thumbnail.headers["content-type"] + ";base64," + Buffer.from(thumbnail.data).toString('base64');
 
         res.writeHead(200, {
             'Content-Type': 'image/png',
@@ -34,4 +34,4 @@ module.exports = async (req, res) => {
         return res.sendFile(thumbnail.data);
 
     }
-}
+};

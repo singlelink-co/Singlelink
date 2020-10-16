@@ -19,9 +19,9 @@ module.exports = (req, res) => {
 
     sendPasswordResetEmail(user.email).then(() => {
       res.status(200).send();
-    })
+    });
   });
-}
+};
 
 /**
  * Sends a password reset email to the user.
@@ -38,7 +38,7 @@ async function sendPasswordResetEmail(email) {
     }
   );
 
-  let url = global.config.baseUrl + "/forgot-password/change?";
+  let url = global.config.clientDomain + "/forgot-password/change?";
   const params = new URLSearchParams({token: token});
   url += params.toString();
 

@@ -21,4 +21,4 @@ module.exports = async (req, res) => {
         payload.links = links || [];
         res.send(payload);
     });
-}
+};

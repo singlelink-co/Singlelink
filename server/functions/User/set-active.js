@@ -16,4 +16,4 @@ module.exports = async function (req, res) {
     await req.user.save();
 
     return res.send(pending_profile);
-}
+};

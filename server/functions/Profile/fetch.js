@@ -39,6 +39,6 @@ module.exports = (req, res) => {
                         }).save();
                         res.send(payload);
                     });
-                })
+                });
             });
-}
+};
