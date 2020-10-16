@@ -94,12 +94,23 @@ async function initProxy(connection, port) {
     }
   });
 
-  proxy.register(environment === 'development' ? 'singlelink.localhost' : config.apiDomain, "127.0.0.1:4444", {
-    ssl: {
-      key: "./localcert/singlelink.localhost.key",
-      cert: "./localcert/singlelink.localhost.crt",
-    }
-  });
+  if (environment === 'development') {
+    proxy.register('singlelink.localhost', "127.0.0.1:4444", {
+      ssl: {
+        key: "./localcert/singlelink.localhost.key",
+        cert: "./localcert/singlelink.localhost.crt",
+      }
+    });
+  } else {
+    proxy.register(config.apiDomain, "127.0.0.1:4444", {
+      ssl: {
+        letsencrypt: {
+          email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
+          production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+        }
+      }
+    });
+  }
 
   proxy.register("localhost", "127.0.0.1:4444", {
     ssl: {
