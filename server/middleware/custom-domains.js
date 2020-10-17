@@ -22,6 +22,8 @@ module.exports = async function (req, res, next) {
     res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>${profile.headline || ''}</title>
+    <base target="_parent">
 </head>
 
 <body>
