@@ -31,7 +31,7 @@
             </select>
           </div>
         </div>
-        <div class="flex flex-col w-full mb-6">
+        <div class="flex flex-col w-full mb-4">
           <label class="font-medium text-sm text-gray-800" for="image_url">Avatar Image URL</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="image_url" type="text" placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg" v-model="user.active_profile.image_url"/>
         </div>
