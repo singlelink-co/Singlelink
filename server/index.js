@@ -8,6 +8,7 @@ const AWS = require("aws-sdk");
 
 global.config = require('./config');
 global.mongodb = true;
+global.environment = process.env.NODE_ENV || 'development';
 
 AWS.config.update({
   region: config.aws.region,
@@ -30,7 +31,6 @@ mongoose.connect(global.config.database,
   });
 
 const app = express();
-const environment = process.env.NODE_ENV || 'development';
 let port = process.env.API_PORT || config.port || 80;
 
 // Rate limit emails.

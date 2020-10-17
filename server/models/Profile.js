@@ -56,14 +56,18 @@ profileEventEmitter.on('change', change => {
     let customDomain = change.fullDocument.custom_domain;
 
     if (customDomain) {
-      proxy.register(customDomain, "127.0.0.1:4444", {
-        ssl: {
-          letsencrypt: {
-            email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
-            production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+      if (environment === 'development') {
+        proxy.register(customDomain, "127.0.0.1:4444");
+      } else {
+        proxy.register(customDomain, "127.0.0.1:4444", {
+          ssl: {
+            letsencrypt: {
+              email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
+              production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 });
