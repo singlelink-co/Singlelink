@@ -151,14 +151,25 @@ export default {
       handle: ctx.route.path.replace('/u/', '')
     })
       .then((response) => {
-        return {
-          profile: response.profile,
-          links: response.links.sort(function (a, b) {
-            return a.order - b.order;
-          }),
-          user: response.user,
-          theme: response.theme || null,
-        };
+        if(response.data) {
+          return {
+            profile: response.data.profile,
+            links: response.data.links.sort(function (a, b) {
+              return a.order - b.order;
+            }),
+            user: response.data.user,
+            theme: response.data.theme || null,
+          };
+        } else {
+          return {
+            profile: response.profile,
+            links: response.links.sort(function (a, b) {
+              return a.order - b.order;
+            }),
+            user: response.user,
+            theme: response.theme || null,
+          };
+        }
       })
       .catch((error) => {
         console.log('Error fetching profile');

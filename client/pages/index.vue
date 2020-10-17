@@ -27,9 +27,9 @@
             </label>
           </div>
           <div class="text-sm leading-5">
-            <a href='mailto:support@neutroncreative.com?subject="I forgot my password"' class="font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:underline">
+            <n-link to="/forgot-password" class="font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:underline">
               Forgot your password?
-            </a>
+            </n-link>
           </div>
         </div>
         <button type="button" @click="attempt_login" class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">Login</button>
