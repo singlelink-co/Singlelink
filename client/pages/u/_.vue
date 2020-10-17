@@ -147,20 +147,12 @@ export default {
     };
   },
       asyncData(ctx) {
-    return ctx.$axios.$post('/profile/fetch', {
-      handle: ctx.route.path.replace('/u/', '')
-    })
+    console.log('Handle');
+    console.log(ctx.route.path.replace('/u/',''));
+    return ctx.$axios.$post('/profile/fetch/' + ctx.route.path.replace('/u/',''))
       .then((response) => {
-        if(response.data) {
-          return {
-            profile: response.data.profile,
-            links: response.data.links.sort(function (a, b) {
-              return a.order - b.order;
-            }),
-            user: response.data.user,
-            theme: response.data.theme || null,
-          };
-        } else {
+        console.log('Response!');
+        console.log(response);
           return {
             profile: response.profile,
             links: response.links.sort(function (a, b) {
@@ -169,7 +161,6 @@ export default {
             user: response.user,
             theme: response.theme || null,
           };
-        }
       })
       .catch((error) => {
         console.log('Error fetching profile');

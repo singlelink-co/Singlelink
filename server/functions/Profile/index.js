@@ -7,7 +7,7 @@ const ProfileController = express();
 // Routing
 //ProfileController.all('/', require('./'));
 
-ProfileController.post('/fetch', require('./fetch'));
+ProfileController.all('/fetch', require('./fetch'));
 ProfileController.all('/fetch/:handle', require('./fetch'));
 
 // Thumbnail routing
@@ -18,7 +18,9 @@ ProfileController.use(require('../../middleware/auth'));
 
 ProfileController.post('/create', require('./create'));
 
-ProfileController.post('/fetch-preview', require('./fetch-preview'));
+ProfileController.all('/fetch-preview', require('./fetch-preview'));
+ProfileController.all('/fetch-preview/:handle', require('./fetch-preview'));
+
 
 ProfileController.post('/activate-theme', require('./activate-theme'));
 

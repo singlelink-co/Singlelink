@@ -89,16 +89,6 @@
         token: Cookies.getCookieValue('singlelink_token', ctx)
       })
         .then((response) => {
-          if(response.data) {
-            return {
-              profile: response.data.profile,
-              links: response.data.links.sort(function (a, b) {
-                return a.order - b.order;
-              }),
-              user: response.data.user,
-              theme: response.data.theme
-            };
-          } else {
             return {
               profile: response.profile,
               links: response.links.sort(function (a, b) {
@@ -107,7 +97,6 @@
               user: response.user,
               theme: response.theme
             };
-          }
         }).catch((error) => {
         console.log('Error fetching profile');
         console.log(error);
