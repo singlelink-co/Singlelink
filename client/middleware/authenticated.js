@@ -1,7 +1,7 @@
 import Cookies from "~/middleware/utils";
 
 export default function (context) {
-  const singlelink_token = Cookies.getCookieValue('singlelink_token') || context.store.getters.get_token;
+  const singlelink_token = Cookies.getCookieValue('singlelink_token', context) || context.store.getters.get_token;
 
   if (singlelink_token) {
     if (!context.store.user) {
@@ -31,6 +31,6 @@ export default function (context) {
       // verify token
     }
   } else {
-    return context.redirect(200, '/');
+    return context.redirect('/');
   }
 }

@@ -57,6 +57,8 @@
 </template>
 
 <script>
+  import Cookies from "~/middleware/utils";
+
   export default {
     data: function() {
       return {
@@ -82,7 +84,26 @@
       };
     },
     middleware: 'authenticated',
-    mounted: function() {
+    asyncData(ctx) {
+      return ctx.$axios.$post('/profile/fetch-preview', {
+        token: Cookies.getCookieValue('singlelink_token', ctx)
+      })
+        .then((response) => {
+          return {
+            profile: response.profile,
+            links: response.links.sort(function (a, b) {
+              return a.order - b.order;
+            }),
+            user: response.user,
+            theme: response.theme
+          };
+        }).catch((error) => {
+        console.log('Error fetching profile');
+        console.log(error);
+        return {failed: true};
+      });
+    },
+    /*mounted: function() {
       this.$axios.$post('/profile/fetch-preview', {
         token: this.$store.getters['auth/get_token']
       })
@@ -96,13 +117,28 @@
           this.user = response.user;
           this.theme = response.theme || null;
           console.log(response.theme);
+
+          // Search for and attempt to run javascript in Custom HTML
+          var executeScripts= function(elm, html) {
+            elm.innerHTML = html;
+            Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
+              const newScript = document.createElement("script");
+              Array.from(oldScript.attributes)
+                .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+              newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+              oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+          };
+          setTimeout(
+          executeScripts(document.getElementById('__layout'), document.getElementById('__layout').innerHTML)
+          , 1000);
         })
         .catch((error) => {
           console.log('Error fetching profile');
           console.log(error);
           this.failed = true;
         });
-    }
+    }*/
   };
 </script>
 

@@ -70,7 +70,7 @@
           .then((response) => {
             console.log('Created account successful');
             console.log(response);
-            Cookies.setCookie('singlelink_token', response.data.token, 7);
+            Cookies.setCookie('singlelink_token', response.data.token, 7, this);
             this.$store.commit('auth/login', response.data.token);
             this.$nuxt.$loading.finish();
             return this.$router.push('/dashboard');

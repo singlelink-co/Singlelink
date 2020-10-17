@@ -114,20 +114,59 @@ export default {
       return window.location.href = "https://singlelink.co";
     },
   },
-  head: {
-    meta: [
-      {
-        name: 'og:image',
-        content: 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', '')
-      },
-      {
-        hid: 'og:image',
-        name: 'og:image',
-        content: 'https://api.singlelink.co/profile/thumbnail/' + window.location.pathname.replace('/u/', '')
-      }
-    ],
+  head: function() {
+    return {
+      title: this.profile.headline || '',
+      meta: [
+        {
+          hid: 'title',
+          name: 'title',
+          content: this.profile.headline || ''
+        },
+        {
+          hid: 'og:title',
+          name: 'title',
+          content: this.profile.headline || ''
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.profile.subtitle || ''
+        },
+        {
+          hid: 'og:description',
+          name: 'description',
+          content: this.profile.subtitle || ''
+        },
+        {
+          hid: 'og:image',
+          name: 'og:image',
+          content: 'https://api.singlelink.co/profile/thumbnail/' + this.$route.path.replace('/u/', '')
+        }
+      ],
+    };
   },
-  mounted: function () {
+      asyncData(ctx) {
+    return ctx.$axios.$post('/profile/fetch', {
+      handle: ctx.route.path.replace('/u/', '')
+    })
+      .then((response) => {
+        return {
+          profile: response.profile,
+          links: response.links.sort(function (a, b) {
+            return a.order - b.order;
+          }),
+          user: response.user,
+          theme: response.theme || null,
+        };
+      })
+      .catch((error) => {
+        console.log('Error fetching profile');
+        console.log(error);
+        return {failed:true};
+      });
+  },
+  /*mounted: function () {
     this.$axios.$post('/profile/fetch', {
       handle: window.location.pathname.replace('/u/', '')
     })
@@ -154,7 +193,7 @@ export default {
         console.log(error);
         this.failed = true;
       });
-  },
+  },*/
 };
 </script>
 

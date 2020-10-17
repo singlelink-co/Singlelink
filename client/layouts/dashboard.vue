@@ -122,7 +122,7 @@ html {
       preview_url: function() {
         try {
           let origin = window.location.origin;
-          if(origin=='https://app.singlelink.co' || origin=='http://localhost:8080') return 'https://singlel.ink' + '/u-preview/' + this.user.active_profile.handle;
+          //if(origin=='https://app.singlelink.co' || origin=='http://localhost:8080') return 'https://singlel.ink' + '/u-preview/' + this.user.active_profile.handle;
           return origin + '/u-preview/' + this.user.active_profile.handle;
         } catch(err) {
           console.log(err);

@@ -3,12 +3,12 @@ export default {
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
   */
-  mode: 'universal',
+  ssr: true,
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
-  target: 'static',
+  target: 'server',
   /*
   ** Hosting 404 Hotfix
   ** See https://ko.nuxtjs.org/faq/netlify-deployment/
@@ -34,9 +34,18 @@ export default {
         name: 'description',
         content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
-      {name: 'og:image', content: 'https://singlelink.co/social-hero.png'},
-      {name: 'og:title', content: 'Singlelink - A free & open-source Linktree alternative'},
       {
+        hid: 'og:image',
+        name: 'og:image',
+        content: 'https://singlelink.co/social-hero.png'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Singlelink - A free & open-source Linktree alternative'
+      },
+      {
+        hid: 'og:description',
         name: 'og:description',
         content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
@@ -54,7 +63,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    {src: '~plugins/draggable.js', ssr: false}
+    {src: '~plugins/draggable.js', ssr: true}
   ],
   /*
   ** Auto import components
@@ -75,7 +84,8 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
   ],
   /*
   ** Axios module configuration
