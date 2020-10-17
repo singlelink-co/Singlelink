@@ -14,4 +14,8 @@ const VisitSchema = new mongoose.Schema({
     },
 });
 
+VisitSchema.virtual('created_on').get(function() {
+  return this._id.getTimestamp();
+});
+
 module.exports = mongoose.model('Visit', VisitSchema);

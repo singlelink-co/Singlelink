@@ -64,6 +64,7 @@ app.use('/user', require('./functions/User'));
 app.use('/profile', require('./functions/Profile'));
 app.use('/link', require('./functions/Link'));
 app.use('/theme', require('./functions/Theme'));
+app.use('/visit', require('./functions/Visit'));
 app.use('/analytics', require('./functions/Analytics'));
 
 app.get('/', require('./functions/Misc/status'));
