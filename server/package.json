@@ -30,7 +30,7 @@
     "md5": "^2.3.0",
     "mongoose": "^5.10.0",
     "nc-deeplink": "^1.0.5",
-    "redbird": "^0.10.0"
+    "redbird": "github:neutron-creative/redbird#master"
   },
   "devDependencies": {
     "eslint": "^7.11.0"
