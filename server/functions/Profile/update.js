@@ -30,7 +30,7 @@ module.exports = (req, res) => {
           }
         });
       }
-    } else if (req.user.active_profile.custom_domain != null) {
+    } else if ((typeof req.user.active_profile.custom_domain) !== undefined) {
       req.user.active_profile.custom_domain = null;
     }
   }

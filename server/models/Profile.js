@@ -35,7 +35,10 @@ const ProfileSchema = new mongoose.Schema({
   },
   custom_css: String,
   custom_html: String,
-  custom_domain: String,
+  custom_domain: {
+    type: String,
+    unique: true
+  },
   theme: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Theme',
