@@ -26,8 +26,8 @@ module.exports = (req, res) => {
           }
         }
       });
-    } else if (req.user.custom_domain != null) {
-      req.user.custom_domain = null;
+    } else if (typeof req.user.active_profile.custom_domain != 'undefined') {
+      req.user.active_profile.custom_domain = null;
     }
   }
 
