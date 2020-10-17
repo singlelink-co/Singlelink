@@ -10,6 +10,9 @@ global.config = require('./config');
 global.mongodb = true;
 global.environment = process.env.NODE_ENV || 'development';
 
+console.log(`Singlelink is starting in ${global.environment} mode!`);
+console.log(`Production mode: ${config.production}`);
+
 AWS.config.update({
   region: config.aws.region,
   credentials: {
@@ -90,7 +93,7 @@ async function initProxy(connection, port) {
     },
     ssl: {
       http2: true,
-      port: 443, // SSL port used to serve registered https routes with LetsEncrypt certificate.
+      port: 443 // SSL port used to serve registered https routes with LetsEncrypt certificate.
     }
   });
 
@@ -139,7 +142,6 @@ async function initProxy(connection, port) {
       });
     }
   }
-
 
   console.log(`Reverse proxy started on port ${port}, listening for connections`);
 }
