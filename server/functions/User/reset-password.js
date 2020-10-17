@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   if (!req.body.token)
     return res.status(400).send('Missing token');
 
@@ -15,14 +15,14 @@ module.exports = (req, res) => {
     maxAge: "60m"
   });
 
-  User.findOne({email: decoded.email}).exec(function (err, user) {
+  /*User.findOne({email: decoded.email}).exec(function (err, user) {
     if (err)
       return res.status(500).send(err);
 
     if (!user)
       return res.status(404).send('User with email address cannot be found');
 
-    setPassword(user, user.email, req.body.password).then(val => {
+    setPassword(user, decoded, req.body.password).then(val => {
 
       if (val)
         res.status(200).send(val);
@@ -32,7 +32,18 @@ module.exports = (req, res) => {
         });
 
     });
-  });
+  });*/
+  try {
+    let user = await User.findOne({email: decoded.email});
+    if (!user) return res.status(404).send('User with email address cannot be found');
+    let hashedPassword = bcrypt.hashSync(req.body.password, 10);
+    user.password = hashedPassword;
+    let updated_user = user.save();
+    return res.status(200).send('Password updated successfully');
+  } catch (err) {
+      console.log(err);
+      return res.status(500).send('Error!' + err);
+  }
 };
 
 /**
@@ -43,22 +54,20 @@ module.exports = (req, res) => {
  */
 async function setPassword(user, decodedToken, password) {
   try {
-    if (!decodedToken.password) {
-      return false;
-    }
+    if (!decodedToken.passwordReset) return false;
 
     let hashedPassword = await bcrypt.hash(password);
 
     User.update({email: user.email}, {
       password: hashedPassword,
     }, function (err, numberAffected, rawResponse) {
-      if (err)
+      if (err) {
         console.error(err);
-
-      return false;
+        return false;
+      } else {
+        return true;
+      }
     });
-
-    return true;
   } catch (err) {
     return false;
   }
