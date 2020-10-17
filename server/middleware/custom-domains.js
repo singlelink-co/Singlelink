@@ -32,6 +32,19 @@ module.exports = async function (req, res, next) {
     <link rel="icon" type="image/png" href="https://singlelink.co/favicon.ico">
     <!-- Set page scale -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="${profile.custom_domain}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${profile.headline || ''}">
+    <meta property="og:description" content="${profile.subtitle || ''}">
+    <meta property="og:image" content="https://api.singlelink.co/profile/thumbnail/${profile.handle}">
+
+    <!-- Twitter Meta Tags -->
+    <meta property="twitter:url" content="jimmybusiness.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${profile.headline || ''}">
+    <meta name="twitter:description" content="{profile.subtitle || ''}">
+    <meta name="twitter:image" content="https://api.singlelink.co/profile/thumbnail/${profile.handle}">
 </head>
 
 <body>
