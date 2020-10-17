@@ -11,11 +11,11 @@ module.exports = (req, res) => {
   if (typeof req.body.custom_css != 'undefined') req.user.active_profile.custom_css = req.body.custom_css || '';
   if (typeof req.body.custom_html != 'undefined') req.user.active_profile.custom_html = req.body.custom_html || '';
 
-  let userDomain = new URL(req.body.custom_domain);
+  let userDomain;
+  if(req.body.custom_domain) userDomain = new URL('https://' + req.body.custom_domain.replace('https://','').replace('http://',''));
   let apiDomain = new URL(config.apiDomain);
 
-  if (userDomain.host !== apiDomain.host) {
-    if (req.body.custom_domain) {
+  if (req.body.custom_domain && userDomain.host !== apiDomain.host) {
       req.user.active_profile.custom_domain = userDomain.host;
 
       if (environment === 'development') {
@@ -30,9 +30,9 @@ module.exports = (req, res) => {
           }
         });
       }
-    } else if ((typeof req.user.active_profile.custom_domain) !== undefined) {
-      req.user.active_profile.custom_domain = null;
-    }
+
+  } else if ((typeof req.user.active_profile.custom_domain) !== undefined) {
+    req.user.active_profile.custom_domain = null;
   }
 
   req.user.active_profile.save((err, profile) => {

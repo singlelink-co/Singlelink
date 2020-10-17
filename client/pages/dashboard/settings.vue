@@ -32,8 +32,12 @@
           </div>
         </div>
         <div class="flex flex-col w-full mb-6">
-          <label class="font-medium text-sm text-gray-800" for="visibility">Avatar Image URL</label>
+          <label class="font-medium text-sm text-gray-800" for="image_url">Avatar Image URL</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="image_url" type="text" placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg" v-model="user.active_profile.image_url"/>
+        </div>
+        <div class="flex flex-col w-full mb-6">
+          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (🐳 Whale's only!)</label>
+          <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_domain" type="text" placeholder="e.g. neutroncreative.com (no http/https)" v-model="user.active_profile.custom_domain"/>
         </div>
         <button @click="save_changes" type="button" class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">Save changes</button>
       </form>
@@ -82,6 +86,7 @@ export default {
           headline: '',
           subtitle: '',
           handle: '',
+          custom_domain: '',
           visibility: ''
         }
       }
@@ -102,6 +107,7 @@ export default {
         subtitle: this.user.active_profile.subtitle || null,
         handle: this.user.active_profile.handle || null,
         visibility: this.user.active_profile.visibility || null,
+        custom_domain: this.user.active_profile.custom_domain || null
       })
       .then((response) => {
         console.log('Successfully saved changes');
