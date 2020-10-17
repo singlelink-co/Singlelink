@@ -28,6 +28,11 @@
             Links
           </div>
         </n-link>
+        <n-link to="/dashboard/analytics">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="get_active_styles('dashboard-analytics')">
+            Analytics
+          </div>
+        </n-link>
         <n-link to="/dashboard/appearance">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="get_active_styles('dashboard-appearance')">
             Appearance
@@ -168,6 +173,9 @@ html {
               break;
             case "dashboard-appearance":
               this.active = "dashboard-appearance";
+              break;
+            case "dashboard-analytics":
+              this.active = "dashboard-analytics";
               break;
             case "dashboard-settings":
               this.active = "dashboard-settings";
