@@ -22,11 +22,20 @@ module.exports = async function (req, res, next) {
     res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- SEO Title -->
     <title>${profile.headline || ''}</title>
-    <base target="_parent">
+    <!-- SEO/OG Description -->
+    <meta data-n-head="1" name="og:description" content="${profile.subtitle || ''}">
+    <!-- OpenGraph Image -->
+    <meta data-n-head="1" name="og:image" content="https://api.singlelink.co/profile/thumbnail/${profile.handle}">
+    <!-- Set favicon -->
+    <link rel="icon" type="image/png" href="https://singlelink.co/favicon.ico">
+    <!-- Set page scale -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
+<!-- Profile contents -->
 <iframe
   src='${url}'
   style="
