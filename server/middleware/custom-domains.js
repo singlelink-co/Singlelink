@@ -43,7 +43,7 @@ module.exports = async function (req, res, next) {
     <meta property="twitter:url" content="jimmybusiness.com">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${profile.headline || ''}">
-    <meta name="twitter:description" content="{profile.subtitle || ''}">
+    <meta name="twitter:description" content="${profile.subtitle || ''}">
     <meta name="twitter:image" content="https://api.singlelink.co/profile/thumbnail/${profile.handle}">
 </head>
 
