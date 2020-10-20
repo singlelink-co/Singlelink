@@ -98,13 +98,9 @@ async function initProxy(connection, port) {
     }
   });
 
-  if (environment === 'development') {
-    proxy.register('singlelink.localhost', "127.0.0.1:4444");
-  } else {
-    proxy.register(config.apiDomain, "127.0.0.1:4444");
-  }
-
+  proxy.register('singlelink.localhost', "127.0.0.1:4444");
   proxy.register("localhost", "127.0.0.1:4444");
+  proxy.register(config.apiDomain, "127.0.0.1:4444");
 
   let profiles = await Profile.find({"custom_domain": {"$nin": [null, ""]}});
 
