@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 module.exports = (req, res) => {
-  req.user.active_profile.image_url = req.body.image_url || null;
+  if (typeof req.body.image_url != 'undefined') req.user.active_profile.image_url = req.body.image_url || null;
   if (req.body.headline) req.user.active_profile.headline = req.body.headline;
   if (req.body.subtitle) req.user.active_profile.subtitle = req.body.subtitle;
   if (req.body.handle) req.user.active_profile.handle = req.body.handle;
