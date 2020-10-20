@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
   });
 
   let link_views = [];
+  let total_link_sum = 0;
 
   for(let i=0;i<links.length;i++) {
     let temp_link_views = await Visit.find({
@@ -39,6 +40,7 @@ module.exports = async (req, res) => {
     });
 
     let temp_link_sum = 0;
+    total_link_sum++;
 
     for(let i=0;i<temp_link_views.length;i++) {
       if(new Date(temp_link_views[i].created_on) > new Date((new Date().getTime() - (days * 24 * 60 * 60 * 1000)))) {
@@ -52,9 +54,12 @@ module.exports = async (req, res) => {
     });
   };
 
+  let ctr = total_link_sum/profile_view_sum*100;
+
   // Return payload
   return res.send({
     profile_view_sum,
-    link_views
+    link_views,
+    ctr
   });
 };
