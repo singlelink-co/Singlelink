@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const config = global.config;
 
 const Profile = mongoose.model('Profile');
 

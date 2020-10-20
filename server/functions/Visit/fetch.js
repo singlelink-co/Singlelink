@@ -54,7 +54,7 @@ module.exports = async (req, res) => {
     });
   }
 
-  let ctr = total_link_sum/profile_view_sum*100;
+  let ctr = total_link_sum / profile_view_sum * 100;
 
   // Return payload
   return res.send({

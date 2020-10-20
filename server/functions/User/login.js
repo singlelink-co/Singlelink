@@ -22,7 +22,7 @@ module.exports = (req, res) => {
                 token: jwt.sign(
                     {
                         email: user.email,
-                    }, global.config.secret, {
+                    }, config.secret, {
                         expiresIn: '168h'
                     }
                 )

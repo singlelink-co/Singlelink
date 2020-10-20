@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-const config = global.config;
-
 const User = mongoose.model('User');
 
 module.exports = function (req, res, next) {

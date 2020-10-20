@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 
 const User = mongoose.model('User');
 
-let senderEmailAddress = global.config.aws.senderEmailAddress;
+let senderEmailAddress = config.aws.senderEmailAddress;
 
 module.exports = (req, res) => {
   if (!req.body.email)
@@ -32,13 +32,13 @@ async function sendPasswordResetEmail(email) {
       email,
       passwordReset: true
     },
-    global.config.secret,
+    config.secret,
     {
       expiresIn: '60m'
     }
   );
 
-  let url = global.config.clientDomain + "/forgot-password/change?";
+  let url = config.clientDomain + "/forgot-password/change?";
   const params = new URLSearchParams({token: token});
   url += params.toString();
 

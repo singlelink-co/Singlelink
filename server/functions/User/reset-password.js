@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   if (!req.body.password)
     return res.status(400).send('Missing new password');
 
-  let decoded = jwt.verify(req.body.token, global.config.secret, {
+  let decoded = jwt.verify(req.body.token, config.secret, {
     maxAge: "60m"
   });
 

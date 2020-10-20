@@ -22,7 +22,7 @@ AWS.config.update({
   apiVersion: '2010-12-01'
 });
 
-mongoose.connect(global.config.database,
+mongoose.connect(config.database,
   {
     useNewUrlParser: true
   })
