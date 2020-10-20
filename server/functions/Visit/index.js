@@ -7,6 +7,6 @@ const VisitController = express();
 VisitController.use(require('../../middleware/auth'));
 
 // Routing
-VisitController.get('/fetch', require('./fetch'));
+VisitController.all('/fetch', require('./fetch'));
 
 module.exports = VisitController;
