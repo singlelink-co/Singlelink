@@ -88,14 +88,6 @@ db.once('open', async () => {
 async function initProxy(connection, port) {
   global.proxy = require('redbird')({
     port: port, // http port is needed for LetsEncrypt challenge during request / renewal. Also enables automatic http->https redirection for registered https routes.
-    letsencrypt: {
-      path: __dirname + '/certs',
-      port: 9999 // LetsEncrypt minimal web server port for handling challenges. Routed 80->9999, no need to open 9999 in firewall. Default 3000 if not defined.
-    },
-    ssl: {
-      http2: true,
-      port: 443 // SSL port used to serve registered https routes with LetsEncrypt certificate.
-    }
   });
 
   proxy.register('singlelink.localhost', "127.0.0.1:4444");
@@ -106,22 +98,22 @@ async function initProxy(connection, port) {
 
   console.log(`${profiles.length} domains found.`);
 
-  if (environment === 'development') {
-    for (let profile of profiles) {
-      proxy.register(profile.custom_domain, "127.0.0.1:4444");
-    }
-  } else {
-    for (let profile of profiles) {
-      proxy.register(profile.custom_domain, "127.0.0.1:4444", {
-        ssl: {
-          letsencrypt: {
-            email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
-            production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
-          }
-        }
-      });
-    }
+  // if (environment === 'development') {
+  for (let profile of profiles) {
+    proxy.register(profile.custom_domain, "127.0.0.1:4444");
   }
+  // } else {
+  //   for (let profile of profiles) {
+  //     proxy.register(profile.custom_domain, "127.0.0.1:4444", {
+  //       ssl: {
+  //         letsencrypt: {
+  //           email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
+  //           production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
   console.log(`Reverse proxy started on port ${port}, listening for connections`);
 }
