@@ -18,19 +18,7 @@ module.exports = (req, res) => {
   if (req.body.custom_domain && userDomain.host !== apiDomain.host) {
     req.user.active_profile.custom_domain = userDomain.host;
 
-    // if (environment === 'development') {
     proxy.register(userDomain.host, "127.0.0.1:4444");
-    // } else {
-    //   proxy.register(userDomain.host, "127.0.0.1:4444", {
-    //     ssl: {
-    //       letsencrypt: {
-    //         email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
-    //         production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
-    //       }
-    //     }
-    //   });
-    // }
-
   } else if ((typeof req.user.active_profile.custom_domain) !== undefined) {
     req.user.active_profile.custom_domain = null;
   }

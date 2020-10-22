@@ -98,22 +98,9 @@ async function initProxy(connection, port) {
 
   console.log(`${profiles.length} domains found.`);
 
-  // if (environment === 'development') {
   for (let profile of profiles) {
     proxy.register(profile.custom_domain, "127.0.0.1:4444");
   }
-  // } else {
-  //   for (let profile of profiles) {
-  //     proxy.register(profile.custom_domain, "127.0.0.1:4444", {
-  //       ssl: {
-  //         letsencrypt: {
-  //           email: 'letsencrypt@neutroncreative.com', // Domain owner/admin email
-  //           production: config.production, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
 
   console.log(`Reverse proxy started on port ${port}, listening for connections`);
 }
