@@ -153,13 +153,23 @@
 <script>
   export default {
     head: {
-      title: 'Singlelink - A single link for all your content 🔗🔥',
+      title: 'Singlelink - A single link for everything 🔗🔥',
       meta: [
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: 'Singlelink - A single link for everything 🔗🔥'
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+        },
         {
           hid: 'description',
           name: 'description',
-          content: 'A single link for all your needs. Build your profile in seconds and get started for free!'
-        }
+          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+        },
       ],
     },
     data: function() {

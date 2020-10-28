@@ -135,10 +135,21 @@
       title: 'Pricing & plans - Singlelink',
       meta: [
         {
+          hid: 'og:title',
+          name: 'og:title',
+          content: 'Pricing & plans - Singlelink'
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: 'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+        },
+        {
           hid: 'description',
           name: 'description',
-          content: 'View and compare available pricing plans for Singlelink cloud.'
-        }
+          content:  'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+        },
+
       ],
     }
   };

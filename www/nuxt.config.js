@@ -15,14 +15,14 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: 'Singlelink - A free & open-source Linktree alternative',
+    title: 'Singlelink - A single link for everything 🔗🔥',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.' },
-      { name: 'og:image', content: 'https://singlelink.co/social-hero.png' },
-      { name: 'og:title', content: 'Singlelink - A free & open-source Linktree alternative' },
-      { name: 'og:description', content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.' },
+      { hid: 'description', name: 'description', content: 'A single link for everything. Build your profile in seconds and get started for free!' },
+      { name: 'og:image', content: 'https://singlelink.co/Singlelink-Hero-v2.png' },
+      { name: 'og:title', content: 'Singlelink - A single link for everything 🔗🔥' },
+      { name: 'og:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
       { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
     ],
     link: [
