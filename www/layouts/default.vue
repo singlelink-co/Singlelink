@@ -60,7 +60,7 @@
     </nav>
     <Nuxt class="bg-gray-100 flex flex-grow w-full h-auto justify-start flex-col" />
     <footer class="bg-gray-100 border border-gray-200 border-l-0 border-r-0 border-b-0 p-10">
-      <a href="https://github.com/Neutron-Creative" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
+      <a href="https://beta-app.singlelink.co/create-account" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
         <span class="p-2 mr-2 hover:text-gray-800 cursor-pointer flex-row items-center justify-center">Get access to Singlelink beta!<span class="ml-2">🤫</span></span>
       </a>
       <ul class="w-full flex flex-col md:flex-row text-gray-600 text-sm items-center justify-center">
