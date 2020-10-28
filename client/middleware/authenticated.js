@@ -11,8 +11,6 @@ export default function (context) {
             token: singlelink_token
           })
         .then((response) => {
-          console.log('ree');
-          console.log(response);
           //context.store.commit('user/set_user', response);
           context.store.commit('auth/login', singlelink_token);
           // verify token

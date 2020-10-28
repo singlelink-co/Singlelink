@@ -111,7 +111,6 @@ export default {
       })
       .then((response) => {
         console.log('Successfully saved changes');
-        console.log(response);
         if(this.user.active_profile.handle != this.original_handle) return location.reload();
         this.refresh_preview();
       })
@@ -146,7 +145,6 @@ export default {
       })
         .then((response) => {
           console.log('Fetched user data successfully');
-          console.log(response);
           this.user = response;
           this.original_handle = this.user.active_profile.handle;
         })

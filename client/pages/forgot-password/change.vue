@@ -68,7 +68,6 @@
               return window.location.replace('/');
             }, 250);
           }
-        console.log(request);
       } catch(err) {
         this.message = null;
         console.log('Error!');
