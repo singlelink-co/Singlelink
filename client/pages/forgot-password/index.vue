@@ -56,7 +56,6 @@
           this.error = null;
           this.message = 'Password reset sent, check your inbox.';
         }
-        console.log(request);
       } catch(err) {
         this.message = null;
         console.log('Error!');

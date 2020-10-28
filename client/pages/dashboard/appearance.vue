@@ -242,7 +242,6 @@ export default {
       })
         .then((response) => {
           console.log('Fetched user data successfully');
-          console.log(response);
           if(response.active_profile.theme) this.active_theme = response.active_profile.theme;
           if(response.active_profile.custom_css) this.custom_css = response.active_profile.custom_css;
           if(response.active_profile.custom_html) this.custom_html = response.active_profile.custom_html;

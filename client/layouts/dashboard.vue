@@ -191,7 +191,6 @@ html {
         })
           .then((response) => {
             console.log('Fetched user data successfully');
-            console.log(response);
             this.user = response;
           })
           .catch((error) => {
