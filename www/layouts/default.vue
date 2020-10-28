@@ -3,8 +3,9 @@
     <a href="https://neutroncreative.com/">
       <div class="flex flex-row w-full bg-black items-center justify-center p-3">
         <div class="w-full max-w-6xl flex-row flex items-center justify-center">
-          <img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
-          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white ml-2">Read more 👉</span></span>
+          <!--<img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>-->
+          <!--<span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white ml-2">Read more 👉</span></span>-->
+          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink is currently experiencing issues due to a service provider outage from MongoDB Atlas</span>
         </div>
       </div>
     </a>
