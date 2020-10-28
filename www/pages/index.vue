@@ -166,6 +166,16 @@
           content: 'A single link for everything. Build your profile in seconds and get started for free!'
         },
         {
+          hid: 'twitter:title',
+          name: 'twitter:title',
+          content: 'Singlelink - A single link for everything 🔗🔥'
+        },
+        {
+          hid: 'twitter:description',
+          name: 'twitter:description',
+          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+        },
+        {
           hid: 'description',
           name: 'description',
           content: 'A single link for everything. Build your profile in seconds and get started for free!'

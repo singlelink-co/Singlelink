@@ -23,7 +23,12 @@ export default {
       { name: 'og:image', content: 'https://singlelink.co/Singlelink-Hero-v2.png' },
       { name: 'og:title', content: 'Singlelink - A single link for everything 🔗🔥' },
       { name: 'og:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
-      { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
+      { name: 'twitter:image', content: 'https://singlelink.co/Singlelink-Hero-v2.png' },
+      { name: 'twitter:title', content: 'Singlelink - A single link for everything 🔗🔥' },
+      { name: 'twitter:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
+      { name: 'twitter:card', content: 'summary_large_image'}
+
+    { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

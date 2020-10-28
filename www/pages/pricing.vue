@@ -145,6 +145,16 @@
           content: 'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
         },
         {
+          hid: 'twitter:title',
+          name: 'og:title',
+          content: 'Pricing & plans - Singlelink'
+        },
+        {
+          hid: 'twitter:description',
+          name: 'og:description',
+          content: 'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+        },
+        {
           hid: 'description',
           name: 'description',
           content:  'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
