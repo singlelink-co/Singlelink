@@ -37,7 +37,8 @@
 </p>
 <br>
 
-<img src="static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>
+<!--<img src="client/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
+<img src="client/static/Singlelink-Hero-v2.png" alt="Singlelink promotional graphic"/>
 
 <h2 id="key-features">Key features</h2>
 
