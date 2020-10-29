@@ -87,6 +87,9 @@
         <a href="https://github.com/Neutron-Creative">
           <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Github</li>
         </a>
+        <a href="https:/status.singlelink.co">
+          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Status</li>
+        </a>
       </ul>
       <div class="text-gray-600 text-sm text-center p-3 leading-relaxed">
         Built as part of our mission to make the world open-source by the team at <a class="text-indigo-600 hover:underline cursor-pointer" href="https://neutroncreative.com">Neutron Creative Inc.</a>

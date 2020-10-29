@@ -231,7 +231,7 @@
       },
       fetch_analytics: async function() {
         try {
-          let analytics = await this.$axios.get('https://api.singlelink.co/analytics/fetch');
+          let analytics = await this.$axios.get('https://beta-api.singlelink.co/analytics/fetch');
           this.users = analytics.data.users;
         } catch(err) {
           console.log(err);
