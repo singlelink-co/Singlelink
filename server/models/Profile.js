@@ -59,7 +59,7 @@ profileEventEmitter.on('change', change => {
     let customDomain = change.fullDocument.custom_domain;
 
     if (customDomain) {
-      proxy.register(customDomain, "127.0.0.1:4444");
+      reverseProxy.register(customDomain, "127.0.0.1:4444");
     }
   }
 });

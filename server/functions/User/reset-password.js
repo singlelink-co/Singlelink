@@ -56,7 +56,7 @@ async function setPassword(user, decodedToken, password) {
   try {
     if (!decodedToken.passwordReset) return false;
 
-    let hashedPassword = await bcrypt.hash(password);
+    let hashedPassword = await bcrypt.hash(password, 10);
 
     User.update({email: user.email}, {
       password: hashedPassword,

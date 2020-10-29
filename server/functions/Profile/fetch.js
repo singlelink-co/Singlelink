@@ -8,7 +8,6 @@ const Theme = mongoose.model('Theme');
 
 module.exports = (req, res) => {
     if(!req.body.handle && !req.params.handle) return res.status(400).send('Handle required to find account');
-    console.log(req.body.handle);
     let payload = {
         profile: null,
         links: null,

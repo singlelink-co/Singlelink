@@ -10,9 +10,6 @@ module.exports = async (req, res) => {
 
     let links = await Link.find({parent: req.user.active_profile._id}).sort({"order":1});
 
-    console.log('Before');
-    console.log(links);
-
     let end_links = links.splice(req.body.new_index);
     if(req.body.old_index > req.body.new_index) {
         // Search end_links
@@ -32,9 +29,6 @@ module.exports = async (req, res) => {
         links[i].order = i;
         await links[i].save();
     }
-
-    console.log('After');
-    console.log(links);
 
     return res.send(links);
 

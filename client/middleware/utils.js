@@ -4,7 +4,6 @@ export default class Cookies {
       const b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
       return b ? b.pop() : '';
     } else {
-      console.log('Get context');
       if(context && context.app.$cookies) {
         return context.app.$cookies.get(a);
       }

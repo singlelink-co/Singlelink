@@ -154,8 +154,6 @@ export default {
         theme: theme._id,
       })
         .then((response) => {
-          console.log('Themes activated successfully');
-          console.log(response);
           this.active_theme = response.theme;
           this.refresh_preview();
         })
@@ -169,8 +167,6 @@ export default {
         token: this.$store.getters['auth/get_token']
       })
       .then((response) => {
-        console.log('Themes fetched successfully');
-        console.log(response);
         this.themes = response;
 
       })
@@ -196,8 +192,6 @@ export default {
         }
       })
       .then((response) => {
-        console.log('Theme created successfully');
-        console.log(response);
         this.themes.push(response);
         if(close) return this.close_modal();
         this.set_pending(null);
@@ -241,7 +235,6 @@ export default {
         token : this.$store.getters['auth/get_token']
       })
         .then((response) => {
-          console.log('Fetched user data successfully');
           if(response.active_profile.theme) this.active_theme = response.active_profile.theme;
           if(response.active_profile.custom_css) this.custom_css = response.active_profile.custom_css;
           if(response.active_profile.custom_html) this.custom_html = response.active_profile.custom_html;
@@ -258,8 +251,6 @@ export default {
         custom_html: this.custom_html
       })
         .then((response) => {
-          console.log('Successfully saved changes');
-          console.log(response);
           this.refresh_preview();
         })
         .catch((error) => {

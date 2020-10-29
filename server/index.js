@@ -86,20 +86,25 @@ db.once('open', async () => {
  * @param port Port to open for incoming connections
  */
 async function initProxy(connection, port) {
-  global.proxy = require('redbird')({
+  global.reverseProxy = require('redbird')({
     port: port, // http port is needed for LetsEncrypt challenge during request / renewal. Also enables automatic http->https redirection for registered https routes.
   });
 
-  proxy.register('singlelink.localhost', "127.0.0.1:4444");
-  proxy.register("localhost", "127.0.0.1:4444");
-  proxy.register(config.apiDomain, "127.0.0.1:4444");
+  reverseProxy.register('singlelink.localhost', "127.0.0.1:4444");
+  reverseProxy.register("localhost", "127.0.0.1:4444");
+  reverseProxy.register(config.apiDomain, "127.0.0.1:4444");
+
+  reverseProxy.proxy.on('proxyRes', function (proxyRes, req, res) {
+    res.setHeader('access-control-allow-origin', '*');
+    res.setHeader('access-control-allow-methods', 'POST, GET, OPTIONS');
+  });
 
   let profiles = await Profile.find({"custom_domain": {"$nin": [null, ""]}});
 
   console.log(`${profiles.length} domains found.`);
 
   for (let profile of profiles) {
-    proxy.register(profile.custom_domain, "127.0.0.1:4444");
+    reverseProxy.register(profile.custom_domain, "127.0.0.1:4444");
   }
 
   console.log(`Reverse proxy started on port ${port}, listening for connections`);

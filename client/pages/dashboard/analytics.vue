@@ -49,7 +49,6 @@ export default {
         token : this.$store.getters['auth/get_token']
       })
         .then((response) => {
-          console.log('Fetched user data successfully');
           this.analytics = response;
         })
         .catch((error) => {

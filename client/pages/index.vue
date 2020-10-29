@@ -67,7 +67,6 @@
         password: this.password
       })
         .then((response) => {
-          console.log('Login successful');
           Cookies.setCookie('singlelink_token', response.data.token, 7, this);
           this.$store.commit('auth/login', response.data.token);
           this.$nuxt.$loading.finish();

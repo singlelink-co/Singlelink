@@ -147,12 +147,8 @@ export default {
     };
   },
       asyncData(ctx) {
-    console.log('Handle');
-    console.log(ctx.route.path.replace('/u/',''));
     return ctx.$axios.$post('/profile/fetch/' + ctx.route.path.replace('/u/',''))
       .then((response) => {
-        console.log('Response!');
-        console.log(response);
           return {
             profile: response.profile,
             links: response.links.sort(function (a, b) {

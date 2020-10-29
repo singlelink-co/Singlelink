@@ -48,7 +48,6 @@
   methods: {
     async request_reset () {
       try {
-        console.log('Email: ', this.email);
         let request = await this.$axios.post('/user/request-reset-password', {
           email: this.email
         });

@@ -123,7 +123,6 @@ export default {
         token: this.$store.getters['auth/get_token']
       })
         .then((response) => {
-          console.log('Fetched user data successfully');
           this.user = response;
         })
         .catch((error) => {
@@ -163,8 +162,6 @@ export default {
         target: this.pending_link._id,
       })
         .then((response) => {
-          console.log('Successfully destroyed link');
-          console.log(response);
           this.links = response;
           this.refresh_preview();
           this.close_modal();
@@ -184,8 +181,6 @@ export default {
         custom_css: this.pending_link.custom_css,
       })
         .then((response) => {
-          console.log('Successfully updated link');
-          console.log(response);
           this.links = response;
           this.refresh_preview();
           this.close_modal();
@@ -209,8 +204,6 @@ export default {
         token: this.$store.getters['auth/get_token']
       })
         .then((response) => {
-          console.log('Successfully added new link to profile');
-          console.log(response);
           this.links.push(response.data);
           this.refresh_preview();
           this.clear_pending();
@@ -231,7 +224,6 @@ export default {
       };
     },
     edit_link: function (link) {
-      console.log(link);
       this.clear_pending();
       this.pending_link = {
         _id: link._id,

@@ -110,8 +110,7 @@ export default {
         custom_domain: this.user.active_profile.custom_domain || null
       })
       .then((response) => {
-        console.log('Successfully saved changes');
-        if(this.user.active_profile.handle != this.original_handle) return location.reload();
+        if(this.user.active_profile.handle !== this.original_handle) return location.reload();
         this.refresh_preview();
       })
       .catch((error) => {
@@ -144,7 +143,6 @@ export default {
         token : this.$store.getters['auth/get_token']
       })
         .then((response) => {
-          console.log('Fetched user data successfully');
           this.user = response;
           this.original_handle = this.user.active_profile.handle;
         })
