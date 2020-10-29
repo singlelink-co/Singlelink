@@ -52,7 +52,9 @@
     },
     computed: {
       origin: function() {
-        return window.location.origin.replace('https://', '').replace('http://', '');
+        if (process.browser) {
+          return window.location.origin.replace('https://', '').replace('http://', '');
+        }
       }
     },
     middleware: 'unauthenticated',
