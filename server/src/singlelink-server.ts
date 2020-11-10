@@ -1,9 +1,9 @@
 import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
-import {config} from "./data/config";
+import {config} from "./config/config";
 import AWS from 'aws-sdk';
 
 /**
- * The Capture Server contains a Fastify instance and a list of IControllers, which register controllers with Fastify.
+ * The Capture Server contains a Fastify instance and a list of IControllers, which registers routes with Fastify.
  */
 export class SingleLinkServer {
   private readonly controllers: IController[];
@@ -14,7 +14,7 @@ export class SingleLinkServer {
 
   /**
    *
-   * @param controllers Any controllers that should be passed with the managers constructor. Otherwise, they can be added later with addController(controller).
+   * @param controllers Any controllers that should be passed with the constructor. Otherwise, they can be added later with addController(controller).
    * @constructor
    */
   constructor(controllers?: IController[]) {
@@ -48,7 +48,7 @@ export class SingleLinkServer {
   }
 
   /**
-   * Starts the fastify managers with the controllers provided.
+   * Starts the fastify server with the controllers provided.
    */
   startServer() {
     this.fastify.listen(config.port, config.host, (err, address) => {
@@ -91,7 +91,7 @@ export class SingleLinkServer {
   }
 
   /**
-   * Index route for the managers.
+   * Index route for the server.
    *
    * @param request
    * @param reply

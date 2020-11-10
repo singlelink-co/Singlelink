@@ -1,4 +1,4 @@
-import {DatabaseManager} from "./managers/database-manager";
+import {DatabaseManager} from "./data/database-manager";
 import {SingleLinkServer} from "./singlelink-server";
 import {AnalyticsController} from "./controllers/analytics-controller";
 import {LinkController} from "./controllers/link-controller";

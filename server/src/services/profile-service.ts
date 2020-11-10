@@ -1,4 +1,4 @@
-import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./base-service";
 
 /**

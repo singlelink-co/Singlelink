@@ -22,14 +22,14 @@ if (process.env.CAPTURE_KEY) {
 }
 
 /**
- * The port that the managers will use.
+ * The port that the server will use.
  */
 if (process.env.PORT) {
   config.port = process.env.PORT;
 }
 
 /**
- * The domain that this managers will be hosted on.
+ * The domain that this server will be hosted on.
  */
 if (process.env.API_DOMAIN) {
   config.apiDomain = process.env.API_DOMAIN;
@@ -43,7 +43,7 @@ if (process.env.CLIENT_DOMAIN) {
 }
 
 /**
- * An email that can be used to contact the administrator of this managers.
+ * An email that can be used to contact the administrator of this server.
  */
 if (process.env.CONTACT_EMAIL) {
   config.contactEmail = process.env.CONTACT_EMAIL;

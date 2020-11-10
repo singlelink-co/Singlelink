@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {UserService} from "../services/user-service";
-import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
 import {AuthUtils} from "../utils/auth-utils";
 

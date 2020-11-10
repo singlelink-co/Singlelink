@@ -1,9 +1,9 @@
 import * as bcrypt from "bcrypt";
-import {config} from "../data/config";
+import {config} from "../config/config";
 import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
 import {DatabaseService} from "./base-service";
-import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseManager} from "../data/database-manager";
 
 /**
  * This service takes care of transactional tasks for the User Controller.

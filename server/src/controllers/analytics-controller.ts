@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {UserService} from "../services/user-service";
-import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {constants as HttpStatus} from "http2";
 import {DeepLinker} from "nc-deeplink";
@@ -72,7 +72,7 @@ export class AnalyticsController implements IController {
 
     if (!link) {
       reply.type("application/json").code(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-      return {error: "The link could not be processed by the managers."};
+      return {error: "The link could not be processed by the server."};
     }
 
     if (link.use_deep_link) {

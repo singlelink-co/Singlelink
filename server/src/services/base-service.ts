@@ -1,8 +1,8 @@
 import {Pool} from "pg";
-import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseManager} from "../data/database-manager";
 
 /**
- * A BaseService is an agent that can perform tasks on the server.s
+ * A BaseService is an agent that can perform any arbitrary task between controllers (and other components).
  * It should perform actions based on requests provided by the server.
  */
 export abstract class BaseService {
