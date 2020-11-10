@@ -104,7 +104,7 @@ export default {
       this.$nuxt.$loading.start();
       this.$router.push('/');
       this.$nuxt.$loading.finish();
-      return;
+
     },
     fetch_user_data: function() {
       this.$axios.$post('/user/fetch', {

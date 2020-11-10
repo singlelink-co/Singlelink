@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowJs": false
+  },
+  "include": [
+    "src/config.json",
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

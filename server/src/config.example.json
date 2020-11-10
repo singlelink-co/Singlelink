@@ -1,0 +1,23 @@
+{
+  "database": "",
+  "secret": "",
+  "capture_key": "",
+  "port": 80,
+  "apiDomain": "",
+  "clientDomain": "",
+  "contactEmail": "",
+  "aws": {
+    "senderEmailAddress": "",
+    "region": "",
+    "accessKey": "",
+    "secretKey": ""
+  },
+  "s3Bucket": {
+    "endPoint": "",
+    "bucketName": "",
+    "port": 443,
+    "useSSL": true,
+    "accessKey": "",
+    "secretKey": ""
+  }
+}
