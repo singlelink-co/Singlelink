@@ -1,25 +1,25 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserManager} from "../server/user-manager";
-import {DatabaseManager} from "../server/database-manager";
-import {AnalyticsManager} from "../server/analytics-manager";
+import {UserService} from "../services/user-service";
+import {DatabaseManager} from "../managers/database-manager";
+import {AnalyticsService} from "../services/analytics-service";
 import {constants as HttpStatus} from "http2";
 import {DeepLinker} from "nc-deeplink";
 
 /**
- * The analytics router maps and provides for all the routes under /analytics.
+ * This controller maps and provides for all the controllers under /analytics.
  */
-export class AnalyticsRouter implements IRouter {
-  private readonly userManager: UserManager;
+export class AnalyticsController implements IController {
+  private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
-  private analyticsManager: AnalyticsManager;
+  private analyticsService: AnalyticsService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     this.fastify = fastify;
     this.databaseManager = databaseManager;
-    this.userManager = new UserManager(databaseManager);
-    this.analyticsManager = new AnalyticsManager(databaseManager);
+    this.userManager = new UserService(databaseManager);
+    this.analyticsService = new AnalyticsService(databaseManager);
   }
 
   registerRoutes(): void {
@@ -39,7 +39,7 @@ export class AnalyticsRouter implements IRouter {
    * @constructor
    */
   async FetchAnalytics(request: FastifyRequest, reply: FastifyReply): Promise<any> {
-    let data = await this.analyticsManager.getAnalytics();
+    let data = await this.analyticsService.getAnalytics();
 
     return {
       users: data.total_users,
@@ -68,11 +68,11 @@ export class AnalyticsRouter implements IRouter {
       return {};
     }
 
-    let link = await this.analyticsManager.getLink(id, true);
+    let link = await this.analyticsService.getLink(id, true);
 
     if (!link) {
       reply.type("application/json").code(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-      return {error: "The link could not be processed by the server."};
+      return {error: "The link could not be processed by the managers."};
     }
 
     if (link.use_deep_link) {

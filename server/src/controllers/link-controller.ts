@@ -1,24 +1,25 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserManager} from "../server/user-manager";
-import {DatabaseManager} from "../server/database-manager";
+import {DatabaseManager} from "../managers/database-manager";
 import {Pool} from "pg";
 import {AuthUtils} from "../utils/auth-utils";
+import {LinkService} from "../services/link-service";
+import {AnalyticsService} from "../services/analytics-service";
 
 /**
- * The analytics router maps and provides for all the routes under /link.
+ * This controller maps and provides for all the controllers under /link.
  */
-export class LinkRouter implements IRouter {
-  private readonly userManager: UserManager;
+export class LinkController implements IController {
 
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
   private pool: Pool;
+  private linkService: LinkService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     this.fastify = fastify;
     this.databaseManager = databaseManager;
     this.pool = databaseManager.pool;
-    this.userManager = new UserManager(databaseManager);
+    this.linkService = new LinkService(databaseManager);
   }
 
   registerRoutes(): void {

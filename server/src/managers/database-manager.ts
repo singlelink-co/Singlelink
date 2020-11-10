@@ -2,6 +2,9 @@ import {Pool} from "pg";
 import * as fs from "fs";
 import {config} from "../data/config";
 
+/**
+ * The DatabaseManager manages a connection to the PostgreSQL database.
+ */
 export class DatabaseManager {
   pool = new Pool({
     connectionString: config.database,
@@ -34,7 +37,7 @@ export class DatabaseManager {
 
   /**
    * Call this when the pool needs to be disposed. It is unlikely this needs to ever be done in the life span of the
-   * server, however, since the pool will always be active.
+   * managers, however, since the pool will always be active.
    */
   async dispose() {
     await this.pool.end();

@@ -18,7 +18,7 @@
   },
   "include": [
     // Only copied if config.json exists in src dir
-    "src/config.json",
+    "src/data/config.json",
     "src"
   ],
   "exclude": [

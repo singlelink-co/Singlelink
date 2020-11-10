@@ -1,5 +1,5 @@
 /**
- * Basically a lock that prevents things from progressing until they are ready. If this list is empty, the server is ready.
+ * Basically a lock that prevents things from progressing until they are ready. If this list is empty, the managers is ready.
  */
 
 export class ReadyLock {

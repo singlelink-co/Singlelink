@@ -1,11 +1,11 @@
-import {DatabaseManager} from "./server/database-manager";
-import {SingleLinkServer} from "./server/singlelink-server";
-import {AnalyticsRouter} from "./routes/analytics-router";
-import {LinkRouter} from "./routes/link-router";
-import {ProfileRouter} from "./routes/profile-router";
-import {ThemeRouter} from "./routes/theme-router";
-import {UserRouter} from "./routes/user-router";
-import {VisitRouter} from "./routes/visit-router";
+import {DatabaseManager} from "./managers/database-manager";
+import {SingleLinkServer} from "./singlelink-server";
+import {AnalyticsController} from "./controllers/analytics-controller";
+import {LinkController} from "./controllers/link-controller";
+import {ProfileController} from "./controllers/profile-controller";
+import {ThemeController} from "./controllers/theme-controller";
+import {UserController} from "./controllers/user-controller";
+import {VisitController} from "./controllers/visit-controller";
 
 console.log("Initializing Singlelink");
 
@@ -19,12 +19,12 @@ start().then(() => {
 async function start() {
   await database.initialize();
 
-  server.addRouter(new AnalyticsRouter(server.fastify, database));
-  server.addRouter(new LinkRouter(server.fastify, database));
-  server.addRouter(new ProfileRouter(server.fastify, database));
-  server.addRouter(new ThemeRouter(server.fastify, database));
-  server.addRouter(new UserRouter(server.fastify, database));
-  server.addRouter(new VisitRouter(server.fastify, database));
+  server.addController(new AnalyticsController(server.fastify, database));
+  server.addController(new LinkController(server.fastify, database));
+  server.addController(new ProfileController(server.fastify, database));
+  server.addController(new ThemeController(server.fastify, database));
+  server.addController(new UserController(server.fastify, database));
+  server.addController(new VisitController(server.fastify, database));
 
   server.startServer();
 }

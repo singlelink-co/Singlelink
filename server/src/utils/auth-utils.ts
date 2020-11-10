@@ -3,7 +3,7 @@ import {FastifyReply, FastifyRequest} from "fastify";
 export class AuthUtils {
 
   /**
-   * Default authentication options for routes.
+   * Default authentication options for controllers.
    */
   static AuthedRouteOpts = {
     preHandler: AuthUtils.checkAuth

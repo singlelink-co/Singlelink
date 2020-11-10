@@ -170,7 +170,7 @@ do
 $$
     begin
         /*
-         Creates an analytics view for use with the server analytics.
+         Creates an analytics view for use with the managers analytics.
          */
         create materialized view users.analytics_view as
             select count(users.accounts.user_id)                                 as total_users,

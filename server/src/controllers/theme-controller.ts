@@ -1,24 +1,29 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserManager} from "../server/user-manager";
-import {DatabaseManager} from "../server/database-manager";
+import {UserService} from "../services/user-service";
+import {DatabaseManager} from "../managers/database-manager";
 import {Pool} from "pg";
 import {AuthUtils} from "../utils/auth-utils";
+import {LinkService} from "../services/link-service";
+import {ThemeService} from "../services/theme-service";
+import {ProfileService} from "../services/profile-service";
 
 /**
- * The analytics router maps and provides for all the routes under /theme.
+ * This controller maps and provides for all the controllers under /theme.
  */
-export class ThemeRouter implements IRouter {
-  private readonly userManager: UserManager;
+export class ThemeController implements IController {
+  private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
   private pool: Pool;
+  private themeService: ThemeService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     this.fastify = fastify;
     this.databaseManager = databaseManager;
     this.pool = databaseManager.pool;
-    this.userManager = new UserManager(databaseManager);
+    this.userManager = new UserService(databaseManager);
+    this.themeService = new ThemeService(databaseManager);
   }
 
   registerRoutes(): void {

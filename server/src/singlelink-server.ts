@@ -1,12 +1,12 @@
 import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
-import {config} from "../data/config";
+import {config} from "./data/config";
 import AWS from 'aws-sdk';
 
 /**
- * The Capture Server contains a Fastify instance and a list of IRouters, which register routes with Fastify.
+ * The Capture Server contains a Fastify instance and a list of IControllers, which register controllers with Fastify.
  */
 export class SingleLinkServer {
-  private readonly routers: IRouter[];
+  private readonly controllers: IController[];
 
   fastify = fastifyInit({
     logger: true
@@ -14,14 +14,14 @@ export class SingleLinkServer {
 
   /**
    *
-   * @param routers Any routers that should be passed with the server constructor. Otherwise, they can be added later with addRouter(router).
+   * @param controllers Any controllers that should be passed with the managers constructor. Otherwise, they can be added later with addController(controller).
    * @constructor
    */
-  constructor(routers?: IRouter[]) {
-    if (routers)
-      this.routers = routers;
+  constructor(controllers?: IController[]) {
+    if (controllers)
+      this.controllers = controllers;
     else
-      this.routers = [];
+      this.controllers = [];
 
     this.fastify.register(require('fastify-favicon'), {
       path: `${__dirname}/../assets/`
@@ -48,7 +48,7 @@ export class SingleLinkServer {
   }
 
   /**
-   * Starts the fastify server with the routes provided.
+   * Starts the fastify managers with the controllers provided.
    */
   startServer() {
     this.fastify.listen(config.port, config.host, (err, address) => {
@@ -58,8 +58,8 @@ export class SingleLinkServer {
 
     this.registerDefaultRoutes();
 
-    for (let router of this.routers) {
-      router.registerRoutes();
+    for (let controller of this.controllers) {
+      controller.registerRoutes();
     }
 
     console.log("SingleLink is listening for requests!");
@@ -72,26 +72,26 @@ export class SingleLinkServer {
   }
 
   /**
-   * Add a route to a router.
-   * @param router
+   * Add a controller.
+   * @param controller
    */
-  addRouter(router: IRouter) {
-    this.routers.push(router);
+  addController(controller: IController) {
+    this.controllers.push(controller);
   }
 
   /**
-   * Remove a router from a router.
-   * @param router
+   * Remove a controller.
+   * @param controller
    */
-  removeRouter(router: IRouter) {
-    let index = this.routers.indexOf(router);
+  removeController(controller: IController) {
+    let index = this.controllers.indexOf(controller);
 
     if (index > -1)
-      this.routers.splice(index, 1);
+      this.controllers.splice(index, 1);
   }
 
   /**
-   * Index route for the server.
+   * Index route for the managers.
    *
    * @param request
    * @param reply

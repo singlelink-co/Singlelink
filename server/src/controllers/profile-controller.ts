@@ -1,29 +1,33 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserManager} from "../server/user-manager";
-import {DatabaseManager} from "../server/database-manager";
+import {UserService} from "../services/user-service";
+import {DatabaseManager} from "../managers/database-manager";
 import {Pool} from "pg";
 import {AuthUtils} from "../utils/auth-utils";
+import {LinkService} from "../services/link-service";
+import {ProfileService} from "../services/profile-service";
 
 /**
- * The analytics router maps and provides for all the routes under /profile.
+ * This controller maps and provides for all the controllers under /profile.
  */
-export class ProfileRouter implements IRouter {
-  private readonly userManager: UserManager;
+export class ProfileController implements IController {
+  private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
   private pool: Pool;
+  private profileService: ProfileService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     this.fastify = fastify;
     this.databaseManager = databaseManager;
     this.pool = databaseManager.pool;
-    this.userManager = new UserManager(databaseManager);
+    this.userManager = new UserService(databaseManager);
+    this.profileService = new ProfileService(databaseManager);
   }
 
   registerRoutes(): void {
 
-    // Unauthenticated routes
+    // Unauthenticated controllers
 
     this.fastify.all('/profile/fetch/:handle', this.FetchProfile.bind(this));
     this.fastify.all('/profile/thumbnail/:handle', this.ProfileThumbnailHandle.bind(this));

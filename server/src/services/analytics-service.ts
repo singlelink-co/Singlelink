@@ -1,11 +1,13 @@
-import {DatabaseManager} from "./database-manager";
-import {Pool} from "pg";
+import {DatabaseManager} from "../managers/database-manager";
+import {DatabaseService} from "./base-service";
 
-export class AnalyticsManager {
-  pool: Pool;
+/**
+ * This service takes care of transactional tasks for the Analytics Controller.
+ */
+export class AnalyticsService extends DatabaseService {
 
   constructor(databaseManager: DatabaseManager) {
-    this.pool = databaseManager.pool;
+    super(databaseManager);
   }
 
   /**

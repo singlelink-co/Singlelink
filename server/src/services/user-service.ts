@@ -1,17 +1,17 @@
 import * as bcrypt from "bcrypt";
-import {Pool, QueryResult} from "pg";
-import {DatabaseManager} from "./database-manager";
 import {config} from "../data/config";
 import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
+import {DatabaseService} from "./base-service";
+import {DatabaseManager} from "../managers/database-manager";
 
-export class UserManager {
-  private databaseManager: DatabaseManager;
-  private pool: Pool;
+/**
+ * This service takes care of transactional tasks for the User Controller.
+ */
+export class UserService extends DatabaseService {
 
   constructor(databaseManager: DatabaseManager) {
-    this.databaseManager = databaseManager;
-    this.pool = databaseManager.pool;
+    super(databaseManager);
   }
 
   async findUserById(userId: string): Promise<{ user_id: string, email: string, pass_hash: string }> {

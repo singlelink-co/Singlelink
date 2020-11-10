@@ -1,5 +1,5 @@
 /*
-  This is a conversion script meant to convert an old SingleLink MongoDB server to a PostgreSQL database.
+  This is a conversion script meant to convert an old SingleLink MongoDB managers to a PostgreSQL database.
   It requires two environment variables:
   MONGODB - The url to connect to MongoDB
   POSTGRESQL - The url that will be used to connect to PostgreSQL
