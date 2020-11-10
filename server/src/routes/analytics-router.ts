@@ -24,9 +24,8 @@ export class AnalyticsRouter implements IRouter {
 
   registerRoutes(): void {
 
-    this.fastify.get('/analytics/fetch', this.FetchAnalytics);
-
-    this.fastify.all('/analytics/link/:id', this.LinkAnalytics);
+    this.fastify.get('/analytics/fetch', this.FetchAnalytics.bind(this));
+    this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
 
   }
 

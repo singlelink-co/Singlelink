@@ -23,8 +23,8 @@ export class ThemeRouter implements IRouter {
 
   registerRoutes(): void {
 
-    this.fastify.post('/theme/fetch', AuthUtils.AuthedRouteOpts, this.FetchTheme);
-    this.fastify.post('/theme/update', AuthUtils.AuthedRouteOpts, this.UpdateTheme);
+    this.fastify.post('/theme/fetch', AuthUtils.AuthedRouteOpts, this.FetchTheme.bind(this));
+    this.fastify.post('/theme/update', AuthUtils.AuthedRouteOpts, this.UpdateTheme.bind(this));
 
   }
 

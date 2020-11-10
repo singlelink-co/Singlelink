@@ -25,20 +25,20 @@ export class ProfileRouter implements IRouter {
 
     // Unauthenticated routes
 
-    this.fastify.all('/profile/fetch/:handle', this.FetchProfile);
-    this.fastify.all('/profile/thumbnail/:handle', this.ProfileThumbnailHandle);
+    this.fastify.all('/profile/fetch/:handle', this.FetchProfile.bind(this));
+    this.fastify.all('/profile/thumbnail/:handle', this.ProfileThumbnailHandle.bind(this));
 
     // Authenticated
 
-    this.fastify.all('/profile/fetch-preview/', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview);
-    this.fastify.all('/profile/fetch-preview/:handle', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview);
+    this.fastify.all('/profile/fetch-preview/', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
+    this.fastify.all('/profile/fetch-preview/:handle', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
 
-    this.fastify.post('/profile/create/', AuthUtils.AuthedRouteOpts, this.CreateProfile);
-    this.fastify.post('/profile/activate-theme', AuthUtils.AuthedRouteOpts, this.ActivateProfileTheme);
-    this.fastify.post('/profile/update', AuthUtils.AuthedRouteOpts, this.UpdateProfile);
-    this.fastify.post('/profile/links', AuthUtils.AuthedRouteOpts, this.ListProfileLinks);
-    this.fastify.post('/profile/list', AuthUtils.AuthedRouteOpts, this.ListProfiles);
-    this.fastify.post('/profile/destroy', AuthUtils.AuthedRouteOpts, this.DestroyProfile);
+    this.fastify.post('/profile/create/', AuthUtils.AuthedRouteOpts, this.CreateProfile.bind(this));
+    this.fastify.post('/profile/activate-theme', AuthUtils.AuthedRouteOpts, this.ActivateProfileTheme.bind(this));
+    this.fastify.post('/profile/update', AuthUtils.AuthedRouteOpts, this.UpdateProfile.bind(this));
+    this.fastify.post('/profile/links', AuthUtils.AuthedRouteOpts, this.ListProfileLinks.bind(this));
+    this.fastify.post('/profile/list', AuthUtils.AuthedRouteOpts, this.ListProfiles.bind(this));
+    this.fastify.post('/profile/destroy', AuthUtils.AuthedRouteOpts, this.DestroyProfile.bind(this));
 
   }
 

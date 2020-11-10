@@ -23,11 +23,11 @@ export class LinkRouter implements IRouter {
 
   registerRoutes(): void {
 
-    this.fastify.post('/link/create', AuthUtils.AuthedRouteOpts, this.CreateLink);
-    this.fastify.post('/link/update', AuthUtils.AuthedRouteOpts, this.UpdateLink);
-    this.fastify.post('/link/destroy', AuthUtils.AuthedRouteOpts, this.DestroyLink);
-    this.fastify.post('/link/reorder', AuthUtils.AuthedRouteOpts, this.ReorderLink);
-    this.fastify.post('/link/reset-order', AuthUtils.AuthedRouteOpts, this.ResetLinkOrder);
+    this.fastify.post('/link/create', AuthUtils.AuthedRouteOpts, this.CreateLink.bind(this));
+    this.fastify.post('/link/update', AuthUtils.AuthedRouteOpts, this.UpdateLink.bind(this));
+    this.fastify.post('/link/destroy', AuthUtils.AuthedRouteOpts, this.DestroyLink.bind(this));
+    this.fastify.post('/link/reorder', AuthUtils.AuthedRouteOpts, this.ReorderLink.bind(this));
+    this.fastify.post('/link/reset-order', AuthUtils.AuthedRouteOpts, this.ResetLinkOrder.bind(this));
 
   }
 

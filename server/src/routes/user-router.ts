@@ -25,15 +25,15 @@ export class UserRouter implements IRouter {
 
     // Unauthenticated
 
-    this.fastify.all('/user/login', this.LoginUser);
-    this.fastify.all('/user/create', this.CreateUser);
-    this.fastify.all('/user/request-reset-password', this.UserRequestResetPassword);
-    this.fastify.all('/user/reset-password', this.ResetUserPassword);
+    this.fastify.all('/user/login', this.LoginUser.bind(this));
+    this.fastify.all('/user/create', this.CreateUser.bind(this));
+    this.fastify.all('/user/request-reset-password', this.UserRequestResetPassword.bind(this));
+    this.fastify.all('/user/reset-password', this.ResetUserPassword.bind(this));
 
     // Authenticated
 
-    this.fastify.all('/user/fetch', AuthUtils.AuthedRouteOpts, this.FetchUser);
-    this.fastify.all('/user/set-active', AuthUtils.AuthedRouteOpts, this.SetActiveUser);
+    this.fastify.all('/user/fetch', AuthUtils.AuthedRouteOpts, this.FetchUser.bind(this));
+    this.fastify.all('/user/set-active', AuthUtils.AuthedRouteOpts, this.SetActiveUser.bind(this));
 
   }
 

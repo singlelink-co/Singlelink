@@ -23,7 +23,7 @@ export class VisitRouter implements IRouter {
 
   registerRoutes(): void {
 
-    this.fastify.all('/visit/fetch', AuthUtils.AuthedRouteOpts, this.FetchVisit);
+    this.fastify.all('/visit/fetch', AuthUtils.AuthedRouteOpts, this.FetchVisit.bind(this));
 
   }
 
