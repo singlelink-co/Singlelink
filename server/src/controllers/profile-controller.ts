@@ -2,14 +2,13 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
-import {AuthUtils} from "../utils/auth-utils";
-import {LinkService} from "../services/link-service";
+import {Auth} from "../utils/auth";
 import {ProfileService} from "../services/profile-service";
 
 /**
  * This controller maps and provides for all the controllers under /profile.
  */
-export class ProfileController implements IController {
+export class ProfileController implements Controller {
   private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
@@ -26,7 +25,6 @@ export class ProfileController implements IController {
   }
 
   registerRoutes(): void {
-
     // Unauthenticated controllers
 
     this.fastify.all('/profile/fetch/:handle', this.FetchProfile.bind(this));
@@ -34,16 +32,15 @@ export class ProfileController implements IController {
 
     // Authenticated
 
-    this.fastify.all('/profile/fetch-preview/', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
-    this.fastify.all('/profile/fetch-preview/:handle', AuthUtils.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
+    this.fastify.all('/profile/fetch-preview/', Auth.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
+    this.fastify.all('/profile/fetch-preview/:handle', Auth.AuthedRouteOpts, this.FetchProfilePreview.bind(this));
 
-    this.fastify.post('/profile/create/', AuthUtils.AuthedRouteOpts, this.CreateProfile.bind(this));
-    this.fastify.post('/profile/activate-theme', AuthUtils.AuthedRouteOpts, this.ActivateProfileTheme.bind(this));
-    this.fastify.post('/profile/update', AuthUtils.AuthedRouteOpts, this.UpdateProfile.bind(this));
-    this.fastify.post('/profile/links', AuthUtils.AuthedRouteOpts, this.ListProfileLinks.bind(this));
-    this.fastify.post('/profile/list', AuthUtils.AuthedRouteOpts, this.ListProfiles.bind(this));
-    this.fastify.post('/profile/destroy', AuthUtils.AuthedRouteOpts, this.DestroyProfile.bind(this));
-
+    this.fastify.post('/profile/create/', Auth.AuthedRouteOpts, this.CreateProfile.bind(this));
+    this.fastify.post('/profile/activate-theme', Auth.AuthedRouteOpts, this.ActivateProfileTheme.bind(this));
+    this.fastify.post('/profile/update', Auth.AuthedRouteOpts, this.UpdateProfile.bind(this));
+    this.fastify.post('/profile/links', Auth.AuthedRouteOpts, this.ListProfileLinks.bind(this));
+    this.fastify.post('/profile/list', Auth.AuthedRouteOpts, this.ListProfiles.bind(this));
+    this.fastify.post('/profile/destroy', Auth.AuthedRouteOpts, this.DestroyProfile.bind(this));
   }
 
   /**

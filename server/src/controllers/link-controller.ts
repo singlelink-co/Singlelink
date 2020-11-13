@@ -1,14 +1,14 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RouteHandlerMethod} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
-import {AuthUtils} from "../utils/auth-utils";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {LinkService} from "../services/link-service";
-import {AnalyticsService} from "../services/analytics-service";
+import {ReplyUtils} from "../utils/reply-utils";
 
 /**
  * This controller maps and provides for all the controllers under /link.
  */
-export class LinkController implements IController {
+export class LinkController implements Controller {
 
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
@@ -23,13 +23,11 @@ export class LinkController implements IController {
   }
 
   registerRoutes(): void {
-
-    this.fastify.post('/link/create', AuthUtils.AuthedRouteOpts, this.CreateLink.bind(this));
-    this.fastify.post('/link/update', AuthUtils.AuthedRouteOpts, this.UpdateLink.bind(this));
-    this.fastify.post('/link/destroy', AuthUtils.AuthedRouteOpts, this.DestroyLink.bind(this));
-    this.fastify.post('/link/reorder', AuthUtils.AuthedRouteOpts, this.ReorderLink.bind(this));
-    this.fastify.post('/link/reset-order', AuthUtils.AuthedRouteOpts, this.ResetLinkOrder.bind(this));
-
+    this.fastify.post('/link/create', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.CreateLink.bind(this));
+    this.fastify.post('/link/update', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.UpdateLink.bind(this));
+    this.fastify.post('/link/destroy', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.DestroyLink.bind(this));
+    this.fastify.post('/link/reorder', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ReorderLink.bind(this));
+    this.fastify.post('/link/reset-order', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ResetLinkOrder.bind(this));
   }
 
   /**
@@ -40,8 +38,38 @@ export class LinkController implements IController {
    * @param request
    * @param reply
    */
-  async CreateLink(request: FastifyRequest, reply: FastifyReply) {
+  async CreateLink(request: AuthenticatedRequest, reply: FastifyReply) {
+    let json: any = request.body;
+    let profile = request.profile;
 
+    reply.type("application/json");
+
+    if (!json.label) {
+      return reply.status(400).send(ReplyUtils.error("No label was provided."));
+    }
+
+    if (!json.url) {
+      return reply.status(400).send(ReplyUtils.error("No url was provided."));
+    }
+
+    let count = await this.linkService.getProfileLinkCount(profile.id);
+
+    let link = await this.linkService.createLink(
+      profile.id,
+      json.url,
+      ++count,
+      json.label,
+      json.subtitle,
+      json.style,
+      json.custom_css,
+      json.use_deep_link
+    );
+
+    if (!link) {
+      return reply.status(500).send(ReplyUtils.error("There was a problem while trying to save the link."));
+    }
+
+    return link;
   }
 
   /**
@@ -52,8 +80,29 @@ export class LinkController implements IController {
    * @param request
    * @param reply
    */
-  async UpdateLink(request: FastifyRequest, reply: FastifyReply) {
+  async UpdateLink(request: AuthenticatedRequest, reply: FastifyReply) {
+    let json: any = request.body;
 
+    if (!json.target) {
+      return reply.status(400).send(ReplyUtils.error("No target was provided."));
+    }
+
+    let link = await this.linkService.updateLink(
+      json.target,
+      json.url,
+      json.order,
+      json.label,
+      json.subtitle,
+      json.style,
+      json.custom_css,
+      json.use_deep_link
+    );
+
+    if (!link) {
+      return reply.status(500).send(ReplyUtils.error("There was a problem while trying to save the link."));
+    }
+
+    return link;
   }
 
   /**
@@ -64,7 +113,7 @@ export class LinkController implements IController {
    * @param request
    * @param reply
    */
-  async DestroyLink(request: FastifyRequest, reply: FastifyReply) {
+  async DestroyLink(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 
@@ -76,7 +125,7 @@ export class LinkController implements IController {
    * @param request
    * @param reply
    */
-  async ReorderLink(request: FastifyRequest, reply: FastifyReply) {
+  async ReorderLink(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 
@@ -88,7 +137,7 @@ export class LinkController implements IController {
    * @param request
    * @param reply
    */
-  async ResetLinkOrder(request: FastifyRequest, reply: FastifyReply) {
+  async ResetLinkOrder(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 }

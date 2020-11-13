@@ -1,12 +1,12 @@
 import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
-import {config} from "./config/config";
 import AWS from 'aws-sdk';
+import {runtimeConfig} from "./config/runtime-config";
 
 /**
- * The Capture Server contains a Fastify instance and a list of IControllers, which registers routes with Fastify.
+ * The Capture Server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.
  */
 export class SingleLinkServer {
-  private readonly controllers: IController[];
+  private readonly controllers: Controller[];
 
   fastify = fastifyInit({
     logger: true
@@ -17,7 +17,7 @@ export class SingleLinkServer {
    * @param controllers Any controllers that should be passed with the constructor. Otherwise, they can be added later with addController(controller).
    * @constructor
    */
-  constructor(controllers?: IController[]) {
+  constructor(controllers?: Controller[]) {
     if (controllers)
       this.controllers = controllers;
     else
@@ -38,10 +38,10 @@ export class SingleLinkServer {
     });
 
     AWS.config.update({
-      region: config.aws.region,
+      region: runtimeConfig.aws.region,
       credentials: {
-        accessKeyId: config.aws.access_key,
-        secretAccessKey: config.aws.secret_key
+        accessKeyId: runtimeConfig.aws.access_key,
+        secretAccessKey: runtimeConfig.aws.secret_key
       },
       apiVersion: '2010-12-01'
     });
@@ -51,7 +51,7 @@ export class SingleLinkServer {
    * Starts the fastify server with the controllers provided.
    */
   startServer() {
-    this.fastify.listen(config.port, config.host, (err, address) => {
+    this.fastify.listen(runtimeConfig.port, runtimeConfig.host, (err: Error, address: string) => {
       if (err)
         throw err;
     });
@@ -66,7 +66,7 @@ export class SingleLinkServer {
   }
 
   registerDefaultRoutes() {
-    this.fastify.get('/', async (request, reply) => {
+    this.fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
       return await this.Index(request, reply);
     });
   }
@@ -75,7 +75,7 @@ export class SingleLinkServer {
    * Add a controller.
    * @param controller
    */
-  addController(controller: IController) {
+  addController(controller: Controller) {
     this.controllers.push(controller);
   }
 
@@ -83,7 +83,7 @@ export class SingleLinkServer {
    * Remove a controller.
    * @param controller
    */
-  removeController(controller: IController) {
+  removeController(controller: Controller) {
     let index = this.controllers.indexOf(controller);
 
     if (index > -1)

@@ -2,12 +2,12 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
-import {AuthUtils} from "../utils/auth-utils";
+import {Auth} from "../utils/auth";
 
 /**
  * This controller maps and provides for all the controllers under /user.
  */
-export class UserController implements IController {
+export class UserController implements Controller {
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
   private pool: Pool;
@@ -21,7 +21,6 @@ export class UserController implements IController {
   }
 
   registerRoutes(): void {
-
     // Unauthenticated
 
     this.fastify.all('/user/login', this.LoginUser.bind(this));
@@ -31,9 +30,8 @@ export class UserController implements IController {
 
     // Authenticated
 
-    this.fastify.all('/user/fetch', AuthUtils.AuthedRouteOpts, this.FetchUser.bind(this));
-    this.fastify.all('/user/set-active', AuthUtils.AuthedRouteOpts, this.SetActiveUser.bind(this));
-
+    this.fastify.all('/user/fetch', Auth.AuthedRouteOpts, this.FetchUser.bind(this));
+    this.fastify.all('/user/set-active', Auth.AuthedRouteOpts, this.SetActiveUser.bind(this));
   }
 
   /**

@@ -2,15 +2,13 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
-import {AuthUtils} from "../utils/auth-utils";
-import {LinkService} from "../services/link-service";
+import {Auth} from "../utils/auth";
 import {ThemeService} from "../services/theme-service";
-import {ProfileService} from "../services/profile-service";
 
 /**
  * This controller maps and provides for all the controllers under /theme.
  */
-export class ThemeController implements IController {
+export class ThemeController implements Controller {
   private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
@@ -27,10 +25,8 @@ export class ThemeController implements IController {
   }
 
   registerRoutes(): void {
-
-    this.fastify.post('/theme/fetch', AuthUtils.AuthedRouteOpts, this.FetchTheme.bind(this));
-    this.fastify.post('/theme/update', AuthUtils.AuthedRouteOpts, this.UpdateTheme.bind(this));
-
+    this.fastify.post('/theme/fetch', Auth.AuthedRouteOpts, this.FetchTheme.bind(this));
+    this.fastify.post('/theme/update', Auth.AuthedRouteOpts, this.UpdateTheme.bind(this));
   }
 
   /**

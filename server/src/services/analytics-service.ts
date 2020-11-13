@@ -1,5 +1,5 @@
 import {DatabaseManager} from "../data/database-manager";
-import {DatabaseService} from "./base-service";
+import {DatabaseService} from "./database-service";
 
 /**
  * This service takes care of transactional tasks for the Analytics Controller.
@@ -15,26 +15,26 @@ export class AnalyticsService extends DatabaseService {
    *
    * Returns all data as -1 if the database was unable to be queried.
    */
-  async getAnalytics(): Promise<{ total_users: number, total_profiles: number, profiles_published: number, total_links: number, total_themes: number }> {
+  async getAnalytics(): Promise<Analytics> {
     let queryResult = await this.pool.query("select * from users.analytics_view");
 
     if (queryResult.rowCount > 0) {
       let data = queryResult.rows[0];
 
       return {
-        total_users: data.total_users,
-        total_profiles: data.total_profiles,
-        profiles_published: data.profiles_published,
-        total_links: data.total_links,
-        total_themes: data.total_themes,
+        totalUsers: data.total_users,
+        totalProfiles: data.total_profiles,
+        profilesPublished: data.profiles_published,
+        totalLinks: data.total_links,
+        totalThemes: data.total_themes,
       };
     } else {
       return {
-        total_users: -1,
-        total_profiles: -1,
-        profiles_published: -1,
-        total_links: -1,
-        total_themes: -1,
+        totalUsers: -1,
+        totalProfiles: -1,
+        profilesPublished: -1,
+        totalLinks: -1,
+        totalThemes: -1,
       };
     }
   }
@@ -45,8 +45,8 @@ export class AnalyticsService extends DatabaseService {
    *
    * The analytics will only be incremented if "updateAnalytics" is true.
    *
-   * @param id: The id of the link that is being visited
-   * @param updateAnalytics: Should we update analytics?
+   * @param id The id of the link that is being visited
+   * @param updateAnalytics Should we update analytics?
    */
   async getLink(id: string, updateAnalytics: boolean): Promise<{ url: string, use_deep_link: boolean } | null> {
     let queryResult = await this.pool.query("select * from users.links");

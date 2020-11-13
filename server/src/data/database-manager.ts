@@ -1,13 +1,13 @@
 import {Pool} from "pg";
 import * as fs from "fs";
-import {config} from "../config/config";
+import {runtimeConfig} from "../config/runtime-config";
 
 /**
  * The DatabaseManager manages a connection to the PostgreSQL database.
  */
 export class DatabaseManager {
   pool = new Pool({
-    connectionString: config.database,
+    connectionString: runtimeConfig.database,
     ssl: {
       rejectUnauthorized: false
     }

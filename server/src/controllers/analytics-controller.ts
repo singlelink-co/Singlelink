@@ -8,7 +8,7 @@ import {DeepLinker} from "nc-deeplink";
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
-export class AnalyticsController implements IController {
+export class AnalyticsController implements Controller {
   private readonly userManager: UserService;
 
   private fastify: FastifyInstance;
@@ -23,10 +23,8 @@ export class AnalyticsController implements IController {
   }
 
   registerRoutes(): void {
-
     this.fastify.get('/analytics/fetch', this.FetchAnalytics.bind(this));
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
-
   }
 
   /**
@@ -38,15 +36,15 @@ export class AnalyticsController implements IController {
    * @param reply
    * @constructor
    */
-  async FetchAnalytics(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+  async FetchAnalytics(request: FastifyRequest, reply: FastifyReply) {
     let data = await this.analyticsService.getAnalytics();
 
     return {
-      users: data.total_users,
-      profiles: data.total_profiles,
-      profiles_published: data.profiles_published,
-      links: data.total_links,
-      themes: data.total_themes
+      users: data.totalUsers,
+      profiles: data.totalProfiles,
+      profiles_published: data.profilesPublished,
+      links: data.totalLinks,
+      themes: data.totalThemes
     };
   }
 

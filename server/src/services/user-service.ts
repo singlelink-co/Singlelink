@@ -1,9 +1,9 @@
 import * as bcrypt from "bcrypt";
-import {config} from "../config/config";
+import {runtimeConfig} from "../config/runtime-config";
 import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
-import {DatabaseService} from "./base-service";
 import {DatabaseManager} from "../data/database-manager";
+import {DatabaseService} from "./database-service";
 
 /**
  * This service takes care of transactional tasks for the User Controller.
@@ -14,8 +14,8 @@ export class UserService extends DatabaseService {
     super(databaseManager);
   }
 
-  async findUserById(userId: string): Promise<{ user_id: string, email: string, pass_hash: string }> {
-    let checkQuery = await this.pool.query("select user_id, email, pass_hash from users.accounts where user_id=$1", [userId]);
+  async findUserById(userId: string): Promise<UserAccount> {
+    let checkQuery = await this.pool.query("select id, email, pass_hash from users.accounts where id=$1", [userId]);
 
     return checkQuery.rowCount > 0 ? checkQuery.rows[0] : null;
   }
@@ -36,7 +36,7 @@ export class UserService extends DatabaseService {
    */
   async setPasswordWithToken(token: string, password: string): Promise<boolean> {
     try {
-      let decoded: any = jwt.verify(token, config.secret, {
+      let decoded: any = jwt.verify(token, runtimeConfig.secret, {
         algorithms: ["RS256"],
         maxAge: "15m"
       });
@@ -52,7 +52,7 @@ export class UserService extends DatabaseService {
       let hashedPassword = await bcrypt.hash(password, 12);
 
       let result = await this.pool.query(
-        "update users.accounts set pass_hash=$2 where user_id=$1",
+        "update users.accounts set pass_hash=$2 where id=$1",
         [decoded.userId, hashedPassword]
       );
 
@@ -68,7 +68,7 @@ export class UserService extends DatabaseService {
         userId,
         passwordReset: true
       },
-      config.secret,
+      runtimeConfig.secret,
       {algorithm: "RS256", expiresIn: '15m'}
     );
 
@@ -78,7 +78,7 @@ export class UserService extends DatabaseService {
       return false;
     }
 
-    let url = config.baseUrl + "/forgot-password/change?";
+    let url = runtimeConfig.baseUrl + "/forgot-password/change?";
     const params = new URLSearchParams({token: token});
     url += params.toString();
 
@@ -118,7 +118,7 @@ Note: Do not reply to this email, as there is no inbox for it.`
             Data: 'Password Reset Request for SingleLink'
           }
         },
-        Source: config.senderEmailAddress
+        Source: runtimeConfig.senderEmailAddress
       };
 
       await new AWS.SES().sendEmail(emailParams).promise();

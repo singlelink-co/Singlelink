@@ -7,7 +7,7 @@
     "copy": "(copyfiles -f \"src/sql/*.sql\" dist/sql) && (copyfiles -f src/crypto/*.* dist/crypto/)",
     "start": "node dist/App.js",
     "build": "tsc && npm run copy",
-    "dev": "ts-node --files src/App.ts --no-cache",
+    "dev": "ts-node src/App.ts",
     "version": "auto-changelog && git add CHANGELOG.md",
     "test": "jest",
     "test-debug": "jest --runInBand --detectOpenHandles",

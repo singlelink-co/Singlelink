@@ -1,13 +1,13 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Pool} from "pg";
-import {AuthUtils} from "../utils/auth-utils";
+import {Auth} from "../utils/auth";
 import {VisitService} from "../services/visit-service";
 
 /**
  * This controller maps and provides for all the controllers under /visit.
  */
-export class VisitController implements IController {
+export class VisitController implements Controller {
   private fastify: FastifyInstance;
   private databaseManager: DatabaseManager;
   private pool: Pool;
@@ -21,9 +21,7 @@ export class VisitController implements IController {
   }
 
   registerRoutes(): void {
-
-    this.fastify.all('/visit/fetch', AuthUtils.AuthedRouteOpts, this.FetchVisit.bind(this));
-
+    this.fastify.all('/visit/fetch', Auth.AuthedRouteOpts, this.FetchVisit.bind(this));
   }
 
   /**

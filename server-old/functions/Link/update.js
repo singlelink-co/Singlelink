@@ -4,6 +4,7 @@ const Link = mongoose.model('Link');
 
 module.exports = (req, res) => {
     if(!req.body.target) return res.status(400).send('Target required');
+
     Link.findOne({
         _id: req.body.target
     }, (err, link) => {
