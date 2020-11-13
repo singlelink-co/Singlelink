@@ -174,7 +174,7 @@ export default {
     save_link_changes: function () {
       this.$axios.$post('/link/update', {
         token: this.$store.getters['auth/get_token'],
-        target: this.pending_link._id,
+        id: this.pending_link._id,
         label: this.pending_link.label,
         subtitle: this.pending_link.subtitle,
         url: this.pending_link.url,

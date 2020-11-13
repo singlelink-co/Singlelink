@@ -83,12 +83,12 @@ export class LinkController implements Controller {
   async UpdateLink(request: AuthenticatedRequest, reply: FastifyReply) {
     let json: any = request.body;
 
-    if (!json.target) {
-      return reply.status(400).send(ReplyUtils.error("No target was provided."));
+    if (!json.id) {
+      return reply.status(400).send(ReplyUtils.error("No id was provided."));
     }
 
     let link = await this.linkService.updateLink(
-      json.target,
+      json.id,
       json.url,
       json.order,
       json.label,
