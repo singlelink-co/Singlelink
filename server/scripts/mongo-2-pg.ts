@@ -7,8 +7,9 @@
 
 import readline from "readline";
 import mongoose from "mongoose";
-import {Pool} from "pg";
+import {Pool, PoolClient} from "pg";
 import fs from "fs";
+import {QueryUtils} from "../src/utils/query-utils";
 
 const User = require('./models/User');
 const Profile = require('./models/Profile');
@@ -73,9 +74,14 @@ class Converter {
 
       console.log("Truncating PostgreSQL database, wiping it clean...");
 
-      // language=PostgreSQL
-      let truncateQuery = "drop table users.accounts, users.links, users.profiles, users.themes, history.visits cascade";
-      await this.pool.query(truncateQuery);
+      try {
+        // language=PostgreSQL
+        let truncateQuery = "drop table app.users, app.links, app.profiles, app.themes, history.visits cascade";
+        await this.pool.query(truncateQuery);
+      } catch (err) {
+        console.log("An error occurred, you can probably ignore this as it'll give an error if the schema or tables don't exist yet.");
+        console.log(err.message);
+      }
 
       let sql = fs.readFileSync(`${__dirname}/../src/sql/setup-database.sql`).toString();
       await this.pool.query(sql);
@@ -125,7 +131,7 @@ class Converter {
         let func = async () => {
           try {
             let queryResult = await this.pool.query(
-              "insert into users.accounts (full_name, email, pass_hash, active_profile, created_on)\nvalues ($1, $2, $3, $4, $5)\non conflict do nothing\nreturning *;",
+              'insert into app.users (full_name, email, pass_hash, active_profile, created_on) values ($1, $2, $3, $4, $5) on conflict do nothing returning *;',
               [
                 user.name,
                 user.email,
@@ -136,7 +142,7 @@ class Converter {
             );
 
             if (queryResult.rowCount < 1) {
-              queryResult.rows[0] = (await this.pool.query("select * from users.accounts where email=$1", [user.email])).rows[0];
+              queryResult.rows[0] = (await this.pool.query("select * from app.users where email=$1", [user.email])).rows[0];
             } else {
               addedAccounts++;
             }
@@ -164,7 +170,7 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              "insert into users.themes (label, global, colors, custom_css, custom_html, account_id, created_on)\nvalues ($1, $2, $3, $4, $5, $6, $7)\non conflict do nothing\nreturning *;",
+              'insert into app.themes (label, global, colors, custom_css, custom_html, user_id, created_on) values ($1, $2, $3, $4, $5, $6, $7) on conflict do nothing returning *;',
               [
                 theme.label,
                 theme.global,
@@ -177,7 +183,7 @@ class Converter {
             );
 
             if (queryResult.rowCount < 1) {
-              queryResult.rows[0] = (await this.pool.query("select * from users.themes where account_id=$1 and label=$2", [pgAccount.id, theme.label])).rows[0];
+              queryResult.rows[0] = (await this.pool.query("select * from app.themes where user_id=$1 and label=$2", [pgAccount.id, theme.label])).rows[0];
             } else {
               addedThemes++;
             }
@@ -206,7 +212,7 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              "insert into users.profiles (handle, account_id, image_url, headline, subtitle, social, custom_css, custom_html, custom_domain, theme_id, visibility, created_on)\nvalues ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)\non conflict do nothing\nreturning *;",
+              'insert into app.profiles (handle, user_id, image_url, headline, subtitle, social, custom_css, custom_html, custom_domain, theme_id, visibility, created_on) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) on conflict do nothing returning *;',
               [
                 profile.handle,
                 pgAccount.id,
@@ -224,7 +230,7 @@ class Converter {
             );
 
             if (queryResult.rowCount < 1) {
-              queryResult.rows[0] = (await this.pool.query("select * from users.profiles where handle=$1", [profile.handle])).rows[0];
+              queryResult.rows[0] = (await this.pool.query("select * from app.profiles where handle=$1", [profile.handle])).rows[0];
             } else {
               addedProfiles++;
             }
@@ -252,7 +258,7 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              'insert into users.links (profile_id, url, "order", label, subtitle, style, custom_css, created_on) values ($1, $2, $3, $4, $5, $6, $7, $8)\non conflict do nothing\nreturning *;',
+              'insert into app.links (profile_id, url, sort_order, label, subtitle, style, custom_css, created_on) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict do nothing returning *;',
               [
                 pgProfile.id,
                 link.url,
@@ -266,7 +272,7 @@ class Converter {
             );
 
             if (queryResult.rowCount < 1) {
-              queryResult.rows[0] = (await this.pool.query("select * from users.links where profile_id=$1", [pgProfile.id])).rows[0];
+              queryResult.rows[0] = (await this.pool.query("select * from app.links where profile_id=$1", [pgProfile.id])).rows[0];
             } else {
               addedLinks++;
             }
@@ -303,7 +309,7 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              "insert into history.visits (type, referral, created_on) values ($1, $2, $3)\non conflict do nothing\nreturning *;",
+              'insert into history.visits (type, referral, created_on) values ($1, $2, $3) on conflict do nothing returning *;',
               [
                 visit.type.toLowerCase(),
                 pgObj.id,
@@ -364,7 +370,7 @@ class Converter {
 
 
       console.log("Refreshing analytics view.");
-      await this.pool.query('refresh materialized view users.analytics_view');
+      await this.pool.query('refresh materialized view app.analytics_view');
 
     } catch (err) {
       console.error(err);

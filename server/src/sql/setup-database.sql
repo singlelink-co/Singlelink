@@ -1,4 +1,4 @@
-create schema if not exists users;
+create schema if not exists app;
 create schema if not exists history;
 
 do
@@ -51,7 +51,7 @@ $$ language plpgsql;
 /*
  Creates an accounts table with a list of profiles associated with it.
  */
-create table if not exists users.accounts
+create table if not exists app.users
 (
     id                bigserial primary key unique,
     email             varchar(340) unique not null,
@@ -65,12 +65,12 @@ create table if not exists users.accounts
     created_on        timestamp           not null default current_timestamp
 );
 
-create index if not exists accounts_email_index on users.accounts (email);
+create index if not exists accounts_email_index on app.users (email);
 
 /*
  Creates a theme table that contains all user themes.
  */
-create table if not exists users.themes
+create table if not exists app.themes
 (
     id          bigserial primary key unique,
     label       text      not null,
@@ -78,47 +78,58 @@ create table if not exists users.themes
     colors      jsonb              default '{}',
     custom_css  text,
     custom_html text,
-    account_id  bigint    references users.accounts (id) on update cascade on delete set null,
+    user_id     bigint    references app.users (id) on update cascade on delete set null,
     created_on  timestamp not null default current_timestamp
 );
 
-create index if not exists themes_global_index on users.themes (global);
-create index if not exists themes_account_id_index on users.themes (account_id);
+create index if not exists themes_global_index on app.themes (global);
+create index if not exists themes_user_id_index on app.themes (user_id);
 
 /*
  Creates a profile table with a constraint pointing to a parent account.
  */
-create table if not exists users.profiles
+create table if not exists app.profiles
 (
     id            bigserial primary key unique,
-    handle        text unique not null,                                                    -- The name of the profile in the url
-    account_id    bigint references users.accounts (id) on update cascade on delete cascade,
+    handle        text unique not null,                                                  -- The name of the profile in the url
+    user_id       bigint references app.users (id) on update cascade on delete cascade,
     image_url     text,
-    headline      text,                                                                    -- The name that shows up on the page
-    subtitle      text,                                                                    -- The name underneath a profile's avatar
+    headline      text,                                                                  -- The name that shows up on the page
+    subtitle      text,                                                                  -- The name underneath a profile's avatar
     social        jsonb                default '{}',
     custom_css    text,
     custom_html   text,
     custom_domain text unique,
-    theme_id      bigint references users.themes (id) on update cascade on delete cascade, -- The profile's currently selected theme
+    theme_id      bigint references app.themes (id) on update cascade on delete cascade, -- The profile's currently selected theme
     visibility    visibility_t         default 'unpublished',
     metadata      jsonb                default '{}',
     created_on    timestamp   not null default current_timestamp
 );
 
-create index if not exists profiles_account_id_index on users.profiles (account_id);
-create index if not exists profiles_theme_id_index on users.profiles (theme_id);
-create index if not exists profiles_visibility_index on users.profiles (visibility);
+create index if not exists profiles_user_id_index on app.profiles (user_id);
+create index if not exists profiles_theme_id_index on app.profiles (theme_id);
+create index if not exists profiles_visibility_index on app.profiles (visibility);
+
+-- TODO Use this table to allow for multiple users per profile
+create table if not exists app.profile_members
+(
+    handle text not null,
+    member text not null,
+    unique (handle, member)
+);
+
+create index if not exists profile_members_handle_index on app.profile_members (handle);
+create index if not exists profile_members_member_index on app.profile_members (member);
 
 /*
  Creates a table for the individual links created.
  */
-create table if not exists users.links
+create table if not exists app.links
 (
     id            bigserial primary key unique,
-    profile_id    bigint references users.profiles (id) on update cascade on delete cascade,
+    profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
     url           text default '#'   not null,
-    "order"       int                not null,
+    sort_order    int                not null,
     label         text               not null,
     subtitle      text,
     style         text,
@@ -127,8 +138,8 @@ create table if not exists users.links
     created_on    timestamp          not null default current_timestamp
 );
 
-create index if not exists links_profile_id on users.links (profile_id);
-create index if not exists links_url_index on users.links (url);
+create index if not exists links_profile_id on app.links (profile_id);
+create index if not exists links_url_index on app.links (url);
 
 /*
  Creates a table for analytics, keeps track of all the visits.
@@ -150,16 +161,16 @@ $$
         /*
          Creates an analytics view for use with the server analytics.
          */
-        create materialized view users.analytics_view as
-            select count(users.accounts.*)                                                                        as total_users,
-                   (select count(users.profiles.*) from users.profiles)                                           as total_profiles,
-                   (select count(users.profiles.*) filter ( where visibility = 'published' )
-                    from users.profiles)                                                                          as profiles_published,
-                   (select count(users.links.*) from users.links)                                                 as total_links,
-                   (select count(users.themes.*) from users.themes)                                               as total_themes
-            from users.accounts;
+        create materialized view app.analytics_view as
+            select count(app.users.*)                                                                         as total_users,
+                   (select count(app.profiles.*) from app.profiles)                                           as total_profiles,
+                   (select count(app.profiles.*) filter ( where visibility = 'published' )
+                    from app.profiles)                                                                        as profiles_published,
+                   (select count(app.links.*) from app.links)                                                 as total_links,
+                   (select count(app.themes.*) from app.themes)                                               as total_themes
+            from app.users;
     exception
-        when duplicate_table then raise notice 'users.analytics_view already added.';
+        when duplicate_table then raise notice 'app.analytics_view already added.';
     end;
 $$ language plpgsql;
 

@@ -33,7 +33,7 @@
           <input class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border" type="password"
                  placeholder="e.g. your password" v-model="password"/>
         </div>
-        <button @click="attempt_register" type="button"
+        <button @click="attemptRegister" type="button"
                 class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-sm font-semibold">
           Sign up
         </button>
@@ -62,6 +62,7 @@ export default {
       error: null
     };
   },
+
   computed: {
     origin: function () {
       if (process.browser) {
@@ -69,9 +70,11 @@ export default {
       }
     }
   },
+
   middleware: 'unauthenticated',
+
   methods: {
-    attempt_register() {
+    attemptRegister() {
       this.$nuxt.$loading.start();
       if (!this.email) {
         this.error = 'Email address is required to register.';
@@ -104,12 +107,13 @@ export default {
           } else {
             this.error = 'The server was unable to create your account. Please try again later.';
           }
-       
+
           console.log(this.error);
           return this.$nuxt.$loading.finish();
         });
     },
-    clear_errors: () => {
+
+    clearErrors: () => {
       this.error = null;
     }
   }

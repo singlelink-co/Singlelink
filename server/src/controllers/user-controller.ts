@@ -1,22 +1,18 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RouteHandlerMethod} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
-import {Pool} from "pg";
-import {Auth} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {Controller} from "./controller";
 
 /**
  * This controller maps and provides for all the controllers under /user.
  */
-export class UserController implements Controller {
-  private fastify: FastifyInstance;
-  private databaseManager: DatabaseManager;
-  private pool: Pool;
+export class UserController extends Controller {
   private userService: UserService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
-    this.fastify = fastify;
-    this.databaseManager = databaseManager;
-    this.pool = databaseManager.pool;
+    super(fastify, databaseManager);
+
     this.userService = new UserService(databaseManager);
   }
 
@@ -30,8 +26,9 @@ export class UserController implements Controller {
 
     // Authenticated
 
-    this.fastify.all('/user/fetch', Auth.AuthedRouteOpts, this.FetchUser.bind(this));
-    this.fastify.all('/user/set-active', Auth.AuthedRouteOpts, this.SetActiveUser.bind(this));
+    this.fastify.all('/user/fetch', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.FetchUser.bind(this));
+    this.fastify.all('/user/set-active', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.SetActiveUser.bind(this));
+    this.fastify.all('/user/delete', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.DeleteUser.bind(this));
   }
 
   /**
@@ -75,7 +72,7 @@ export class UserController implements Controller {
    * @param request
    * @param reply
    */
-  async FetchUser(request: FastifyRequest, reply: FastifyReply) {
+  async FetchUser(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 
@@ -84,7 +81,16 @@ export class UserController implements Controller {
    * @param request
    * @param reply
    */
-  async SetActiveUser(request: FastifyRequest, reply: FastifyReply) {
+  async SetActiveUser(request: AuthenticatedRequest, reply: FastifyReply) {
+
+  }
+
+  /**
+   * Route for /user/delete
+   * @param request
+   * @param reply
+   */
+  async DeleteUser(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 }

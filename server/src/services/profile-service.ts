@@ -1,8 +1,13 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
+import Axios, {AxiosResponse} from "axios";
+import {appConfig} from "../config/app-config";
+import {Converter} from "../utils/converter";
+import {HttpError} from "../utils/http-error";
+import {constants as HttpStatus} from "http2";
 
 /**
- * This service takes care of transactional tasks for the Profile Controller.
+ * This service takes care of transactional tasks related to Profiles.
  */
 export class ProfileService extends DatabaseService {
 
@@ -10,4 +15,219 @@ export class ProfileService extends DatabaseService {
     super(databaseManager);
   }
 
+  /**
+   * Gets a profile.
+   *
+   * @param handle The handle of the profile.
+   */
+  async getProfile(handle: string): Promise<Profile | HttpError> {
+    let profileResult = await this.pool.query("select * from app.profiles where handle=$1", [handle]);
+
+    if (profileResult.rowCount > 0) {
+      let profileRow = profileResult.rows[0];
+
+      if (profileRow.visibility === 'unpublished') {
+        return new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+      }
+
+      return Converter.toProfile(profileRow);
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+  }
+
+  /**
+   * Uses Neutron Capture to generate a thumbnail image of a profile.
+   *
+   * @param handle
+   */
+  async getThumbnail(handle: string): Promise<AxiosResponse<ArrayBuffer> | HttpError> {
+    let url: string;
+    let thumbnail: AxiosResponse<ArrayBuffer>;
+    let scale = 3;
+
+    let final_size = {
+      x: 1200,
+      y: 630
+    };
+
+    let resolution = {
+      x: final_size.x / scale,
+      y: final_size.y / scale
+    };
+
+    try {
+      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${appConfig.captureKey}&url=${appConfig.clientDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
+      thumbnail = await Axios.get<ArrayBuffer>(url, {
+        responseType: "arraybuffer"
+      });
+
+      return thumbnail;
+    } catch (err) {
+      console.error(err);
+      return new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "An internal error occurred while fetching the thumbnail.");
+    }
+  }
+
+  /**
+   * Creates a new profile.
+   *
+   * @param handle
+   * @param userId The userId that owns this profile.
+   * @param imageUrl
+   * @param headline
+   * @param subtitle
+   */
+  async createProfile(handle: string, userId: string, imageUrl?: string, headline?: string, subtitle?: string): Promise<Profile | HttpError> {
+
+    try {
+      let queryResult = await this.pool.query("insert into app.profiles (handle, user_id, image_url, headline, subtitle) values ($1, $2, $3, $4, $5) returning *",
+        [
+          handle,
+          userId,
+          imageUrl,
+          headline,
+          subtitle
+        ]);
+
+      if (queryResult.rowCount > 0) {
+        return Converter.toProfile(queryResult.rows[0]);
+      } else {
+        console.log("Handle already exists in database, couldn't add new profile.");
+      }
+
+    } catch (err) {
+      console.log("Handle already exists in database, couldn't add new profile.");
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+  }
+
+  /**
+   * Gets all the profiles that an account is associated with.
+   *
+   * @param userId
+   */
+  async listProfiles(userId: string): Promise<Profile[] | HttpError> {
+    let queryResult = await this.pool.query("select * from app.profiles where user_id=$1", [userId]);
+
+    if (queryResult.rowCount > 0) {
+      return queryResult.rows.map(x => {
+        return Converter.toProfile(x);
+      });
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profiles couldn't be found.");
+  }
+
+  /**
+   * Sets the active theme for a profile. Clears it if the themeId is null.
+   *
+   * @param profileId
+   * @param themeId
+   */
+  async setActiveTheme(profileId: string, themeId: string): Promise<Theme | HttpError> {
+    let queryResult = await this.pool.query("update app.profiles set theme_id=$1 where id=$2 returning *", [themeId, profileId]);
+
+    if (queryResult.rowCount > 0) {
+      return Converter.toTheme(queryResult.rows[0]);
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+  }
+
+  /**
+   * Returns the amounts on a account.
+   *
+   * @param userId The user id associated with the profiles.
+   */
+  async getProfileCount(userId: string): Promise<number> {
+    let queryResult = await this.pool.query("select count(*) from app.profiles where user_id=$1", [userId]);
+
+    return queryResult.rowCount > 0 ? Number.parseInt(queryResult.rows[0].count) : 0;
+  }
+
+  /**
+   * Updates a profile.
+   *
+   * @param profileId
+   * @param imageUrl
+   * @param headline
+   * @param subtitle
+   * @param handle
+   * @param visibility
+   * @param customCss
+   * @param customHtml
+   * @param customDomain
+   */
+  async updateProfile(
+    profileId: string,
+    imageUrl?: string,
+    headline?: string,
+    subtitle?: string,
+    handle?: string,
+    visibility?: string,
+    customCss?: string,
+    customHtml?: string,
+    customDomain?: string
+  ): Promise<Profile | HttpError> {
+    let queryResult = await this.pool.query("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
+      [
+        imageUrl,
+        headline,
+        subtitle,
+        handle,
+        visibility,
+        customCss,
+        customHtml,
+        customDomain,
+        profileId
+      ]);
+
+    if (queryResult.rowCount > 0) {
+      return Converter.toProfile(queryResult.rows[0]);
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+  }
+
+  /**
+   * Destroys a profile. The user cannot destroy a profile if they only have one.
+   *
+   * @param userId
+   * @param profileId
+   */
+  async destroyProfile(userId: string, profileId: string): Promise<Profile | HttpError> {
+    let profilesResult = await this.listProfiles(userId);
+
+    if (profilesResult instanceof HttpError) {
+      return profilesResult;
+    }
+
+    if (profilesResult.length > 0) {
+      let profileRow: Profile | undefined = profilesResult.find(x => x.id === profileId);
+
+      if (!profileRow) return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+
+      profilesResult.splice(profilesResult.indexOf(profileRow));
+
+      if (await this.getProfileCount(profileId) <= 1) {
+        return new HttpError(HttpStatus.HTTP_STATUS_BAD_REQUEST, "You cannot delete your only profile.");
+      }
+
+      let deletedProfile = await this.pool.query("delete from app.profiles where id=$1", [profileId]);
+
+      if (deletedProfile.rowCount > 0) {
+        let nextProfile = profilesResult[0];
+
+        await this.pool.query("update app.users set active_profile=$1 where id=$2", [nextProfile.id, userId]);
+
+        return nextProfile;
+      }
+
+      return new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Unable to delete the profile because of an internal error.");
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+  }
 }

@@ -5,10 +5,10 @@ export const state = () => ({
 });
 
 export const getters = {
-  get_token(state) {
+  getToken(state) {
     return state.token || Cookies.getCookieValue('singlelink_token', this);
   },
-  is_authenticated(state) {
+  isAuthenticated(state) {
     return state.token != null;
   },
 };

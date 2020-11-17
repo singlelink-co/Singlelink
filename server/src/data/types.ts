@@ -28,20 +28,23 @@ type Visibility = 'unpublished' | 'published' | 'published-18+';
  */
 type VisitType = 'link' | 'page';
 
-interface UserAccount {
+interface User {
   id: string,
-  fullName: string | null,
   email: string,
+  fullName: string | null,
   activeProfile: string | null,
-  paymentId: string | null,
   subscriptionTier: SubscriptionTier | null,
   inventory: any | null,
   metadata: any | null,
   createdOn: string
 }
 
-interface UserAccountWithPass extends UserAccount {
-  passHash: string
+/**
+ * User with sensitive information included.
+ */
+interface SensitiveUser extends User {
+  passHash: string,
+  paymentId: string | null,
 }
 
 interface Theme {
@@ -60,14 +63,14 @@ interface Theme {
   } | null,
   customCss: string | null,
   customHtml: string | null,
-  owner: string,
+  userId: string,
   createdOn: string
 }
 
 interface Profile {
   id: string,
   handle: string,
-  owner: string,
+  userId: string,
   imageUrl: string | null,
   headline: string | null,
   social: {
@@ -76,8 +79,9 @@ interface Profile {
     alt: string
   },
   customCss: string,
+  customHtml: string,
   customDomain: string,
-  theme: string,
+  themeId: string,
   visibility: Visibility,
   metadata: any,
   createdOn: string
@@ -85,9 +89,9 @@ interface Profile {
 
 interface Link {
   id: string,
-  owner: string,
+  profileId: string,
   url: string,
-  order: number,
+  sortOrder: number,
   label: string,
   subtitle: string | null,
   style: string | null,

@@ -1,33 +1,30 @@
 import {FastifyInstance, FastifyReply, FastifyRequest, RouteHandlerMethod} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {Pool} from "pg";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {LinkService} from "../services/link-service";
 import {ReplyUtils} from "../utils/reply-utils";
+import {constants as HttpStatus} from "http2";
+import {Controller} from "./controller";
+import {HttpError} from "../utils/http-error";
 
 /**
  * This controller maps and provides for all the controllers under /link.
  */
-export class LinkController implements Controller {
-
-  private fastify: FastifyInstance;
-  private databaseManager: DatabaseManager;
-  private pool: Pool;
+export class LinkController extends Controller {
   private linkService: LinkService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
-    this.fastify = fastify;
-    this.databaseManager = databaseManager;
-    this.pool = databaseManager.pool;
+    super(fastify, databaseManager);
+
     this.linkService = new LinkService(databaseManager);
   }
 
   registerRoutes(): void {
     this.fastify.post('/link/create', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.CreateLink.bind(this));
+    this.fastify.post('/link/list', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.CreateLink.bind(this));
     this.fastify.post('/link/update', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.UpdateLink.bind(this));
     this.fastify.post('/link/destroy', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.DestroyLink.bind(this));
     this.fastify.post('/link/reorder', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ReorderLink.bind(this));
-    this.fastify.post('/link/reset-order', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ResetLinkOrder.bind(this));
   }
 
   /**
@@ -42,14 +39,12 @@ export class LinkController implements Controller {
     let json: any = request.body;
     let profile = request.profile;
 
-    reply.type("application/json");
-
     if (!json.label) {
-      return reply.status(400).send(ReplyUtils.error("No label was provided."));
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
     }
 
     if (!json.url) {
-      return reply.status(400).send(ReplyUtils.error("No url was provided."));
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
     }
 
     let count = await this.linkService.getProfileLinkCount(profile.id);
@@ -65,8 +60,11 @@ export class LinkController implements Controller {
       json.use_deep_link
     );
 
-    if (!link) {
-      return reply.status(500).send(ReplyUtils.error("There was a problem while trying to save the link."));
+    if (link instanceof HttpError) {
+      let error: HttpError = link;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
     }
 
     return link;
@@ -84,13 +82,13 @@ export class LinkController implements Controller {
     let json: any = request.body;
 
     if (!json.id) {
-      return reply.status(400).send(ReplyUtils.error("No id was provided."));
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
     }
 
     let link = await this.linkService.updateLink(
       json.id,
       json.url,
-      json.order,
+      json.sort_order,
       json.label,
       json.subtitle,
       json.style,
@@ -98,8 +96,11 @@ export class LinkController implements Controller {
       json.use_deep_link
     );
 
-    if (!link) {
-      return reply.status(500).send(ReplyUtils.error("There was a problem while trying to save the link."));
+    if (link instanceof HttpError) {
+      let error: HttpError = link;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
     }
 
     return link;
@@ -114,7 +115,22 @@ export class LinkController implements Controller {
    * @param reply
    */
   async DestroyLink(request: AuthenticatedRequest, reply: FastifyReply) {
+    let json: any = request.body;
 
+    if (!json.id) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+    }
+
+    let links = await this.linkService.deleteLink(json.id);
+
+    if (links instanceof HttpError) {
+      let error: HttpError = links;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
+    }
+
+    return links;
   }
 
   /**
@@ -126,18 +142,29 @@ export class LinkController implements Controller {
    * @param reply
    */
   async ReorderLink(request: AuthenticatedRequest, reply: FastifyReply) {
+    if (!request.profile) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    }
 
-  }
+    let json: any = request.body;
 
-  /**
-   * Route for /link/reset-order
-   *
-   * Resets the link reorder value for a link.
-   *
-   * @param request
-   * @param reply
-   */
-  async ResetLinkOrder(request: AuthenticatedRequest, reply: FastifyReply) {
+    if (json.oldIndex !== 0 && !json.oldIndex) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
+    }
 
+    if (json.newIndex !== 0 && !json.newIndex) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
+    }
+
+    let links = await this.linkService.reorderLinks(request.profile.id, json.oldIndex, json.newIndex);
+
+    if (links instanceof HttpError) {
+      let error: HttpError = links;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
+    }
+
+    return links;
   }
 }

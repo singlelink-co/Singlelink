@@ -1,6 +1,7 @@
 import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
 import AWS from 'aws-sdk';
-import {runtimeConfig} from "./config/runtime-config";
+import {appConfig} from "./config/app-config";
+import {Controller} from "./controllers/controller";
 
 /**
  * The Capture Server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.
@@ -9,7 +10,8 @@ export class SingleLinkServer {
   private readonly controllers: Controller[];
 
   fastify = fastifyInit({
-    logger: true
+    logger: true,
+    ignoreTrailingSlash: true
   });
 
   /**
@@ -38,10 +40,10 @@ export class SingleLinkServer {
     });
 
     AWS.config.update({
-      region: runtimeConfig.aws.region,
+      region: appConfig.aws.region,
       credentials: {
-        accessKeyId: runtimeConfig.aws.access_key,
-        secretAccessKey: runtimeConfig.aws.secret_key
+        accessKeyId: appConfig.aws.access_key,
+        secretAccessKey: appConfig.aws.secret_key
       },
       apiVersion: '2010-12-01'
     });
@@ -51,7 +53,7 @@ export class SingleLinkServer {
    * Starts the fastify server with the controllers provided.
    */
   startServer() {
-    this.fastify.listen(runtimeConfig.port, runtimeConfig.host, (err: Error, address: string) => {
+    this.fastify.listen(appConfig.port, appConfig.host, (err: Error, address: string) => {
       if (err)
         throw err;
     });

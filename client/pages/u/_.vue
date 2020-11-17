@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
-    <section v-if="profile.visibility=='published-18+' && age_verification"
+    <section v-if="profile.visibility==='published-18+' && ageVerification"
              class="fixed top-0 left-0 right-0 z-10 flex flex-col items-center justify-center w-screen h-screen"
              style="box-shadow: rgba(0, 0, 0, .65) 0  0 10px 5px inset;">
       <div class="flex flex-col w-full h-full text-center items-center justify-center p-8"
@@ -8,11 +8,11 @@
         <span class="text-white text-2xl mb-2">Warning: 18+ only</span>
         <span class="text-gray-200 text-lg mb-4">To continue, please confirm your age below.</span>
         <div class="flex flex-col">
-          <button @click="accept_age_verification"
+          <button @click="acceptAgeVerification"
                   class="w-full mb-4 uppercase rounded p-4 pl-4 pr-4 bg-indigo-600 hover:bg-indigo-500 cursor-pointer font-medium text-sm tracking-wide shadow text-white">
             Continue, I am 18+
           </button>
-          <button @click="reject_age_verification" style="background:#e74c3c;"
+          <button @click="rejectAgeVerification" style="background:#e74c3c;"
                   class="w-full uppercase rounded p-4 pl-4 pr-4 cursor-pointer font-medium text-sm tracking-wide shadow text-white mr-2">
             Go back, I'm under 18
           </button>
@@ -20,19 +20,19 @@
       </div>
     </section>
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-      <img class="nc-avatar mb-2" v-if="profile.image_url || user.avatar_url || user.hash"
-           :src="profile.image_url || user.avatar_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
+      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.hash"
+           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.hash"/>
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
-      <a :href="'https://api.singlelink.co/analytics/link/' + link._id" v-for="link in links" class="w-full">
+      <a :href="'https://api.singlelink.co/analytics/link/' + link.id" v-for="link in links" class="w-full">
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item flex items-center justify-center flex-col"
-          :style="link.custom_css">
+          :style="link.customCss">
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </a>
-      <div v-html="profile.custom_html"></div>
+      <div v-html="profile.customHtml"></div>
       <component is="style" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};
@@ -55,7 +55,7 @@
         color: {{ theme.colors.text.secondary }};
         }
       </component>
-      <component is="style">{{ profile.custom_css || null }}</component>
+      <component is="style">{{ profile.customCss || null }}</component>
       <component is="style">
         .nc-avatar {
         width: 60px;
@@ -83,9 +83,9 @@ export default {
   data: function () {
     return {
       profile: {
-        custom_html: null,
-        custom_css: null,
-        image_url: null,
+        customHtml: null,
+        customCss: null,
+        imageUrl: null,
         headline: null,
         subtitle: null,
         visibility: null,
@@ -97,24 +97,24 @@ export default {
       user: {
         name: null,
         hash: null,
-        avatar_url: null
+        avatarUrl: null
       },
       thumbnail: null,
       theme: null,
       links: null,
       failed: false,
-      age_verification: true
+      ageVerification: true
     };
   },
   methods: {
-    accept_age_verification: function () {
-      return this.age_verification = false;
+    acceptAgeVerification: function () {
+      return this.ageVerification = false;
     },
-    reject_age_verification: function () {
+    rejectAgeVerification: function () {
       return window.location.href = "https://singlelink.co";
     },
   },
-  head: function() {
+  head: function () {
     return {
       title: this.profile.headline || '',
       meta: [
@@ -146,22 +146,22 @@ export default {
       ],
     };
   },
-      asyncData(ctx) {
-    return ctx.$axios.$post('/profile/fetch/' + ctx.route.path.replace('/u/',''))
+  asyncData(ctx) {
+    return ctx.$axios.$post('/profile/fetch/' + ctx.route.path.replace('/u/', ''))
       .then((response) => {
-          return {
-            profile: response.profile,
-            links: response.links.sort(function (a, b) {
-              return a.order - b.order;
-            }),
-            user: response.user,
-            theme: response.theme || null,
-          };
+        return {
+          profile: response.profile,
+          links: response.links.sort(function (a, b) {
+            return a.sortOrder - b.sortOrder;
+          }),
+          user: response.user,
+          theme: response.theme || null,
+        };
       })
       .catch((error) => {
         console.log('Error fetching profile');
         console.log(error);
-        return {failed:true};
+        return {failed: true};
       });
   },
   /*mounted: function () {

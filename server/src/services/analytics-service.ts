@@ -1,8 +1,11 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
+import {Converter} from "../utils/converter";
+import {HttpError} from "../utils/http-error";
+import {constants as HttpStatus} from "http2";
 
 /**
- * This service takes care of transactional tasks for the Analytics Controller.
+ * This service takes care of transactional tasks for Analytics.
  */
 export class AnalyticsService extends DatabaseService {
 
@@ -16,18 +19,12 @@ export class AnalyticsService extends DatabaseService {
    * Returns all data as -1 if the database was unable to be queried.
    */
   async getAnalytics(): Promise<Analytics> {
-    let queryResult = await this.pool.query("select * from users.analytics_view");
+    let queryResult = await this.pool.query("select * from app.analytics_view");
 
     if (queryResult.rowCount > 0) {
       let data = queryResult.rows[0];
 
-      return {
-        totalUsers: data.total_users,
-        totalProfiles: data.total_profiles,
-        profilesPublished: data.profiles_published,
-        totalLinks: data.total_links,
-        totalThemes: data.total_themes,
-      };
+      return Converter.toAnalytics(data);
     } else {
       return {
         totalUsers: -1,
@@ -45,25 +42,22 @@ export class AnalyticsService extends DatabaseService {
    *
    * The analytics will only be incremented if "updateAnalytics" is true.
    *
-   * @param id The id of the link that is being visited
+   * @param linkId The linkId of the link that is being visited
    * @param updateAnalytics Should we update analytics?
    */
-  async getLink(id: string, updateAnalytics: boolean): Promise<{ url: string, use_deep_link: boolean } | null> {
-    let queryResult = await this.pool.query("select * from users.links");
+  async getLink(linkId: string, updateAnalytics: boolean): Promise<Link | HttpError> {
+    let queryResult = await this.pool.query("select * from app.links where id=$1", [linkId]);
 
     if (queryResult.rowCount > 0) {
       let data = queryResult.rows[0];
 
       if (updateAnalytics) {
-        await this.pool.query("insert into history.visits( \"type\", referral) values ($1, $2)", ['link', id]);
+        await this.pool.query("insert into history.visits(type, referral) values ($1, $2)", ['link', linkId]);
       }
 
-      return {
-        url: data.url,
-        use_deep_link: data.use_deep_link
-      };
+      return Converter.toLink(data);
     } else {
-      return null;
+      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
     }
   }
 }

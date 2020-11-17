@@ -1,12 +1,16 @@
 import * as bcrypt from "bcrypt";
-import {runtimeConfig} from "../config/runtime-config";
+import {appConfig} from "../config/app-config";
 import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
+import {Converter} from "../utils/converter";
+import {HttpError} from "../utils/http-error";
+import {constants as HttpStatus} from "http2";
+import {ReplyUtils} from "../utils/reply-utils";
 
 /**
- * This service takes care of transactional tasks for the User Controller.
+ * This service takes care of transactional tasks for Accounts.
  */
 export class UserService extends DatabaseService {
 
@@ -14,19 +18,34 @@ export class UserService extends DatabaseService {
     super(databaseManager);
   }
 
-  async findUserById(userId: string): Promise<UserAccount> {
-    let checkQuery = await this.pool.query("select id, email, pass_hash from users.accounts where id=$1", [userId]);
+  /**
+   * Gets a user by the account Id.
+   *
+   * @param userId
+   */
+  async getUser(userId: string): Promise<User | HttpError> {
+    let queryResult = await this.pool.query("select (id, email, full_name, active_profile, subscription_tier, inventory, metadata, created_on) from app.users where id=$1", [userId]);
 
-    return checkQuery.rowCount > 0 ? checkQuery.rows[0] : null;
+    if (queryResult.rowCount > 0) {
+      return Converter.toUser(queryResult.rows[0]);
+    }
+
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
   }
 
-  async createUser(): Promise<any> {
+  /**
+   * Gets a sensitive user by the account Id.
+   *
+   * @param userId
+   */
+  async getSensitiveUser(userId: string): Promise<SensitiveUser | HttpError> {
+    let queryResult = await this.pool.query("select * from app.users where id=$1", [userId]);
 
-    return null;
-  }
+    if (queryResult.rowCount > 0) {
+      return Converter.toSensitiveUser(queryResult.rows[0]);
+    }
 
-  async deleteUser(email: string): Promise<boolean> {
-    return false;
+    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
   }
 
   /**
@@ -36,7 +55,7 @@ export class UserService extends DatabaseService {
    */
   async setPasswordWithToken(token: string, password: string): Promise<boolean> {
     try {
-      let decoded: any = jwt.verify(token, runtimeConfig.secret, {
+      let decoded: any = jwt.verify(token, appConfig.secret, {
         algorithms: ["RS256"],
         maxAge: "15m"
       });
@@ -52,7 +71,7 @@ export class UserService extends DatabaseService {
       let hashedPassword = await bcrypt.hash(password, 12);
 
       let result = await this.pool.query(
-        "update users.accounts set pass_hash=$2 where id=$1",
+        "update app.users set pass_hash=$2 where id=$1",
         [decoded.userId, hashedPassword]
       );
 
@@ -68,17 +87,17 @@ export class UserService extends DatabaseService {
         userId,
         passwordReset: true
       },
-      runtimeConfig.secret,
+      appConfig.secret,
       {algorithm: "RS256", expiresIn: '15m'}
     );
 
-    let user = await this.findUserById(userId);
+    let user = await this.getUser(userId);
 
-    if (!user) {
+    if (user instanceof HttpError) {
       return false;
     }
 
-    let url = runtimeConfig.baseUrl + "/forgot-password/change?";
+    let url = appConfig.baseUrl + "/forgot-password/change?";
     const params = new URLSearchParams({token: token});
     url += params.toString();
 
@@ -118,7 +137,7 @@ Note: Do not reply to this email, as there is no inbox for it.`
             Data: 'Password Reset Request for SingleLink'
           }
         },
-        Source: runtimeConfig.senderEmailAddress
+        Source: appConfig.senderEmailAddress
       };
 
       await new AWS.SES().sendEmail(emailParams).promise();

@@ -1,7 +1,7 @@
 {
   "database": "",
   "secret": "",
-  "capture_key": "",
+  "captureKey": "",
   "port": 80,
   "apiDomain": "",
   "clientDomain": "",

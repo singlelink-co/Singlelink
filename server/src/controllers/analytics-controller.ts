@@ -1,24 +1,20 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {constants as HttpStatus} from "http2";
 import {DeepLinker} from "nc-deeplink";
+import {Controller} from "./controller";
+import {HttpError} from "../utils/http-error";
 
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
-export class AnalyticsController implements Controller {
-  private readonly userManager: UserService;
-
-  private fastify: FastifyInstance;
-  private databaseManager: DatabaseManager;
+export class AnalyticsController extends Controller {
   private analyticsService: AnalyticsService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
-    this.fastify = fastify;
-    this.databaseManager = databaseManager;
-    this.userManager = new UserService(databaseManager);
+    super(fastify, databaseManager);
+
     this.analyticsService = new AnalyticsService(databaseManager);
   }
 
@@ -42,7 +38,7 @@ export class AnalyticsController implements Controller {
     return {
       users: data.totalUsers,
       profiles: data.totalProfiles,
-      profiles_published: data.profilesPublished,
+      profilesPublished: data.profilesPublished,
       links: data.totalLinks,
       themes: data.totalThemes
     };
@@ -59,21 +55,24 @@ export class AnalyticsController implements Controller {
    * @constructor
    */
   async LinkAnalytics(request: FastifyRequest, reply: FastifyReply) {
-    let id = (<any>request.params).id;
+    let params: any = request.params;
+    let id = params.id;
 
     if (!id) {
-      reply.type("application/json").code(HttpStatus.HTTP_STATUS_NOT_FOUND);
+      reply.code(HttpStatus.HTTP_STATUS_NOT_FOUND);
       return {};
     }
 
     let link = await this.analyticsService.getLink(id, true);
 
-    if (!link) {
-      reply.type("application/json").code(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-      return {error: "The link could not be processed by the server."};
+    if (link instanceof HttpError) {
+      let error: HttpError = link;
+      reply.code(error.statusCode);
+
+      return {error: error.message};
     }
 
-    if (link.use_deep_link) {
+    if (link.useDeepLink) {
       const userAgent = request.headers["user-agent"];
 
       if (userAgent) {

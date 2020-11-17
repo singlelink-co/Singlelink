@@ -1,32 +1,24 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {UserService} from "../services/user-service";
+import {FastifyInstance, FastifyReply, RouteHandlerMethod} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {Pool} from "pg";
-import {Auth} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ThemeService} from "../services/theme-service";
+import {Controller} from "./controller";
 
 /**
  * This controller maps and provides for all the controllers under /theme.
  */
-export class ThemeController implements Controller {
-  private readonly userManager: UserService;
-
-  private fastify: FastifyInstance;
-  private databaseManager: DatabaseManager;
-  private pool: Pool;
+export class ThemeController extends Controller {
   private themeService: ThemeService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
-    this.fastify = fastify;
-    this.databaseManager = databaseManager;
-    this.pool = databaseManager.pool;
-    this.userManager = new UserService(databaseManager);
+    super(fastify, databaseManager);
+
     this.themeService = new ThemeService(databaseManager);
   }
 
   registerRoutes(): void {
-    this.fastify.post('/theme/fetch', Auth.AuthedRouteOpts, this.FetchTheme.bind(this));
-    this.fastify.post('/theme/update', Auth.AuthedRouteOpts, this.UpdateTheme.bind(this));
+    this.fastify.post('/theme/fetch', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.FetchTheme.bind(this));
+    this.fastify.post('/theme/update', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.UpdateTheme.bind(this));
   }
 
   /**
@@ -34,7 +26,7 @@ export class ThemeController implements Controller {
    * @param request
    * @param reply
    */
-  async FetchTheme(request: FastifyRequest, reply: FastifyReply) {
+  async FetchTheme(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 
@@ -43,7 +35,7 @@ export class ThemeController implements Controller {
    * @param request
    * @param reply
    */
-  async UpdateTheme(request: FastifyRequest, reply: FastifyReply) {
+  async UpdateTheme(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 }

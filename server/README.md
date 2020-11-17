@@ -24,7 +24,7 @@
 #!/bin/sh
 # /root/update_analytics.sh
 # Make sure your permissions allow your script to be executable!
-sql <connection_string> -c 'refresh materialized view users.analytics_view
+sql <connection_string> -c 'refresh materialized view app.analytics_view
 ```
 
 After you save that script somewhere, type in:
