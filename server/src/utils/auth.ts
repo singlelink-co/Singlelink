@@ -4,6 +4,7 @@ import {appConfig} from "../config/app-config";
 import {Pool} from "pg";
 import {ReplyUtils} from "./reply-utils";
 import {constants as HttpStatus} from "http2";
+import {Converter} from "./converter";
 
 /**
  * A Fastify request that has been properly authenticated via a JWT token.
@@ -84,6 +85,8 @@ export class Auth {
 
           if (accountQuery.rowCount > 0) {
             let user = accountQuery.rows[0];
+            let authRequest = <AuthenticatedRequest>request;
+            authRequest.user = Converter.toUser(user);
 
             // Next, we grab the active profile
 
@@ -96,45 +99,10 @@ export class Auth {
 
             if (profileQuery.rowCount > 0) {
               let profile = profileQuery.rows[0];
-
-              // Finally, after we've found all the data we need, we attach it to the request.
-
-              let authRequest = <AuthenticatedRequest>request;
-
-              authRequest.user = {
-                activeProfile: user.active_profile,
-                createdOn: user.created_on,
-                email: user.email,
-                fullName: user.full_name,
-                inventory: user.inventory,
-                metadata: user.metadata,
-                subscriptionTier: user.subscription_tier,
-                id: user.id
-              };
-
-              authRequest.profile = {
-                createdOn: profile.created_on,
-                customCss: profile.custom_css,
-                customHtml: profile.custom_html,
-                customDomain: profile.custom_domain,
-                handle: profile.handle,
-                headline: profile.headline,
-                imageUrl: profile.image_url,
-                metadata: profile.metadata,
-                userId: profile.user_id,
-                id: profile.id,
-                social: {
-                  alt: profile.social?.alt,
-                  icon: profile.social?.icon,
-                  link: profile.social?.link
-                },
-                themeId: profile.theme,
-                visibility: profile.visibility
-              };
-
-
+              authRequest.profile = Converter.toProfile(profile);
             }
 
+            // Finally, after we've found all the data we need, we've attached it to the request and return it.
             done();
             return;
 
