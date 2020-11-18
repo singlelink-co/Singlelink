@@ -76,7 +76,7 @@ class Converter {
 
       try {
         // language=PostgreSQL
-        let truncateQuery = "drop table app.users, app.links, app.profiles, app.themes, history.visits cascade";
+        let truncateQuery = "drop table app.users, app.links, app.profiles, app.themes, analytics.visits cascade";
         await this.pool.query(truncateQuery);
       } catch (err) {
         console.log("An error occurred, you can probably ignore this as it'll give an error if the schema or tables don't exist yet.");
@@ -309,7 +309,7 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              'insert into history.visits (type, referral, created_on) values ($1, $2, $3) on conflict do nothing returning *;',
+              'insert into analytics.visits (type, referral, created_on) values ($1, $2, $3) on conflict do nothing returning *;',
               [
                 visit.type.toLowerCase(),
                 pgObj.id,
@@ -320,6 +320,7 @@ class Converter {
             if (queryResult.rowCount > 0) {
               addedVisits++;
             }
+
           } catch (err) {
             console.log(err);
           }
@@ -370,7 +371,7 @@ class Converter {
 
 
       console.log("Refreshing analytics view.");
-      await this.pool.query('refresh materialized view app.analytics_view');
+      await this.pool.query('refresh materialized view analytics.global_stats');
 
     } catch (err) {
       console.error(err);

@@ -121,20 +121,20 @@ export default {
   },
 
   methods: {
-    fetchUserData: function () {
-      this.$axios.$post('/user/fetch', {
+    getUserData: function () {
+      this.$axios.$post('/user', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
           this.user = response;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     },
 
-    fetchLinks: function () {
+    getLinks: function () {
       this.$axios.$post('/profile/links', {
         token: this.$store.getters['auth/getToken']
       })
@@ -142,7 +142,7 @@ export default {
           this.links = response;
         })
         .catch((error) => {
-          console.log('Error fetching profile links');
+          console.log('Error getting profile links');
           console.log(error);
         });
     },
@@ -274,8 +274,8 @@ export default {
     }
   },
   mounted: function () {
-    this.fetchUserData();
-    this.fetchLinks();
+    this.getUserData();
+    this.getLinks();
   }
 };
 </script>

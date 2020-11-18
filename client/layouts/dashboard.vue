@@ -125,22 +125,26 @@ export default {
   },
   computed: {
     profileUrl: function () {
-      try {
-        return window.location.origin + '/u/' + this.user.activeProfile.handle;
-      } catch (err) {
-        console.log(err);
-        return 'https://singlelink.co/';
+      if (process.browser) {
+        try {
+          return window.location.origin + '/u/' + this.user.activeProfile.handle;
+        } catch (err) {
+          console.log(err);
+          return 'https://singlelink.co/';
+        }
       }
     },
 
     previewUrl: function () {
-      try {
-        let origin = window.location.origin;
-        //if(origin=='https://app.singlelink.co' || origin=='http://localhost:8080') return 'https://singlel.ink' + '/u-preview/' + this.user.activeProfile.handle;
-        return origin + '/u-preview/' + this.user.activeProfile.handle;
-      } catch (err) {
-        console.log(err);
-        return 'https://singlelink.co/';
+      if (process.browser) {
+        try {
+          let origin = window.location.origin;
+          //if(origin=='https://app.singlelink.co' || origin=='http://localhost:8080') return 'https://singlel.ink' + '/u-preview/' + this.user.activeProfile.handle;
+          return origin + '/u-preview/' + this.user.activeProfile.handle;
+        } catch (err) {
+          console.log(err);
+          return 'https://singlelink.co/';
+        }
       }
     }
   },
@@ -169,8 +173,8 @@ export default {
       this.profileSelect = !this.profileSelect;
     },
 
-    async fetchProfiles() {
-      this.profiles = await this.$axios.$post('/profile/list', {
+    async listProfiles() {
+      this.profiles = await this.$axios.$post('/profiles', {
         token: this.$store.getters['auth/getToken']
       });
     },
@@ -201,15 +205,15 @@ export default {
       }
     },
 
-    fetchUserData: function () {
-      this.$axios.$post('/user/fetch', {
+    getUserData: function () {
+      this.$axios.$post('/user', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
           this.user = response;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     }
@@ -217,8 +221,8 @@ export default {
 
   mounted: function () {
     this.setActive();
-    this.fetchUserData();
-    this.fetchProfiles();
+    this.getUserData();
+    this.listProfiles();
   },
 
   watch: {

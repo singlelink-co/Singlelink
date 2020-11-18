@@ -1,10 +1,18 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface, RouteHandlerMethod} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {constants as HttpStatus} from "http2";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {ReplyUtils} from "../utils/reply-utils";
+
+interface LinkAnalyticsRequest extends RequestGenericInterface {
+  Params: {
+    id?: string
+  }
+}
 
 /**
  * This controller maps and provides for all the controllers under /analytics.
@@ -19,12 +27,16 @@ export class AnalyticsController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.get('/analytics/fetch', this.FetchAnalytics.bind(this));
+    // Unauthenticated
+    this.fastify.get('/analytics', this.GetAnalytics.bind(this));
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
+
+    // Authenticated
+    this.fastify.all('/analytics/profile', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetProfileAnalytics.bind(this));
   }
 
   /**
-   * Route for /analytics/fetch
+   * Route for /analytics
    *
    * Used to get general SingleLink analytics.
    *
@@ -32,7 +44,7 @@ export class AnalyticsController extends Controller {
    * @param reply
    * @constructor
    */
-  async FetchAnalytics(request: FastifyRequest, reply: FastifyReply) {
+  async GetAnalytics(request: FastifyRequest, reply: FastifyReply) {
     let data = await this.analyticsService.getAnalytics();
 
     return {
@@ -54,8 +66,8 @@ export class AnalyticsController extends Controller {
    * @param reply
    * @constructor
    */
-  async LinkAnalytics(request: FastifyRequest, reply: FastifyReply) {
-    let params: any = request.params;
+  async LinkAnalytics(request: FastifyRequest<LinkAnalyticsRequest>, reply: FastifyReply) {
+    let params = request.params;
     let id = params.id;
 
     if (!id) {
@@ -76,17 +88,34 @@ export class AnalyticsController extends Controller {
       const userAgent = request.headers["user-agent"];
 
       if (userAgent) {
-
         const deepLink = DeepLinker.parseDeepLink(link.url, userAgent);
+
         return reply.redirect(deepLink);
-
-      } else {
-        return reply.redirect(link?.url);
       }
-
-    } else {
-      return reply.redirect(link?.url);
     }
 
+    return reply.redirect(link?.url);
+  }
+
+  /**
+   * Route for /visit
+   * @param request
+   * @param reply
+   */
+  async GetProfileAnalytics(request: AuthenticatedRequest, reply: FastifyReply) {
+    if (!request.profile) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    }
+
+    let data = await this.analyticsService.getProfileAnalyticsData(request.profile.id);
+
+    if (data instanceof HttpError) {
+      let error: HttpError = data;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
+    }
+
+    return data;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * types.ts contains all the types that represent the data that will received from the database.
+ * app-types.ts contains all the types that represent the data that will received from the database.
  */
 
 /**
@@ -34,8 +34,8 @@ interface User {
   fullName: string | null,
   activeProfile: string | null,
   subscriptionTier: SubscriptionTier | null,
-  inventory: any | null,
-  metadata: any | null,
+  inventory: unknown | null,
+  metadata: unknown | null,
   createdOn: string
 }
 
@@ -47,20 +47,22 @@ interface SensitiveUser extends User {
   paymentId: string | null,
 }
 
+interface ThemeColors {
+  fill: {
+    primary: string,
+    secondary: string
+  },
+  text: {
+    primary: string,
+    secondary: string
+  }
+}
+
 interface Theme {
   id: string,
   label: string,
   global: boolean,
-  colors: {
-    fill: {
-      primary: string,
-      secondary: string
-    } | null,
-    text: {
-      primary: string,
-      secondary: string
-    } | null
-  } | null,
+  colors: ThemeColors | null,
   customCss: string | null,
   customHtml: string | null,
   userId: string,
@@ -83,7 +85,7 @@ interface Profile {
   customDomain: string,
   themeId: string,
   visibility: Visibility,
-  metadata: any,
+  metadata: unknown,
   createdOn: string
 }
 
@@ -106,7 +108,7 @@ interface Visit {
   createdOn: string
 }
 
-interface Analytics {
+interface AnalyticsGlobalStats {
   totalUsers: number;
   totalProfiles: number;
   profilesPublished: number;

@@ -5,7 +5,6 @@ import {LinkController} from "./controllers/link-controller";
 import {ProfileController} from "./controllers/profile-controller";
 import {ThemeController} from "./controllers/theme-controller";
 import {UserController} from "./controllers/user-controller";
-import {VisitController} from "./controllers/visit-controller";
 import {Auth} from "./utils/auth";
 
 console.log("Initializing Singlelink");
@@ -26,7 +25,6 @@ async function start() {
   server.addController(new ProfileController(server.fastify, database));
   server.addController(new ThemeController(server.fastify, database));
   server.addController(new UserController(server.fastify, database));
-  server.addController(new VisitController(server.fastify, database));
 
   server.startServer();
 }

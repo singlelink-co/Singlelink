@@ -1,5 +1,5 @@
 create schema if not exists app;
-create schema if not exists history;
+create schema if not exists analytics;
 
 do
 $$
@@ -146,14 +146,14 @@ create index if not exists links_url_index on app.links (url);
  type: The type of visit this was.
  referral: The link or page this visit points to.
  */
-create table if not exists history.visits
+create table if not exists analytics.visits
 (
     type       visit_t   not null,
     referral   bigint    not null,
     created_on timestamp not null default current_timestamp
 );
 
-create index if not exists visits_referral_index on history.visits (referral);
+create index if not exists visits_referral_index on analytics.visits (referral);
 
 do
 $$
@@ -161,7 +161,7 @@ $$
         /*
          Creates an analytics view for use with the server analytics.
          */
-        create materialized view app.analytics_view as
+        create materialized view analytics.global_stats as
             select count(app.users.*)                                                                         as total_users,
                    (select count(app.profiles.*) from app.profiles)                                           as total_profiles,
                    (select count(app.profiles.*) filter ( where visibility = 'published' )
@@ -170,7 +170,7 @@ $$
                    (select count(app.themes.*) from app.themes)                                               as total_themes
             from app.users;
     exception
-        when duplicate_table then raise notice 'app.analytics_view already added.';
+        when duplicate_table then raise notice 'analytics.analytics_view already added.';
     end;
 $$ language plpgsql;
 

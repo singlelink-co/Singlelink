@@ -26,9 +26,9 @@ export class UserController extends Controller {
 
     // Authenticated
 
-    this.fastify.all('/user/fetch', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.FetchUser.bind(this));
-    this.fastify.all('/user/set-active', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.SetActiveUser.bind(this));
-    this.fastify.all('/user/delete', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.DeleteUser.bind(this));
+    this.fastify.all('/user', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetUser.bind(this));
+    this.fastify.all('/user/set-active', Auth.AuthRouteOptions, <RouteHandlerMethod>this.SetActiveUser.bind(this));
+    this.fastify.all('/user/delete', Auth.AuthRouteOptions, <RouteHandlerMethod>this.DeleteUser.bind(this));
   }
 
   /**
@@ -68,11 +68,11 @@ export class UserController extends Controller {
   }
 
   /**
-   * Route for /user/fetch
+   * Route for /user
    * @param request
    * @param reply
    */
-  async FetchUser(request: AuthenticatedRequest, reply: FastifyReply) {
+  async GetUser(request: AuthenticatedRequest, reply: FastifyReply) {
 
   }
 

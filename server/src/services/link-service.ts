@@ -2,7 +2,7 @@ import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {QueryUtils} from "../utils/query-utils";
 import {PoolClient} from "pg";
-import {Converter} from "../utils/converter";
+import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {constants as HttpStatus} from "http2";
 
@@ -37,7 +37,7 @@ export class LinkService extends DatabaseService {
     customCss?: string,
     useDeepLink: boolean = false
   ): Promise<Link | HttpError> {
-    let queryResult = await this.pool.query(`insert into app.links (profile_id, label, url, sort_order, subtitle, style, custom_css, use_deep_link) values ${QueryUtils.values(8)} returning *;`,
+    let queryResult = await this.pool.query<AppLink>(`insert into app.links (profile_id, label, url, sort_order, subtitle, style, custom_css, use_deep_link) values ${QueryUtils.values(8)} returning *;`,
       [
         profileId,
         label,
@@ -49,11 +49,11 @@ export class LinkService extends DatabaseService {
         useDeepLink
       ]);
 
-    if (queryResult.rowCount > 0) {
-      return Converter.toLink(queryResult.rows[0]);
-    } else {
+    if (queryResult.rowCount < 1) {
       return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
     }
+
+    return DbTypeConverter.toLink(queryResult.rows[0]);
   }
 
   /**
@@ -78,7 +78,7 @@ export class LinkService extends DatabaseService {
     customCss?: string,
     useDeepLink?: boolean
   ): Promise<Link | HttpError> {
-    let queryResult = await this.pool.query("update app.links set url=coalesce($1, url), sort_order=coalesce($2, sort_order), label=coalesce($3, label), subtitle=coalesce($4, subtitle), style=coalesce($5, style), custom_css=coalesce($6, custom_css), use_deep_link=coalesce($7, use_deep_link) where id=$8 returning *;",
+    let queryResult = await this.pool.query<AppLink>("update app.links set url=coalesce($1, url), sort_order=coalesce($2, sort_order), label=coalesce($3, label), subtitle=coalesce($4, subtitle), style=coalesce($5, style), custom_css=coalesce($6, custom_css), use_deep_link=coalesce($7, use_deep_link) where id=$8 returning *;",
       [
         url,
         sortOrder,
@@ -90,11 +90,11 @@ export class LinkService extends DatabaseService {
         linkId
       ]);
 
-    if (queryResult.rowCount > 0) {
-      return Converter.toLink(queryResult.rows[0]);
-    } else {
+    if (queryResult.rowCount < 1) {
       return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
     }
+
+    return DbTypeConverter.toLink(queryResult.rows[0]);
   }
 
   /**
@@ -103,17 +103,15 @@ export class LinkService extends DatabaseService {
    * @param linkId The id of the link to delete
    */
   async deleteLink(linkId: string): Promise<Link[] | HttpError> {
-    let queryResult = await this.pool.query(
+    let queryResult = await this.pool.query<AppLink>(
       "delete from app.links where id=$1 returning profile_id",
       [linkId]);
 
-    if (queryResult.rowCount > 0) {
-      let profileId = queryResult.rows[0].profile_id;
-
-      return this.listLinks(profileId);
-    } else {
+    if (queryResult.rowCount < 1) {
       return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
     }
+
+    return this.listLinks(queryResult.rows[0].profile_id);
   }
 
   /**
@@ -122,15 +120,15 @@ export class LinkService extends DatabaseService {
    * @param profileId The profile that owns the links
    */
   async listLinks(profileId: string): Promise<Link[] | HttpError> {
-    let queryResult = await this.pool.query("select * from app.links where profile_id=$1 order by sort_order desc", [profileId]);
+    let queryResult = await this.pool.query<AppLink>("select * from app.links where profile_id=$1 order by sort_order desc", [profileId]);
 
-    if (queryResult.rowCount > 0) {
-      return queryResult.rows.map(x => {
-        return Converter.toLink(x);
-      });
-    } else {
+    if (queryResult.rowCount < 1) {
       return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The links couldn't be found.");
     }
+
+    return queryResult.rows.map(x => {
+      return DbTypeConverter.toLink(x);
+    });
   }
 
   /**
@@ -139,9 +137,7 @@ export class LinkService extends DatabaseService {
    * @param profileId The profile associated with the links.
    */
   async getProfileLinkCount(profileId: string): Promise<number> {
-    let queryResult = await this.pool.query("select count(*) from app.links where profile_id=$1", [profileId]);
-
-    return queryResult.rowCount > 0 ? Number.parseInt(queryResult.rows[0].count) : 0;
+    return (await this.pool.query<Number>("select count(*) from app.links where profile_id=$1", [profileId])).rowCount;
   }
 
   /**
@@ -156,14 +152,14 @@ export class LinkService extends DatabaseService {
     try {
       await db.query("begin");
 
-      let queryResult = await db.query("select * from app.links where profile_id=$1 order by sort_order", [profileId]);
+      let queryResult = await db.query<AppLink>("select * from app.links where profile_id=$1 order by sort_order", [profileId]);
 
       if (queryResult.rowCount < 1) {
         return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
       }
 
-      let linkRows: any[] = queryResult.rows;
-      let linkRow: any;
+      let linkRows: AppLink[] = queryResult.rows;
+      let linkRow: AppLink | undefined;
 
       if (oldIndex >= 0 && oldIndex < linkRows.length && newIndex >= 0 && newIndex < linkRows.length) {
         if (oldIndex < linkRows.length) {
@@ -188,7 +184,7 @@ export class LinkService extends DatabaseService {
       await db.query("commit");
 
       return linkRows.map(x => {
-        return Converter.toLink(x);
+        return DbTypeConverter.toLink(x);
       });
 
     } catch (err) {

@@ -80,7 +80,7 @@ export default {
       this.hourlyGrowthRate = null;
       this.projectedUsers = null;
 
-      this.analytics = await this.$axios.$get('/analytics/fetch');
+      this.analytics = await this.$axios.$get('/analytics');
 
       this.computeVariables();
     },
@@ -101,7 +101,7 @@ export default {
   },
 
   mounted: async function () {
-    this.analytics = await this.$axios.$get('/analytics/fetch');
+    this.analytics = await this.$axios.$get('/analytics');
 
     this.computeVariables();
   }

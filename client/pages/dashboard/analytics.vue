@@ -8,7 +8,9 @@
       </div>
       <div class="flex flex-col p-6 bg-white shadow rounded w-full md:w-1/2 mb-8 md:ml-2">
         <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Click through rate</h2>
-        <h4 class="text-indigo-600 text-3xl" v-if="analytics.ctr">{{ analytics.ctr.toFixed(2) }}%</h4>
+        <h4 class="text-indigo-600 text-3xl" v-if="analytics.clickThroughRate">{{
+            analytics.clickThroughRate.toFixed(2)
+          }}%</h4>
       </div>
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 md:mr-2">
@@ -38,23 +40,23 @@ export default {
       analytics: {
         profileViewSum: null,
         linkViews: [],
-        ctr: null
+        clickThroughRate: null
       }
     };
   },
   mounted: function () {
-    this.fetchAnalytics();
+    this.getProfileAnalytics();
   },
   methods: {
-    fetchAnalytics: function () {
-      this.$axios.$post('/visit/fetch', {
+    getProfileAnalytics: function () {
+      this.$axios.$post('/analytics/profile', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
           this.analytics = response;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     },

@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RouteHandlerMethod} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface, RouteHandlerMethod} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ProfileService} from "../services/profile-service";
@@ -9,6 +9,40 @@ import {UserService} from "../services/user-service";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
+
+interface ProfileHandleRequest extends RequestGenericInterface {
+  Params: {
+    handle?: string
+  }
+}
+
+interface CreateProfileRequest extends RequestGenericInterface {
+  Body: {
+    handle?: string,
+    imageUrl: string,
+    headline: string,
+    subtitle: string
+  }
+}
+
+interface ActiveProfileThemeRequest extends RequestGenericInterface {
+  Body: {
+    theme: string
+  }
+}
+
+interface UpdateProfileRequest extends RequestGenericInterface {
+  Body: {
+    imageUrl: string,
+    headline: string,
+    subtitle: string,
+    handle: string,
+    visibility: string,
+    customCss: string,
+    customHtml: string,
+    customDomain: string
+  }
+}
 
 /**
  * This controller maps and provides for all the controllers under /profile.
@@ -31,33 +65,34 @@ export class ProfileController extends Controller {
   registerRoutes(): void {
     // Unauthenticated controllers
 
-    this.fastify.all('/profile/fetch/:handle', this.FetchProfile.bind(this));
+    this.fastify.all('/profile', this.GetProfile.bind(this));
+    this.fastify.all('/profile/:handle', this.GetProfile.bind(this));
     this.fastify.all('/profile/thumbnail/:handle', this.ProfileThumbnailHandle.bind(this));
 
     // Authenticated
 
-    this.fastify.all('/profile/fetch-preview', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.FetchProfilePreview.bind(this));
-    this.fastify.all('/profile/fetch-preview/:handle', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.FetchProfilePreview.bind(this));
+    this.fastify.all('/profile/preview', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetProfilePreview.bind(this));
+    this.fastify.all('/profile/preview/:handle', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetProfilePreview.bind(this));
 
-    this.fastify.post('/profile/create', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.CreateProfile.bind(this));
-    this.fastify.post('/profile/activate-theme', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ActivateProfileTheme.bind(this));
-    this.fastify.post('/profile/update', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.UpdateProfile.bind(this));
-    this.fastify.post('/profile/links', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ListProfileLinks.bind(this));
-    this.fastify.post('/profile/list', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.ListProfiles.bind(this));
-    this.fastify.post('/profile/destroy', Auth.AuthedRouteOpts, <RouteHandlerMethod>this.DestroyProfile.bind(this));
+    this.fastify.post('/profiles', Auth.AuthRouteOptions, <RouteHandlerMethod>this.ListProfiles.bind(this));
+    this.fastify.post('/profile/create', Auth.AuthRouteOptions, <RouteHandlerMethod>this.CreateProfile.bind(this));
+    this.fastify.post('/profile/activate-theme', Auth.AuthRouteOptions, <RouteHandlerMethod>this.ActivateProfileTheme.bind(this));
+    this.fastify.post('/profile/update', Auth.AuthRouteOptions, <RouteHandlerMethod>this.UpdateProfile.bind(this));
+    this.fastify.post('/profile/links', Auth.AuthRouteOptions, <RouteHandlerMethod>this.ListProfileLinks.bind(this));
+    this.fastify.post('/profile/destroy', Auth.AuthRouteOptions, <RouteHandlerMethod>this.DestroyProfile.bind(this));
   }
 
   /**
-   * Route for /profile/fetch
-   * /profile/fetch/:handle
+   * Route for /profile
+   * /profile//:handle
    *
    * Fetches a user's profile.
    *
    * @param request
    * @param reply
    */
-  async FetchProfile(request: FastifyRequest, reply: FastifyReply) {
-    let params: any = request.params;
+  async GetProfile(request: FastifyRequest<ProfileHandleRequest>, reply: FastifyReply) {
+    let params = request.params;
 
     if (!params.handle) {
       return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
@@ -90,8 +125,8 @@ export class ProfileController extends Controller {
    * @param request
    * @param reply
    */
-  async ProfileThumbnailHandle(request: FastifyRequest, reply: FastifyReply) {
-    let params: any = request.params;
+  async ProfileThumbnailHandle(request: FastifyRequest<ProfileHandleRequest>, reply: FastifyReply) {
+    let params = request.params;
 
     if (!params.handle) {
       return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
@@ -115,19 +150,42 @@ export class ProfileController extends Controller {
   }
 
   /**
+   * Route for /profiles
+   *
+   * @param request
+   * @param reply
+   */
+  async ListProfiles(request: AuthenticatedRequest, reply: FastifyReply) {
+    if (!request.profile) {
+      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    }
+
+    let profiles = await this.profileService.listProfiles(request.user.id);
+
+    if (profiles instanceof HttpError) {
+      let error: HttpError = profiles;
+      reply.code(error.statusCode);
+
+      return ReplyUtils.error(error.message, error);
+    }
+
+    return profiles;
+  }
+
+  /**
    * Route for /profile/create/
    *
    * @param request
    * @param reply
    */
-  async CreateProfile(request: AuthenticatedRequest, reply: FastifyReply) {
-    let json: any = request.body;
+  async CreateProfile(request: AuthenticatedRequest<CreateProfileRequest>, reply: FastifyReply) {
+    let body = request.body;
 
-    if (!json.handle) {
-      json.handle = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+    if (!body.handle) {
+      body.handle = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
     }
 
-    let profile = await this.profileService.createProfile(json.handle, request.user.id, json.imageUrl, json.headline, json.subtitle);
+    let profile = await this.profileService.createProfile(body.handle, request.user.id, body.imageUrl, body.headline, body.subtitle);
 
     if (profile instanceof HttpError) {
       let error: HttpError = profile;
@@ -140,13 +198,13 @@ export class ProfileController extends Controller {
   }
 
   /**
-   * Route for /profile/fetch-preview/
-   * /profile/fetch-preview/:handle
+   * Route for /profile/preview
+   * /profile/preview/:handle
    *
    * @param request
    * @param reply
    */
-  async FetchProfilePreview(request: AuthenticatedRequest, reply: FastifyReply) {
+  async GetProfilePreview(request: AuthenticatedRequest, reply: FastifyReply) {
     if (!request.profile) {
       return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
     }
@@ -182,14 +240,14 @@ export class ProfileController extends Controller {
    * @param request
    * @param reply
    */
-  async ActivateProfileTheme(request: AuthenticatedRequest, reply: FastifyReply) {
+  async ActivateProfileTheme(request: AuthenticatedRequest<ActiveProfileThemeRequest>, reply: FastifyReply) {
     if (!request.profile) {
       return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
     }
 
-    let json: any = request.body;
+    let body = request.body;
 
-    let profile = await this.profileService.setActiveTheme(request.profile.id, json.theme);
+    let profile = await this.profileService.setActiveTheme(request.profile.id, body.theme);
 
     if (profile instanceof HttpError) {
       let error: HttpError = profile;
@@ -207,23 +265,23 @@ export class ProfileController extends Controller {
    * @param request
    * @param reply
    */
-  async UpdateProfile(request: AuthenticatedRequest, reply: FastifyReply) {
+  async UpdateProfile(request: AuthenticatedRequest<UpdateProfileRequest>, reply: FastifyReply) {
     if (!request.profile) {
       return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
     }
 
-    let json: any = request.body;
+    let body = request.body;
 
     let profile = await this.profileService.updateProfile(
       request.profile.id,
-      json.imageUrl,
-      json.headline,
-      json.subtitle,
-      json.handle,
-      json.visibility,
-      json.customCss,
-      json.customHtml,
-      json.customDomain
+      body.imageUrl,
+      body.headline,
+      body.subtitle,
+      body.handle,
+      body.visibility,
+      body.customCss,
+      body.customHtml,
+      body.customDomain
     );
 
     if (profile instanceof HttpError) {
@@ -257,29 +315,6 @@ export class ProfileController extends Controller {
     }
 
     return links;
-  }
-
-  /**
-   * Route for /profile/list
-   *
-   * @param request
-   * @param reply
-   */
-  async ListProfiles(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
-    }
-
-    let profiles = await this.profileService.listProfiles(request.user.id);
-
-    if (profiles instanceof HttpError) {
-      let error: HttpError = profiles;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return profiles;
   }
 
   /**

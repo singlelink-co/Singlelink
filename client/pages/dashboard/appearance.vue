@@ -184,7 +184,7 @@ export default {
     };
   },
   mounted: function () {
-    this.fetchUserData();
+    this.getUserData();
     this.loadThemes();
   },
   methods: {
@@ -204,7 +204,7 @@ export default {
         });
     },
     loadThemes: function () {
-      this.$axios.$post('/theme/fetch', {
+      this.$axios.$post('/theme', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
@@ -212,8 +212,7 @@ export default {
 
         })
         .catch((error) => {
-          //this.error = 'Failed to fetch themes';
-          console.log('Failed to fetch themes');
+          console.log('Failed to get themes');
           console.log(error);
         });
     },
@@ -269,10 +268,12 @@ export default {
       return this.modal = false;
     },
     refreshPreview: function () {
-      document.getElementById('preview-frame').window.location.reload();
+      if (process.browser) {
+        document.getElementById('preview-frame').window.location.reload();
+      }
     },
-    fetchUserData: function () {
-      this.$axios.$post('/user/fetch', {
+    getUserData: function () {
+      this.$axios.$post('/user', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
@@ -281,7 +282,7 @@ export default {
           if (response.activeProfile.customHtml) this.customHtml = response.activeProfile.customHtml;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     },

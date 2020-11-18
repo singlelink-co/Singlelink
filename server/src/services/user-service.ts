@@ -4,10 +4,9 @@ import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
-import {Converter} from "../utils/converter";
+import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {constants as HttpStatus} from "http2";
-import {ReplyUtils} from "../utils/reply-utils";
 
 /**
  * This service takes care of transactional tasks for Accounts.
@@ -24,13 +23,13 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getUser(userId: string): Promise<User | HttpError> {
-    let queryResult = await this.pool.query("select (id, email, full_name, active_profile, subscription_tier, inventory, metadata, created_on) from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<AppUser>("select (id, email, full_name, active_profile, subscription_tier, inventory, metadata, created_on) from app.users where id=$1", [userId]);
 
-    if (queryResult.rowCount > 0) {
-      return Converter.toUser(queryResult.rows[0]);
+    if (queryResult.rowCount < 1) {
+      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
     }
 
-    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+    return DbTypeConverter.toUser(queryResult.rows[0]);
   }
 
   /**
@@ -39,13 +38,13 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getSensitiveUser(userId: string): Promise<SensitiveUser | HttpError> {
-    let queryResult = await this.pool.query("select * from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<AppSensitiveUser>("select * from app.users where id=$1", [userId]);
 
-    if (queryResult.rowCount > 0) {
-      return Converter.toSensitiveUser(queryResult.rows[0]);
+    if (queryResult.rowCount < 1) {
+      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
     }
 
-    return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+    return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
   }
 
   /**

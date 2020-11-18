@@ -59,7 +59,10 @@ export default {
   },
   middleware: 'unauthenticated',
   mounted: function () {
-    if (!this.$route.query['token']) return window.location.replace('/forgot-password');
+    if (process.browser) {
+      if (!this.$route.query['token'])
+        return window.location.replace('/forgot-password');
+    }
   },
   methods: {
     async resetPassword() {
@@ -74,7 +77,9 @@ export default {
         if (request.status && request.status === 200) {
           this.message = 'Password reset successful, redirecting.';
           setTimeout(function () {
-            return window.location.replace('/');
+            if (process.browser) {
+              return window.location.replace('/');
+            }
           }, 250);
         }
       } catch (err) {

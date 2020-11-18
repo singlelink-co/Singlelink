@@ -119,11 +119,13 @@ export default {
     };
   },
   mounted: function () {
-    this.fetchUserData();
+    this.getUserData();
   },
   methods: {
     refreshPreview: function () {
-      document.getElementById('preview-frame').window.location.reload();
+      if (process.browser) {
+        document.getElementById('preview-frame').window.location.reload();
+      }
     },
     saveChanges: function () {
       this.$axios.$post('/profile/update', {
@@ -164,8 +166,8 @@ export default {
       this.$nuxt.$loading.finish();
       return location.replace('/dashboard');
     },
-    fetchUserData: function () {
-      this.$axios.$post('/user/fetch', {
+    getUserData: function () {
+      this.$axios.$post('/user', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
@@ -173,7 +175,7 @@ export default {
           this.originalHandle = this.user.activeProfile.handle;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     },

@@ -111,7 +111,7 @@ export default {
     };
   },
   mounted: function () {
-    this.fetchUserData();
+    this.getUserData();
   },
   methods: {
     openInfoModal: function () {
@@ -133,15 +133,15 @@ export default {
       this.$nuxt.$loading.finish();
 
     },
-    fetchUserData: function () {
-      this.$axios.$post('/user/fetch', {
+    getUserData: function () {
+      this.$axios.$post('/user', {
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
           this.user = response;
         })
         .catch((error) => {
-          console.log('Error fetching user data');
+          console.log('Error getting user data');
           console.log(error);
         });
     },
