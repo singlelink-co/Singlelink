@@ -16,7 +16,7 @@ interface AppUser {
   id: string,
   email: string,
   full_name: string | null,
-  active_profile: string | null,
+  active_profile_id: string | null,
   subscription_tier: subscription_t | null,
   inventory: unknown | null,
   metadata: unknown | null,

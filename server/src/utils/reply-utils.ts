@@ -7,4 +7,7 @@ export class ReplyUtils {
     return `{"error": "${msg}"${error ? `,"errorObject": ${JSON.stringify(error)}` : ``}}`;
   }
 
+  static success(msg: string) {
+    return `{"message": "${msg}"}`;
+  }
 }

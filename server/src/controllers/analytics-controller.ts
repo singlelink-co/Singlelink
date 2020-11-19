@@ -67,34 +67,37 @@ export class AnalyticsController extends Controller {
    * @constructor
    */
   async LinkAnalytics(request: FastifyRequest<LinkAnalyticsRequest>, reply: FastifyReply) {
-    let params = request.params;
-    let id = params.id;
+    try {
+      let params = request.params;
+      let id = params.id;
 
-    if (!id) {
-      reply.code(HttpStatus.HTTP_STATUS_NOT_FOUND);
-      return {};
-    }
-
-    let link = await this.analyticsService.getLink(id, true);
-
-    if (link instanceof HttpError) {
-      let error: HttpError = link;
-      reply.code(error.statusCode);
-
-      return {error: error.message};
-    }
-
-    if (link.useDeepLink) {
-      const userAgent = request.headers["user-agent"];
-
-      if (userAgent) {
-        const deepLink = DeepLinker.parseDeepLink(link.url, userAgent);
-
-        return reply.redirect(deepLink);
+      if (!id) {
+        reply.code(HttpStatus.HTTP_STATUS_NOT_FOUND);
+        return ReplyUtils.error("The link was not found.");
       }
-    }
 
-    return reply.redirect(link?.url);
+      let link = await this.analyticsService.getLink(id, true);
+
+      if (link.useDeepLink) {
+        const userAgent = request.headers["user-agent"];
+
+        if (userAgent) {
+          const deepLink = DeepLinker.parseDeepLink(link.url, userAgent);
+
+          reply.redirect(deepLink);
+          return;
+        }
+      }
+
+      reply.redirect(link?.url);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
   }
 
   /**
@@ -103,19 +106,20 @@ export class AnalyticsController extends Controller {
    * @param reply
    */
   async GetProfileAnalytics(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      return await this.analyticsService.getProfileAnalyticsData(request.profile.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let data = await this.analyticsService.getProfileAnalyticsData(request.profile.id);
-
-    if (data instanceof HttpError) {
-      let error: HttpError = data;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return data;
   }
 }

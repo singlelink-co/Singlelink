@@ -7,9 +7,8 @@
 
 import readline from "readline";
 import mongoose from "mongoose";
-import {Pool, PoolClient} from "pg";
+import {Pool} from "pg";
 import fs from "fs";
-import {QueryUtils} from "../src/utils/query-utils";
 
 const User = require('./models/User');
 const Profile = require('./models/Profile');
@@ -131,17 +130,17 @@ class Converter {
         let func = async () => {
           try {
             let queryResult = await this.pool.query(
-              'insert into app.users (full_name, email, pass_hash, active_profile, created_on) values ($1, $2, $3, $4, $5) on conflict do nothing returning *;',
+              'insert into app.users (full_name, email, pass_hash, active_profile_id, created_on) values ($1, $2, $3, $4, $5) on conflict do nothing returning *;',
               [
                 user.name,
                 user.email,
                 user.password,
-                user.active_profile?.handle,
+                null,
                 user._id.getTimestamp()
               ]
             );
 
-            if (queryResult.rowCount < 1) {
+            if (queryResult.rowCount <= 0) {
               queryResult.rows[0] = (await this.pool.query("select * from app.users where email=$1", [user.email])).rows[0];
             } else {
               addedAccounts++;
@@ -182,7 +181,7 @@ class Converter {
               ]
             );
 
-            if (queryResult.rowCount < 1) {
+            if (queryResult.rowCount <= 0) {
               queryResult.rows[0] = (await this.pool.query("select * from app.themes where user_id=$1 and label=$2", [pgAccount.id, theme.label])).rows[0];
             } else {
               addedThemes++;
@@ -229,11 +228,19 @@ class Converter {
               ]
             );
 
-            if (queryResult.rowCount < 1) {
+            if (queryResult.rowCount <= 0) {
               queryResult.rows[0] = (await this.pool.query("select * from app.profiles where handle=$1", [profile.handle])).rows[0];
             } else {
               addedProfiles++;
             }
+
+            await this.pool.query(
+              'update app.users set active_profile_id=$1 where id=$2',
+              [
+                queryResult.rows[0].id,
+                pgAccount.id
+              ]
+            );
 
             let obj = queryResult.rows[0];
             obj.oldId = profile._id.toString();
@@ -271,7 +278,7 @@ class Converter {
               ]
             );
 
-            if (queryResult.rowCount < 1) {
+            if (queryResult.rowCount <= 0) {
               queryResult.rows[0] = (await this.pool.query("select * from app.links where profile_id=$1", [pgProfile.id])).rows[0];
             } else {
               addedLinks++;

@@ -162,7 +162,7 @@ export default {
     },
 
     async selectProfile(profile) {
-      this.user.activeProfile = await this.$axios.$post('/user/set-active', {
+      this.user.activeProfile = await this.$axios.$post('/user/set-active-profile', {
         token: this.$store.getters['auth/getToken'],
         profile: profile
       });

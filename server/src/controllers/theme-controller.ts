@@ -46,18 +46,18 @@ export class ThemeController extends Controller {
    * @param reply
    */
   async GetTheme(request: AuthenticatedRequest<GetThemeRequest>, reply: FastifyReply) {
-    let body = request.body;
+    try {
+      let body = request.body;
 
-    let themes = await this.themeService.listThemes(request.user.id, body.includeGlobal);
+      return await this.themeService.listThemes(request.user.id, body.includeGlobal);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
 
-    if (themes instanceof HttpError) {
-      let error: HttpError = themes;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
+      throw e;
     }
-
-    return themes;
   }
 
   /**
@@ -66,22 +66,23 @@ export class ThemeController extends Controller {
    * @param reply
    */
   async CreateTheme(request: AuthenticatedRequest<CreateThemeRequest>, reply: FastifyReply) {
-    let body = request.body;
+    try {
+      let body = request.body;
 
-    if (!body.label) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+      if (!body.label) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+        return;
+      }
+
+      return await this.themeService.createTheme(request.user.id, body.label, body.colors, body.customCss, body.customHtml);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let theme = await this.themeService.createTheme(request.user.id, body.label, body.colors, body.customCss, body.customHtml);
-
-    if (theme instanceof HttpError) {
-      let error: HttpError = theme;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return theme;
   }
 
   /**
@@ -90,8 +91,17 @@ export class ThemeController extends Controller {
    * @param reply
    */
   async UpdateTheme(request: AuthenticatedRequest, reply: FastifyReply) {
+    try {
+      reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
 
-    reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
-    return ReplyUtils.error("Sorry, this is not available yet.");
+      return ReplyUtils.error("Sorry, this is not available yet.");
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
   }
 }

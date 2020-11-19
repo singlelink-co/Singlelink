@@ -57,7 +57,7 @@ create table if not exists app.users
     email             varchar(340) unique not null,
     full_name         text,
     pass_hash         varchar(60)         not null,
-    active_profile    text,
+    active_profile_id bigint,
     payment_id        text,                                        -- The associated payment account id (external) for this user
     subscription_tier subscription_t               default 'free', -- The subscription tier of this user
     inventory         jsonb                        default '{}',   -- All the stuff this account owns
@@ -78,7 +78,7 @@ create table if not exists app.themes
     colors      jsonb              default '{}',
     custom_css  text,
     custom_html text,
-    user_id     bigint    references app.users (id) on update cascade on delete set null,
+    user_id     bigint references app.users (id) on update cascade on delete cascade,
     created_on  timestamp not null default current_timestamp
 );
 
@@ -91,16 +91,16 @@ create index if not exists themes_user_id_index on app.themes (user_id);
 create table if not exists app.profiles
 (
     id            bigserial primary key unique,
-    handle        text unique not null,                                                  -- The name of the profile in the url
-    user_id       bigint references app.users (id) on update cascade on delete cascade,
+    handle        text unique not null,                                                        -- The name of the profile in the url
+    user_id       bigint,
     image_url     text,
-    headline      text,                                                                  -- The name that shows up on the page
-    subtitle      text,                                                                  -- The name underneath a profile's avatar
+    headline      text,                                                                        -- The name that shows up on the page
+    subtitle      text,                                                                        -- The name underneath a profile's avatar
     social        jsonb                default '{}',
     custom_css    text,
     custom_html   text,
     custom_domain text unique,
-    theme_id      bigint references app.themes (id) on update cascade on delete cascade, -- The profile's currently selected theme
+    theme_id      bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility    visibility_t         default 'unpublished',
     metadata      jsonb                default '{}',
     created_on    timestamp   not null default current_timestamp
@@ -109,6 +109,13 @@ create table if not exists app.profiles
 create index if not exists profiles_user_id_index on app.profiles (user_id);
 create index if not exists profiles_theme_id_index on app.profiles (theme_id);
 create index if not exists profiles_visibility_index on app.profiles (visibility);
+
+-- Create the foreign keys for app.users and app.profiles
+alter table app.users
+    add constraint fk_users_active_profile_id foreign key (active_profile_id) references app.profiles (id) on update cascade on delete set null deferrable initially deferred;
+
+alter table app.profiles
+    add constraint fk_profiles_user_id foreign key (user_id) references app.users (id) on update cascade on delete cascade deferrable initially deferred;
 
 -- TODO Use this table to allow for multiple users per profile
 create table if not exists app.profile_members
@@ -149,11 +156,11 @@ create index if not exists links_url_index on app.links (url);
 create table if not exists analytics.visits
 (
     type       visit_t   not null,
-    referral   bigint    not null,
+    referral_id   bigint    not null,
     created_on timestamp not null default current_timestamp
 );
 
-create index if not exists visits_referral_index on analytics.visits (referral);
+create index if not exists visits_referral_index on analytics.visits (referral_id);
 
 do
 $$

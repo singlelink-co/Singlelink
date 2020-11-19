@@ -18,7 +18,7 @@ interface ProfileHandleRequest extends RequestGenericInterface {
 
 interface CreateProfileRequest extends RequestGenericInterface {
   Body: {
-    handle?: string,
+    handle: string,
     imageUrl: string,
     headline: string,
     subtitle: string
@@ -67,7 +67,7 @@ export class ProfileController extends Controller {
 
     this.fastify.all('/profile', this.GetProfile.bind(this));
     this.fastify.all('/profile/:handle', this.GetProfile.bind(this));
-    this.fastify.all('/profile/thumbnail/:handle', this.ProfileThumbnailHandle.bind(this));
+    this.fastify.all('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
 
     // Authenticated
 
@@ -92,31 +92,51 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async GetProfile(request: FastifyRequest<ProfileHandleRequest>, reply: FastifyReply) {
-    let params = request.params;
+    try {
+      let params = request.params;
 
-    if (!params.handle) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+      if (!params.handle) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+        return;
+      }
+
+      let profile = await this.profileService.getProfileByHandle(params.handle);
+      let links;
+      let user;
+      let theme;
+
+      try {
+        links = await this.linkService.listLinks(profile.id);
+      } catch (err) {
+        // ignore, we don't care why these properties don't exist
+      }
+
+      try {
+        user = await this.accountService.getUser(profile.userId);
+      } catch (err) {
+        // ignore, we don't care why these properties don't exist
+      }
+
+      try {
+        theme = await this.themeService.getTheme(profile.themeId);
+      } catch (err) {
+        // ignore, we don't care why these properties don't exist
+      }
+
+      return {
+        profile: profile,
+        links: links,
+        user: user,
+        theme: theme
+      };
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let profile = await this.profileService.getProfile(params.handle);
-
-    if (profile instanceof HttpError) {
-      let error: HttpError = profile;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    let links = await this.linkService.listLinks(profile.id);
-    let user = await this.accountService.getUser(profile.userId);
-    let theme = await this.themeService.getTheme(profile.themeId);
-
-    return {
-      profile: profile,
-      links: links instanceof HttpError ? null : links,
-      user: user instanceof HttpError ? null : user,
-      theme: theme instanceof HttpError ? null : theme
-    };
   }
 
   /**
@@ -125,28 +145,32 @@ export class ProfileController extends Controller {
    * @param request
    * @param reply
    */
-  async ProfileThumbnailHandle(request: FastifyRequest<ProfileHandleRequest>, reply: FastifyReply) {
-    let params = request.params;
+  async GetProfileThumbnail(request: FastifyRequest<ProfileHandleRequest>, reply: FastifyReply) {
+    try {
+      let params = request.params;
 
-    if (!params.handle) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+      if (!params.handle) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+        return;
+      }
+
+      let thumbnail = await this.profileService.getThumbnailByHandle(params.handle);
+
+      reply.code(HttpStatus.HTTP_STATUS_OK).headers({
+        "Content-Type": "image/png",
+        "Content-Length": thumbnail.data.byteLength
+      });
+
+      reply.send(thumbnail.data);
+      return;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let thumbnail = await this.profileService.getThumbnail(params.handle);
-
-    if (thumbnail instanceof HttpError) {
-      let error: HttpError = thumbnail;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    reply.code(HttpStatus.HTTP_STATUS_OK).headers({
-      "Content-Type": "image/png",
-      "Content-Length": thumbnail.data.byteLength
-    });
-
-    return reply.send(thumbnail.data);
   }
 
   /**
@@ -156,20 +180,21 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async ListProfiles(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      return await this.profileService.listProfiles(request.user.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let profiles = await this.profileService.listProfiles(request.user.id);
-
-    if (profiles instanceof HttpError) {
-      let error: HttpError = profiles;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return profiles;
   }
 
   /**
@@ -179,22 +204,18 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async CreateProfile(request: AuthenticatedRequest<CreateProfileRequest>, reply: FastifyReply) {
-    let body = request.body;
+    try {
+      let body = request.body;
 
-    if (!body.handle) {
-      body.handle = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+      return await this.profileService.createProfile(body.handle, request.user.id, body.imageUrl, body.headline, body.subtitle);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let profile = await this.profileService.createProfile(body.handle, request.user.id, body.imageUrl, body.headline, body.subtitle);
-
-    if (profile instanceof HttpError) {
-      let error: HttpError = profile;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return profile;
   }
 
   /**
@@ -205,32 +226,45 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async GetProfilePreview(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      let user = request.user;
+      let profile = request.profile;
+      let profiles = await this.profileService.listProfiles(user.id);
+      let links;
+      let theme;
+
+      try {
+        links = await this.linkService.listLinks(profile.id);
+      } catch (err) {
+        // ignore, we don't care why these properties don't exist
+      }
+
+      try {
+        theme = await this.themeService.getTheme(profile.themeId);
+      } catch (err) {
+        // ignore, we don't care why these properties don't exist
+      }
+
+      return {
+        profile,
+        profiles,
+        links: links,
+        user,
+        theme: theme
+      };
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let user = request.user;
-    let profile = request.profile;
-
-    let profiles = await this.profileService.listProfiles(user.id);
-
-    if (profiles instanceof HttpError) {
-      let error: HttpError = profiles;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    let links = await this.linkService.listLinks(profile.id);
-    let theme = await this.themeService.getTheme(profile.themeId);
-
-    return {
-      profile,
-      profiles,
-      links: links instanceof HttpError ? null : links,
-      user,
-      theme: theme instanceof HttpError ? null : theme
-    };
   }
 
 
@@ -241,22 +275,23 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async ActivateProfileTheme(request: AuthenticatedRequest<ActiveProfileThemeRequest>, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      let body = request.body;
+
+      return await this.profileService.setActiveTheme(request.profile.id, body.theme);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let body = request.body;
-
-    let profile = await this.profileService.setActiveTheme(request.profile.id, body.theme);
-
-    if (profile instanceof HttpError) {
-      let error: HttpError = profile;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return profile;
   }
 
   /**
@@ -266,32 +301,33 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async UpdateProfile(request: AuthenticatedRequest<UpdateProfileRequest>, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      let body = request.body;
+
+      return await this.profileService.updateProfile(
+        request.profile.id,
+        body.imageUrl,
+        body.headline,
+        body.subtitle,
+        body.handle,
+        body.visibility,
+        body.customCss,
+        body.customHtml,
+        body.customDomain
+      );
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let body = request.body;
-
-    let profile = await this.profileService.updateProfile(
-      request.profile.id,
-      body.imageUrl,
-      body.headline,
-      body.subtitle,
-      body.handle,
-      body.visibility,
-      body.customCss,
-      body.customHtml,
-      body.customDomain
-    );
-
-    if (profile instanceof HttpError) {
-      let error: HttpError = profile;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return profile;
   }
 
   /**
@@ -301,20 +337,21 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async ListProfileLinks(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      return await this.linkService.listLinks(request.profile.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let links = await this.linkService.listLinks(request.profile.id);
-
-    if (links instanceof HttpError) {
-      let error: HttpError = links;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return links;
   }
 
   /**
@@ -324,19 +361,20 @@ export class ProfileController extends Controller {
    * @param reply
    */
   async DestroyProfile(request: AuthenticatedRequest, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      return await this.profileService.destroyProfile(request.user.id, request.profile.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let nextProfile = await this.profileService.destroyProfile(request.user.id, request.profile.id);
-
-    if (nextProfile instanceof HttpError) {
-      let error: HttpError = nextProfile;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return nextProfile;
   }
 }

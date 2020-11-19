@@ -19,11 +19,11 @@ export class ThemeService extends DatabaseService {
    *
    * @param themeId
    */
-  async getTheme(themeId: string): Promise<Theme | HttpError> {
+  async getTheme(themeId: string): Promise<Theme> {
     let queryResult = await this.pool.query<AppTheme>("select * from app.themes where id=$1", [themeId]);
 
-    if (queryResult.rowCount < 1) {
-      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The theme couldn't be found.");
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The theme couldn't be found.");
     }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
@@ -35,7 +35,7 @@ export class ThemeService extends DatabaseService {
    * @param userId
    * @param includeGlobal Should global themes be included in the results?
    */
-  async listThemes(userId: string, includeGlobal: boolean = true): Promise<Theme[] | HttpError> {
+  async listThemes(userId: string, includeGlobal: boolean = true): Promise<Theme[]> {
     let queryResult: QueryResult<AppTheme>;
 
     if (includeGlobal) {
@@ -44,8 +44,8 @@ export class ThemeService extends DatabaseService {
       queryResult = await this.pool.query<AppTheme>("select * from app.themes where user_id=$1", [userId]);
     }
 
-    if (queryResult.rowCount < 1) {
-      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "No themes were found.");
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "No themes were found.");
     }
 
     return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
@@ -66,7 +66,7 @@ export class ThemeService extends DatabaseService {
     colors?: ThemeColors,
     customCss?: string,
     customHtml?: string
-  ): Promise<Theme | HttpError> {
+  ): Promise<Theme> {
     let queryResult = await this.pool.query<AppTheme>("insert into app.themes(label, colors, custom_css, custom_html, user_id) values ($1, $2, $3, $4, $5) returning *",
       [
         label,
@@ -76,8 +76,8 @@ export class ThemeService extends DatabaseService {
         userId
       ]);
 
-    if (queryResult.rowCount < 1) {
-      return new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Failed to add a new theme because of an internal server error.");
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Failed to add a new theme because of an internal server error.");
     }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);

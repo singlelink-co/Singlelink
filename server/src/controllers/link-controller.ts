@@ -72,38 +72,40 @@ export class LinkController extends Controller {
    * @param reply
    */
   async CreateLink(request: AuthenticatedRequest<CreateLinkRequest>, reply: FastifyReply) {
-    let body = request.body;
-    let profile = request.profile;
+    try {
+      let body = request.body;
+      let profile = request.profile;
 
-    if (!body.label) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+      if (!body.label) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+        return;
+      }
+
+      if (!body.url) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
+        return;
+      }
+
+      let count = await this.linkService.getProfileLinkCount(profile.id);
+
+      return await this.linkService.createLink(
+        profile.id,
+        body.url,
+        ++count,
+        body.label,
+        body.subtitle,
+        body.style,
+        body.customCss,
+        body.useDeepLink
+      );
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    if (!body.url) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
-    }
-
-    let count = await this.linkService.getProfileLinkCount(profile.id);
-
-    let link = await this.linkService.createLink(
-      profile.id,
-      body.url,
-      ++count,
-      body.label,
-      body.subtitle,
-      body.style,
-      body.customCss,
-      body.useDeepLink
-    );
-
-    if (link instanceof HttpError) {
-      let error: HttpError = link;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return link;
   }
 
   /**
@@ -115,31 +117,32 @@ export class LinkController extends Controller {
    * @param reply
    */
   async UpdateLink(request: AuthenticatedRequest<UpdateLinkRequest>, reply: FastifyReply) {
-    let body = request.body;
+    try {
+      let body = request.body;
 
-    if (!body.id) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+      if (!body.id) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+        return;
+      }
+
+      return await this.linkService.updateLink(
+        body.id,
+        body.url,
+        body.sortOrder,
+        body.label,
+        body.subtitle,
+        body.style,
+        body.customCss,
+        body.useDeepLink
+      );
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let link = await this.linkService.updateLink(
-      body.id,
-      body.url,
-      body.sortOrder,
-      body.label,
-      body.subtitle,
-      body.style,
-      body.customCss,
-      body.useDeepLink
-    );
-
-    if (link instanceof HttpError) {
-      let error: HttpError = link;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return link;
   }
 
   /**
@@ -151,22 +154,23 @@ export class LinkController extends Controller {
    * @param reply
    */
   async DestroyLink(request: AuthenticatedRequest<DestroyLinkRequest>, reply: FastifyReply) {
-    let body = request.body;
+    try {
+      let body = request.body;
 
-    if (!body.id) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+      if (!body.id) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+        return;
+      }
+
+      return await this.linkService.deleteLink(body.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let links = await this.linkService.deleteLink(body.id);
-
-    if (links instanceof HttpError) {
-      let error: HttpError = links;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return links;
   }
 
   /**
@@ -178,29 +182,32 @@ export class LinkController extends Controller {
    * @param reply
    */
   async ReorderLink(request: AuthenticatedRequest<ReorderLinkRequest>, reply: FastifyReply) {
-    if (!request.profile) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+    try {
+      if (!request.profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      let body = request.body;
+
+      if (body.oldIndex !== 0 && !body.oldIndex) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
+        return;
+      }
+
+      if (body.newIndex !== 0 && !body.newIndex) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
+        return;
+      }
+
+      return await this.linkService.reorderLinks(request.profile.id, body.oldIndex, body.newIndex);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
     }
-
-    let body = request.body;
-
-    if (body.oldIndex !== 0 && !body.oldIndex) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
-    }
-
-    if (body.newIndex !== 0 && !body.newIndex) {
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
-    }
-
-    let links = await this.linkService.reorderLinks(request.profile.id, body.oldIndex, body.newIndex);
-
-    if (links instanceof HttpError) {
-      let error: HttpError = links;
-      reply.code(error.statusCode);
-
-      return ReplyUtils.error(error.message, error);
-    }
-
-    return links;
   }
 }

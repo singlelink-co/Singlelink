@@ -43,7 +43,6 @@ interface DecodedAuthToken {
   email: string,
 }
 
-
 export class Auth {
 
   /**
@@ -78,25 +77,30 @@ export class Auth {
     let body = request.body;
     let token: string | null | undefined = body?.token;
 
-    if (!token)
-      return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
+    if (!token) {
+      reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
+      return;
+    }
 
     jwt.verify(
       token,
       appConfig.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
-          return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
+          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
+          return;
         }
 
         if (!decoded) {
-          return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
         }
 
         let dAuthToken: DecodedAuthToken = <DecodedAuthToken>decoded;
 
         if (!dAuthToken?.email) {
-          return reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
         }
 
         try {
@@ -110,8 +114,9 @@ export class Auth {
             ]
           );
 
-          if (accountQuery.rowCount < 1) {
-            return reply.status(HttpStatus.HTTP_STATUS_NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
+          if (accountQuery.rowCount <= 0) {
+            reply.status(HttpStatus.HTTP_STATUS_NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
+            return;
           }
 
           let user = accountQuery.rows[0];
@@ -123,7 +128,7 @@ export class Auth {
           let profileQuery = await Auth.pool.query<AppProfile>(
             "select * from app.profiles where handle=$1",
             [
-              user.active_profile
+              user.active_profile_id
             ]
           );
 
@@ -138,11 +143,13 @@ export class Auth {
 
         } catch (err) {
           if (err) {
-            return reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("Error while authenticating request.", err));
+            reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("Error while authenticating request.", err));
+            return;
           }
         }
 
-        return reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("An unexpected error occurred."));
+        reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("An unexpected error occurred."));
+        return;
       });
   }
 

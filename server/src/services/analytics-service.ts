@@ -27,7 +27,7 @@ export class AnalyticsService extends DatabaseService {
   async getAnalytics(): Promise<AnalyticsGlobalStats> {
     let queryResult = await this.pool.query<AppAnalyticsGlobalStats>("select * from analytics.global_stats");
 
-    if (queryResult.rowCount < 1) {
+    if (queryResult.rowCount <= 0) {
       return {
         totalUsers: -1,
         totalProfiles: -1,
@@ -49,11 +49,11 @@ export class AnalyticsService extends DatabaseService {
    * @param linkId The linkId of the link that is being visited
    * @param updateAnalytics Should we update analytics?
    */
-  async getLink(linkId: string, updateAnalytics: boolean): Promise<Link | HttpError> {
+  async getLink(linkId: string, updateAnalytics: boolean): Promise<Link> {
     let queryResult = await this.pool.query<AppLink>("select * from app.links where id=$1", [linkId]);
 
-    if (queryResult.rowCount < 1) {
-      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
     }
 
     if (updateAnalytics) {
@@ -68,7 +68,7 @@ export class AnalyticsService extends DatabaseService {
    *
    * @param profileId
    */
-  async getProfileAnalyticsData(profileId: string): Promise<AnalyticsProfileData | HttpError> {
+  async getProfileAnalyticsData(profileId: string): Promise<AnalyticsProfileData> {
     // TODO use subscription tier to check for date range, for now leave it at 30 days
 
     let views = await this.pool.query<{ profile_views: number, link_views: number }>("select count(*) filter (where type='page') as profile_views, count(*) filter (where type='link') as link_views from analytics.visits where referral=$1 and created_on > current_date - interval '30' day",
@@ -76,8 +76,8 @@ export class AnalyticsService extends DatabaseService {
         profileId,
       ]);
 
-    if (views.rowCount < 1) {
-      return new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
+    if (views.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
     }
 
     let profileViews = views.rows[0].profile_views;

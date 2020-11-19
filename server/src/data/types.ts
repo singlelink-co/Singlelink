@@ -1,5 +1,5 @@
 /**
- * app-types.ts contains all the types that represent the data that will received from the database.
+ * types.ts contains all the types that represent the data that will received from the database.
  */
 
 /**
@@ -32,7 +32,7 @@ interface User {
   id: string,
   email: string,
   fullName: string | null,
-  activeProfile: string | null,
+  activeProfileId: string | null,
   subscriptionTier: SubscriptionTier | null,
   inventory: unknown | null,
   metadata: unknown | null,

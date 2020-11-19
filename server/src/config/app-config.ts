@@ -120,6 +120,11 @@ if (process.env.S3_SECRET_KEY) {
   appConfig.s3Bucket.secretKey = process.env.S3_SECRET_KEY;
 }
 
+
+
+
+// Extra logic for debug messages
+
 if (appConfig.s3Bucket.endPoint) {
   console.log("S3 Bucket caching is enabled!");
 }
