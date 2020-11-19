@@ -63,7 +63,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getSensitiveUser(userId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select * from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
@@ -78,13 +78,43 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select * from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
+  }
+
+  /**
+   * Gets a sensitive user by the account Id.
+   *
+   * @param userId
+   */
+  async getSensitiveUserWithPassword(userId: string): Promise<SensitiveUserWithPassword> {
+    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where id=$1", [userId]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+    }
+
+    return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
+  }
+
+  /**
+   * Gets a user by their email.
+   *
+   * @param email
+   */
+  async getSensitiveUserWithPasswordByEmail(email: string): Promise<SensitiveUserWithPassword> {
+    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where email=$1", [email]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+    }
+
+    return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
   }
 
   /**
@@ -174,7 +204,7 @@ export class UserService extends DatabaseService {
    * @param password
    */
   async loginUser(email: string, password: string): Promise<LoginResultData> {
-    let user = await this.getSensitiveUserByEmail(email);
+    let user = await this.getSensitiveUserWithPasswordByEmail(email);
     let profileQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
     let activeProfile;
 
@@ -210,7 +240,7 @@ export class UserService extends DatabaseService {
   async createUser(email: string, password: string, name?: string): Promise<SensitiveUser> {
     let passHash = await bcrypt.hash(password, 10);
 
-    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning *",
+    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning (id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on)",
       [
         email,
         passHash

@@ -44,6 +44,14 @@ interface User {
  */
 interface SensitiveUser extends User {
   email: string,
+  paymentId: string | null,
+}
+
+/**
+ * User with sensitive information included with password.
+ */
+interface SensitiveUserWithPassword extends SensitiveUser {
+  email: string,
   passHash: string,
   paymentId: string | null,
 }

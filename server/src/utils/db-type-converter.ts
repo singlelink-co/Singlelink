@@ -21,6 +21,21 @@ export class DbTypeConverter {
       id: user.id,
       email: user.email,
       emailHash: user.email_hash,
+      fullName: user.full_name,
+      activeProfileId: user.active_profile_id,
+      subscriptionTier: user.subscription_tier,
+      paymentId: user.payment_id,
+      inventory: user.inventory,
+      metadata: user.metadata,
+      createdOn: user.created_on
+    };
+  }
+
+  static toSensitiveUserWithPassword(user: DbSensitiveUserWithPassword): SensitiveUserWithPassword {
+    return {
+      id: user.id,
+      email: user.email,
+      emailHash: user.email_hash,
       passHash: user.pass_hash,
       fullName: user.full_name,
       activeProfileId: user.active_profile_id,

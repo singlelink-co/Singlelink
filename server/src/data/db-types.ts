@@ -25,6 +25,11 @@ interface DbUser {
 
 interface DbSensitiveUser extends DbUser {
   email: string,
+  payment_id: string | null,
+}
+
+interface DbSensitiveUserWithPassword extends DbUser {
+  email: string,
   pass_hash: string,
   payment_id: string | null,
 }
