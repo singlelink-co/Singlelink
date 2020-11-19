@@ -5,7 +5,8 @@ import {LinkController} from "./controllers/link-controller";
 import {ProfileController} from "./controllers/profile-controller";
 import {ThemeController} from "./controllers/theme-controller";
 import {UserController} from "./controllers/user-controller";
-import {Auth} from "./utils/auth";
+import {AuthOpts} from "./utils/auth";
+import {InfoController} from "./controllers/info-controller";
 
 console.log("Initializing Singlelink");
 
@@ -18,13 +19,17 @@ start().then(() => {
 
 async function start() {
   await database.initialize();
-  Auth.initialize(database.pool);
+  AuthOpts.initialize(database.pool);
 
+  // SingleLink main controllers
   server.addController(new AnalyticsController(server.fastify, database));
   server.addController(new LinkController(server.fastify, database));
   server.addController(new ProfileController(server.fastify, database));
   server.addController(new ThemeController(server.fastify, database));
   server.addController(new UserController(server.fastify, database));
+
+  // Server utility controllers
+  server.addController(new InfoController(server.fastify, database));
 
   server.startServer();
 }

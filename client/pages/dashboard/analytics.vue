@@ -4,7 +4,7 @@
     <div class="flex md:flex-row flex-col items-center justify-center w-full">
       <div class="flex flex-col p-6 bg-white shadow rounded w-full md:w-1/2 mb-8 md:mr-2">
         <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Total views</h2>
-        <h4 class="text-indigo-600 text-3xl">{{ analytics.profileViewSum }}</h4>
+        <h4 class="text-indigo-600 text-3xl">{{ analytics.totalProfileViews }}</h4>
       </div>
       <div class="flex flex-col p-6 bg-white shadow rounded w-full md:w-1/2 mb-8 md:ml-2">
         <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Click through rate</h2>
@@ -15,7 +15,7 @@
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 md:mr-2">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-4">Link engagement</h2>
-      <div v-for="link in analytics.linkViews"
+      <div v-for="link in analytics.linkVisits"
            class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center md:flex-row flex-col"
            :style="link.link.customCss">
         <div class="text-left mr-4 flex flex-col justify-start">
@@ -24,7 +24,7 @@
         </div>
         <div class="ml-auto flex flex-col justify-end items-center">
           <span class="text-sm uppercase text-gray-700 font-semibold mb-2">Total clicks</span>
-          <h4 class="ml-auto text-indigo-600 text-lg">{{ linkViews }}</h4>
+          <h4 class="ml-auto text-indigo-600 text-lg">{{ link.views }}</h4>
         </div>
       </div>
     </div>
@@ -35,30 +35,31 @@
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
-  data: function () {
+
+  data() {
     return {
       analytics: {
-        profileViewSum: null,
-        linkViews: [],
+        totalProfileViews: null,
+        linkVisits: [],
         clickThroughRate: null
       }
     };
   },
-  mounted: function () {
-    this.getProfileAnalytics();
+
+  async mounted() {
+    await this.getProfileAnalytics();
   },
+
   methods: {
-    getProfileAnalytics: function () {
-      this.$axios.$post('/analytics/profile', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.analytics = response;
-        })
-        .catch((error) => {
-          console.log('Error getting user data');
-          console.log(error);
+    async getProfileAnalytics() {
+      try {
+        this.analytics = await this.$axios.$post('/analytics/profile', {
+          token: this.$store.getters['auth/getToken']
         });
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
     },
   }
 };

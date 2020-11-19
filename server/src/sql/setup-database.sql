@@ -55,6 +55,7 @@ create table if not exists app.users
 (
     id                bigserial primary key unique,
     email             varchar(340) unique not null,
+    email_hash        text,
     full_name         text,
     pass_hash         varchar(60)         not null,
     active_profile_id bigint,
@@ -111,11 +112,26 @@ create index if not exists profiles_theme_id_index on app.profiles (theme_id);
 create index if not exists profiles_visibility_index on app.profiles (visibility);
 
 -- Create the foreign keys for app.users and app.profiles
-alter table app.users
-    add constraint fk_users_active_profile_id foreign key (active_profile_id) references app.profiles (id) on update cascade on delete set null deferrable initially deferred;
 
-alter table app.profiles
-    add constraint fk_profiles_user_id foreign key (user_id) references app.users (id) on update cascade on delete cascade deferrable initially deferred;
+do
+$$
+    begin
+        alter table app.users
+            add constraint fk_users_active_profile_id foreign key (active_profile_id) references app.profiles (id) on update cascade on delete set null deferrable initially deferred;
+    exception
+        when duplicate_object then raise notice 'table constraint foo.bar already exists';
+    end;
+$$;
+
+do
+$$
+    begin
+        alter table app.profiles
+            add constraint fk_profiles_user_id foreign key (user_id) references app.users (id) on update cascade on delete cascade deferrable initially deferred;
+    exception
+        when duplicate_object then raise notice 'table constraint foo.bar already exists';
+    end;
+$$;
 
 -- TODO Use this table to allow for multiple users per profile
 create table if not exists app.profile_members
@@ -135,32 +151,33 @@ create table if not exists app.links
 (
     id            bigserial primary key unique,
     profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
-    url           text default '#'   not null,
-    sort_order    int                not null,
-    label         text               not null,
+    url           text  default '#'   not null,
+    sort_order    int                 not null,
+    label         text                not null,
     subtitle      text,
     style         text,
     custom_css    text,
-    use_deep_link bool default false not null,
-    created_on    timestamp          not null default current_timestamp
+    use_deep_link bool  default false not null,
+    metadata      jsonb default '{}',
+    created_on    timestamp           not null default current_timestamp
 );
 
 create index if not exists links_profile_id on app.links (profile_id);
 create index if not exists links_url_index on app.links (url);
 
 /*
- Creates a table for analytics, keeps track of all the visits.
+ Creates a table for visiting analytics.
  type: The type of visit this was.
- referral: The link or page this visit points to.
+ referral_id: The link or page this visit points to.
  */
 create table if not exists analytics.visits
 (
-    type       visit_t   not null,
-    referral_id   bigint    not null,
-    created_on timestamp not null default current_timestamp
+    type        visit_t   not null,
+    referral_id bigint    not null,
+    created_on  timestamp not null default current_timestamp
 );
 
-create index if not exists visits_referral_index on analytics.visits (referral_id);
+create index if not exists visits_referral_id_index on analytics.visits (referral_id);
 
 do
 $$

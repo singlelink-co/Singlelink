@@ -9,7 +9,7 @@
               class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">
         Add new link
       </button>
-      <draggable v-model="sortedLinks" :list="sortedLinks" @change="updateLinkOrder" class="flex flex-col w-full">
+      <draggable v-model="sortedLinks" @change="updateLinkOrder" class="flex flex-col w-full">
         <div v-if="links && links.length > 0" v-for="link in sortedLinks" :key="link.id" @click="editLink(link)"
              class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer">
           {{ link.label }}
@@ -90,7 +90,7 @@ export default {
   layout: 'dashboard',
   middleware: 'authenticated',
 
-  data: function () {
+  data() {
     return {
       links: [],
       modal: false,
@@ -103,69 +103,67 @@ export default {
         customCss: '',
       },
       user: null,
-      error: null
+      error: null,
+      sortedLinks: []
     };
   },
 
-  computed: {
-    sortedLinks: function () {
-      try {
-        return this.links.sort(function (a, b) {
-          return a.sortOrder - b.sortOrder;
-        });
-      } catch (err) {
-        console.log(err);
-        return [];
-      }
+  async mounted() {
+    await this.getUserData();
+    await this.getLinks();
+
+    try {
+      this.sortedLinks = this.links.sort(function (a, b) {
+        return a.sortOrder - b.sortOrder;
+      });
+    } catch (err) {
+      console.log(err);
+      return [];
     }
   },
 
   methods: {
-    getUserData: function () {
-      this.$axios.$post('/user', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.user = response;
-        })
-        .catch((error) => {
-          console.log('Error getting user data');
-          console.log(error);
+    async getUserData() {
+      try {
+        this.user = await this.$axios.$post('/user', {
+          token: this.$store.getters['auth/getToken']
         });
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
     },
 
-    getLinks: function () {
-      this.$axios.$post('/profile/links', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.links = response;
-        })
-        .catch((error) => {
-          console.log('Error getting profile links');
-          console.log(error);
+    async getLinks() {
+      try {
+        this.links = await this.$axios.$post('/profile/links', {
+          token: this.$store.getters['auth/getToken']
         });
+      } catch (err) {
+        console.log('Error getting profile links');
+        console.log(err);
+      }
     },
 
-    openModal: function (intent) {
+    openModal(intent) {
       if (intent) this.modalIntent = intent;
       this.modal = true;
     },
 
-    closeModal: function () {
+    closeModal() {
       this.clearPending();
       this.modal = false;
     },
 
-    saveAndClose: function () {
+    saveAndClose() {
       this.addNewLink(true);
     },
 
-    saveAndContinue: function () {
+    saveAndContinue() {
       this.addNewLink();
     },
 
-    deleteLink: function () {
+    deleteLink() {
       this.$axios.$post('/link/destroy', {
         token: this.$store.getters['auth/getToken'],
         id: this.pendingLink.id,
@@ -181,7 +179,7 @@ export default {
         });
     },
 
-    saveLinkChanges: function () {
+    saveLinkChanges() {
       this.$axios.$post('/link/update', {
         token: this.$store.getters['auth/getToken'],
         id: this.pendingLink.id,
@@ -201,11 +199,11 @@ export default {
         });
     },
 
-    clearErrors: function () {
+    clearErrors() {
       this.error = null;
     },
 
-    addNewLink: function (close) {
+    addNewLink(close) {
       if (!this.pendingLink.label) return this.error = 'Link label required';
       if (!this.pendingLink.url) return this.error = 'Link URL required';
       this.$axios.post('/link/create', {
@@ -227,7 +225,7 @@ export default {
         });
     },
 
-    clearPending: function () {
+    clearPending() {
       this.clearErrors();
       this.pendingLink = {
         label: '',
@@ -237,7 +235,7 @@ export default {
       };
     },
 
-    editLink: function (link) {
+    editLink(link) {
       this.clearPending();
       this.pendingLink = {
         id: link.id,
@@ -249,33 +247,29 @@ export default {
       this.openModal('edit');
     },
 
-    updateLinkOrder: function (event) {
-      console.log(event);
-      this.$axios.$post('/link/reorder', {
-        token: this.$store.getters['auth/getToken'],
-        target: event.moved.element.id,
-        newIndex: event.moved.newIndex,
-        oldIndex: event.moved.oldIndex,
-      })
-        .then((response) => {
-          console.log('Successfully reordered links');
-          console.log(response);
-          this.links = response;
-          this.refreshPreview();
-        })
-        .catch((error) => {
-          console.log('Error reordering links');
-          console.log(error);
+    async updateLinkOrder(event) {
+      try {
+        let response = await this.$axios.$post('/link/reorder', {
+          token: this.$store.getters['auth/getToken'],
+          target: event.moved.element.id,
+          newIndex: event.moved.newIndex,
+          oldIndex: event.moved.oldIndex,
         });
+
+        console.log('Successfully reordered links');
+        this.links = response;
+        this.refreshPreview();
+      } catch (err) {
+        console.log('Error reordering links');
+        console.log(err);
+      }
     },
 
-    refreshPreview: function () {
-      document.getElementById('preview-frame').contentWindow.location.reload();
+    refreshPreview() {
+      if (process.browser) {
+        document.getElementById('preview-frame').contentWindow.location.reload();
+      }
     }
-  },
-  mounted: function () {
-    this.getUserData();
-    this.getLinks();
   }
 };
 </script>

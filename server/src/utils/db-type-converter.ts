@@ -3,10 +3,10 @@
  */
 export class DbTypeConverter {
 
-  static toUser(user: AppUser): User {
+  static toUser(user: DbUser): User {
     return {
       id: user.id,
-      email: user.email,
+      emailHash: user.email_hash,
       fullName: user.full_name,
       activeProfileId: user.active_profile_id,
       subscriptionTier: user.subscription_tier,
@@ -16,10 +16,11 @@ export class DbTypeConverter {
     };
   }
 
-  static toSensitiveUser(user: AppSensitiveUser): SensitiveUser {
+  static toSensitiveUser(user: DbSensitiveUser): SensitiveUser {
     return {
       id: user.id,
       email: user.email,
+      emailHash: user.email_hash,
       passHash: user.pass_hash,
       fullName: user.full_name,
       activeProfileId: user.active_profile_id,
@@ -31,7 +32,7 @@ export class DbTypeConverter {
     };
   }
 
-  static toTheme(theme: AppTheme): Theme {
+  static toTheme(theme: DbTheme): Theme {
     return {
       id: theme.id,
       label: theme.label,
@@ -44,13 +45,14 @@ export class DbTypeConverter {
     };
   }
 
-  static toProfile(profile: AppProfile): Profile {
+  static toProfile(profile: DbProfile): Profile {
     return {
       id: profile.id,
       handle: profile.handle,
       userId: profile.user_id,
       imageUrl: profile.image_url,
       headline: profile.headline,
+      subtitle: profile.subtitle,
       social: profile.social,
       customCss: profile.custom_css,
       customHtml: profile.custom_html,
@@ -62,14 +64,14 @@ export class DbTypeConverter {
     };
   }
 
-  static toProfileMember(member: AppProfileMember): AppProfileMember {
+  static toProfileMember(member: DbProfileMember): DbProfileMember {
     return {
       handle: member.handle,
       member: member.member
     };
   }
 
-  static toLink(link: AppLink): Link {
+  static toLink(link: DbLink): Link {
     return {
       id: link.id,
       profileId: link.profile_id,
@@ -84,15 +86,15 @@ export class DbTypeConverter {
     };
   }
 
-  static toVisit(visit: AppAnalyticsVisit): Visit {
+  static toVisit(visit: DbAnalyticsVisit): Visit {
     return {
       type: visit.type,
-      referral: visit.referral,
+      referralId: visit.referral_id,
       createdOn: visit.created_on
     };
   }
 
-  static toAnalytics(analytics: AppAnalyticsGlobalStats): AnalyticsGlobalStats {
+  static toAnalytics(analytics: DbAnalyticsGlobalStats): AnalyticsGlobalStats {
     return {
       totalUsers: analytics.total_users,
       totalProfiles: analytics.total_profiles,

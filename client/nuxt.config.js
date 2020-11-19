@@ -8,7 +8,7 @@ export default {
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
-  target: 'server',
+  target: 'static',
   /*
   ** Hosting 404 Hotfix
   ** See https://ko.nuxtjs.org/faq/netlify-deployment/
@@ -19,6 +19,9 @@ export default {
   loading: {
     color: '#4C51BF',
     height: '3px'
+  },
+  server: {
+    port: 3001 // default: 3000
   },
   /*
   ** Headers of the page

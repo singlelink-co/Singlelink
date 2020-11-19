@@ -20,8 +20,8 @@
       </div>
     </section>
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.hash"
-           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.hash"/>
+      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
+           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
       <a :href="'https://api.singlelink.co/analytics/link/' + link.id" v-for="link in links" class="w-full">
@@ -80,7 +80,7 @@
 
 <script>
 export default {
-  data: function () {
+  data() {
     return {
       profile: {
         customHtml: null,
@@ -88,15 +88,11 @@ export default {
         imageUrl: null,
         headline: null,
         subtitle: null,
-        visibility: null,
-        parent: {
-          name: null,
-          hash: null
-        }
+        visibility: null
       },
       user: {
         name: null,
-        hash: null,
+        emailHash: null,
         avatarUrl: null
       },
       thumbnail: null,
@@ -106,17 +102,20 @@ export default {
       ageVerification: true
     };
   },
+
   methods: {
-    acceptAgeVerification: function () {
+    acceptAgeVerification() {
       return this.ageVerification = false;
     },
-    rejectAgeVerification: function () {
+
+    rejectAgeVerification() {
       if (process.browser) {
         return window.location.href = "https://singlelink.co";
       }
     },
   },
-  head: function () {
+
+  head() {
     return {
       title: this.profile.headline || '',
       meta: [
@@ -148,23 +147,26 @@ export default {
       ],
     };
   },
-  asyncData(ctx) {
-    return ctx.$axios.$post('/profile/' + ctx.route.path.replace('/u/', ''))
-      .then((response) => {
-        return {
-          profile: response.profile,
-          links: response.links.sort(function (a, b) {
-            return a.sortOrder - b.sortOrder;
-          }),
-          user: response.user,
-          theme: response.theme || null,
-        };
-      })
-      .catch((error) => {
-        console.log('Error getting profile');
-        console.log(error);
-        return {failed: true};
+
+  async mounted() {
+    try {
+      let url = '/profile/' + this.$route.path.replace('/u/', '');
+
+      let response = await this.$axios.$post(url, {
+        token: this.$store.getters['auth/getToken']
       });
+
+      this.profile = response.profile;
+      this.links = response.links.sort(function (a, b) {
+        return a.sortOrder - b.sortOrder;
+      });
+      this.user = response.user;
+      this.theme = response.theme || null;
+
+    } catch (err) {
+      console.log('Error getting profile');
+      console.log(err);
+    }
   },
 };
 </script>

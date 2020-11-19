@@ -20,7 +20,7 @@ export class ThemeService extends DatabaseService {
    * @param themeId
    */
   async getTheme(themeId: string): Promise<Theme> {
-    let queryResult = await this.pool.query<AppTheme>("select * from app.themes where id=$1", [themeId]);
+    let queryResult = await this.pool.query<DbTheme>("select * from app.themes where id=$1", [themeId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The theme couldn't be found.");
@@ -36,12 +36,12 @@ export class ThemeService extends DatabaseService {
    * @param includeGlobal Should global themes be included in the results?
    */
   async listThemes(userId: string, includeGlobal: boolean = true): Promise<Theme[]> {
-    let queryResult: QueryResult<AppTheme>;
+    let queryResult: QueryResult<DbTheme>;
 
     if (includeGlobal) {
-      queryResult = await this.pool.query<AppTheme>("select * from app.themes where user_id=$1 or global=true", [userId]);
+      queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1 or global=true", [userId]);
     } else {
-      queryResult = await this.pool.query<AppTheme>("select * from app.themes where user_id=$1", [userId]);
+      queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1", [userId]);
     }
 
     if (queryResult.rowCount <= 0) {
@@ -67,7 +67,7 @@ export class ThemeService extends DatabaseService {
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {
-    let queryResult = await this.pool.query<AppTheme>("insert into app.themes(label, colors, custom_css, custom_html, user_id) values ($1, $2, $3, $4, $5) returning *",
+    let queryResult = await this.pool.query<DbTheme>("insert into app.themes(label, colors, custom_css, custom_html, user_id) values ($1, $2, $3, $4, $5) returning *",
       [
         label,
         colors,

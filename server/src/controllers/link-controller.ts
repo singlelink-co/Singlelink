@@ -1,13 +1,13 @@
-import {FastifyInstance, FastifyReply, RequestGenericInterface, RouteHandlerMethod} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {LinkService} from "../services/link-service";
 import {ReplyUtils} from "../utils/reply-utils";
 import {constants as HttpStatus} from "http2";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 
-interface CreateLinkRequest extends RequestGenericInterface {
+interface CreateLinkRequest extends AuthenticatedRequest {
   Body: {
     label?: string,
     url?: string,
@@ -15,7 +15,7 @@ interface CreateLinkRequest extends RequestGenericInterface {
     style: string,
     customCss: string,
     useDeepLink: boolean
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 interface UpdateLinkRequest extends RequestGenericInterface {
@@ -37,11 +37,11 @@ interface DestroyLinkRequest extends RequestGenericInterface {
   }
 }
 
-interface ReorderLinkRequest extends RequestGenericInterface {
+interface ReorderLinkRequest extends AuthenticatedRequest {
   Body: {
     oldIndex?: number,
     newIndex?: number
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 /**
@@ -57,10 +57,11 @@ export class LinkController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.post('/link/create', Auth.AuthRouteOptions, <RouteHandlerMethod>this.CreateLink.bind(this));
-    this.fastify.post('/link/update', Auth.AuthRouteOptions, <RouteHandlerMethod>this.UpdateLink.bind(this));
-    this.fastify.post('/link/destroy', Auth.AuthRouteOptions, <RouteHandlerMethod>this.DestroyLink.bind(this));
-    this.fastify.post('/link/reorder', Auth.AuthRouteOptions, <RouteHandlerMethod>this.ReorderLink.bind(this));
+    this.fastify.post<CreateLinkRequest>('/link/create', AuthOpts.ValidateWithData, this.CreateLink.bind(this));
+    this.fastify.post<UpdateLinkRequest>('/link/update', AuthOpts.ValidateOnly, this.UpdateLink.bind(this));
+    this.fastify.post<DestroyLinkRequest>('/link/destroy', AuthOpts.ValidateOnly, this.DestroyLink.bind(this));
+
+    this.fastify.post<ReorderLinkRequest>('/link/reorder', AuthOpts.ValidateWithData, this.ReorderLink.bind(this));
   }
 
   /**
@@ -71,10 +72,15 @@ export class LinkController extends Controller {
    * @param request
    * @param reply
    */
-  async CreateLink(request: AuthenticatedRequest<CreateLinkRequest>, reply: FastifyReply) {
+  async CreateLink(request: FastifyRequest<CreateLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
-      let profile = request.profile;
+      let profile = request.body.profile;
+
+      if (!profile) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
 
       if (!body.label) {
         reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
@@ -116,7 +122,7 @@ export class LinkController extends Controller {
    * @param request
    * @param reply
    */
-  async UpdateLink(request: AuthenticatedRequest<UpdateLinkRequest>, reply: FastifyReply) {
+  async UpdateLink(request: FastifyRequest<UpdateLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
@@ -153,7 +159,7 @@ export class LinkController extends Controller {
    * @param request
    * @param reply
    */
-  async DestroyLink(request: AuthenticatedRequest<DestroyLinkRequest>, reply: FastifyReply) {
+  async DestroyLink(request: FastifyRequest<DestroyLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
@@ -181,14 +187,14 @@ export class LinkController extends Controller {
    * @param request
    * @param reply
    */
-  async ReorderLink(request: AuthenticatedRequest<ReorderLinkRequest>, reply: FastifyReply) {
+  async ReorderLink(request: FastifyRequest<ReorderLinkRequest>, reply: FastifyReply) {
     try {
-      if (!request.profile) {
+      let body = request.body;
+
+      if (!body.profile) {
         reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
-
-      let body = request.body;
 
       if (body.oldIndex !== 0 && !body.oldIndex) {
         reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
@@ -200,7 +206,7 @@ export class LinkController extends Controller {
         return;
       }
 
-      return await this.linkService.reorderLinks(request.profile.id, body.oldIndex, body.newIndex);
+      return await this.linkService.reorderLinks(body.profile.id, body.oldIndex, body.newIndex);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

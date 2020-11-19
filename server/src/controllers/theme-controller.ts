@@ -1,25 +1,25 @@
-import {FastifyInstance, FastifyReply, RequestGenericInterface, RouteHandlerMethod} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {ReplyUtils} from "../utils/reply-utils";
 import {constants as HttpStatus} from "http2";
 
-interface GetThemeRequest extends RequestGenericInterface {
+interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
     includeGlobal: boolean
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
-interface CreateThemeRequest extends RequestGenericInterface {
+interface CreateThemeRequest extends AuthenticatedRequest {
   Body: {
     label: string,
     colors: ThemeColors,
     customCss: string,
     customHtml: string
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 /**
@@ -35,9 +35,9 @@ export class ThemeController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.post('/theme', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetTheme.bind(this));
-    this.fastify.post('/theme/create', Auth.AuthRouteOptions, <RouteHandlerMethod>this.CreateTheme.bind(this));
-    this.fastify.post('/theme/update', Auth.AuthRouteOptions, <RouteHandlerMethod>this.UpdateTheme.bind(this));
+    this.fastify.post<GetThemeRequest>('/theme', AuthOpts.ValidateWithData, this.GetTheme.bind(this));
+    this.fastify.post<CreateThemeRequest>('/theme/create', AuthOpts.ValidateWithData, this.CreateTheme.bind(this));
+    this.fastify.post('/theme/update', AuthOpts.ValidateOnly, this.UpdateTheme.bind(this));
   }
 
   /**
@@ -45,11 +45,11 @@ export class ThemeController extends Controller {
    * @param request
    * @param reply
    */
-  async GetTheme(request: AuthenticatedRequest<GetThemeRequest>, reply: FastifyReply) {
+  async GetTheme(request: FastifyRequest<GetThemeRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
-      return await this.themeService.listThemes(request.user.id, body.includeGlobal);
+      return await this.themeService.listThemes(body.user.id, body.includeGlobal);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -65,7 +65,7 @@ export class ThemeController extends Controller {
    * @param request
    * @param reply
    */
-  async CreateTheme(request: AuthenticatedRequest<CreateThemeRequest>, reply: FastifyReply) {
+  async CreateTheme(request: FastifyRequest<CreateThemeRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
@@ -74,7 +74,7 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.createTheme(request.user.id, body.label, body.colors, body.customCss, body.customHtml);
+      return await this.themeService.createTheme(body.user.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -90,7 +90,7 @@ export class ThemeController extends Controller {
    * @param request
    * @param reply
    */
-  async UpdateTheme(request: AuthenticatedRequest, reply: FastifyReply) {
+  async UpdateTheme(request: FastifyRequest, reply: FastifyReply) {
     try {
       reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
 

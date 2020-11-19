@@ -1,17 +1,24 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface, RouteHandlerMethod} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {constants as HttpStatus} from "http2";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
   Params: {
     id?: string
   }
+}
+
+interface GetProfileAnalyticsRequest extends AuthenticatedRequest {
+  Body: {
+    dayRange: number,
+    dateRange: string
+  } & AuthenticatedRequest["Body"]
 }
 
 /**
@@ -32,7 +39,7 @@ export class AnalyticsController extends Controller {
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
 
     // Authenticated
-    this.fastify.all('/analytics/profile', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetProfileAnalytics.bind(this));
+    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', AuthOpts.ValidateWithData, this.GetProfileAnalytics.bind(this));
   }
 
   /**
@@ -101,18 +108,20 @@ export class AnalyticsController extends Controller {
   }
 
   /**
-   * Route for /visit
+   * Route for /analytics/profile
    * @param request
    * @param reply
    */
-  async GetProfileAnalytics(request: AuthenticatedRequest, reply: FastifyReply) {
+  async GetProfileAnalytics(request: FastifyRequest<GetProfileAnalyticsRequest>, reply: FastifyReply) {
     try {
-      if (!request.profile) {
+      if (!request.body.profile) {
         reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.analyticsService.getProfileAnalyticsData(request.profile.id);
+      // TODO Grab dateRange/dayRange and pass it in for time specific analytics
+
+      return await this.analyticsService.getProfileAnalyticsData(request.body.profile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

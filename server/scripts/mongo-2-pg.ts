@@ -9,6 +9,7 @@ import readline from "readline";
 import mongoose from "mongoose";
 import {Pool} from "pg";
 import fs from "fs";
+import crypto from "crypto";
 
 const User = require('./models/User');
 const Profile = require('./models/Profile');
@@ -130,10 +131,11 @@ class Converter {
         let func = async () => {
           try {
             let queryResult = await this.pool.query(
-              'insert into app.users (full_name, email, pass_hash, active_profile_id, created_on) values ($1, $2, $3, $4, $5) on conflict do nothing returning *;',
+              'insert into app.users (full_name, email, email_hash, pass_hash, active_profile_id, created_on) values ($1, $2, $3, $4, $5, $6) on conflict do nothing returning *;',
               [
                 user.name,
                 user.email,
+                crypto.createHash("md5").update(user.email).digest("hex"),
                 user.password,
                 null,
                 user._id.getTimestamp()
@@ -301,7 +303,9 @@ class Converter {
           try {
             let pgObj: any = null;
 
-            switch (visit.type.toLowerCase()) {
+            let visitType = visit.type.toLowerCase();
+
+            switch (visitType) {
               case "link":
                 pgObj = pgLinks.find(x => x.oldId == visit.referral.toString());
                 break;
@@ -316,9 +320,9 @@ class Converter {
             }
 
             let queryResult = await this.pool.query(
-              'insert into analytics.visits (type, referral, created_on) values ($1, $2, $3) on conflict do nothing returning *;',
+              'insert into analytics.visits (type, referral_id, created_on) values ($1, $2, $3) on conflict do nothing returning *;',
               [
-                visit.type.toLowerCase(),
+                visitType,
                 pgObj.id,
                 visit._id.getTimestamp()
               ]

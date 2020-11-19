@@ -96,7 +96,8 @@
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
-  data: function () {
+
+  data() {
     return {
       infoModal: false,
       modal: false,
@@ -110,41 +111,57 @@ export default {
       }
     };
   },
-  mounted: function () {
-    this.getUserData();
+
+  async mounted() {
+    await this.getUserData();
   },
+
   methods: {
-    openInfoModal: function () {
+    openInfoModal() {
       return this.infoModal = true;
     },
-    closeInfoModal: function () {
+
+    closeInfoModal() {
       return this.infoModal = false;
     },
-    openModal: function () {
+
+    openModal() {
       return this.modal = true;
     },
-    closeModal: function () {
+
+    closeModal() {
       return this.modal = false;
     },
-    attemptDelete: function () {
+
+    attemptDelete() {
       //this.closeModal();
       this.$nuxt.$loading.start();
       this.$router.push('/');
       this.$nuxt.$loading.finish();
 
     },
-    getUserData: function () {
-      this.$axios.$post('/user', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.user = response;
-        })
-        .catch((error) => {
-          console.log('Error getting user data');
-          console.log(error);
+
+    async getUserData() {
+      try {
+        let token = this.$store.getters['auth/getToken'];
+
+        let userResponse = await this.$axios.$post('/user', {
+          token
         });
-    },
+
+        let profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
+        });
+
+        this.user = userResponse;
+        this.user.activeProfile = profileResponse;
+        this.originalHandle = this.user.activeProfile.handle;
+
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
+    }
   }
 };
 </script>

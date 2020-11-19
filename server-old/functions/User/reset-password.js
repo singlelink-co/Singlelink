@@ -15,24 +15,6 @@ module.exports = async (req, res) => {
     maxAge: "60m"
   });
 
-  /*User.findOne({email: decoded.email}).exec(function (err, user) {
-    if (err)
-      return res.status(500).send(err);
-
-    if (!user)
-      return res.status(404).send('User with email address cannot be found');
-
-    setPassword(user, decoded, req.body.password).then(val => {
-
-      if (val)
-        res.status(200).send(val);
-      else
-        res.status(500).send({
-          error: "Unable to reset password."
-        });
-
-    });
-  });*/
   try {
     let user = await User.findOne({email: decoded.email});
     if (!user) return res.status(404).send('User with email address cannot be found');

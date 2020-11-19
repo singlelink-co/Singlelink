@@ -30,7 +30,7 @@ type VisitType = 'link' | 'page';
 
 interface User {
   id: string,
-  email: string,
+  emailHash: string, // Used for gravatar, it could be better but this is how the service works
   fullName: string | null,
   activeProfileId: string | null,
   subscriptionTier: SubscriptionTier | null,
@@ -43,6 +43,7 @@ interface User {
  * User with sensitive information included.
  */
 interface SensitiveUser extends User {
+  email: string,
   passHash: string,
   paymentId: string | null,
 }
@@ -75,6 +76,7 @@ interface Profile {
   userId: string,
   imageUrl: string | null,
   headline: string | null,
+  subtitle: string | null,
   social: {
     icon: string,
     link: string,
@@ -104,7 +106,7 @@ interface Link {
 
 interface Visit {
   type: VisitType,
-  referral: string,
+  referralId: string,
   createdOn: string
 }
 

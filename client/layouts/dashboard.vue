@@ -5,13 +5,13 @@
       <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img @click="toggleProfileSelect" v-if="user && profiles.length>=1" style="width: 100%; border-radius: 100px;"
-             :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.hash"/>
+             :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
         <ul v-if="profileSelect" class="absolute bottom-0 rounded shadow bg-white border border-gray-200"
             style="left: 60px; width: 245px;">
           <li v-for="profile in profiles" @click="selectProfile(profile.id)"
               class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start">
             <img class="mr-2 rounded-full" style="width: 100%;max-width: 35px;"
-                 :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.hash"/>
+                 :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
             <div class="flex flex-col">
               <span class="text-sm font-medium capitalize">{{ profile.handle }}</span>
               <span class="text-xs text-gray-700">{{ profile.headline }}</span>
@@ -115,39 +115,42 @@ html {
 
 <script>
 export default {
-  data: () => {
+  data() {
     return {
       active: 'dashboard',
-      user: null,
+      user: {
+        emailHash: null
+      },
       profiles: [],
       profileSelect: false,
+      profileUrl: '',
+      previewUrl: ''
     };
   },
-  computed: {
-    profileUrl: function () {
-      if (process.browser) {
-        try {
-          return window.location.origin + '/u/' + this.user.activeProfile.handle;
-        } catch (err) {
-          console.log(err);
-          return 'https://singlelink.co/';
-        }
-      }
-    },
 
-    previewUrl: function () {
-      if (process.browser) {
-        try {
-          let origin = window.location.origin;
-          //if(origin=='https://app.singlelink.co' || origin=='http://localhost:8080') return 'https://singlel.ink' + '/u-preview/' + this.user.activeProfile.handle;
-          return origin + '/u-preview/' + this.user.activeProfile.handle;
-        } catch (err) {
-          console.log(err);
-          return 'https://singlelink.co/';
-        }
+  async mounted() {
+    this.setActive();
+    await this.getUserData();
+    await this.listProfiles();
+
+    if (process.browser) {
+      try {
+        this.profileUrl = window.location.origin + '/u/' + this.user.activeProfile.handle;
+      } catch (err) {
+        console.log(err);
+        this.profileUrl = 'https://singlelink.co/';
+      }
+
+      try {
+        this.previewUrl = window.location.origin + '/u-preview/' + this.user.activeProfile.handle;
+      } catch (err) {
+        console.log(err);
+        this.previewUrl = 'https://singlelink.co/';
       }
     }
+
   },
+
   methods: {
     attemptLogout() {
       return this.$nuxt.$router.push('/logout');
@@ -157,15 +160,18 @@ export default {
       await this.$axios.$post('/profile/create', {
         token: this.$store.getters['auth/getToken']
       });
+
       this.profileSelect = false;
+
       location.reload();
     },
 
     async selectProfile(profile) {
       this.user.activeProfile = await this.$axios.$post('/user/set-active-profile', {
         token: this.$store.getters['auth/getToken'],
-        profile: profile
+        newProfileId: profile
       });
+
       location.reload();
     },
 
@@ -199,30 +205,36 @@ export default {
           case "dashboard-settings":
             this.active = "dashboard-settings";
             break;
+          case "dashboard-account-settings":
+            this.active = "dashboard-account-settings";
+            break;
         }
       } catch (err) {
         console.log(err);
       }
     },
 
-    getUserData: function () {
-      this.$axios.$post('/user', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.user = response;
-        })
-        .catch((error) => {
-          console.log('Error getting user data');
-          console.log(error);
-        });
-    }
-  },
+    async getUserData() {
+      try {
+        let token = this.$store.getters['auth/getToken'];
 
-  mounted: function () {
-    this.setActive();
-    this.getUserData();
-    this.listProfiles();
+        let userResponse = await this.$axios.$post('/user', {
+          token
+        });
+
+        let profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
+        });
+
+        this.user = userResponse;
+        this.user.activeProfile = profileResponse;
+        this.originalHandle = this.user.activeProfile.handle;
+
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
+    }
   },
 
   watch: {

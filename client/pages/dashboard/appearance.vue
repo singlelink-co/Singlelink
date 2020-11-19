@@ -159,7 +159,8 @@
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
-  data: function () {
+
+  data() {
     return {
       error: null,
       themes: [],
@@ -183,12 +184,14 @@ export default {
       }
     };
   },
-  mounted: function () {
+  
+  mounted() {
     this.getUserData();
     this.loadThemes();
   },
+
   methods: {
-    selectTheme: function (theme) {
+    selectTheme(theme) {
       if (!theme) theme = {id: null};
       this.$axios.$post('/profile/activate-theme', {
         token: this.$store.getters['auth/getToken'],
@@ -203,7 +206,8 @@ export default {
           console.log(error);
         });
     },
-    loadThemes: function () {
+
+    loadThemes() {
       this.$axios.$post('/theme', {
         token: this.$store.getters['auth/getToken']
       })
@@ -216,7 +220,8 @@ export default {
           console.log(error);
         });
     },
-    saveTheme: function (close) {
+
+    saveTheme(close) {
       this.$axios.$post('/theme/create', {
         token: this.$store.getters['auth/getToken'],
         label: this.pendingTheme.label,
@@ -243,7 +248,8 @@ export default {
           this.error = error;
         });
     },
-    setPending: function (theme) {
+
+    setPending(theme) {
       if (theme === null) return this.pendingTheme = {
         label: '',
         colors: {
@@ -259,34 +265,42 @@ export default {
       };
       return this.pendingTheme = theme;
     },
-    openModal: function () {
+
+    openModal() {
       this.setPending(null);
       return this.modal = true;
     },
-    closeModal: function () {
+
+    closeModal() {
       this.setPending(null);
       return this.modal = false;
     },
-    refreshPreview: function () {
+
+    refreshPreview() {
       if (process.browser) {
         document.getElementById('preview-frame').window.location.reload();
       }
     },
-    getUserData: function () {
-      this.$axios.$post('/user', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          if (response.activeProfile.theme) this.activeTheme = response.activeProfile.theme;
-          if (response.activeProfile.customCss) this.customCss = response.activeProfile.customCss;
-          if (response.activeProfile.customHtml) this.customHtml = response.activeProfile.customHtml;
-        })
-        .catch((error) => {
-          console.log('Error getting user data');
-          console.log(error);
+
+    getUserData: async function () {
+      try {
+        let token = this.$store.getters['auth/getToken'];
+
+        let profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token: token
         });
+
+        this.activeTheme = profileResponse.theme ?? null;
+        this.customCss = profileResponse.customCss ?? '';
+        this.customHtml = profileResponse.customHtml ?? '';
+
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
     },
-    saveChanges: function () {
+
+    saveChanges() {
       this.$axios.$post('/profile/update', {
         token: this.$store.getters['auth/getToken'],
         customCss: this.customCss,

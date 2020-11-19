@@ -1,8 +1,6 @@
 /**
  * An Error that is extended to also contain a status code.
  */
-import {FastifyReply} from "fastify";
-
 export class HttpError extends Error {
   statusCode: number;
 

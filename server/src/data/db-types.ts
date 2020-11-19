@@ -12,9 +12,9 @@ type visit_t = 'link' | 'page';
 Tables will be mapped with the schema name in front of them to prevent collisions with resolved types.
  */
 
-interface AppUser {
+interface DbUser {
   id: string,
-  email: string,
+  email_hash: string, // Used for gravatar, it could be better but this is how the service works
   full_name: string | null,
   active_profile_id: string | null,
   subscription_tier: subscription_t | null,
@@ -23,12 +23,13 @@ interface AppUser {
   created_on: string
 }
 
-interface AppSensitiveUser extends AppUser {
+interface DbSensitiveUser extends DbUser {
+  email: string,
   pass_hash: string,
   payment_id: string | null,
 }
 
-interface AppThemeColors {
+interface DbThemeColors {
   fill: {
     primary: string,
     secondary: string
@@ -39,23 +40,24 @@ interface AppThemeColors {
   }
 }
 
-interface AppTheme {
+interface DbTheme {
   id: string,
   label: string,
   global: boolean,
-  colors: AppThemeColors | null,
+  colors: DbThemeColors | null,
   custom_css: string | null,
   custom_html: string | null,
   user_id: string,
   created_on: string
 }
 
-interface AppProfile {
+interface DbProfile {
   id: string,
   handle: string,
   user_id: string,
   image_url: string | null,
   headline: string | null,
+  subtitle: string | null,
   social: {
     icon: string,
     link: string,
@@ -70,12 +72,12 @@ interface AppProfile {
   created_on: string
 }
 
-interface AppProfileMember {
+interface DbProfileMember {
   handle: string,
   member: string
 }
 
-interface AppLink {
+interface DbLink {
   id: string,
   profile_id: string,
   url: string,
@@ -88,14 +90,14 @@ interface AppLink {
   created_on: string
 }
 
-interface AppAnalyticsVisit {
+interface DbAnalyticsVisit {
   type: visit_t,
-  referral: string,
+  referral_id: string,
   created_on: string
 }
 
 
-interface AppAnalyticsGlobalStats {
+interface DbAnalyticsGlobalStats {
   total_users: number;
   total_profiles: number;
   profiles_published: number;

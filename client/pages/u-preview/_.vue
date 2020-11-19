@@ -1,8 +1,8 @@
 <template>
   <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.hash"
-           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.hash"/>
+      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
+           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
       <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
       <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
       <a :href="link.url" v-for="link in links" class="w-full">
@@ -60,10 +60,10 @@
 </template>
 
 <script>
-import Cookies from "~/middleware/utils";
-
 export default {
-  data: function () {
+  middleware: 'authenticated',
+
+  data() {
     return {
       profile: {
         customHtml: null,
@@ -71,14 +71,10 @@ export default {
         imageUrl: null,
         headline: null,
         subtitle: null,
-        parent: {
-          name: null,
-          hash: null
-        }
       },
       user: {
         name: null,
-        hash: null,
+        emailHash: null,
         avatarUrl: null
       },
       theme: null,
@@ -86,26 +82,26 @@ export default {
       failed: false
     };
   },
-  middleware: 'authenticated',
-  asyncData(ctx) {
-    return ctx.$axios.$post('/profile/preview', {
-      token: Cookies.getCookieValue('singlelink_token', ctx)
-    })
-      .then((response) => {
-        return {
-          profile: response.profile,
-          links: response.links.sort(function (a, b) {
-            return a.sortOrder - b.sortOrder;
-          }),
-          user: response.user,
-          theme: response.theme
-        };
-      }).catch((error) => {
-        console.log('Error getting profile');
-        console.log(error);
-        return {failed: true};
+
+  async mounted() {
+    try {
+      let response = await this.$axios.$post('/profile/preview', {
+        token: this.$store.getters['auth/getToken']
       });
-  },
+
+      this.profile = response.profile;
+      this.links = response.links.sort(function (a, b) {
+        return a.sortOrder - b.sortOrder;
+      });
+      this.user = response.user;
+      this.theme = response.theme || null;
+
+    } catch (err) {
+      console.log('Error getting profile');
+      console.log(err);
+      return {failed: true};
+    }
+  }
 };
 </script>
 

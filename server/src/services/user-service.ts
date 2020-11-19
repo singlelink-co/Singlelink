@@ -7,6 +7,7 @@ import {DatabaseService} from "./database-service";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {constants as HttpStatus} from "http2";
+import {StringUtils} from "../utils/string-utils";
 
 interface LoginResultData {
   user: {
@@ -32,7 +33,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getUser(userId: string): Promise<User> {
-    let queryResult = await this.pool.query<AppUser>("select (id, email, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on) from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
@@ -47,7 +48,7 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getUserByEmail(email: string): Promise<User> {
-    let queryResult = await this.pool.query<AppUser>("select (id, email, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on) from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
@@ -62,7 +63,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getSensitiveUser(userId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<AppSensitiveUser>("select * from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select * from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
@@ -77,7 +78,7 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<AppSensitiveUser>("select * from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select * from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
@@ -92,31 +93,28 @@ export class UserService extends DatabaseService {
    * @param token
    * @param password
    */
-  async setPasswordWithToken(token: string, password: string): Promise<boolean> {
-    try {
-      let decoded: any = jwt.verify(token, appConfig.secret, {
-        algorithms: ["RS256"],
-        maxAge: "15m"
-      });
+  async setPasswordWithToken(token: string, password: string) {
+    let decoded: any = jwt.verify(token, appConfig.secret, {
+      maxAge: "15m"
+    });
 
-      if (!decoded.userId) {
-        return false;
-      }
-
-      if (!decoded.passwordReset) {
-        return false;
-      }
-
-      let hashedPassword = await bcrypt.hash(password, 12);
-
-      let result = await this.pool.query(
-        "update app.users set pass_hash=$2 where id=$1",
-        [decoded.userId, hashedPassword]
-      );
-
-      return result.rowCount > 0;
-    } catch (err) {
+    if (!decoded.userId) {
       return false;
+    }
+
+    if (!decoded.passwordReset) {
+      return false;
+    }
+
+    let hashedPassword = await bcrypt.hash(password, 10);
+
+    let queryResult = await this.pool.query(
+      "update app.users set pass_hash=$2 where id=$1",
+      [decoded.userId, hashedPassword]
+    );
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
     }
   }
 
@@ -133,33 +131,33 @@ export class UserService extends DatabaseService {
         passwordReset: true
       },
       appConfig.secret,
-      {algorithm: "RS256", expiresIn: '15m'}
+      {expiresIn: '15m'}
     );
 
-    let url = appConfig.baseUrl + "/forgot-password/change?";
-    const params = new URLSearchParams({token: token});
+    let url = appConfig.clientDomain + "/forgot-password/change?";
+    const params = new URLSearchParams({token});
     url += params.toString();
 
     try {
       let emailParams = {
         Destination: {
           ToAddresses: [
-            user.email,
+            email,
           ]
         },
         Message: {
           Body: {
             Text: {
               Charset: appConfig.messages.passwordResetEmail.messageCharset,
-              Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.message, url)
+              Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.message, {url})
             }
           },
           Subject: {
             Charset: appConfig.messages.passwordResetEmail.subjectCharset,
-            Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.subject, url)
+            Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.subject, {url})
           }
         },
-        Source: appConfig.senderEmailAddress
+        Source: appConfig.aws.senderEmailAddress
       };
 
       await new AWS.SES().sendEmail(emailParams).promise();
@@ -177,7 +175,7 @@ export class UserService extends DatabaseService {
    */
   async loginUser(email: string, password: string): Promise<LoginResultData> {
     let user = await this.getSensitiveUserByEmail(email);
-    let profileQuery = await this.pool.query<AppProfile>("select * from app.profiles where user_id=$1", [user.id]);
+    let profileQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
     let activeProfile;
 
     if (profileQuery.rowCount > 0) {
@@ -197,8 +195,8 @@ export class UserService extends DatabaseService {
         id: user.id,
         email: user.email
       },
-      activeProfile: activeProfile,
-      token: token
+      activeProfile,
+      token
     };
   }
 
@@ -209,10 +207,10 @@ export class UserService extends DatabaseService {
    * @param password
    * @param name
    */
-  async createUser(email: string, password: string, name?: string): Promise<User> {
+  async createUser(email: string, password: string, name?: string): Promise<SensitiveUser> {
     let passHash = await bcrypt.hash(password, 10);
 
-    let userInsertQuery = await this.pool.query<AppUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning *",
+    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning *",
       [
         email,
         passHash
@@ -222,22 +220,22 @@ export class UserService extends DatabaseService {
       throw new HttpError(HttpStatus.HTTP_STATUS_CONFLICT, "The user already exists.");
     }
 
-    return DbTypeConverter.toUser(userInsertQuery.rows[0]);
+    return DbTypeConverter.toSensitiveUser(userInsertQuery.rows[0]);
   }
 
   /**
-   * Sets the active profile for a user.
+   * Sets the active profile for a user. Does not check for ownership.
    *
    * @param userId
    * @param profileId
    */
-  async setActiveProfile(userId: string, profileId: string): Promise<string> {
-    let queryResult = await this.pool.query<{ active_profile_id: string }>("update app.users set active_profile_id=$1 where id=$2 returning active_profile_id", [profileId, userId]);
+  async setActiveProfile(userId: string, profileId: string): Promise<Profile> {
+    let profileResult = await this.pool.query<DbProfile>("update app.users set active_profile_id=$1 where id=$2 returning *", [profileId, userId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (profileResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user or profile could not be found.");
     }
 
-    return queryResult.rows[0].active_profile_id;
+    return DbTypeConverter.toProfile(profileResult.rows[0]);
   }
 }

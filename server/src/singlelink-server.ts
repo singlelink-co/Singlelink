@@ -42,8 +42,8 @@ export class SingleLinkServer {
     AWS.config.update({
       region: appConfig.aws.region,
       credentials: {
-        accessKeyId: appConfig.aws.access_key,
-        secretAccessKey: appConfig.aws.secret_key
+        accessKeyId: appConfig.aws.accessKey,
+        secretAccessKey: appConfig.aws.secretKey
       },
       apiVersion: '2010-12-01'
     });

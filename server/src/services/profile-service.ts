@@ -5,6 +5,7 @@ import {appConfig} from "../config/app-config";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {constants as HttpStatus} from "http2";
+import {StringUtils} from "../utils/string-utils";
 
 /**
  * This service takes care of transactional tasks related to Profiles.
@@ -19,9 +20,10 @@ export class ProfileService extends DatabaseService {
    * Gets a profile by id.
    *
    * @param profileId
+   * @param checkVisibility Throw an HttpError if the profile is unpublished.
    */
-  async getProfile(profileId: string): Promise<Profile> {
-    let profileResult = await this.pool.query<AppProfile>("select * from app.profiles where id=$1", [profileId]);
+  async getProfile(profileId: string, checkVisibility: boolean): Promise<Profile> {
+    let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where id=$1", [profileId]);
 
     if (profileResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
@@ -29,8 +31,10 @@ export class ProfileService extends DatabaseService {
 
     let profileRow = profileResult.rows[0];
 
-    if (profileRow.visibility === 'unpublished') {
-      throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+    if (checkVisibility) {
+      if (profileRow.visibility === 'unpublished') {
+        throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+      }
     }
 
     return DbTypeConverter.toProfile(profileRow);
@@ -40,9 +44,10 @@ export class ProfileService extends DatabaseService {
    * Gets a profile by handle.
    *
    * @param handle The handle of the profile.
+   * @param checkVisibility Throw an HttpError if the profile is unpublished.
    */
-  async getProfileByHandle(handle: string): Promise<Profile> {
-    let profileResult = await this.pool.query<AppProfile>("select * from app.profiles where handle=$1", [handle]);
+  async getProfileByHandle(handle: string, checkVisibility: boolean): Promise<Profile> {
+    let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where handle=$1", [handle]);
 
     if (profileResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
@@ -50,8 +55,10 @@ export class ProfileService extends DatabaseService {
 
     let profileRow = profileResult.rows[0];
 
-    if (profileRow.visibility === 'unpublished') {
-      throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+    if (checkVisibility) {
+      if (profileRow.visibility === 'unpublished') {
+        throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+      }
     }
 
     return DbTypeConverter.toProfile(profileRow);
@@ -100,7 +107,7 @@ export class ProfileService extends DatabaseService {
    * @param subtitle
    */
   async createProfile(userId: string, handle?: string, imageUrl?: string, headline?: string, subtitle?: string): Promise<Profile> {
-    let queryResult = await this.pool.query<AppProfile>("insert into app.profiles (handle, user_id, image_url, headline, subtitle) values ($1, $2, $3, $4, $5) on conflict do nothing returning *",
+    let queryResult = await this.pool.query<DbProfile>("insert into app.profiles (handle, user_id, image_url, headline, subtitle) values ($1, $2, $3, $4, $5) on conflict do nothing returning *",
       [
         handle ?? StringUtils.generateRandomSlug(),
         userId,
@@ -123,7 +130,7 @@ export class ProfileService extends DatabaseService {
    * @param userId
    */
   async listProfiles(userId: string): Promise<Profile[]> {
-    let queryResult = await this.pool.query<AppProfile>("select * from app.profiles where user_id=$1", [userId]);
+    let queryResult = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profiles couldn't be found.");
@@ -141,7 +148,7 @@ export class ProfileService extends DatabaseService {
    * @param themeId
    */
   async setActiveTheme(profileId: string, themeId: string): Promise<Profile> {
-    let queryResult = await this.pool.query<AppProfile>("update app.profiles set theme_id=$1 where id=$2 returning *", [themeId, profileId]);
+    let queryResult = await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2 returning *", [themeId, profileId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
@@ -183,7 +190,7 @@ export class ProfileService extends DatabaseService {
     customHtml?: string,
     customDomain?: string
   ): Promise<Profile> {
-    let queryResult = await this.pool.query<AppProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
+    let queryResult = await this.pool.query<DbProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
       [
         imageUrl,
         headline,
@@ -226,7 +233,7 @@ export class ProfileService extends DatabaseService {
       throw new HttpError(HttpStatus.HTTP_STATUS_BAD_REQUEST, "You cannot delete your only profile.");
     }
 
-    let deletedProfile = await this.pool.query<AppProfile>("delete from app.profiles where id=$1", [profileId]);
+    let deletedProfile = await this.pool.query<DbProfile>("delete from app.profiles where id=$1", [profileId]);
 
     if (deletedProfile.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Unable to delete the profile because of an internal error.");

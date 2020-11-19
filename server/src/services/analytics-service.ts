@@ -5,8 +5,11 @@ import {HttpError} from "../utils/http-error";
 import {constants as HttpStatus} from "http2";
 
 interface AnalyticsProfileData {
-  profileViews: number,
-  linkViews: number,
+  totalProfileViews: number,
+  linkVisits: {
+    link: Link,
+    views: number
+  }[],
   clickThroughRate: number
 }
 
@@ -25,7 +28,7 @@ export class AnalyticsService extends DatabaseService {
    * Returns all data as -1 if the database was unable to be queried.
    */
   async getAnalytics(): Promise<AnalyticsGlobalStats> {
-    let queryResult = await this.pool.query<AppAnalyticsGlobalStats>("select * from analytics.global_stats");
+    let queryResult = await this.pool.query<DbAnalyticsGlobalStats>("select * from analytics.global_stats");
 
     if (queryResult.rowCount <= 0) {
       return {
@@ -50,14 +53,14 @@ export class AnalyticsService extends DatabaseService {
    * @param updateAnalytics Should we update analytics?
    */
   async getLink(linkId: string, updateAnalytics: boolean): Promise<Link> {
-    let queryResult = await this.pool.query<AppLink>("select * from app.links where id=$1", [linkId]);
+    let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
     }
 
     if (updateAnalytics) {
-      await this.pool.query("insert into analytics.visits(type, referral) values ($1, $2)", ['link', linkId]);
+      await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
     }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
@@ -67,26 +70,53 @@ export class AnalyticsService extends DatabaseService {
    * Gets the analytics data for a specific profile.
    *
    * @param profileId
+   * @param dayRange The number of days to limit the range by, default is 30
    */
-  async getProfileAnalyticsData(profileId: string): Promise<AnalyticsProfileData> {
+  async getProfileAnalyticsData(profileId: string, dayRange: number = 30): Promise<AnalyticsProfileData> {
     // TODO use subscription tier to check for date range, for now leave it at 30 days
 
-    let views = await this.pool.query<{ profile_views: number, link_views: number }>("select count(*) filter (where type='page') as profile_views, count(*) filter (where type='link') as link_views from analytics.visits where referral=$1 and created_on > current_date - interval '30' day",
+    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`,
       [
         profileId,
       ]);
 
-    if (views.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
+    if (profileViewQuery.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile views could not be found.");
     }
 
-    let profileViews = views.rows[0].profile_views;
-    let linkViews = views.rows[0].link_views;
-    let clickThroughRate = (linkViews / profileViews) * 100;
+    let linksQuery = await this.pool.query<DbLink>("select * from app.links where profile_id=$1", [profileId]);
+
+    if (linksQuery.rowCount <= 0) {
+      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The links could not be found.");
+    }
+
+    let linkVisits: { link: Link, views: number }[] = [];
+    let totalLinks = 0;
+
+    for (let i = 0; i < linksQuery.rowCount; i++) {
+      let link = linksQuery.rows[i];
+      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select * from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`, [link.id]);
+
+      totalLinks++;
+
+      let linkVisitCount = 0;
+
+      for (const visit of linkVisitQuery.rows) {
+        linkVisitCount++;
+      }
+
+      linkVisits.push({
+        link: DbTypeConverter.toLink(link),
+        views: linkVisitCount
+      });
+    }
+
+    let totalProfileViews = profileViewQuery.rows[0].profile_views;
+    let clickThroughRate = (totalLinks / totalProfileViews) * 100;
 
     return {
-      profileViews,
-      linkViews,
+      totalProfileViews,
+      linkVisits,
       clickThroughRate
     };
   }

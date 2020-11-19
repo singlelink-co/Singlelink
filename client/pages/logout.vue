@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  mounted: function () {
+  mounted() {
     this.$store.commit('auth/logout');
     this.$router.push('/');
   }

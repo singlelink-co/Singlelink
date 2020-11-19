@@ -1,12 +1,12 @@
 import Cookies from "~/middleware/utils";
 
 export default function (context) {
-  const singlelink_token = Cookies.getCookieValue('singlelink_token', context) || context.store.getters.get_token;
+  const singlelink_token = Cookies.getCookieValue('singlelink_token', context) || context.store.getters["auth/getToken"];
 
   if (singlelink_token) {
     if (!context.store.user) {
       context.$axios
-        .$post('/user/fetch',
+        .$post('/user',
           {
             token: singlelink_token
           })
@@ -16,7 +16,7 @@ export default function (context) {
           // verify token
         })
         .catch((error) => {
-          console.log('Error fetching self');
+          console.log('Error getting self');
           console.log(error);
           //context.store.commit('auth/login', singlelink_token);
           context.store.commit('auth/login', null);

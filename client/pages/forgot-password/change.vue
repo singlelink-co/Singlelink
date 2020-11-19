@@ -34,7 +34,7 @@
         </button>
       </form>
     </section>
-    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.</br>Copyright ©2020
+    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©2020
       Neutron Creative Inc.
     </section>
   </div>
@@ -48,7 +48,7 @@
 <script>
 
 export default {
-  name: 'Forgot password',
+  name: 'ForgotPassword',
   data: () => {
     return {
       password: '',
@@ -58,7 +58,7 @@ export default {
     };
   },
   middleware: 'unauthenticated',
-  mounted: function () {
+  mounted() {
     if (process.browser) {
       if (!this.$route.query['token'])
         return window.location.replace('/forgot-password');

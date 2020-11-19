@@ -1,7 +1,6 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface, RouteHandlerMethod} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {Controller} from "./controller";
 import {ReplyUtils} from "../utils/reply-utils";
 import {constants as HttpStatus} from "http2";
@@ -9,6 +8,7 @@ import {HttpError} from "../utils/http-error";
 import {ProfileService} from "../services/profile-service";
 import * as jwt from "jsonwebtoken";
 import {appConfig} from "../config/app-config";
+import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 
 interface LoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -40,14 +40,14 @@ interface ResetUserPasswordRequest extends RequestGenericInterface {
 }
 
 // TODO Implement UpdateUserRequest
-interface UpdateUserRequest extends RequestGenericInterface {
-  Body: {}
+interface UpdateUserRequest extends AuthenticatedRequest {
+  Body: {} & AuthenticatedRequest["Body"]
 }
 
-interface SetActiveProfileRequest extends RequestGenericInterface {
+interface SetActiveProfileRequest extends AuthenticatedRequest {
   Body: {
-    profile?: string
-  }
+    newProfileId?: string
+  } & AuthenticatedRequest["Body"]
 }
 
 /**
@@ -66,16 +66,16 @@ export class UserController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated
-    this.fastify.all('/user/login', this.LoginUser.bind(this));
-    this.fastify.all('/user/create', this.CreateUser.bind(this));
-    this.fastify.all('/user/request-reset-password', this.UserRequestResetPassword.bind(this));
-    this.fastify.all('/user/reset-password', this.ResetUserPassword.bind(this));
+    this.fastify.all<LoginUserRequest>('/user/login', this.LoginUser.bind(this));
+    this.fastify.all<CreateUserRequest>('/user/create', this.CreateUser.bind(this));
+    this.fastify.all<UserRequestResetPasswordRequest>('/user/request-reset-password', this.UserRequestResetPassword.bind(this));
+    this.fastify.all<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
 
     // Authenticated
-    this.fastify.all('/user', Auth.AuthRouteOptions, <RouteHandlerMethod>this.GetUser.bind(this));
-    this.fastify.all('/user/update', Auth.AuthRouteOptions, <RouteHandlerMethod>this.UpdateUser.bind(this));
-    this.fastify.all('/user/set-active-profile', Auth.AuthRouteOptions, <RouteHandlerMethod>this.SetActiveProfile.bind(this));
-    this.fastify.all('/user/delete', Auth.AuthRouteOptions, <RouteHandlerMethod>this.DeleteUser.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/user', AuthOpts.ValidateWithData, this.GetUser.bind(this));
+    this.fastify.all<UpdateUserRequest>('/user/update', AuthOpts.ValidateWithData, this.UpdateUser.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/user/delete', AuthOpts.ValidateWithData, this.DeleteUser.bind(this));
+    this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', AuthOpts.ValidateWithData, this.SetActiveProfile.bind(this));
   }
 
   /**
@@ -134,9 +134,9 @@ export class UserController extends Controller {
       let token = jwt.sign({email: user.email}, appConfig.secret, {expiresIn: '168h'});
 
       return {
-        user: user,
+        user,
         activeProfile: profile,
-        token: token
+        token
       };
     } catch (e) {
       if (e instanceof HttpError) {
@@ -182,7 +182,21 @@ export class UserController extends Controller {
    */
   async ResetUserPassword(request: FastifyRequest<ResetUserPasswordRequest>, reply: FastifyReply) {
     try {
+      let body = request.body;
 
+      if (!body.token) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        return;
+      }
+
+      if (!body.password) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        return;
+      }
+
+      await this.userService.setPasswordWithToken(body.token, body.password);
+
+      return ReplyUtils.success("Successfully changed password.");
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -198,8 +212,8 @@ export class UserController extends Controller {
    * @param request
    * @param reply
    */
-  async GetUser(request: AuthenticatedRequest, reply: FastifyReply) {
-    return request.user;
+  async GetUser(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+    return request.body.user;
   }
 
   //TODO Implement UpdateUser
@@ -208,7 +222,7 @@ export class UserController extends Controller {
    * @param request
    * @param reply
    */
-  async UpdateUser(request: AuthenticatedRequest<UpdateUserRequest>, reply: FastifyReply) {
+  async UpdateUser(request: FastifyRequest<UpdateUserRequest>, reply: FastifyReply) {
     try {
       reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
 
@@ -223,12 +237,13 @@ export class UserController extends Controller {
     }
   }
 
+  //TODO Implement DeleteUser
   /**
-   * Route for /user/set-active
+   * Route for /user/delete
    * @param request
    * @param reply
    */
-  async SetActiveProfile(request: AuthenticatedRequest<SetActiveProfileRequest>, reply: FastifyReply) {
+  async DeleteUser(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
 
     } catch (e) {
@@ -242,13 +257,30 @@ export class UserController extends Controller {
   }
 
   /**
-   * Route for /user/delete
+   * Route for /user/set-active
+   *
    * @param request
    * @param reply
    */
-  async DeleteUser(request: AuthenticatedRequest, reply: FastifyReply) {
+  async SetActiveProfile(request: FastifyRequest<SetActiveProfileRequest>, reply: FastifyReply) {
     try {
+      let body = request.body;
+      let user = body.user;
+      let newProfileId = body.newProfileId;
 
+      if (!newProfileId) {
+        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        return;
+      }
+
+      let newProfile = await this.profileService.getProfile(newProfileId, false);
+
+      if (user.id !== newProfile.userId) {
+        reply.status(HttpStatus.HTTP_STATUS_UNAUTHORIZED).send(ReplyUtils.error("The user doesn't own the profile."));
+        return;
+      }
+
+      return await this.userService.setActiveProfile(user.id, newProfileId);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

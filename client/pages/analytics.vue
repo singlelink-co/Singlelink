@@ -66,7 +66,7 @@
 </template>
 <script>
 export default {
-  data: function () {
+  data() {
     return {
       analytics: {},
       hourlyGrowthRate: null,
@@ -75,7 +75,7 @@ export default {
   },
 
   methods: {
-    refreshData: async function () {
+    async refreshData() {
       this.analytics = {};
       this.hourlyGrowthRate = null;
       this.projectedUsers = null;
@@ -85,7 +85,7 @@ export default {
       this.computeVariables();
     },
 
-    computeVariables: function () {
+    computeVariables() {
       this.hourlyGrowthRate = (this.analytics.users / this.timeDifference(new Date(), new Date(1599035400 * 1000)));
       this.projectedUsers = this.hourlyGrowthRate * 24 * 365;
 
@@ -93,14 +93,14 @@ export default {
       this.projectedUsers = this.projectedUsers.toFixed(0);
     },
 
-    timeDifference: function (dt2, dt1) {
+    timeDifference(dt2, dt1) {
       let diff = (dt2.getTime() - dt1.getTime()) / 1000;
       diff /= (60 * 60);
       return Math.abs(Math.round(diff));
     },
   },
 
-  mounted: async function () {
+  async mounted() {
     this.analytics = await this.$axios.$get('/analytics');
 
     this.computeVariables();

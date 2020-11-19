@@ -7,10 +7,7 @@ export const state = () => ({
 export const getters = {
   getToken(state) {
     return state.token || Cookies.getCookieValue('singlelink_token', this);
-  },
-  isAuthenticated(state) {
-    return state.token != null;
-  },
+  }
 };
 
 export const mutations = {
