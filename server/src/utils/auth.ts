@@ -9,7 +9,7 @@ import jwt, {VerifyErrors} from "jsonwebtoken";
 import {appConfig} from "../config/app-config";
 import {Pool} from "pg";
 import {ReplyUtils} from "./reply-utils";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {DbTypeConverter} from "./db-type-converter";
 
 /**
@@ -70,7 +70,7 @@ export class AuthOpts {
     let token: string | null | undefined = body?.token;
 
     if (!token) {
-      reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
+      reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
       return;
     }
 
@@ -79,19 +79,19 @@ export class AuthOpts {
       appConfig.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
           return;
         }
 
         if (!decoded) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
           return;
         }
 
         let dAuthToken: { email: string } = <{ email: string }>decoded;
 
         if (!dAuthToken?.email) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
           return;
         }
 
@@ -113,7 +113,7 @@ export class AuthOpts {
     let token: string | null | undefined = body?.token;
 
     if (!token) {
-      reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
+      reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Token was missing."));
       return;
     }
 
@@ -127,19 +127,19 @@ export class AuthOpts {
       appConfig.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Error while validating token.", err));
           return;
         }
 
         if (!decoded) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
           return;
         }
 
         let dAuthToken: { email: string } = <{ email: string }>decoded;
 
         if (!dAuthToken?.email) {
-          reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Unable to verify user, invalid token."));
           return;
         }
 
@@ -155,7 +155,7 @@ export class AuthOpts {
           );
 
           if (accountQuery.rowCount <= 0) {
-            reply.status(HttpStatus.HTTP_STATUS_NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
+            reply.status(StatusCodes.NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
             return;
           }
 
@@ -204,12 +204,12 @@ export class AuthOpts {
 
         } catch (err) {
           if (err) {
-            reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("Error while authenticating request.", err));
+            reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReplyUtils.error("Error while authenticating request.", err));
             return;
           }
         }
 
-        reply.status(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR).send(ReplyUtils.error("An unexpected error occurred."));
+        reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReplyUtils.error("An unexpected error occurred."));
         return;
       });
   }

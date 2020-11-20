@@ -4,8 +4,10 @@ import Axios, {AxiosResponse} from "axios";
 import {appConfig} from "../config/app-config";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
+import {QueryResult} from "pg";
+import {DatabaseError} from 'pg-protocol/dist/messages';
 
 /**
  * This service takes care of transactional tasks related to Profiles.
@@ -26,14 +28,14 @@ export class ProfileService extends DatabaseService {
     let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where id=$1", [profileId]);
 
     if (profileResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
     let profileRow = profileResult.rows[0];
 
     if (checkVisibility) {
       if (profileRow.visibility === 'unpublished') {
-        throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+        throw new HttpError(StatusCodes.FORBIDDEN, "This profile is unpublished.");
       }
     }
 
@@ -50,14 +52,14 @@ export class ProfileService extends DatabaseService {
     let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where handle=$1", [handle]);
 
     if (profileResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
     let profileRow = profileResult.rows[0];
 
     if (checkVisibility) {
       if (profileRow.visibility === 'unpublished') {
-        throw new HttpError(HttpStatus.HTTP_STATUS_FORBIDDEN, "This profile is unpublished.");
+        throw new HttpError(StatusCodes.FORBIDDEN, "This profile is unpublished.");
       }
     }
 
@@ -93,7 +95,7 @@ export class ProfileService extends DatabaseService {
       return thumbnail;
     } catch (err) {
       console.error(err);
-      throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "An internal error occurred while fetching the thumbnail.");
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "An internal error occurred while fetching the thumbnail.");
     }
   }
 
@@ -118,7 +120,7 @@ export class ProfileService extends DatabaseService {
 
     if (queryResult.rowCount <= 0) {
       console.log("Handle already exists in database, couldn't add new profile.");
-      throw new HttpError(HttpStatus.HTTP_STATUS_CONFLICT, "The profile couldn't be added because it is already being used.");
+      throw new HttpError(StatusCodes.CONFLICT, "The profile couldn't be added because it is already being used.");
     }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
@@ -133,7 +135,7 @@ export class ProfileService extends DatabaseService {
     let queryResult = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profiles couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profiles couldn't be found.");
     }
 
     return queryResult.rows.map(x => {
@@ -151,7 +153,7 @@ export class ProfileService extends DatabaseService {
     let queryResult = await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2 returning *", [themeId, profileId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
@@ -163,7 +165,7 @@ export class ProfileService extends DatabaseService {
    * @param userId The user id associated with the profiles.
    */
   async getProfileCount(userId: string): Promise<number> {
-    return (await this.pool.query("select count(*) from app.profiles where user_id=$1", [userId])).rowCount;
+    return (await this.pool.query<{count: number}>("select count(*) from app.profiles where user_id=$1", [userId])).rows[0].count;
   }
 
   /**
@@ -190,23 +192,35 @@ export class ProfileService extends DatabaseService {
     customHtml?: string,
     customDomain?: string
   ): Promise<Profile> {
-    let queryResult = await this.pool.query<DbProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
-      [
-        imageUrl,
-        headline,
-        subtitle,
-        handle,
-        visibility,
-        customCss,
-        customHtml,
-        customDomain,
-        profileId
-      ]);
+    let queryResult: QueryResult<DbProfile>;
+
+    try {
+      queryResult = await this.pool.query<DbProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
+        [
+          imageUrl,
+          headline,
+          subtitle,
+          handle,
+          visibility,
+          customCss,
+          customHtml,
+          customDomain,
+          profileId
+        ]);
+    } catch (err) {
+      if (err instanceof DatabaseError) {
+        if (err.message.includes("duplicate key")) {
+          throw new HttpError(StatusCodes.CONFLICT, "This handle is already being used.");
+        }
+      }
+
+      throw err;
+    }
 
     // TODO Use custom domain handle to update custom domain on proxies
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
@@ -224,19 +238,19 @@ export class ProfileService extends DatabaseService {
     let profileRow: Profile | undefined = profilesResult.find(x => x.id === profileId);
 
     if (!profileRow) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user doesn't own this profile.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user doesn't own this profile.");
     }
 
     profilesResult.splice(profilesResult.indexOf(profileRow));
 
-    if (await this.getProfileCount(profileId) <= 1) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_BAD_REQUEST, "You cannot delete your only profile.");
+    if (await this.getProfileCount(userId) <= 1) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, "You cannot delete your only profile.");
     }
 
     let deletedProfile = await this.pool.query<DbProfile>("delete from app.profiles where id=$1", [profileId]);
 
     if (deletedProfile.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Unable to delete the profile because of an internal error.");
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to delete the profile because of an internal error.");
     }
 
     let nextProfile = profilesResult[0];

@@ -3,7 +3,7 @@ import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
 import {ReplyUtils} from "../utils/reply-utils";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {HttpError} from "../utils/http-error";
 import {ProfileService} from "../services/profile-service";
 import * as jwt from "jsonwebtoken";
@@ -88,12 +88,12 @@ export class UserController extends Controller {
       let body = request.body;
 
       if (!body.email) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
       if (!body.password) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
         return;
       }
 
@@ -118,12 +118,12 @@ export class UserController extends Controller {
       let body = request.body;
 
       if (!body.email) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
       if (!body.password) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
         return;
       }
 
@@ -158,7 +158,7 @@ export class UserController extends Controller {
       let body = request.body;
 
       if (!body.email) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
@@ -185,12 +185,12 @@ export class UserController extends Controller {
       let body = request.body;
 
       if (!body.token) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
       if (!body.password) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
@@ -224,7 +224,7 @@ export class UserController extends Controller {
    */
   async UpdateUser(request: FastifyRequest<UpdateUserRequest>, reply: FastifyReply) {
     try {
-      reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
+      reply.code(StatusCodes.NOT_IMPLEMENTED);
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
     } catch (e) {
@@ -269,14 +269,14 @@ export class UserController extends Controller {
       let newProfileId = body.newProfileId;
 
       if (!newProfileId) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
         return;
       }
 
       let newProfile = await this.profileService.getProfile(newProfileId, false);
 
       if (user.id !== newProfile.userId) {
-        reply.status(HttpStatus.HTTP_STATUS_UNAUTHORIZED).send(ReplyUtils.error("The user doesn't own the profile."));
+        reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("The user doesn't own the profile."));
         return;
       }
 

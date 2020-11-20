@@ -13,7 +13,9 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
     "cookie-universal-nuxt": "^2.1.4",
+    "http-status-codes": "^2.1.4",
     "nuxt": "^2.14.7",
+    "vue": "^2.6.12",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
@@ -24,6 +26,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
     "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-webpack-plugin": "^2.3.0",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0"
   }

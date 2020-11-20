@@ -5,7 +5,7 @@ import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {ReplyUtils} from "../utils/reply-utils";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 
 interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
@@ -70,7 +70,7 @@ export class ThemeController extends Controller {
       let body = request.body;
 
       if (!body.label) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
         return;
       }
 
@@ -92,7 +92,7 @@ export class ThemeController extends Controller {
    */
   async UpdateTheme(request: FastifyRequest, reply: FastifyReply) {
     try {
-      reply.code(HttpStatus.HTTP_STATUS_NOT_IMPLEMENTED);
+      reply.code(StatusCodes.NOT_IMPLEMENTED);
 
       return ReplyUtils.error("Sorry, this is not available yet.");
     } catch (e) {

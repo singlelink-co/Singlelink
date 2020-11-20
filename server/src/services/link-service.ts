@@ -4,7 +4,7 @@ import {QueryUtils} from "../utils/query-utils";
 import {PoolClient} from "pg";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 
 /**
  * This service takes care of transactional tasks related to Links.
@@ -50,7 +50,7 @@ export class LinkService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
     }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
@@ -91,7 +91,7 @@ export class LinkService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
     }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
@@ -108,7 +108,7 @@ export class LinkService extends DatabaseService {
       [linkId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
     }
 
     return this.listLinks(queryResult.rows[0].profile_id);
@@ -123,7 +123,7 @@ export class LinkService extends DatabaseService {
     let queryResult = await this.pool.query<DbLink>("select * from app.links where profile_id=$1 order by sort_order desc", [profileId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The links couldn't be found.");
+      return [];
     }
 
     return queryResult.rows.map(x => {
@@ -155,7 +155,7 @@ export class LinkService extends DatabaseService {
       let queryResult = await db.query<DbLink>("select * from app.links where profile_id=$1 order by sort_order", [profileId]);
 
       if (queryResult.rowCount <= 0) {
-        return Promise.reject(new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile couldn't be found."));
+        return Promise.reject(new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found."));
       }
 
       let linkRows: DbLink[] = queryResult.rows;
@@ -196,6 +196,6 @@ export class LinkService extends DatabaseService {
       db.release();
     }
 
-    throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "The link couldn't be reorder because of an internal error.");
+    throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "The link couldn't be reorder because of an internal error.");
   }
 }

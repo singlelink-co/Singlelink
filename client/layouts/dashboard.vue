@@ -133,27 +133,24 @@ export default {
     await this.getUserData();
     await this.listProfiles();
 
-    if (process.browser) {
-      try {
-        this.profileUrl = window.location.origin + '/u/' + this.user.activeProfile.handle;
-      } catch (err) {
-        console.log(err);
-        this.profileUrl = 'https://singlelink.co/';
-      }
-
-      try {
-        this.previewUrl = window.location.origin + '/u-preview/' + this.user.activeProfile.handle;
-      } catch (err) {
-        console.log(err);
-        this.previewUrl = 'https://singlelink.co/';
-      }
+    try {
+      this.profileUrl = window.location.origin + '/u/' + this.user.activeProfile.handle;
+    } catch (err) {
+      console.log(err);
+      this.profileUrl = 'https://singlelink.co/';
     }
 
+    try {
+      this.previewUrl = window.location.origin + '/u-preview/' + this.user.activeProfile.handle;
+    } catch (err) {
+      console.log(err);
+      this.previewUrl = 'https://singlelink.co/';
+    }
   },
 
   methods: {
     attemptLogout() {
-      return this.$nuxt.$router.push('/logout');
+      this.$nuxt.$router.push('/logout');
     },
 
     async createNewProfile() {

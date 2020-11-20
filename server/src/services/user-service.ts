@@ -6,7 +6,7 @@ import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
 
 interface LoginResultData {
@@ -36,7 +36,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toUser(queryResult.rows[0]);
@@ -51,7 +51,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toUser(queryResult.rows[0]);
@@ -66,7 +66,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
@@ -81,7 +81,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
@@ -96,7 +96,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
@@ -111,7 +111,7 @@ export class UserService extends DatabaseService {
     let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where email=$1", [email]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
 
     return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
@@ -144,7 +144,7 @@ export class UserService extends DatabaseService {
     );
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
     }
   }
 
@@ -193,7 +193,7 @@ export class UserService extends DatabaseService {
       await new AWS.SES().sendEmail(emailParams).promise();
     } catch (e) {
       console.error(e);
-      throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Failed to send email because of an internal server error: " + e.toString());
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send email because of an internal server error: " + e.toString());
     }
   }
 
@@ -215,7 +215,7 @@ export class UserService extends DatabaseService {
     let valid = await bcrypt.compare(password, user.passHash);
 
     if (!valid) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_UNAUTHORIZED, "The password was incorrect.");
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "The password was incorrect.");
     }
 
     let token = jwt.sign({email: user.email}, appConfig.secret, {expiresIn: '168h'});
@@ -243,11 +243,12 @@ export class UserService extends DatabaseService {
     let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning (id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on)",
       [
         email,
-        passHash
+        passHash,
+        name
       ]);
 
     if (userInsertQuery.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_CONFLICT, "The user already exists.");
+      throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
 
     return DbTypeConverter.toSensitiveUser(userInsertQuery.rows[0]);
@@ -263,7 +264,7 @@ export class UserService extends DatabaseService {
     let profileResult = await this.pool.query<DbProfile>("update app.users set active_profile_id=$1 where id=$2 returning *", [profileId, userId]);
 
     if (profileResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The user or profile could not be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user or profile could not be found.");
     }
 
     return DbTypeConverter.toProfile(profileResult.rows[0]);

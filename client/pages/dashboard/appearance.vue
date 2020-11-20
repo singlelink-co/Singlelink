@@ -184,7 +184,7 @@ export default {
       }
     };
   },
-  
+
   mounted() {
     this.getUserData();
     this.loadThemes();
@@ -277,8 +277,8 @@ export default {
     },
 
     refreshPreview() {
-      if (process.browser) {
-        document.getElementById('preview-frame').window.location.reload();
+      if (process.client) {
+        document.getElementById('preview-frame').contentWindow.location.reload();
       }
     },
 
@@ -300,20 +300,19 @@ export default {
       }
     },
 
-    saveChanges() {
-      this.$axios.$post('/profile/update', {
-        token: this.$store.getters['auth/getToken'],
-        customCss: this.customCss,
-        customHtml: this.customHtml
-      })
-        .then((response) => {
-          this.refreshPreview();
-        })
-        .catch((error) => {
-          console.log('Error saving changes');
-          console.log(error);
+    async saveChanges() {
+      try {
+        await this.$axios.$post('/profile/update', {
+          token: this.$store.getters['auth/getToken'],
+          customCss: this.customCss,
+          customHtml: this.customHtml
         });
-    },
+
+        this.refreshPreview();
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 };
 </script>

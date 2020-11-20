@@ -227,6 +227,7 @@ export default {
 
     clearPending() {
       this.clearErrors();
+
       this.pendingLink = {
         label: '',
         subtitle: '',
@@ -266,7 +267,7 @@ export default {
     },
 
     refreshPreview() {
-      if (process.browser) {
+      if (process.client) {
         document.getElementById('preview-frame').contentWindow.location.reload();
       }
     }

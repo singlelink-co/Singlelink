@@ -2,6 +2,13 @@
   <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-scroll">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Profile settings</h1>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+      <div v-if="this.error"
+           class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm">
+        <img style="width: 12px;" src="/caution.svg">
+        <div class="flex flex-col ml-2">
+          {{ this.error }}
+        </div>
+      </div>
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Details</h2>
       <form class="flex flex-col">
         <div class="flex flex-row mb-3">
@@ -22,7 +29,7 @@
             <div class="flex flex-row rounded border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
                 class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0">singlelink.co/u/</span>
-              <input class="p-2 flex-grow" id="handle" type="text" placeholder="e.g. janedoe"
+              <input class="p-2 flex-grow" id="handle" type="text" placeholder="e.g. janedoe" autocomplete="off"
                      v-model="user.activeProfile.handle"/>
             </div>
           </div>
@@ -96,9 +103,12 @@
 </template>
 
 <script>
+import {StatusCodes} from "http-status-codes";
+
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
+
   data() {
     return {
       infoModal: false,
@@ -115,7 +125,9 @@ export default {
           customDomain: '',
           visibility: ''
         }
-      }
+      },
+
+      error: null
     };
   },
 
@@ -125,32 +137,44 @@ export default {
 
   methods: {
     refreshPreview() {
-      if (process.browser) {
-        document.getElementById('preview-frame').window.location.reload();
+      if (process.client) {
+        document.getElementById('preview-frame').contentWindow.location.reload();
       }
     },
 
-    saveChanges() {
-      this.$axios.$post('/profile/update', {
-        token: this.$store.getters['auth/getToken'],
-        imageUrl: this.user.activeProfile.imageUrl || null,
-        headline: this.user.activeProfile.headline || null,
-        subtitle: this.user.activeProfile.subtitle || null,
-        handle: this.user.activeProfile.handle || null,
-        visibility: this.user.activeProfile.visibility || null,
-        customDomain: this.user.activeProfile.customDomain || null
-      })
-        .then((response) => {
-          if (process.browser) {
-            if (this.user.activeProfile.handle !== this.originalHandle) return location.reload();
-          }
-
-          this.refreshPreview();
-        })
-        .catch((error) => {
-          console.log('Error saving changes');
-          console.log(error);
+    async saveChanges() {
+      try {
+        await this.$axios.$post('/profile/update', {
+          token: this.$store.getters['auth/getToken'],
+          imageUrl: this.user.activeProfile.imageUrl || null,
+          headline: this.user.activeProfile.headline || null,
+          subtitle: this.user.activeProfile.subtitle || null,
+          handle: this.user.activeProfile.handle || null,
+          visibility: this.user.activeProfile.visibility || null,
+          customDomain: this.user.activeProfile.customDomain || null
         });
+
+        if (process.client) {
+          if (this.user.activeProfile.handle !== this.originalHandle) {
+            location.reload();
+            return;
+          }
+        }
+
+        this.refreshPreview();
+      } catch (err) {
+
+        if (err.response) {
+          if (err.response.status === StatusCodes.CONFLICT) {
+            console.error("This handle is already being used by another profile.");
+            this.error = "This handle is already being used by another profile.";
+
+            return;
+          }
+        }
+
+        throw err;
+      }
     },
 
     openInfoModal() {

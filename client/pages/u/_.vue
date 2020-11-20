@@ -109,7 +109,7 @@ export default {
     },
 
     rejectAgeVerification() {
-      if (process.browser) {
+      if (process.client) {
         return window.location.href = "https://singlelink.co";
       }
     },

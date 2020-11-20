@@ -20,7 +20,7 @@ export default function (context) {
           console.log(error);
           //context.store.commit('auth/login', singlelink_token);
           context.store.commit('auth/login', null);
-          return location.replace('/');
+          location.replace('/');
           // verify token
         });
       // context.store.commit('user/set_user', response)
@@ -29,6 +29,6 @@ export default function (context) {
       // verify token
     }
   } else {
-    return context.redirect('/');
+     context.redirect('/');
   }
 }

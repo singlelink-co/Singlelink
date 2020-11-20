@@ -2,7 +2,7 @@ import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 
 interface AnalyticsProfileData {
   totalProfileViews: number,
@@ -56,7 +56,7 @@ export class AnalyticsService extends DatabaseService {
     let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The link could not be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link could not be found.");
     }
 
     if (updateAnalytics) {
@@ -81,13 +81,13 @@ export class AnalyticsService extends DatabaseService {
       ]);
 
     if (profileViewQuery.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The profile views could not be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile views could not be found.");
     }
 
     let linksQuery = await this.pool.query<DbLink>("select * from app.links where profile_id=$1", [profileId]);
 
     if (linksQuery.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The links could not be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The links could not be found.");
     }
 
     let linkVisits: { link: Link, views: number }[] = [];

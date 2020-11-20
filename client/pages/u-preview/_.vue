@@ -90,12 +90,11 @@ export default {
       });
 
       this.profile = response.profile;
-      this.links = response.links.sort(function (a, b) {
+      this.links = response.links?.sort(function (a, b) {
         return a.sortOrder - b.sortOrder;
       });
       this.user = response.user;
       this.theme = response.theme || null;
-
     } catch (err) {
       console.log('Error getting profile');
       console.log(err);

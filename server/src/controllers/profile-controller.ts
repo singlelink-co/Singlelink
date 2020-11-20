@@ -2,7 +2,7 @@ import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} 
 import {DatabaseManager} from "../data/database-manager";
 import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {ProfileService} from "../services/profile-service";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {ReplyUtils} from "../utils/reply-utils";
 import {LinkService} from "../services/link-service";
 import {UserService} from "../services/user-service";
@@ -96,7 +96,7 @@ export class ProfileController extends Controller {
       let params = request.params;
 
       if (!params.handle) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
         return;
       }
 
@@ -150,13 +150,13 @@ export class ProfileController extends Controller {
       let params = request.params;
 
       if (!params.handle) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No handle was provided."));
         return;
       }
 
       let thumbnail = await this.profileService.getThumbnailByHandle(params.handle);
 
-      reply.code(HttpStatus.HTTP_STATUS_OK).headers({
+      reply.code(StatusCodes.OK).headers({
         "Content-Type": "image/png",
         "Content-Length": thumbnail.data.byteLength
       });
@@ -183,7 +183,7 @@ export class ProfileController extends Controller {
   async GetProfilePreview(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -231,7 +231,7 @@ export class ProfileController extends Controller {
   async ListProfiles(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -255,7 +255,7 @@ export class ProfileController extends Controller {
   async ListProfileLinks(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -280,7 +280,7 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      return await this.profileService.createProfile(body.handle, body.user.id, body.imageUrl, body.headline, body.subtitle);
+      return await this.profileService.createProfile(body.user.id, body.handle, body.imageUrl, body.headline, body.subtitle);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -302,7 +302,7 @@ export class ProfileController extends Controller {
       let body = request.body;
 
       if (!body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -336,7 +336,7 @@ export class ProfileController extends Controller {
   async DestroyProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -360,7 +360,7 @@ export class ProfileController extends Controller {
   async GetActiveProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
@@ -386,7 +386,7 @@ export class ProfileController extends Controller {
       let body = request.body;
 
       if (!body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 

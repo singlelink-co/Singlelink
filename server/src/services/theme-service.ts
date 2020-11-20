@@ -1,7 +1,7 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {HttpError} from "../utils/http-error";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {QueryResult} from "pg";
 import {DbTypeConverter} from "../utils/db-type-converter";
 
@@ -23,7 +23,7 @@ export class ThemeService extends DatabaseService {
     let queryResult = await this.pool.query<DbTheme>("select * from app.themes where id=$1", [themeId]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "The theme couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The theme couldn't be found.");
     }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
@@ -45,7 +45,7 @@ export class ThemeService extends DatabaseService {
     }
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_NOT_FOUND, "No themes were found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "No themes were found.");
     }
 
     return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
@@ -77,7 +77,7 @@ export class ThemeService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(HttpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR, "Failed to add a new theme because of an internal server error.");
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to add a new theme because of an internal server error.");
     }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);

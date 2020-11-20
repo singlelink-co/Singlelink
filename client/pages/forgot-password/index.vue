@@ -43,8 +43,12 @@
 
 <script>
 
+import {StatusCodes} from "http-status-codes";
+
 export default {
   name: 'ForgotPassword',
+  middleware: 'unauthenticated',
+
   data: () => {
     return {
       email: '',
@@ -53,7 +57,7 @@ export default {
       message: null,
     };
   },
-  middleware: 'unauthenticated',
+
   methods: {
     async requestReset() {
       try {
@@ -65,13 +69,24 @@ export default {
           this.message = 'Password reset sent, check your inbox.';
         }
       } catch (err) {
+        console.error(err);
+
         this.message = null;
-        console.log('Error!');
-        console.log(err);
-        this.error = err;
+        this.error = err.toString();
+
+        if (err.response) {
+          if (err.response.status === StatusCodes.NOT_FOUND) {
+            this.error = "The email couldn't be found, please make sure it's correct.";
+          }
+
+          return;
+        }
+
+        throw err;
       }
     },
-    clearErrors: () => {
+
+    clearErrors() {
       this.error = null;
     }
   }

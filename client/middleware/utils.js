@@ -18,17 +18,8 @@ export default class Cookies {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
       }
+
       document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    } else {
-      // This throws errors, is it needed?
-      /*console.log('Set ignore me');
-      if(context && context.app.$cookies) {
-        if(!days) return context.app.$cookies.set(name, value);
-        return context.app.$cookies.set(name, value, {
-          maxAge: days * 24 * 60 * 60
-        });
-      }*/
     }
   }
-
 };

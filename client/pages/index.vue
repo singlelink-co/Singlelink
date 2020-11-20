@@ -71,35 +71,41 @@ export default {
   middleware: 'unauthenticated',
 
   methods: {
-    attemptLogin() {
+    async attemptLogin() {
       this.$nuxt.$loading.start();
+
       if (!this.email) {
         this.error = 'Email address is required to login.';
-        return this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
+        return;
       }
+
       if (!this.password) {
         this.error = 'Password is required to login.';
-        return this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
+        return;
       }
-      this.$axios.post('/user/login', {
-        email: this.email,
-        password: this.password
-      })
-        .then((response) => {
-          Cookies.setCookie('singlelink_token', response.data.token, 7, this);
-          this.$store.commit('auth/login', response.data.token);
-          this.$nuxt.$loading.finish();
-          return this.$router.push('/dashboard');
-        })
-        .catch((err) => {
-          console.log('Login failed');
-          console.log(this.error);
-          this.error = 'Your email or password is incorrect!';
-          return this.$nuxt.$loading.finish();
+
+      try {
+        let response = await this.$axios.post('/user/login', {
+          email: this.email,
+          password: this.password
         });
+
+        Cookies.setCookie('singlelink_token', response.data.token, 7, this);
+        this.$store.commit('auth/login', response.data.token);
+        this.$nuxt.$loading.finish();
+        await this.$router.push('/dashboard');
+      } catch (err) {
+        console.log('Login failed');
+        console.log(err);
+
+        this.error = 'Your email or password is incorrect!';
+        await this.$nuxt.$loading.finish();
+      }
     },
 
-    clearErrors: () => {
+    clearErrors() {
       this.error = null;
     }
   }

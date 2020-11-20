@@ -3,7 +3,7 @@ import {DatabaseManager} from "../data/database-manager";
 import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {LinkService} from "../services/link-service";
 import {ReplyUtils} from "../utils/reply-utils";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 
@@ -78,17 +78,17 @@ export class LinkController extends Controller {
       let profile = request.body.profile;
 
       if (!profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
       if (!body.label) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
         return;
       }
 
       if (!body.url) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
         return;
       }
 
@@ -127,7 +127,7 @@ export class LinkController extends Controller {
       let body = request.body;
 
       if (!body.id) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
         return;
       }
 
@@ -164,7 +164,7 @@ export class LinkController extends Controller {
       let body = request.body;
 
       if (!body.id) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
         return;
       }
 
@@ -192,17 +192,17 @@ export class LinkController extends Controller {
       let body = request.body;
 
       if (!body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
       if (body.oldIndex !== 0 && !body.oldIndex) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
         return;
       }
 
       if (body.newIndex !== 0 && !body.newIndex) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
         return;
       }
 

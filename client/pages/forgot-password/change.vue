@@ -49,6 +49,8 @@
 
 export default {
   name: 'ForgotPassword',
+  middleware: 'unauthenticated',
+
   data: () => {
     return {
       password: '',
@@ -57,13 +59,13 @@ export default {
       message: null,
     };
   },
-  middleware: 'unauthenticated',
+
   mounted() {
-    if (process.browser) {
-      if (!this.$route.query['token'])
-        return window.location.replace('/forgot-password');
+    if (!this.$route.query['token']) {
+      window.location.replace('/forgot-password');
     }
   },
+
   methods: {
     async resetPassword() {
       if (!this.password) return this.error = 'A password is required.';
@@ -77,8 +79,8 @@ export default {
         if (request.status && request.status === 200) {
           this.message = 'Password reset successful, redirecting.';
           setTimeout(function () {
-            if (process.browser) {
-              return window.location.replace('/');
+            if (process.client) {
+              window.location.replace('/');
             }
           }, 250);
         }
@@ -89,7 +91,8 @@ export default {
         this.error = err;
       }
     },
-    clearErrors: () => {
+
+    clearErrors() {
       this.error = null;
     }
   }

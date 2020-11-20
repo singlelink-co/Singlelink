@@ -52,8 +52,11 @@
 
 <script>
 import Cookies from "~/middleware/utils";
+import {StatusCodes} from "http-status-codes";
 
 export default {
+  middleware: 'unauthenticated',
+
   data() {
     return {
       email: '',
@@ -65,55 +68,61 @@ export default {
 
   computed: {
     origin() {
-      if (process.browser) {
+      if (process.client) {
         return window.location.origin.replace('https://', '').replace('http://', '');
       }
     }
   },
 
-  middleware: 'unauthenticated',
-
   methods: {
-    attemptRegister() {
+    async attemptRegister() {
       this.$nuxt.$loading.start();
       if (!this.email) {
         this.error = 'Email address is required to register.';
-        return this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
+        return;
       }
       if (!this.email) {
         this.error = 'A unique handle is required to register.';
-        return this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
+        return;
       }
       if (!this.password) {
         this.error = 'A password is required to register.';
-        return this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
+        return;
       }
-      this.$axios.post('/user/create', {
-        email: this.email,
-        handle: this.handle,
-        password: this.password,
-      })
-        .then((response) => {
-          Cookies.setCookie('singlelink_token', response.data.token, 7, this);
-          this.$store.commit('auth/login', response.data.token);
-          this.$nuxt.$loading.finish();
-          return this.$router.push('/dashboard');
-        })
-        .catch((err) => {
-          console.log('Creating account failed');
 
-          if (err.errorCode === 400) {
-            this.error = 'Failed to create account, email or handle already in use. Try again with a different email address.';
+      try {
+        let response = await this.$axios.post('/user/create', {
+          email: this.email,
+          handle: this.handle,
+          password: this.password,
+        });
+
+        Cookies.setCookie('singlelink_token', response.data.token, 7, this);
+        this.$store.commit('auth/login', response.data.token);
+        this.$nuxt.$loading.finish();
+
+        await this.$router.push('/dashboard');
+      } catch (err) {
+        if (err.response) {
+          if (err.response.status === StatusCodes.CONFLICT) {
+            this.error = 'Email or handle already in use. Try again with a different email address or handle.';
           } else {
             this.error = 'The server was unable to create your account. Please try again later.';
           }
 
-          console.log(this.error);
-          return this.$nuxt.$loading.finish();
-        });
+          console.error(this.error);
+        } else {
+          throw err;
+        }
+
+        this.$nuxt.$loading.finish();
+      }
     },
 
-    clearErrors: () => {
+    clearErrors() {
       this.error = null;
     }
   }

@@ -1,7 +1,7 @@
 import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
-import {constants as HttpStatus} from "http2";
+import {StatusCodes} from "http-status-codes";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
@@ -79,7 +79,7 @@ export class AnalyticsController extends Controller {
       let id = params.id;
 
       if (!id) {
-        reply.code(HttpStatus.HTTP_STATUS_NOT_FOUND);
+        reply.code(StatusCodes.NOT_FOUND);
         return ReplyUtils.error("The link was not found.");
       }
 
@@ -115,7 +115,7 @@ export class AnalyticsController extends Controller {
   async GetProfileAnalytics(request: FastifyRequest<GetProfileAnalyticsRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
-        reply.status(HttpStatus.HTTP_STATUS_BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
