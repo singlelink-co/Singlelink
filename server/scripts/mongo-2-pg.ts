@@ -130,12 +130,14 @@ class Converter {
       for (let user of mongoAccounts) {
         let func = async () => {
           try {
+            let email = user.email.toLowerCase();
+
             let queryResult = await this.pool.query(
               'insert into app.users (full_name, email, email_hash, pass_hash, active_profile_id, created_on) values ($1, $2, $3, $4, $5, $6) on conflict do nothing returning *;',
               [
                 user.name,
-                user.email,
-                crypto.createHash("md5").update(user.email).digest("hex"),
+                email,
+                crypto.createHash("md5").update(email).digest("hex"),
                 user.password,
                 null,
                 user._id.getTimestamp()
@@ -143,7 +145,7 @@ class Converter {
             );
 
             if (queryResult.rowCount <= 0) {
-              queryResult.rows[0] = (await this.pool.query("select * from app.users where email=$1", [user.email])).rows[0];
+              queryResult.rows[0] = (await this.pool.query("select * from app.users where email=$1", [email])).rows[0];
             } else {
               addedAccounts++;
             }

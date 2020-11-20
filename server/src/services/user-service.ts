@@ -8,6 +8,7 @@ import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
+import crypto from "crypto";
 
 interface LoginResultData {
   user: {
@@ -240,9 +241,13 @@ export class UserService extends DatabaseService {
   async createUser(email: string, password: string, name?: string): Promise<SensitiveUser> {
     let passHash = await bcrypt.hash(password, 10);
 
-    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, pass_hash, full_name) values ($1, $2, $3) on conflict do nothing returning (id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on)",
+    // Force lowercase
+    email = email.toLowerCase();
+
+    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, email_hash, pass_hash, full_name) values ($1, $2, $3, $4) on conflict do nothing returning (id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on)",
       [
         email,
+        crypto.createHash("md5").update(email).digest("hex"),
         passHash,
         name
       ]);
