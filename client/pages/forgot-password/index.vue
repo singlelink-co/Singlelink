@@ -18,11 +18,11 @@
           {{ this.message }}
         </div>
       </div>
-      <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col">
+      <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col" @submit.prevent>
         <div class="flex flex-col mb-4">
           <label class="font-medium text-sm">Email Address</label>
           <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" type="email"
-                 placeholder="e.g. jane@gmail.com" v-model="email"/>
+                 placeholder="e.g. jane@gmail.com" v-model="email" @keyup.enter="requestReset"/>
         </div>
         <button type="button" @click="requestReset"
                 class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">
@@ -44,9 +44,11 @@
 <script>
 
 import {StatusCodes} from "http-status-codes";
+import Index from "@/pages/dashboard/index";
 
 export default {
   name: 'ForgotPassword',
+  components: {Index},
   middleware: 'unauthenticated',
 
   data: () => {
@@ -66,7 +68,7 @@ export default {
         });
         if (request.status && request.status === 200) {
           this.error = null;
-          this.message = 'Password reset sent, check your inbox.';
+          this.message = 'Password reset has been sent, check your inbox.';
         }
       } catch (err) {
         console.error(err);
@@ -77,6 +79,10 @@ export default {
         if (err.response) {
           if (err.response.status === StatusCodes.NOT_FOUND) {
             this.error = "The email couldn't be found, please make sure it's correct.";
+          }
+
+          if (err.response.status === StatusCodes.TOO_MANY_REQUESTS) {
+            this.error = `Whoa, slow down! Error: ${err.response.data.message}`;
           }
 
           return;

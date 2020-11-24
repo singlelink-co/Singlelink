@@ -50,6 +50,15 @@ interface SetActiveProfileRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+const userRequestResetPasswordOpts = {
+  config: {
+    rateLimit: {
+      max: 3,
+      timeWindow: '4 hours'
+    }
+  }
+};
+
 /**
  * This controller maps and provides for all the controllers under /user.
  */
@@ -68,7 +77,7 @@ export class UserController extends Controller {
     // Unauthenticated
     this.fastify.all<LoginUserRequest>('/user/login', this.LoginUser.bind(this));
     this.fastify.all<CreateUserRequest>('/user/create', this.CreateUser.bind(this));
-    this.fastify.all<UserRequestResetPasswordRequest>('/user/request-reset-password', this.UserRequestResetPassword.bind(this));
+    this.fastify.all<UserRequestResetPasswordRequest>('/user/request-reset-password', userRequestResetPasswordOpts, this.UserRequestResetPassword.bind(this));
     this.fastify.all<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
 
     // Authenticated
