@@ -1,6 +1,6 @@
 {
   "name": "singlelink-client",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -24,6 +24,7 @@
     "@nuxtjs/eslint-module": "^3.0.1",
     "@nuxtjs/tailwindcss": "^3.2.0",
     "babel-eslint": "^10.1.0",
+    "auto-changelog": "^2.2.1",
     "eslint": "^7.13.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-webpack-plugin": "^2.3.0",

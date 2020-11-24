@@ -1,6 +1,6 @@
 {
   "name": "singlelink",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A single link for everything.",
   "main": "dist/App.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "node dist/App.js",
     "build": "tsc && npm run copy",
     "dev": "ts-node src/App.ts",
-    "version": "auto-changelog --output ../CHANGELOG.md && git add ../CHANGELOG.md",
+    "preversion": "auto-changelog --output ../CHANGELOG.md && git add ../CHANGELOG.md && cd ../client && npm version patch && cd ../proxy && npm version patch",
     "test": "jest",
     "test-debug": "jest --runInBand --detectOpenHandles",
     "convert-database": "ts-node scripts/mongo-2-pg.ts"
