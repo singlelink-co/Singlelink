@@ -1,5 +1,5 @@
 import {Controller} from "./controller";
-import {FastifyInstance} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {InfoService} from "../services/info-service";
 
@@ -17,6 +17,23 @@ export class InfoController extends Controller {
   }
 
   registerRoutes(): void {
+    this.fastify.all('/info/version', this.GetVersion.bind(this));
+  }
 
+  /**
+   * Route for /info/version
+   *
+   * Used to get the server's version.
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async GetVersion(request: FastifyRequest, reply: FastifyReply) {
+    let data = this.infoService.getVersion();
+
+    return {
+      version: data
+    };
   }
 }

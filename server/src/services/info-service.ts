@@ -1,9 +1,17 @@
 import {DatabaseService} from "./database-service";
 import {DatabaseManager} from "../data/database-manager";
 
-// TODO Implement server info service
+const packageJson = require('../../package.json');
+
 export class InfoService extends DatabaseService {
   constructor(databaseManager: DatabaseManager) {
     super(databaseManager);
+  }
+
+  /**
+   * Returns the version number of this server.
+   */
+  getVersion(): number {
+    return packageJson.version;
   }
 }

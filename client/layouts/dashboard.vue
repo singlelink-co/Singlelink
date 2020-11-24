@@ -51,6 +51,9 @@
         </n-link>
       </div>
       <Nuxt/>
+      <div class="p-4 text-md">
+        {{ this.version }} <a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md" class="bg-blue-100">[Changelog]</a>
+      </div>
     </section>
     <section
       class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100">
@@ -117,14 +120,15 @@ html {
 export default {
   data() {
     return {
-      active: 'dashboard',
+      active: "dashboard",
       user: {
         emailHash: null
       },
       profiles: [],
       profileSelect: false,
-      profileUrl: '',
-      previewUrl: ''
+      profileUrl: "",
+      previewUrl: "",
+      version: "Version loading..."
     };
   },
 
@@ -145,6 +149,13 @@ export default {
     } catch (err) {
       console.log(err);
       this.previewUrl = 'https://singlelink.co/';
+    }
+
+    try {
+      let response = await this.$axios.post("/info/version");
+      this.version = "Version v" + response.data.version;
+    } catch (err) {
+      console.warn("Failed to retrieve version from server.");
     }
   },
 

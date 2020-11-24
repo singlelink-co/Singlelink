@@ -8,7 +8,7 @@
     "start": "node dist/App.js",
     "build": "tsc && npm run copy",
     "dev": "ts-node src/App.ts",
-    "version": "auto-changelog && git add CHANGELOG.md",
+    "version": "auto-changelog --output ../CHANGELOG.md && git add ../CHANGELOG.md",
     "test": "jest",
     "test-debug": "jest --runInBand --detectOpenHandles",
     "convert-database": "ts-node scripts/mongo-2-pg.ts"
