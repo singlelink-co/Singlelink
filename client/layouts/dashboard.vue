@@ -52,7 +52,10 @@
       </div>
       <Nuxt/>
       <div class="p-4 text-md">
-        {{ this.version }} <a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md" class="bg-blue-100">[Changelog]</a>
+        <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
+        {{ this.version }}
+        [<a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
+            class="text-indigo-700 bg-blue-100">Changelog</a>]
       </div>
     </section>
     <section
