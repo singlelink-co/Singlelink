@@ -1,12 +1,12 @@
 <template>
   <div class="w-screen min-h-screen flex flex-col">
-    <!--<a href="https://neutroncreative.com/">-->
-    <a href="/blog/outage-report-10-29-20">
+    <a href="https://neutroncreative.com/">
+	<!--<a href="/blog/outage-report-10-29-20">-->
       <div class="flex flex-row w-full bg-black items-center justify-center p-3">
         <div class="w-full max-w-6xl flex-row flex items-center justify-center">
-          <!--<img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>-->
-          <!--<span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white ml-2">Read more 👉</span></span>-->
-          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span>
+          <img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
+          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white ml-2">Read more 👉</span></span>
+		  <!-- <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span> -->
         </div>
       </div>
     </a>
@@ -62,9 +62,9 @@
     </nav>
     <Nuxt class="bg-gray-100 flex flex-grow w-full h-auto justify-start flex-col" />
     <footer class="bg-gray-100 border border-gray-200 border-l-0 border-r-0 border-b-0 p-10">
-      <a href="https://beta-app.singlelink.co/create-account" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
+      <!--<a href="https://beta-app.singlelink.co/create-account" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
         <span class="p-2 mr-2 hover:text-gray-800 cursor-pointer flex-row items-center justify-center">Get access to Singlelink beta!<span class="ml-2">🤫</span></span>
-      </a>
+	  </a>-->
       <ul class="w-full flex flex-col md:flex-row text-gray-600 text-sm items-center justify-center">
         <n-link to="/">
           <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Overview</li>
@@ -87,9 +87,12 @@
         <a href="https://github.com/Neutron-Creative">
           <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Github</li>
         </a>
-        <a href="https:/status.singlelink.co">
+        <a href="https://status.singlelink.co">
           <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Status</li>
         </a>
+		<a href="https://singlel.ink/analytics">
+			<li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Realtime Statistics</li>
+		</a>
       </ul>
       <div class="text-gray-600 text-sm text-center p-3 leading-relaxed">
         Built as part of our mission to make the world open-source by the team at <a class="text-indigo-600 hover:underline cursor-pointer" href="https://neutroncreative.com">Neutron Creative Inc.</a>

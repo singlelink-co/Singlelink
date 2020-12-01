@@ -5,7 +5,7 @@
         <section class="w-full flex items-center bg-gray-100">
           <div data-aos="fade-up" data-aos-duration="1000" class="w-full mx-auto max-w-6xl text-center p-0 md:p-0 items-center flex flex-col md:flex-col">
             <a href="https://beta-app.singlelink.co">
-              <h3 class="md:text-lg text-indigo-600 font-medium uppercase tracking-wider">🎉 Version 2 public beta out now! 🎉</h3>
+              <h3 class="md:text-lg text-indigo-600 font-medium uppercase tracking-wider">🎉 Version 2 is out now! 🎉</h3>
             </a>
             <h1 class="text-4xl md:text-6xl font-bold leading-tight my-4">A single link for everything</h1>
             <p class="leading-relaxed text-gray-600 text-2xl mb-8">Singlelink is the free & improved link builder for social media built for the community, by the community. Build your profile in seconds and get online today!</p>
