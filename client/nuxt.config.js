@@ -4,11 +4,13 @@ export default {
   ** See https://nuxtjs.org/api/configuration-mode
   */
   ssr: true,
+
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
   target: 'server',
+
   /*
   ** Hosting 404 Hotfix
   ** See https://ko.nuxtjs.org/faq/netlify-deployment/
@@ -16,12 +18,14 @@ export default {
   generate: {
     fallback: true
   },
+
   loading: {
     color: '#4C51BF',
     height: '3px'
   },
+
   server: {
-    port: 3001 // default: 3000
+    port: 3000 // default: 3000
   },
   /*
   ** Headers of the page
@@ -78,7 +82,7 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    '@nuxt/typescript-build',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss'
   ],
@@ -89,7 +93,14 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
+    '@aceforth/nuxt-optimized-images',
+    '@nuxtjs/sitemap'
   ],
+
+  optimizedImages: {
+    optimizeImages: true
+  },
+
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
@@ -103,8 +114,10 @@ export default {
   */
   build: {
     extend(config, ctx) {
+      const vue = ctx.loaders.vue;
+
       // Added Line
       config.devtool = ctx.isClient ? 'eval-source-map' : 'inline-source-map';
     }
-  }
+  },
 };

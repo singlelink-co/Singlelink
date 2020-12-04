@@ -28,7 +28,9 @@
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom HTML</h2>
       <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
                 placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-                v-model="customHtml"></textarea>
+                v-model="customHtml"
+                aria-label="Custom HTML"
+      ></textarea>
       <button @click="saveChanges" type="button"
               class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">
         Save changes
@@ -37,13 +39,13 @@
     <div class="flex flex-col p-6 bg-white shadow rounded w-full">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom CSS</h2>
       <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
-                placeholder="e.g. a { color: rgba(0,0,0,.8); }" v-model="customCss"></textarea>
+                placeholder="e.g. a { color: rgba(0,0,0,.8); }" v-model="customCss" aria-label="Custom CSS"></textarea>
       <button @click="saveChanges" type="button"
               class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">
         Save changes
       </button>
     </div>
-    <div v-if="modal" @click="closeModal"
+    <div v-if="modalActive" @click="closeModal"
          class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
          style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
       <div v-on:click.stop class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl">
@@ -120,54 +122,22 @@
   </section>
 </template>
 
-<style lang="sass" scoped>
-.nc-theme
-  display: flex
-  justify-content: center
-  align-items: center
-  width: 80px
-  height: 80px
-  margin-right: 10px
+<script lang="ts">
+import Vue from "vue";
 
-  cursor: pointer
-
-  &.active
-    box-shadow: inset 0 0 2px 2px #5353EC
-
-  .nc-inner
-    width: 40px
-    height: 40px
-    border-radius: 40px
-    display: flex
-    flex-direction: column
-    overflow: hidden
-
-    .nc-bottom-inner
-      width: 100%
-      height: 15px
-      margin-top: auto
-
-  &:hover
-    transform: scale(1.02)
-
-  &:active
-    transform: scale(1)
-
-</style>
-
-<script>
-export default {
+export default Vue.extend({
+  name: 'dashboard-appearance',
   layout: 'dashboard',
   middleware: 'authenticated',
 
   data() {
     return {
-      error: null,
-      themes: [],
-      activeTheme: null,
+      error: '',
+      themes: new Array<any>(),
+      activeTheme: '',
       customCss: '',
       customHtml: '',
-      modal: false,
+      modalActive: false,
       modalIntent: 'save',
       pendingTheme: {
         label: '',
@@ -191,65 +161,68 @@ export default {
   },
 
   methods: {
-    selectTheme(theme) {
-      if (!theme) theme = {id: null};
-      this.$axios.$post('/profile/activate-theme', {
-        token: this.$store.getters['auth/getToken'],
-        theme: theme.id,
-      })
-        .then((response) => {
-          this.activeTheme = response.theme;
-          this.refreshPreview();
-        })
-        .catch((error) => {
-          console.log('Failed to activate theme');
-          console.log(error);
+    async selectTheme(theme: any) {
+      if (!theme)
+        theme = {id: null};
+
+      try {
+        let response = await this.$axios.$post('/profile/activate-theme', {
+          token: this.$store.getters['auth/getToken'],
+          theme: theme.id,
         });
+
+        this.activeTheme = response.theme;
+        this.refreshPreview();
+
+      } catch (error) {
+        console.log('Failed to activate theme');
+        console.log(error);
+      }
     },
 
-    loadThemes() {
-      this.$axios.$post('/theme', {
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.themes = response;
-
-        })
-        .catch((error) => {
-          console.log('Failed to get themes');
-          console.log(error);
-        });
+    async loadThemes() {
+      try {
+        // Grab themes from response
+        this.themes = (await this.$axios.$post('/theme', {
+          token: this.$store.getters['auth/getToken']
+        }));
+      } catch (error) {
+        console.log('Failed to get themes');
+        console.log(error);
+      }
     },
 
-    saveTheme(close) {
-      this.$axios.$post('/theme/create', {
-        token: this.$store.getters['auth/getToken'],
-        label: this.pendingTheme.label,
-        colors: {
-          fill: {
-            primary: this.pendingTheme.colors.fill.primary || 'rgba(255,255,255,1)',
-            secondary: this.pendingTheme.colors.fill.secondary || 'rgba(255,255,255,.85)'
-          },
-          text: {
-            primary: this.pendingTheme.colors.text.primary || 'rgba(0,0,0,1)',
-            secondary: this.pendingTheme.colors.text.secondary || 'rgba(0,0,0,.85)'
+    async saveTheme(close: any) {
+      try {
+        let response = await this.$axios.$post('/theme/create', {
+          token: this.$store.getters['auth/getToken'],
+          label: this.pendingTheme.label,
+          colors: {
+            fill: {
+              primary: this.pendingTheme.colors.fill.primary || 'rgba(255,255,255,1)',
+              secondary: this.pendingTheme.colors.fill.secondary || 'rgba(255,255,255,.85)'
+            },
+            text: {
+              primary: this.pendingTheme.colors.text.primary || 'rgba(0,0,0,1)',
+              secondary: this.pendingTheme.colors.text.secondary || 'rgba(0,0,0,.85)'
+            }
           }
-        }
-      })
-        .then((response) => {
-          this.themes.push(response);
-          if (close) return this.closeModal();
-          this.setPending(null);
-          this.refreshPreview();
-        })
-        .catch((error) => {
-          this.error = 'Failed to create theme';
-          console.log('Failed to create theme');
-          this.error = error;
         });
+
+        this.themes.push(response);
+
+        if (close) return this.closeModal();
+        this.setPending(null);
+        this.refreshPreview();
+
+      } catch (error) {
+        this.error = 'Failed to create theme';
+        console.log('Failed to create theme');
+        this.error = error;
+      }
     },
 
-    setPending(theme) {
+    setPending(theme: any) {
       if (theme === null) return this.pendingTheme = {
         label: '',
         colors: {
@@ -268,21 +241,24 @@ export default {
 
     openModal() {
       this.setPending(null);
-      return this.modal = true;
+      return this.modalActive = true;
     },
 
     closeModal() {
       this.setPending(null);
-      return this.modal = false;
+      return this.modalActive = false;
     },
 
     refreshPreview() {
       if (process.client) {
-        document.getElementById('preview-frame').contentWindow.location.reload();
+        let iframe = <HTMLIFrameElement>document.getElementById('preview-frame');
+
+        if (iframe.contentWindow)
+          iframe.contentWindow.location.reload();
       }
     },
 
-    getUserData: async function () {
+    async getUserData() {
       try {
         let token = this.$store.getters['auth/getToken'];
 
@@ -314,5 +290,46 @@ export default {
       }
     }
   }
-};
+});
 </script>
+
+
+<style lang="scss" scoped>
+.nc-theme {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+  cursor: pointer;
+
+  &.active {
+    box-shadow: inset 0 0 2px 2px #5353EC;
+  }
+
+  .nc-inner {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .nc-bottom-inner {
+    width: 100%;
+    height: 15px;
+    margin-top: auto;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+}
+</style>

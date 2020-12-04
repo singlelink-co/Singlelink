@@ -17,7 +17,7 @@
         </div>
       </draggable>
     </div>
-    <div v-if="modal" @click="closeModal"
+    <div v-if="modalActive" @click="closeModal"
          class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
          style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
       <div v-on:click.stop class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl">
@@ -54,7 +54,7 @@
           </div>
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
-            <textarea lines="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css"
+            <textarea rows="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css"
                       placeholder="e.g. background: #5353EC;" v-model="pendingLink.customCss"></textarea>
           </div>
         </form>
@@ -85,26 +85,24 @@
   </section>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
 
   data() {
+    let pendingLink: Link | undefined;
+
     return {
-      links: [],
-      modal: false,
+      links: new Array<Link>(),
+      modalActive: false,
       modalIntent: 'create',
-      pendingLink: {
-        id: '',
-        label: '',
-        subtitle: '',
-        link: '',
-        customCss: '',
-      },
-      user: null,
-      error: null,
-      sortedLinks: []
+      pendingLink: pendingLink,
+      user: '',
+      error: '',
+      sortedLinks: new Array<Link>()
     };
   },
 
@@ -113,7 +111,7 @@ export default {
     await this.getLinks();
 
     try {
-      this.sortedLinks = this.links.sort(function (a, b) {
+      this.sortedLinks = this.links.sort(function (a: Link, b: Link) {
         return a.sortOrder - b.sortOrder;
       });
     } catch (err) {
@@ -145,18 +143,21 @@ export default {
       }
     },
 
-    openModal(intent) {
-      if (intent) this.modalIntent = intent;
-      this.modal = true;
+    openModal(intent: string) {
+      if (intent)
+        this.modalIntent = intent;
+
+      this.modalActive = true;
     },
 
     closeModal() {
       this.clearPending();
-      this.modal = false;
+      this.modalActive = false;
     },
 
     saveAndClose() {
-      this.addNewLink(true);
+      this.addNewLink();
+      this.closeModal();
     },
 
     saveAndContinue() {
@@ -166,7 +167,7 @@ export default {
     deleteLink() {
       this.$axios.$post('/link/destroy', {
         token: this.$store.getters['auth/getToken'],
-        id: this.pendingLink.id,
+        id: this.pendingLink?.id,
       })
         .then((response) => {
           this.links = response;
@@ -182,11 +183,11 @@ export default {
     saveLinkChanges() {
       this.$axios.$post('/link/update', {
         token: this.$store.getters['auth/getToken'],
-        id: this.pendingLink.id,
-        label: this.pendingLink.label,
-        subtitle: this.pendingLink.subtitle,
-        url: this.pendingLink.url,
-        customCss: this.pendingLink.customCss,
+        id: this.pendingLink?.id,
+        label: this.pendingLink?.label,
+        subtitle: this.pendingLink?.subtitle,
+        url: this.pendingLink?.url,
+        customCss: this.pendingLink?.customCss,
       })
         .then((response) => {
           this.links = response;
@@ -200,24 +201,27 @@ export default {
     },
 
     clearErrors() {
-      this.error = null;
+      this.error = '';
     },
 
-    addNewLink(close) {
-      if (!this.pendingLink.label) return this.error = 'Link label required';
-      if (!this.pendingLink.url) return this.error = 'Link URL required';
+    addNewLink(closeModal: boolean = false) {
+      if (!this.pendingLink?.label)
+        return this.error = 'Link label required';
+
+      if (!this.pendingLink?.url)
+        return this.error = 'Link URL required';
+
       this.$axios.post('/link/create', {
-        label: this.pendingLink.label,
-        subtitle: this.pendingLink.subtitle,
-        url: this.pendingLink.url,
-        customCss: this.pendingLink.customCss || '',
+        label: this.pendingLink?.label,
+        subtitle: this.pendingLink?.subtitle,
+        url: this.pendingLink?.url,
+        customCss: this.pendingLink?.customCss || '',
         token: this.$store.getters['auth/getToken']
       })
         .then((response) => {
           this.links.push(response.data);
           this.refreshPreview();
           this.clearPending();
-          if (close) this.closeModal();
         })
         .catch((error) => {
           console.log('Error adding new link to profile');
@@ -229,26 +233,31 @@ export default {
       this.clearErrors();
 
       this.pendingLink = {
+        id: '',
+        sortOrder: 0,
         label: '',
         subtitle: '',
         url: '',
-        customCss: ''
+        customCss: '',
       };
     },
 
-    editLink(link) {
+    editLink(link: Link) {
       this.clearPending();
+
       this.pendingLink = {
         id: link.id,
+        sortOrder: link.sortOrder,
         label: link.label,
-        subtitle: link.subtitle || null,
-        customCss: link.customCss || null,
+        subtitle: link.subtitle,
+        customCss: link.customCss,
         url: link.url,
       };
+
       this.openModal('edit');
     },
 
-    async updateLinkOrder(event) {
+    async updateLinkOrder(event: any) {
       try {
         let response = await this.$axios.$post('/link/reorder', {
           token: this.$store.getters['auth/getToken'],
@@ -268,9 +277,12 @@ export default {
 
     refreshPreview() {
       if (process.client) {
-        document.getElementById('preview-frame').contentWindow.location.reload();
+        let iframe = <HTMLIFrameElement>document.getElementById('preview-frame');
+
+        if (iframe.contentWindow)
+          iframe.contentWindow.location.reload();
       }
     }
   }
-};
+});
 </script>

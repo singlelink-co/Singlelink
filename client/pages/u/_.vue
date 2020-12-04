@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
-    <section v-if="profile.visibility==='published-18+' && ageVerification"
+    <section v-if="profile.visibility==='published-18+' && ageVerificationRequired"
              class="fixed top-0 left-0 right-0 z-10 flex flex-col items-center justify-center w-screen h-screen"
              style="box-shadow: rgba(0, 0, 0, .65) 0  0 10px 5px inset;">
       <div class="flex flex-col w-full h-full text-center items-center justify-center p-8"
@@ -33,6 +33,7 @@
         </div>
       </a>
       <div v-html="profile.customHtml"></div>
+
       <component is="style" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};
@@ -55,7 +56,9 @@
         color: {{ theme.colors.text.secondary }};
         }
       </component>
+
       <component is="style">{{ profile.customCss || null }}</component>
+
       <component is="style">
         .nc-avatar {
         width: 60px;
@@ -74,70 +77,89 @@
         transform: scale(1);
         }
       </component>
+
     </section>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Context} from "@nuxt/types";
+
+export default Vue.extend({
+  name: 'u-show-profile',
+
   data() {
     return {
       profile: {
-        customHtml: null,
-        customCss: null,
-        imageUrl: null,
-        headline: null,
-        subtitle: null,
-        visibility: null
+        customHtml: '',
+        customCss: '',
+        imageUrl: '',
+        headline: '',
+        subtitle: '',
+        visibility: ''
       },
       user: {
-        name: null,
-        emailHash: null,
-        avatarUrl: null
+        name: '',
+        emailHash: '',
+        avatarUrl: ''
       },
-      thumbnail: null,
-      theme: null,
-      links: null,
+      thumbnail: '',
+      theme: '',
+      links: '',
       failed: false,
-      ageVerification: true
+      ageVerificationRequired: true
     };
   },
 
-  methods: {
-    acceptAgeVerification() {
-      return this.ageVerification = false;
-    },
+  async asyncData(ctx: Context): Promise<object | void> {
+    try {
+      let url = '/profile/' + ctx.route.path.replace('/u/', '');
 
-    rejectAgeVerification() {
-      if (process.client) {
-        return window.location.href = "https://singlelink.co";
-      }
-    },
+      let response = await ctx.$axios.$post(url, {
+        token: ctx.store.getters['auth/getToken']
+      });
+
+      return {
+        profile: response.profile
+      };
+
+    } catch (err) {
+      console.log('Error getting profile');
+      console.log(err);
+
+      ctx.error({
+        statusCode: 404,
+        message: "Page not found"
+      });
+    }
   },
 
   head() {
+    let profile = <Profile>(<any>this).profile;
+
     return {
-      title: this.profile.headline || '',
+      title: profile.headline || '',
       meta: [
         {
           hid: 'title',
           name: 'title',
-          content: this.profile.headline || ''
+          content: profile.headline || ''
         },
         {
           hid: 'og:title',
           name: 'title',
-          content: this.profile.headline || ''
+          content: profile.headline || ''
         },
         {
           hid: 'description',
           name: 'description',
-          content: this.profile.subtitle || ''
+          content: profile.subtitle || ''
         },
         {
           hid: 'og:description',
           name: 'description',
-          content: this.profile.subtitle || ''
+          content: profile.subtitle || ''
         },
         {
           hid: 'og:image',
@@ -157,7 +179,7 @@ export default {
       });
 
       this.profile = response.profile;
-      this.links = response.links.sort(function (a, b) {
+      this.links = response.links.sort(function (a: any, b: any) {
         return a.sortOrder - b.sortOrder;
       });
       this.user = response.user;
@@ -168,24 +190,41 @@ export default {
       console.log(err);
     }
   },
-};
+
+  methods: {
+    acceptAgeVerification(): boolean {
+      return this.ageVerificationRequired = false;
+    },
+
+    rejectAgeVerification() {
+      if (process.client) {
+        return window.location.href = "https://singlelink.co";
+      }
+    },
+  },
+});
 </script>
 
-<style lang="sass" scoped>
-.nc-avatar
-  width: 60px
-  height: 60px
-  border-radius: 1000px
+<style lang="scss" scoped>
+.nc-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 1000px;
+}
 
-.nc-link
-  cursor: pointer
-  transition: .15s ease-in-out
-  overflow: hidden
+.nc-link {
+  cursor: pointer;
+  transition: .15s ease-in-out;
+  overflow: hidden;
 
-  &:hover
-    transform: scale(1.02)
+  &:hover {
+    transform: scale(1.02);
+  }
 
-  &:active
-    transform: scale(1)
+  &:active {
+    transform: scale(1);
+  }
+}
+
 
 </style>

@@ -1,17 +1,33 @@
 <template>
   <div class="flex flex-row w-screen h-screen">
-    <section class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
-             style="width: 70px; max-width: 70px;">
-      <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
+    <section
+      class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
+      style="width: 70px; max-width: 70px;"
+    >
+      <n-link to="/dashboard">
+        <img src="/icon.svg" style="width: 35px;"></n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
-        <img @click="toggleProfileSelect" v-if="user && profiles.length>=1" style="width: 100%; border-radius: 100px;"
-             :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
-        <ul v-if="profileSelect" class="absolute bottom-0 rounded shadow bg-white border border-gray-200"
-            style="left: 60px; width: 245px;">
-          <li v-for="profile in profiles" @click="selectProfile(profile.id)"
-              class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start">
-            <img class="mr-2 rounded-full" style="width: 100%;max-width: 35px;"
-                 :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
+        <img
+          v-if="user && profiles.length>=1"
+          style="width: 100%; border-radius: 100px;"
+          :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+          @click="toggleProfileSelect"
+        >
+        <ul
+          v-if="profileSelect"
+          class="absolute bottom-0 rounded shadow bg-white border border-gray-200"
+          style="left: 60px; width: 245px;"
+        >
+          <li
+            v-for="profile in profiles"
+            class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
+            @click="selectProfile(profile.id)"
+          >
+            <img
+              class="mr-2 rounded-full"
+              style="width: 100%;max-width: 35px;"
+              :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+            >
             <div class="flex flex-col">
               <span class="text-sm font-medium capitalize">{{ profile.handle }}</span>
               <span class="text-xs text-gray-700">{{ profile.headline }}</span>
@@ -19,9 +35,11 @@
           </li>
           <li class=" flex flex-row items-center justify-center">
             <div class="flex flex-row items-center justify-center w-full">
-              <span @click="createNewProfile"
-                    class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700">Create new</span>
-              <span @click="attemptLogout" class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</span>
+              <span
+                class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+                @click="createNewProfile"
+              >Create new</span>
+              <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
             </div>
           </li>
         </ul>
@@ -54,20 +72,26 @@
       <div class="p-4 text-md">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
         {{ this.version }}
-        [<a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
-            class="text-indigo-700 bg-blue-100">Changelog</a>]
+        [<a
+          href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
+          class="text-indigo-700 bg-blue-100"
+        >Changelog</a>]
       </div>
     </section>
     <section
-      class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100">
+      class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100"
+    >
       <div
         class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white"
-        style="height: 57px;">
-        <p class="font-medium mr-2 text-gray-800">Your Singlelink:</p>
+        style="height: 57px;"
+      >
+        <p class="font-medium mr-2 text-gray-800">
+          Your Singlelink:
+        </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline" :href="profileUrl">{{ profileUrl }}</a>
       </div>
       <div class="phone-display">
-        <iframe id="preview-frame" :src="previewUrl"></iframe>
+        <iframe id="preview-frame" :src="previewUrl"/>
       </div>
     </section>
   </div>
@@ -102,30 +126,40 @@ html {
 
 </style>
 
-<style lang="sass" scoped>
-.phone-display
-  display: flex
-  margin: 20px auto auto auto
-  border-radius: 50px
-  background: #000
-  padding: 14px
-  width: 280px
-  height: 606px
+<style lang="scss" scoped>
+.phone-display {
+  display: flex;
+  margin: 20px auto auto auto;
+  border-radius: 50px;
+  background: #000;
+  padding: 14px;
+  width: 280px;
+  height: 606px;
+}
 
-.phone-display > iframe
-  border: none
-  width: 100%
-  height: 100%
-  border-radius: 35px
+.phone-display > iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 35px;
+}
 </style>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: 'Dashboard',
+
   data() {
     return {
       active: "dashboard",
+      originalHandle: '',
       user: {
-        emailHash: null
+        emailHash: '',
+        activeProfile: {
+          handle: ''
+        }
       },
       profiles: [],
       profileSelect: false,
@@ -133,6 +167,12 @@ export default {
       previewUrl: "",
       version: "Version loading..."
     };
+  },
+
+  watch: {
+    $route() {
+      this.setActive();
+    }
   },
 
   async mounted() {
@@ -155,7 +195,7 @@ export default {
     }
 
     try {
-      let response = await this.$axios.post("/info/version");
+      const response = await this.$axios.post("/info/version");
       this.version = "Version v" + response.data.version;
     } catch (err) {
       console.warn("Failed to retrieve version from server.");
@@ -177,7 +217,7 @@ export default {
       location.reload();
     },
 
-    async selectProfile(profile) {
+    async selectProfile(profile: any) {
       this.user.activeProfile = await this.$axios.$post('/user/set-active-profile', {
         token: this.$store.getters['auth/getToken'],
         newProfileId: profile
@@ -196,8 +236,8 @@ export default {
       });
     },
 
-    getActiveStyles(page) {
-      if (page === this.active) return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600";
+    getActiveStyles(page: any) {
+      if (page === this.active) { return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600"; }
       return "hover:bg-indigo-100 hover:text-indigo-600 text-gray-700 nc-item-link";
     },
 
@@ -227,33 +267,26 @@ export default {
 
     async getUserData() {
       try {
-        let token = this.$store.getters['auth/getToken'];
+        const token = this.$store.getters['auth/getToken'];
 
-        let userResponse = await this.$axios.$post('/user', {
+        const userResponse = await this.$axios.$post('/user', {
           token
         });
 
-        let profileResponse = await this.$axios.$post('/profile/active-profile', {
+        const profileResponse = await this.$axios.$post('/profile/active-profile', {
           token
         });
 
         this.user = userResponse;
         this.user.activeProfile = profileResponse;
         this.originalHandle = this.user.activeProfile.handle;
-
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
       }
     }
   },
-
-  watch: {
-    $route() {
-      this.setActive();
-    }
-  },
-};
+});
 </script>
 
 <style lang="sass" scoped>

@@ -1,4 +1,4 @@
-import Cookies from "~/middleware/utils";
+import {Cookies} from "~/middleware/cookies";
 
 export const state = () => ({
   token: null
@@ -6,20 +6,20 @@ export const state = () => ({
 
 export const getters = {
   getToken(state) {
-    return state.token || Cookies.getCookieValue('singlelink_token', this);
+    return state.token || Cookies.getCookieValue('singlelink_token');
   }
 };
 
 export const mutations = {
   login(vuexContext, token) {
-    Cookies.setCookie('singlelink_token', token, 7, this);
+    Cookies.setCookie('singlelink_token', token, 7);
     state.token = token;
     vuexContext.token = token;
   },
   logout(vuexContext) {
     state.token = null;
     vuexContext.token = null;
-    Cookies.setCookie('singlelink_token', '', 7, this);
+    Cookies.setCookie('singlelink_token', '', 7);
   }
 };
 

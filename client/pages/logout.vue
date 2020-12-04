@@ -1,11 +1,13 @@
-<template>
+<template/>
+<script lang="ts">
+import Vue from "vue";
 
-</template>
-<script>
-export default {
+export default Vue.extend({
+  name: 'Logout',
+
   mounted() {
     this.$store.commit('auth/logout');
     this.$router.push('/');
   }
-};
+});
 </script>

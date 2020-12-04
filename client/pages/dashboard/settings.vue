@@ -102,17 +102,19 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import {StatusCodes} from "http-status-codes";
 
-export default {
+export default Vue.extend({
+  name: 'dashboard-settings',
   layout: 'dashboard',
   middleware: 'authenticated',
 
   data() {
     return {
       infoModal: false,
-      modal: false,
+      modalActive: false,
       originalHandle: '',
       user: {
         name: '',
@@ -126,8 +128,7 @@ export default {
           visibility: ''
         }
       },
-
-      error: null
+      error: ''
     };
   },
 
@@ -138,7 +139,10 @@ export default {
   methods: {
     refreshPreview() {
       if (process.client) {
-        document.getElementById('preview-frame').contentWindow.location.reload();
+        let iframe = <HTMLIFrameElement>document.getElementById('preview-frame');
+
+        if (iframe.contentWindow)
+          iframe.contentWindow.location.reload();
       }
     },
 
@@ -186,11 +190,11 @@ export default {
     },
 
     openModal() {
-      return this.modal = true;
+      return this.modalActive = true;
     },
 
     closeModal() {
-      return this.modal = false;
+      return this.modalActive = false;
     },
 
     async attemptDelete() {
@@ -224,5 +228,5 @@ export default {
       }
     },
   }
-};
+});
 </script>

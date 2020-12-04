@@ -1,20 +1,25 @@
 <template>
   <div>
-    <Nuxt />
+    <Nuxt/>
   </div>
 </template>
 
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({});
+</script>
+
 <style>
 html {
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: 'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  sans-serif;
   font-size: 16px;
   line-height: 1.65;
   word-spacing: 1px;

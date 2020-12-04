@@ -1,18 +1,26 @@
 <template>
   <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen">
     <section class="flex items-center justify-center flex-col mt-auto w-screen">
-      <img src="/Icon.svg"/>
-      <h1 class="font-semibold text-3xl mt-2">Set your new password</h1>
-      <p class="text-gray-700 text-sm">Remember: Don't share passwords!</p>
-      <div v-if="this.error"
-           class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm">
+      <img src="/icon.svg">
+      <h1 class="font-semibold text-3xl mt-2">
+        Set your new password
+      </h1>
+      <p class="text-gray-700 text-sm">
+        Remember: Don't share passwords!
+      </p>
+      <div
+        v-if="this.error"
+        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
+      >
         <img style="width: 12px;" src="/caution.svg">
         <div class="flex flex-col ml-2">
           {{ this.error }}
         </div>
       </div>
-      <div v-if="this.message"
-           class="flex flex-row p-2 mt-4 mb-2 bg-green-200 text-green-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border text-center border-green-300 shadow-sm">
+      <div
+        v-if="this.message"
+        class="flex flex-row p-2 mt-4 mb-2 bg-green-200 text-green-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border text-center border-green-300 shadow-sm"
+      >
         <div class="flex flex-col ml-2">
           {{ this.message }}
         </div>
@@ -20,16 +28,27 @@
       <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col">
         <div class="flex flex-col mb-4">
           <label class="font-medium text-sm">Password</label>
-          <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" type="password"
-                 placeholder="e.g. Your secure password" v-model="password"/>
+          <input
+            v-model="password"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+            type="password"
+            placeholder="e.g. Your secure password"
+          >
         </div>
         <div class="flex flex-col mb-4">
           <label class="font-medium text-sm">Confirm password</label>
-          <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" type="password"
-                 placeholder="e.g. Your secure password" v-model="passwordConfirmation"/>
+          <input
+            v-model="passwordConfirmation"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+            type="password"
+            placeholder="e.g. Your secure password"
+          >
         </div>
-        <button type="button" @click="resetPassword"
-                class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">
+        <button
+          type="button"
+          class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
+          @click="resetPassword"
+        >
           Reset password
         </button>
       </form>
@@ -45,18 +64,19 @@
   width: 180px
 </style>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 
-export default {
-  name: 'ForgotPassword',
+export default Vue.extend({
+  name: 'ChangeForgotPassword',
   middleware: 'unauthenticated',
 
   data: () => {
     return {
       password: '',
-      passwordConfirmation: null,
-      error: null,
-      message: null,
+      passwordConfirmation: '',
+      error: '',
+      message: '',
     };
   },
 
@@ -68,11 +88,14 @@ export default {
 
   methods: {
     async resetPassword() {
-      if (!this.password) return this.error = 'A password is required.';
-      if (!this.passwordConfirmation) return this.error = 'Confirm your password below and try again.';
-      if (this.password !== this.passwordConfirmation) return this.error = 'Your passwords don\'t match, try again';
+      if (!this.password) { return this.error = 'A password is required.'; }
+
+      if (!this.passwordConfirmation) { return this.error = 'Confirm your password below and try again.'; }
+
+      if (this.password !== this.passwordConfirmation) { return this.error = 'Your passwords don\'t match, try again'; }
+
       try {
-        let request = await this.$axios.post('/user/reset-password', {
+        const request = await this.$axios.post('/user/reset-password', {
           password: this.password,
           token: this.$route.query['token']
         });
@@ -85,7 +108,7 @@ export default {
           }, 250);
         }
       } catch (err) {
-        this.message = null;
+        this.message = '';
         console.log('Error!');
         console.log(err);
         this.error = err;
@@ -93,8 +116,8 @@ export default {
     },
 
     clearErrors() {
-      this.error = null;
+      this.error = '';
     }
   }
-};
+});
 </script>

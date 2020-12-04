@@ -1,9 +1,12 @@
 {
   "root": true,
   "env": {
+    "browser": true,
     "node": true
   },
-  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "@nuxtjs/eslint-config-typescript"
+  ],
   "plugins": [
     "@typescript-eslint"
   ],
@@ -27,6 +30,12 @@
       2,
       "always"
     ],
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/html-closing-bracket-spacing": "off",
+    "vue/require-default-prop": "off",
     "object-curly-spacing": "off"
-  }
+  },
+  "ignorePatterns": [
+    "**/*.min.*"
+  ]
 }

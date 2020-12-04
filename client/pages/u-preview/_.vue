@@ -1,19 +1,30 @@
 <template>
   <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-      <img class="nc-avatar mb-2" v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
-           :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"/>
-      <h1 class="text-black font-semibold text-2xl sl-headline">{{ profile.headline || user.name }}</h1>
-      <h3 class="text-gray-600 mb-4 sl-subtitle">{{ profile.subtitle }}</h3>
-      <a :href="link.url" v-for="link in links" class="w-full">
+      <img
+        v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
+        class="nc-avatar mb-2"
+        :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+        alt="profile image"
+      >
+      <h1 class="text-black font-semibold text-2xl sl-headline">
+        {{ profile.headline || user.name }}
+      </h1>
+      <h3 class="text-gray-600 mb-4 sl-subtitle">
+        {{ profile.subtitle }}
+      </h3>
+      <a v-for="link in links" :href="link.url" class="w-full">
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
-          :style="link.customCss">
+          :style="link.customCss"
+        >
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </a>
-      <div v-html="profile.customHtml"></div>
+
+      <div v-html="profile.customHtml"/>
+
       <component is="style" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};
@@ -36,7 +47,11 @@
         color: {{ theme.colors.text.secondary }};
         }
       </component>
-      <component is="style">{{ profile.customCss || null }}</component>
+
+      <component is="style">
+        {{ profile.customCss || null }}
+      </component>
+
       <component is="style">
         .nc-avatar {
         width: 60px;
@@ -59,8 +74,11 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: 'UShowProfilePreview',
   middleware: 'authenticated',
 
   data() {
@@ -85,12 +103,12 @@ export default {
 
   async mounted() {
     try {
-      let response = await this.$axios.$post('/profile/preview', {
+      const response: any = await this.$axios.$post('/profile/preview', {
         token: this.$store.getters['auth/getToken']
       });
 
       this.profile = response.profile;
-      this.links = response.links?.sort(function (a, b) {
+      this.links = response.links?.sort(function (a: Link, b: Link) {
         return a.sortOrder - b.sortOrder;
       });
       this.user = response.user;
@@ -101,25 +119,28 @@ export default {
       return {failed: true};
     }
   }
-};
+});
 </script>
 
-<style lang="sass" scoped>
-.nc-avatar
-  width: 60px
-  height: 60px
-  border-radius: 1000px
+<style lang="scss" scoped>
+.nc-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 1000px;
 
-  .nc-link
-    cursor: pointer
-    transition: .15s ease-in-out
-    overflow: hidden
+  .nc-link {
+    cursor: pointer;
+    transition: .15s ease-in-out;
+    overflow: hidden;
+  }
 
-    &:hover
-      transform: scale(1.02)
+  &:hover {
+    transform: scale(1.02);
+  }
 
-    &:active
-      transform: scale(1)
+  &:active {
+    transform: scale(1);
+  }
+}
 
 </style>
-
