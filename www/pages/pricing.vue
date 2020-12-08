@@ -123,6 +123,47 @@
               </div>
             </div>
         </div>
+		<div class="w-11/12 p-8 rounded border mx-auto mt-8 max-w-5xl flex flex-col">
+			<div class="flex flex-col md:flex-row mb-4 items-center">
+				<h3 class="text-3xl font-heading font-semibold">Singlelink Enterprise</h3>
+				<h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">Starting from $50/Month</h4>
+			</div>
+			<p class="mb-8 text-gray-600 font-medium leading-relaxed">For business customers that depend on Singlelink, this is the ultimate option.</p>
+			<h3 class="mb-3 font-heading font-semibold">Includes the following</h3>
+			<div class="flex flex-col md:flex-row md:space-x-4">
+				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
+					<li>
+						<span class="mr-2">✅</span>
+						100% Uptime SLA
+					</li>
+					<li>
+						<span class="mr-2">✅</span>
+						Managed Self-Hosted Instance</span>
+					</li>
+					<li>
+						<span class="mr-2">✅</span>
+						24/7 Support via Discord &amp; Email
+					</li>
+				</ul>
+				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
+					<li>
+						<span class="mr=2">✅</span>
+						Custom theme built for you monthly
+					</li>
+					<li>
+						<span class="mr=2">✅</span>
+						Prioritized issue resolution on Github
+					</li>
+					<li>
+						<span class="mr-2">✅</span>
+						Uncrashable static hosting on Global CDN
+					</li>
+				</ul>
+			</div>
+			<a href="mailto:support@neutroncreative.com" class="text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold">
+				Contact sales
+			</a>
+		</div>
         </section>
       </div>
     </section>

@@ -22,6 +22,7 @@
           <a href="https://neutroncreative.com/community">
             <li class="p-2 mr-2 hover:text-black cursor-pointer">Community</li>
           </a>
+		  <n-link to="gallery"><li class="p-2 mr-2 hover:text-black cursor-pointer">Gallery</li></n-link>
           <n-link to="/pricing"><li class="p-2 mr-2 hover:text-black cursor-pointer">Pricing</li></n-link>
           <a href="https://app.singlelink.co"><li class="p-2 mr-2 hover:text-black cursor-pointer">Log in</li></a>
           <iframe class="mr-2" style="transform: scale(.9);" src="https://ghbtns.com/github-btn.html?user=Neutron-Creative&repo=Singlelink&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
@@ -45,6 +46,9 @@
         <a class="" href="https://neutroncreative.com/community">
           <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Community</li>
         </a>
+		<n-link to="/gallery">
+			<li class="p-3 text-sm text-center hover:text-black cursor-pointer">Gallery</li>
+		</n-link>
         <n-link to="/pricing">
           <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Pricing</li>
         </n-link>
