@@ -26,8 +26,54 @@
 					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(0.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
 						<iframe src="https://app.singlelink.co/u/daje"></iframe>
 					</div>
-					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:undeline" href="https://app.singlelink.co/u/daje">https://app.singlelink.co/u/daje</a>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:undeline" href="https://app.singlelink.co/u/daje">https://singlel.ink/u/daje</a>
 					<span class="text-gray-500 font-medium text-sm">Daje</span>
+				</div>
+			</div>
+			<div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform:perspective(1040px) rotate(0deg) scale(0.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://singlel.ink/u/torres_asdf"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/torres_asdf">https://singlel.ink/u/torres_asdf</a>
+					<span class="text-gray-500 font-medium text-sm">Daniel Torres</span>
+				</div>
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15x 30px; transform: perspective(1040px) rotate(0deg) scale(.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://singlel.ink/u/alex"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/alex">https://singlel.ink/u/alex</a>
+					<span class="text-gray-500 font-medium text-sm">Alex</span>
+				</div>
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://singlel.ink/u/gloomytoons"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/gloomytoons">https://singlel.ink/u/gloomytoons</a>
+					<span class="text-gray-500 font-medium text-sm">Gloomytoons</span>
+				</div>
+			</div>
+			<div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(0.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://singlel.ink/u/SDCD"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/sdcd">https://singlel.ink/u/sdcd</a>
+					<span class="text-gray-500 font-medium text-sm">San Diego Community Defense</span>
+				</div>
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://singlel.ink/u/sarahrubia"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/sarahrubia">https://singlel.ink/u/sarahrubia</a>
+					<span class="text-gray-500 font-medium text-sm">Sarah Rúbia</span>
+				</div>
+				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
+					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(0.65) rotateX(02deg) rotateY(12deg) translateZ(10px);">
+						<iframe src="https://app.singlelink.co/u/bluatruli"/>
+					</div>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://app.singlelink.co/u/bluatruli">https://singlel.ink/u/bluatruli</a>
+					<span class="text-gray-500 font-medium text-sm">Evelyn Lopez</span>
 				</div>
 			</div>
     	</div>

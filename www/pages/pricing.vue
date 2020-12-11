@@ -67,10 +67,18 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 p-4 mb-2 md:mb-0 text-center md:text-left">
-              <div class="p-8 rounded-lg bg-white shadow-lg">
-                <div class="flex flex-col md:flex-row mb-4 items-center">
+				<div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden">
+				<div class="absolute top-0 left-0 right-0 flex flex-row text-white bg-red-500 w-full p-1 text-xs text-center items-center justify-center font-medium">
+					<span v-if="remaining > 0">Limited time launch sale! Only {{remaining}}/50 remaining!</span>
+					<span v-if="remaining <= 0">Price increases soon, buy now for the lowest price!</span>
+				</div>
+                <div class="flex flex-col md:flex-row mb-4 mt-4 items-center">
                   <h3 class="text-3xl font-heading font-semibold">Whale tier 🐳</h3>
-                  <h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">$3/Month</h4>
+				  <div class="flex flex-col items-center justify-end md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2" v-if="remaining > 0">
+				  	<h4 class="text-2xl font-bold text-red-500">$3/Month</h4>
+					<h4 class="text-sm font-bold text-indigo-400 line-through">$6/Month</h4>
+				  </div>
+				  <h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2" v-if="remaining <= 0">$6/Month</h4>
                 </div>
                 <p class="mb-8 text-gray-600 font-medium leading-relaxed">For those that go above and beyond, our whale tier is the perfect choice to grow without limits.</p>
                 <h3 class="mb-3 font-heading font-semibold">Includes the following</h3>
@@ -101,7 +109,7 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Access to the Whale Discord community 🐳
+                    Access to private Discord community 🐳
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -126,10 +134,10 @@
 		<div class="w-11/12 p-8 rounded border mx-auto mt-8 max-w-5xl flex flex-col">
 			<div class="flex flex-col md:flex-row mb-4 items-center">
 				<h3 class="text-3xl font-heading font-semibold">Singlelink Enterprise</h3>
-				<h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">Starting from $50/Month</h4>
+				<h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">Starting from $30/Month</h4>
 			</div>
-			<p class="mb-8 text-gray-600 font-medium leading-relaxed">For business customers that depend on Singlelink, this is the ultimate option.</p>
-			<h3 class="mb-3 font-heading font-semibold">Includes the following</h3>
+			<p class="mb-8 text-gray-600 font-medium leading-relaxed">Custom tailored plans for business customers that depend on Singlelink.</p>
+			<h3 class="mb-3 font-heading font-semibold">Go further with</h3>
 			<div class="flex flex-col md:flex-row md:space-x-4">
 				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
 					<li>
@@ -138,17 +146,17 @@
 					</li>
 					<li>
 						<span class="mr-2">✅</span>
-						Managed Self-Hosted Instance</span>
+						Managed dedicated hosted instance</span>
 					</li>
 					<li>
 						<span class="mr-2">✅</span>
-						24/7 Support via Discord &amp; Email
+						24/7 Support via Phone, Discord &amp; Email
 					</li>
 				</ul>
 				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
 					<li>
 						<span class="mr=2">✅</span>
-						Custom theme built for you monthly
+						Managed private fork, custom experience
 					</li>
 					<li>
 						<span class="mr=2">✅</span>
@@ -202,6 +210,11 @@
         },
 
       ],
-    }
+    },
+	  data: function() {
+		return {
+			remaining:50
+		};
+	  }
   };
 </script>
