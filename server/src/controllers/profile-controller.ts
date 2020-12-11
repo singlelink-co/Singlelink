@@ -76,7 +76,7 @@ export class ProfileController extends Controller {
 
     this.fastify.post<CreateProfileRequest>('/profile/create', AuthOpts.ValidateWithData, this.CreateProfile.bind(this));
     this.fastify.post<UpdateProfileRequest>('/profile/update', AuthOpts.ValidateWithData, this.UpdateProfile.bind(this));
-    this.fastify.post<AuthenticatedRequest>('/profile/destroy', AuthOpts.ValidateWithData, this.DestroyProfile.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/profile/delete', AuthOpts.ValidateWithData, this.DeleteProfile.bind(this));
 
     this.fastify.post<AuthenticatedRequest>('/profile/active-profile', AuthOpts.ValidateWithData, this.GetActiveProfile.bind(this));
     this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', AuthOpts.ValidateWithData, this.ActivateProfileTheme.bind(this));
@@ -328,19 +328,19 @@ export class ProfileController extends Controller {
   }
 
   /**
-   * Route for /profile/destroy
+   * Route for /profile/delete
    *
    * @param request
    * @param reply
    */
-  async DestroyProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+  async DeleteProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       if (!request.body.profile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.profileService.destroyProfile(request.body.user.id, request.body.profile.id);
+      return await this.profileService.deleteProfile(request.body.user.id, request.body.profile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

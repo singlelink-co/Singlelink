@@ -1,20 +1,33 @@
 <template>
   <section class="flex flex-col p-8 items-center bg-gray-100 flex-grow overflow-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">Appearance</h1>
+    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
+      Appearance
+    </h1>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Themes</h2>
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        Themes
+      </h2>
       <div class="flex flex-row">
-        <div class="rounded nc-theme bg-gray-200" @click="selectTheme(null)"
-             v-bind:class="{'active': !activeTheme || activeTheme == null}">
+        <div
+          class="rounded nc-theme bg-gray-200"
+          :class="{'active': !activeTheme || activeTheme == null}"
+          @click="selectTheme(null)"
+        >
           <div class="nc-inner bg-white">
-            <div class="nc-bottom-inner bg-gray-600"></div>
+            <div class="nc-bottom-inner bg-gray-600"/>
           </div>
         </div>
-        <div class="rounded nc-theme" v-if="themes" v-for="theme in themes"
-             :style="'background:'+theme.colors.fill.primary+';'" @click="selectTheme(theme)"
-             v-bind:class="{'active': activeTheme === theme.id}">
+        <div
+          v-for="theme in themes"
+          v-if="themes"
+          :key="theme.id"
+          class="rounded nc-theme"
+          :style="'background:'+theme.colors.fill.primary+';'"
+          :class="{'active': activeTheme === theme.id}"
+          @click="selectTheme(theme)"
+        >
           <div class="nc-inner" :style="'background:'+theme.colors.fill.secondary+';'">
-            <div class="nc-bottom-inner" :style="'background:'+theme.colors.text.primary+';'"></div>
+            <div class="nc-bottom-inner" :style="'background:'+theme.colors.text.primary+';'"/>
           </div>
         </div>
         <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal">
@@ -25,84 +38,143 @@
       </div>
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom HTML</h2>
-      <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
-                placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-                v-model="customHtml"
-                aria-label="Custom HTML"
-      ></textarea>
-      <button @click="saveChanges" type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        Custom HTML
+      </h2>
+      <textarea
+        v-model="customHtml"
+        rows="5"
+        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+        placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
+        aria-label="Custom HTML"
+      />
+      <button
+        type="button"
+        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center"
+        @click="saveChanges"
+      >
         Save changes
       </button>
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">Custom CSS</h2>
-      <textarea rows="5" class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
-                placeholder="e.g. a { color: rgba(0,0,0,.8); }" v-model="customCss" aria-label="Custom CSS"></textarea>
-      <button @click="saveChanges" type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center">
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        Custom CSS
+      </h2>
+      <textarea
+        v-model="customCss"
+        rows="5"
+        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+        placeholder="e.g. a { color: rgba(0,0,0,.8); }"
+        aria-label="Custom CSS"
+      />
+      <button
+        type="button"
+        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center"
+        @click="saveChanges"
+      >
         Save changes
       </button>
     </div>
-    <div v-if="modalActive" @click="closeModal"
-         class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
-      <div v-on:click.stop class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl">
+    <div
+      v-if="modalActive"
+      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+      @click="closeModal"
+    >
+      <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
         <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
-          <h2 class="text-gray-800 font-semibold text-xl" v-if="modalIntent === 'save'">Create new theme</h2>
-          <h2 class="text-gray-800 font-semibold text-xl" v-if="modalIntent === 'edit'">Edit theme</h2>
-          <p class="text-gray-600 text-sm" v-if="modalIntent === 'save'">Fill out the form below to add your new
+          <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
+            Create new theme
+          </h2>
+          <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
+            Edit theme
+          </h2>
+          <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add your new
             theme.</p>
-          <p class="text-gray-600 text-sm" v-if="modalIntent === 'edit'">Fill out the form below to edit & save your
+          <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
             theme changes.</p>
         </div>
         <form class="p-6 pt-4 bg-gray-100 w-full">
-          <div v-if="this.error"
-               class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm">
+          <div
+            v-if="error"
+            class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+          >
             <img style="width: 12px;" src="/caution.svg">
             <div class="flex flex-col ml-2">
-              {{ this.error }}
+              {{ error }}
             </div>
           </div>
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="label">Label</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="label" type="text"
-                   placeholder="e.g. 🌈 Colorful theme" v-model="pendingTheme.label"/>
+            <input
+              id="label"
+              v-model="pendingTheme.label"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              type="text"
+              placeholder="e.g. 🌈 Colorful theme"
+            >
           </div>
           <div class="flex flex-row">
             <div class="flex flex-col mb-3 mr-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="primary_fill">Primary background fill</label>
-              <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="primary_fill" type="text"
-                     placeholder="e.g. #5353EC" v-model="pendingTheme.colors.fill.primary"/>
+              <input
+                id="primary_fill"
+                v-model="pendingTheme.colors.fill.primary"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. #5353EC"
+              >
             </div>
             <div class="flex flex-col mb-3 ml-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="secondary_fill">Secondary background fill</label>
-              <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="secondary_fill"
-                     type="text" placeholder="e.g. #0094DE" v-model="pendingTheme.colors.fill.secondary"/>
+              <input
+                id="secondary_fill"
+                v-model="pendingTheme.colors.fill.secondary"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. #0094DE"
+              >
             </div>
           </div>
           <div class="flex flex-row">
             <div class="flex flex-col mb-3 mr-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="primary_text_fill">Primary text fill</label>
-              <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="primary_text_fill"
-                     type="text" placeholder="e.g. #FFFFFF" v-model="pendingTheme.colors.text.primary"/>
+              <input
+                id="primary_text_fill"
+                v-model="pendingTheme.colors.text.primary"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. #FFFFFF"
+              >
             </div>
             <div class="flex flex-col mb-3 ml-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="secondary_text_fill">Secondary text fill</label>
-              <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="secondary_text_fill"
-                     type="text" placeholder="e.g. rgba(255,255,255,.75)" v-model="pendingTheme.colors.text.secondary"/>
+              <input
+                id="secondary_text_fill"
+                v-model="pendingTheme.colors.text.secondary"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. rgba(255,255,255,.75)"
+              >
             </div>
           </div>
         </form>
-        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-             v-if="modalIntent === 'save'">
-          <button @click="saveTheme(true)" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">
+        <div
+          v-if="modalIntent === 'create'"
+          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+        >
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+            @click="saveTheme(true)"
+          >
             Save and add theme
           </button>
-          <button @click="saveTheme(false)" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center">
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+            @click="saveTheme(false)"
+          >
             Save theme and continue
           </button>
         </div>
@@ -126,7 +198,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'dashboard-appearance',
+  name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',
 
@@ -138,7 +210,7 @@ export default Vue.extend({
       customCss: '',
       customHtml: '',
       modalActive: false,
-      modalIntent: 'save',
+      modalIntent: 'create',
       pendingTheme: {
         label: '',
         colors: {
@@ -162,18 +234,18 @@ export default Vue.extend({
 
   methods: {
     async selectTheme(theme: any) {
-      if (!theme)
+      if (!theme) {
         theme = {id: null};
+      }
 
       try {
-        let response = await this.$axios.$post('/profile/activate-theme', {
+        const response = await this.$axios.$post('/profile/activate-theme', {
           token: this.$store.getters['auth/getToken'],
           theme: theme.id,
         });
 
         this.activeTheme = response.theme;
         this.refreshPreview();
-
       } catch (error) {
         console.log('Failed to activate theme');
         console.log(error);
@@ -194,7 +266,7 @@ export default Vue.extend({
 
     async saveTheme(close: any) {
       try {
-        let response = await this.$axios.$post('/theme/create', {
+        const response = await this.$axios.$post('/theme/create', {
           token: this.$store.getters['auth/getToken'],
           label: this.pendingTheme.label,
           colors: {
@@ -211,10 +283,13 @@ export default Vue.extend({
 
         this.themes.push(response);
 
-        if (close) return this.closeModal();
+        if (close) {
+          this.closeModal();
+          return;
+        }
+
         this.setPending(null);
         this.refreshPreview();
-
       } catch (error) {
         this.error = 'Failed to create theme';
         console.log('Failed to create theme');
@@ -223,53 +298,56 @@ export default Vue.extend({
     },
 
     setPending(theme: any) {
-      if (theme === null) return this.pendingTheme = {
-        label: '',
-        colors: {
-          fill: {
-            primary: '',
-            secondary: ''
-          },
-          text: {
-            primary: '',
-            secondary: ''
+      if (theme === null) {
+        this.pendingTheme = {
+          label: '',
+          colors: {
+            fill: {
+              primary: '',
+              secondary: ''
+            },
+            text: {
+              primary: '',
+              secondary: ''
+            }
           }
-        }
-      };
-      return this.pendingTheme = theme;
+        };
+      }
+
+      this.pendingTheme = theme;
     },
 
     openModal() {
       this.setPending(null);
-      return this.modalActive = true;
+      this.modalActive = true;
     },
 
     closeModal() {
       this.setPending(null);
-      return this.modalActive = false;
+      this.modalActive = false;
     },
 
     refreshPreview() {
       if (process.client) {
-        let iframe = <HTMLIFrameElement>document.getElementById('preview-frame');
+        const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
 
-        if (iframe.contentWindow)
+        if (iframe.contentWindow) {
           iframe.contentWindow.location.reload();
+        }
       }
     },
 
     async getUserData() {
       try {
-        let token = this.$store.getters['auth/getToken'];
+        const token = this.$store.getters['auth/getToken'];
 
-        let profileResponse = await this.$axios.$post('/profile/active-profile', {
-          token: token
+        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
         });
 
         this.activeTheme = profileResponse.theme ?? null;
         this.customCss = profileResponse.customCss ?? '';
         this.customHtml = profileResponse.customHtml ?? '';
-
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
@@ -292,7 +370,6 @@ export default Vue.extend({
   }
 });
 </script>
-
 
 <style lang="scss" scoped>
 .nc-theme {

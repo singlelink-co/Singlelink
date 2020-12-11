@@ -29,7 +29,12 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/axios"
+      "@nuxtjs/axios",
+      "cookie-universal-nuxt"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "@types"
     ]
   },
   "exclude": [

@@ -16,9 +16,9 @@
         <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
           Click through rate
         </h2>
-        <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl">{{
-          analytics.clickThroughRate.toFixed(2)
-        }}%</h4>
+        <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl">
+          {{ analytics.clickThroughRate.toFixed(2) }}%
+        </h4>
       </div>
     </div>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 md:mr-2">
@@ -27,6 +27,7 @@
       </h2>
       <div
         v-for="link in analytics.linkVisits"
+        :key="link.id"
         class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center md:flex-row flex-col"
         :style="link.link.customCss"
       >
@@ -57,7 +58,7 @@ export default Vue.extend({
     return {
       analytics: {
         totalProfileViews: null,
-        linkVisits: [],
+        linkVisits: new Array<LinkVisit>(),
         clickThroughRate: null
       }
     };

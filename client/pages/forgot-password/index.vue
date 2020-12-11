@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen">
     <section class="flex items-center justify-center flex-col mt-auto w-screen">
-      <img src="/icon.svg">
+      <img src="/icon.svg" alt="icon">
       <h1 class="font-semibold text-3xl mt-2">
         Request a password reset
       </h1>
@@ -10,20 +10,20 @@
         href="/create-account"
       >Login</a></p>
       <div
-        v-if="this.error"
+        v-if="error"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
       >
-        <img style="width: 12px;" src="/caution.svg">
+        <img style="width: 12px;" src="/caution.svg" alt="caution">
         <div class="flex flex-col ml-2">
-          {{ this.error }}
+          {{ error }}
         </div>
       </div>
       <div
-        v-if="this.message"
+        v-if="message"
         class="flex flex-row p-2 mt-4 mb-2 bg-green-200 text-green-600 rounded w-11/12 max-w-sm justify-center items-center text-sm text-center border border-green-300 shadow-sm"
       >
         <div class="flex flex-col ml-2">
-          {{ this.message }}
+          {{ message }}
         </div>
       </div>
       <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col" @submit.prevent>
@@ -34,6 +34,7 @@
             class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
             type="email"
             placeholder="e.g. jane@gmail.com"
+            aria-label="email"
             @keyup.enter="requestReset"
           >
         </div>
@@ -51,11 +52,6 @@
     </section>
   </div>
 </template>
-
-<style lang="sass">
-.NeutronLogo
-  width: 180px
-</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -112,3 +108,9 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+.NeutronLogo {
+  width: 180px;
+}
+</style>

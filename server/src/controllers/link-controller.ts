@@ -31,7 +31,7 @@ interface UpdateLinkRequest extends RequestGenericInterface {
   }
 }
 
-interface DestroyLinkRequest extends RequestGenericInterface {
+interface DeleteLinkRequest extends RequestGenericInterface {
   Body: {
     id?: string
   }
@@ -59,7 +59,7 @@ export class LinkController extends Controller {
   registerRoutes(): void {
     this.fastify.post<CreateLinkRequest>('/link/create', AuthOpts.ValidateWithData, this.CreateLink.bind(this));
     this.fastify.post<UpdateLinkRequest>('/link/update', AuthOpts.ValidateOnly, this.UpdateLink.bind(this));
-    this.fastify.post<DestroyLinkRequest>('/link/destroy', AuthOpts.ValidateOnly, this.DestroyLink.bind(this));
+    this.fastify.post<DeleteLinkRequest>('/link/delete', AuthOpts.ValidateOnly, this.DeleteLink.bind(this));
 
     this.fastify.post<ReorderLinkRequest>('/link/reorder', AuthOpts.ValidateWithData, this.ReorderLink.bind(this));
   }
@@ -97,7 +97,7 @@ export class LinkController extends Controller {
       return await this.linkService.createLink(
         profile.id,
         body.url,
-        ++count,
+        count,
         body.label,
         body.subtitle,
         body.style,
@@ -152,14 +152,14 @@ export class LinkController extends Controller {
   }
 
   /**
-   * Route for /link/destroy
+   * Route for /link/delete
    *
-   * Destroys a link.
+   * Deletes a link.
    *
    * @param request
    * @param reply
    */
-  async DestroyLink(request: FastifyRequest<DestroyLinkRequest>, reply: FastifyReply) {
+  async DeleteLink(request: FastifyRequest<DeleteLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 

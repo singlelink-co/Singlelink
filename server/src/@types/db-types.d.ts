@@ -1,5 +1,5 @@
 /**
- * DB Types contains all the types that represent the raw QueryResult data that is received from the database.
+ * db-types.d.ts contains all the types that represent the raw QueryResult data that is received from the database.
  *
  * It is a direct 1:1 of the tables and types within the database.
  */

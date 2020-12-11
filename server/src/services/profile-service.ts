@@ -227,12 +227,12 @@ export class ProfileService extends DatabaseService {
   }
 
   /**
-   * Destroys a profile. The user cannot destroy a profile if they only have one.
+   * Deletes a profile. The user cannot delete a profile if they only have one.
    *
    * @param userId
    * @param profileId
    */
-  async destroyProfile(userId: string, profileId: string): Promise<Profile> {
+  async deleteProfile(userId: string, profileId: string): Promise<Profile> {
     let profilesResult = await this.listProfiles(userId);
 
     let profileRow: Profile | undefined = profilesResult.find(x => x.id === profileId);

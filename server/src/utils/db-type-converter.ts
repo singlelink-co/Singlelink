@@ -1,6 +1,7 @@
 /**
  * Contains many utility functions for converting from DB Types to Typescript Types.
  */
+
 export class DbTypeConverter {
 
   static toUser(user: DbUser): User {

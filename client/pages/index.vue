@@ -8,12 +8,12 @@
       <p class="text-gray-700 text-sm">Or, <a class="text-indigo-600 hover:text-indigo-700" href="/create-account">create
         your new account for free</a></p>
       <div
-        v-if="this.error"
+        v-if="error"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
       >
         <img style="width: 12px;" src="/caution.svg">
         <div class="flex flex-col ml-2">
-          {{ this.error }}
+          {{ error }}
         </div>
       </div>
       <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col">
@@ -41,6 +41,7 @@
               id="remember_me"
               type="checkbox"
               class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+              :value="rememberMe"
             >
             <label for="remember_me" class="ml-2 block text-sm leading-5 text-gray-700">
               Remember me
@@ -70,14 +71,8 @@
   </div>
 </template>
 
-<style lang="sass">
-.NeutronLogo
-  width: 180px
-</style>
-
 <script lang="ts">
 import Vue from "vue";
-import {Cookies} from "~/middleware/cookies";
 
 export default Vue.extend({
   name: 'Index',
@@ -88,7 +83,8 @@ export default Vue.extend({
     return {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      rememberMe: false
     };
   },
 
@@ -108,13 +104,14 @@ export default Vue.extend({
         return;
       }
 
+      this.$cookies.set("remember_auth", this.rememberMe);
+
       try {
         const response = await this.$axios.post('/user/login', {
           email: this.email,
           password: this.password
         });
 
-        Cookies.setCookie('singlelink_token', response.data.token, 7);
         this.$store.commit('auth/login', response.data.token);
         this.$nuxt.$loading.finish();
         await this.$router.push('/dashboard');
@@ -133,3 +130,9 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+.NeutronLogo {
+  width: 180px;
+}
+</style>

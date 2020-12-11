@@ -14,7 +14,11 @@
     "inlineSources": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowJs": false
+    "allowJs": false,
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ]
   },
   "include": [
     // Only copied if config.json exists in src dir

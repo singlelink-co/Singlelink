@@ -5,12 +5,13 @@
       style="width: 70px; max-width: 70px;"
     >
       <n-link to="/dashboard">
-        <img src="/icon.svg" style="width: 35px;"></n-link>
+        <img src="/icon.svg" style="width: 35px;" alt="icon"></n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img
           v-if="user && profiles.length>=1"
           style="width: 100%; border-radius: 100px;"
           :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+          alt="avatar"
           @click="toggleProfileSelect"
         >
         <ul
@@ -20,6 +21,7 @@
         >
           <li
             v-for="profile in profiles"
+            :key="profile.headline"
             class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
             @click="selectProfile(profile.id)"
           >
@@ -27,6 +29,7 @@
               class="mr-2 rounded-full"
               style="width: 100%;max-width: 35px;"
               :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+              alt="avatar"
             >
             <div class="flex flex-col">
               <span class="text-sm font-medium capitalize">{{ profile.handle }}</span>
@@ -71,11 +74,11 @@
       <Nuxt/>
       <div class="p-4 text-md">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
-        {{ this.version }}
+        {{ version }}
         [<a
-          href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
-          class="text-indigo-700 bg-blue-100"
-        >Changelog</a>]
+        class="text-indigo-700 bg-blue-100"
+        href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
+      >Changelog</a>]
       </div>
     </section>
     <section
@@ -96,54 +99,6 @@
     </section>
   </div>
 </template>
-
-<style>
-html {
-  font-family: 'Inter',
-  -apple-system,
-  BlinkMacSystemFont,
-  'Segoe UI',
-  Roboto,
-  'Helvetica Neue',
-  Arial,
-  sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-</style>
-
-<style lang="scss" scoped>
-.phone-display {
-  display: flex;
-  margin: 20px auto auto auto;
-  border-radius: 50px;
-  background: #000;
-  padding: 14px;
-  width: 280px;
-  height: 606px;
-}
-
-.phone-display > iframe {
-  border: none;
-  width: 100%;
-  height: 100%;
-  border-radius: 35px;
-}
-</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -237,7 +192,9 @@ export default Vue.extend({
     },
 
     getActiveStyles(page: any) {
-      if (page === this.active) { return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600"; }
+      if (page === this.active) {
+        return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600";
+      }
       return "hover:bg-indigo-100 hover:text-indigo-600 text-gray-700 nc-item-link";
     },
 
@@ -289,8 +246,51 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="sass" scoped>
-.nc-item-link:hover
-  border-bottom: solid 2px rgba(235, 244, 255, var(--bg-opacity))
+<style lang="scss" scoped>
+html {
+  font-family: 'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.phone-display {
+  display: flex;
+  margin: 20px auto auto auto;
+  border-radius: 50px;
+  background: #000;
+  padding: 14px;
+  width: 280px;
+  height: 606px;
+}
+
+.phone-display > iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 35px;
+}
+
+.nc-item-link:hover {
+  border-bottom: solid 2px rgba(235, 244, 255, var(--bg-opacity));
+}
 </style>

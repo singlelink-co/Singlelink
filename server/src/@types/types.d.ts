@@ -1,5 +1,5 @@
 /**
- * types.ts contains all the types that represent the data that will received from the database.
+ * types.d.ts contains all the types that represent the data that will received from the database.
  */
 
 /**

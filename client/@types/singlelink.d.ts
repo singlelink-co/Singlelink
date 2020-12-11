@@ -4,7 +4,8 @@ interface Link {
   label: string,
   subtitle: string,
   customCss: string,
-  url: string
+  url: string,
+  useDeepLink: boolean
 }
 
 interface Profile {
@@ -14,4 +15,9 @@ interface Profile {
   headline: string,
   subtitle: string,
   visibility: string
+}
+
+interface LinkVisit {
+  link: any,
+  views: any
 }

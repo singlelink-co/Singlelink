@@ -9,7 +9,7 @@ export default {
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
-  target: 'server',
+  target: 'static',
 
   /*
   ** Hosting 404 Hotfix
@@ -25,8 +25,10 @@ export default {
   },
 
   server: {
-    port: 3000 // default: 3000
+    host: process.env.HOST ?? 'app.singlelink.co',
+    port: process.env.PORT ?? 3000
   },
+
   /*
   ** Headers of the page
   ** See https://nuxtjs.org/api/configuration-head
@@ -35,7 +37,10 @@ export default {
     title: 'Singlelink - A free & open-source Linktree alternative',
     meta: [
       {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
       {
         hid: 'description',
         name: 'description',
@@ -58,7 +63,11 @@ export default {
       },
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      }
     ]
   },
   /*
@@ -70,7 +79,10 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    {src: '~plugins/draggable.js', ssr: true}
+    {
+      src: '~plugins/draggable.js',
+      ssr: true
+    }
   ],
   /*
   ** Auto import components
@@ -94,7 +106,8 @@ export default {
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
     '@aceforth/nuxt-optimized-images',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    'cookie-universal-nuxt'
   ],
 
   optimizedImages: {
@@ -106,15 +119,22 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.BASE_URL || 'https://api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
+    baseURL: process.env.API_URL ?? 'https://api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
   },
+
+  env: {
+    API_URL: process.env.API_URL ?? 'https://api.singlelink.co',
+    HOST: process.env.HOST ?? 'app.singlelink.co',
+    PORT: process.env.PORT ?? 3000,
+  },
+
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
     extend(config, ctx) {
-      const vue = ctx.loaders.vue;
+      // const vue = ctx.loaders.vue;
 
       // Added Line
       config.devtool = ctx.isClient ? 'eval-source-map' : 'inline-source-map';

@@ -40,7 +40,7 @@
           </h2>
           <p class="text-xl text-indigo-600 ml-auto relative flex items-center justify-center">
             <span
-              v-if="this.analytics.users && this.analytics.users >= 100"
+              v-if="analytics.users && analytics.users >= 100"
               class="absolute top-0 text-2xl"
               style="left: -70px;"
             >🤠🎉</span>
@@ -109,7 +109,8 @@ export default Vue.extend({
   data() {
     return {
       analytics: {
-        users: 0
+        users: 0,
+        profilesPublished: 0
       },
       hourlyGrowthRate: 0,
       projectedUsers: 0
@@ -125,7 +126,8 @@ export default Vue.extend({
   methods: {
     async refreshData() {
       this.analytics = {
-        users: 0
+        users: 0,
+        profilesPublished: 0
       };
       this.hourlyGrowthRate = 0;
       this.projectedUsers = 0;

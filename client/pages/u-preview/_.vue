@@ -13,7 +13,8 @@
       <h3 class="text-gray-600 mb-4 sl-subtitle">
         {{ profile.subtitle }}
       </h3>
-      <a v-for="link in links" :href="link.url" class="w-full">
+
+      <a v-for="link in links" :key="link.id" :href="link.url" class="w-full">
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
           :style="link.customCss"
@@ -25,7 +26,7 @@
 
       <div v-html="profile.customHtml"/>
 
-      <component is="style" v-if="theme">
+      <component :is="'style'" v-if="theme">
         .sl-headline {
         color: {{ theme.colors.text.primary }};
         }
@@ -48,11 +49,11 @@
         }
       </component>
 
-      <component is="style">
+      <component :is="'style'">
         {{ profile.customCss || null }}
       </component>
 
-      <component is="style">
+      <component :is="'style'">
         .nc-avatar {
         width: 60px;
         height: 60px;
@@ -116,7 +117,6 @@ export default Vue.extend({
     } catch (err) {
       console.log('Error getting profile');
       console.log(err);
-      return {failed: true};
     }
   }
 });

@@ -403,7 +403,7 @@ async function start() {
   });
 
   try {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       console.log();
       console.log("===== POINT OF NO RETURN WARNING: READ CAREFULLY =====");
       console.log("WARNING: This script DOES NOT MERGE DATA. IT COMPLETELY WIPES THE RECEIVING DATABASE FIRST.");

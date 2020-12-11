@@ -1,25 +1,38 @@
-import {Cookies} from "~/middleware/cookies";
-
 export const state = () => ({
   token: null
 });
 
 export const getters = {
   getToken(state) {
-    return state.token || Cookies.getCookieValue('singlelink_token');
+    if (process.client) {
+      return state.token || window.$nuxt.$cookies.get("auth_token");
+    } else {
+      return state.token;
+    }
   }
 };
 
 export const mutations = {
-  login(vuexContext, token) {
-    Cookies.setCookie('singlelink_token', token, 7);
+  login(context, token) {
     state.token = token;
-    vuexContext.token = token;
+
+    if (process.client) {
+      const days = window.$nuxt.$cookies.get("remember_auth") ? 56 : 1;
+
+      window.$nuxt.$cookies.set("auth_token", token, {
+        maxAge: 60 * 60 * 24 * days
+      });
+    }
   },
-  logout(vuexContext) {
+
+  logout(context) {
     state.token = null;
-    vuexContext.token = null;
-    Cookies.setCookie('singlelink_token', '', 7);
+
+    if (process.client) {
+      window.$nuxt.$cookies.set("auth_token", '', {
+        maxAge: 0
+      });
+    }
   }
 };
 

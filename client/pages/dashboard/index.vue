@@ -1,105 +1,203 @@
 <template>
   <section class="flex flex-col items-center w-full h-full bg-gray-100">
     <div class="flex flex-col p-8 max-w-lg items-center justify-center w-full">
-      <div v-if="!links || links.length === 0"
-           class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm">
+      <div
+        v-if="!links || links.length === 0"
+        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
+      >
         You don't have any links to display<br>Click the button below to create one!
       </div>
-      <button @click="openModal('save')" type="button"
-              class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">
+      <button
+        type="button"
+        class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
+        @click="openModal('create')"
+      >
         Add new link
       </button>
-      <draggable v-model="sortedLinks" @change="updateLinkOrder" class="flex flex-col w-full">
-        <div v-if="links && links.length > 0" v-for="link in sortedLinks" :key="link.id" @click="editLink(link)"
-             class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer">
+      <draggable
+        v-if="links && links.length > 0"
+        v-model="sortedLinks"
+        class="flex flex-col w-full"
+        @change="updateLinkOrder"
+      >
+        <div
+          v-for="link in sortedLinks"
+          :key="link.id"
+          class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
+          @click="editLink(link)"
+        >
           {{ link.label }}
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </draggable>
     </div>
-    <div v-if="modalActive" @click="closeModal"
-         class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);">
-      <div v-on:click.stop class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl">
+
+    <div
+      v-if="modalActive"
+      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+      @click="closeModal"
+    >
+
+      <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
+
         <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
-          <h2 class="text-gray-800 font-semibold text-xl" v-if="modalIntent === 'save'">Create new link</h2>
-          <h2 class="text-gray-800 font-semibold text-xl" v-if="modalIntent === 'edit'">Edit link</h2>
-          <p class="text-gray-600 text-sm" v-if="modalIntent === 'save'">Fill out the form below to add a new link to
+          <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
+            Create new link
+          </h2>
+          <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
+            Edit link
+          </h2>
+          <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add a new link to
             your page.</p>
-          <p class="text-gray-600 text-sm" v-if="modalIntent === 'edit'">Fill out the form below to edit & save your
+          <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
             link changes.</p>
         </div>
+
         <form class="p-6 pt-4 bg-gray-100 w-full">
-          <div v-if="this.error"
-               class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm">
-            <img style="width: 12px;" src="/caution.svg">
+
+          <div
+            v-if="error"
+            class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+          >
+            <img style="width: 12px;" src="/caution.svg" alt="caution">
             <div class="flex flex-col ml-2">
-              {{ this.error }}
+              {{ error }}
             </div>
           </div>
+
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="label">Label</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="label" type="text"
-                   placeholder="e.g. My Calendar" v-model="pendingLink.label"/>
+            <input
+              id="label"
+              v-model="pendingLink.label"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              type="text"
+              placeholder="e.g. My Calendar"
+            >
           </div>
+
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle (optional)</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="subtitle" type="text"
-                   placeholder="e.g. A list of all my events and available times" v-model="pendingLink.subtitle"/>
+            <input
+              id="subtitle"
+              v-model="pendingLink.subtitle"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              type="text"
+              placeholder="e.g. A list of all my events and available times"
+            >
           </div>
+
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="link" type="text"
-                   placeholder="e.g. Jane Doe" v-model="pendingLink.url"/>
+            <input
+              id="link"
+              v-model="pendingLink.url"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              type="text"
+              placeholder="e.g. Jane Doe"
+            >
           </div>
+
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
-            <textarea rows="3" class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border" id="custom_css"
-                      placeholder="e.g. background: #5353EC;" v-model="pendingLink.customCss"></textarea>
+            <textarea
+              id="custom_css"
+              v-model="pendingLink.customCss"
+              rows="3"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              placeholder="e.g. background: #5353EC;"
+            />
           </div>
+
+          <div class="flex flex-col mb-3">
+            <label class="font-medium text-sm text-gray-800" for="custom_css">
+              Create Deep Link <a href="https://en.wikipedia.org/wiki/Deep_linking">(?) 📱</a>
+            </label>
+            <input
+              id="deep_link"
+              v-model="pendingLink.useDeepLink"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+              type="checkbox"
+              placeholder="e.g. background: #5353EC;"
+              aria-label="create deep link"
+            >
+          </div>
+
         </form>
-        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-             v-if="modalIntent === 'save'">
-          <button @click="saveAndClose" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">
+
+        <div
+          v-if="modalIntent === 'create'"
+          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+        >
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+            @click="saveAndClose"
+          >
             Save and add link
           </button>
-          <button @click="saveAndContinue" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center">
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+            @click="saveAndContinue"
+          >
             Save and continue
           </button>
         </div>
-        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-             v-if="modalIntent === 'edit'">
-          <button @click="saveLinkChanges" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">
+
+        <div
+          v-if="modalIntent === 'edit'"
+          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+        >
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+            @click="saveLinkChanges"
+          >
             Save changes
           </button>
-          <button @click="deleteLink" type="button"
-                  class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center">
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+            @click="deleteLink"
+          >
             Delete link
           </button>
         </div>
+
       </div>
+
     </div>
+
   </section>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 
+type ModalIntent = "create" | "edit";
+
 export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
 
   data() {
-    let pendingLink: Link | undefined;
+    const pendingLink: Link = {
+      id: "",
+      sortOrder: 0,
+      label: "",
+      subtitle: "",
+      customCss: "",
+      url: "",
+      useDeepLink: false
+    };
 
     return {
       links: new Array<Link>(),
       modalActive: false,
       modalIntent: 'create',
-      pendingLink: pendingLink,
+      pendingLink,
       user: '',
       error: '',
       sortedLinks: new Array<Link>()
@@ -114,9 +212,10 @@ export default Vue.extend({
       this.sortedLinks = this.links.sort(function (a: Link, b: Link) {
         return a.sortOrder - b.sortOrder;
       });
+
+      this.pendingLink.sortOrder = this.links.length;
     } catch (err) {
       console.log(err);
-      return [];
     }
   },
 
@@ -143,9 +242,12 @@ export default Vue.extend({
       }
     },
 
-    openModal(intent: string) {
-      if (intent)
+    openModal(intent: ModalIntent) {
+      if (intent) {
         this.modalIntent = intent;
+      } else {
+        this.modalIntent = 'create';
+      }
 
       this.modalActive = true;
     },
@@ -164,69 +266,79 @@ export default Vue.extend({
       this.addNewLink();
     },
 
-    deleteLink() {
-      this.$axios.$post('/link/destroy', {
-        token: this.$store.getters['auth/getToken'],
-        id: this.pendingLink?.id,
-      })
-        .then((response) => {
-          this.links = response;
-          this.refreshPreview();
-          this.closeModal();
-        })
-        .catch((error) => {
-          console.log('Link destruction unsuccessful');
-          console.log(error);
+    async deleteLink() {
+      try {
+        await this.$axios.$post('/link/delete', {
+          token: this.$store.getters['auth/getToken'],
+          id: this.pendingLink.id,
         });
+
+        const index = this.links.findIndex(x => x.id === this.pendingLink.id);
+        this.links.splice(index, 1);
+
+        this.refreshPreview();
+        this.closeModal();
+      } catch (err) {
+        console.log('Link destruction unsuccessful');
+        console.log(err);
+      }
     },
 
-    saveLinkChanges() {
-      this.$axios.$post('/link/update', {
-        token: this.$store.getters['auth/getToken'],
-        id: this.pendingLink?.id,
-        label: this.pendingLink?.label,
-        subtitle: this.pendingLink?.subtitle,
-        url: this.pendingLink?.url,
-        customCss: this.pendingLink?.customCss,
-      })
-        .then((response) => {
-          this.links = response;
-          this.refreshPreview();
-          this.closeModal();
-        })
-        .catch((error) => {
-          console.log('Link changes unsuccessful');
-          console.log(error);
+    async saveLinkChanges() {
+      try {
+        await this.$axios.$post('/link/update', {
+          token: this.$store.getters['auth/getToken'],
+          id: this.pendingLink.id,
+          label: this.pendingLink.label,
+          subtitle: this.pendingLink.subtitle,
+          url: this.pendingLink.url,
+          customCss: this.pendingLink.customCss,
+          useDeepLink: this.pendingLink.useDeepLink
         });
+
+        const index = this.links.findIndex(x => x.id === this.pendingLink.id);
+        this.links[index] = this.pendingLink;
+
+        this.refreshPreview();
+        this.closeModal();
+      } catch (err) {
+        console.log('Link changes unsuccessful');
+        console.log(err);
+      }
     },
 
     clearErrors() {
       this.error = '';
     },
 
-    addNewLink(closeModal: boolean = false) {
-      if (!this.pendingLink?.label)
-        return this.error = 'Link label required';
+    async addNewLink() {
+      if (!this.pendingLink.label) {
+        this.error = 'Link label required';
+        return;
+      }
 
-      if (!this.pendingLink?.url)
-        return this.error = 'Link URL required';
+      if (!this.pendingLink.url) {
+        this.error = 'Link URL required';
+        return;
+      }
 
-      this.$axios.post('/link/create', {
-        label: this.pendingLink?.label,
-        subtitle: this.pendingLink?.subtitle,
-        url: this.pendingLink?.url,
-        customCss: this.pendingLink?.customCss || '',
-        token: this.$store.getters['auth/getToken']
-      })
-        .then((response) => {
-          this.links.push(response.data);
-          this.refreshPreview();
-          this.clearPending();
-        })
-        .catch((error) => {
-          console.log('Error adding new link to profile');
-          console.log(error);
+      try {
+        const response = await this.$axios.post('/link/create', {
+          token: this.$store.getters['auth/getToken'],
+          label: this.pendingLink.label,
+          subtitle: this.pendingLink.subtitle,
+          url: this.pendingLink.url,
+          customCss: this.pendingLink.customCss || '',
+          useDeepLink: this.pendingLink.useDeepLink
         });
+
+        this.links.push(response.data);
+        this.refreshPreview();
+        this.clearPending();
+      } catch (err) {
+        console.log('Error adding new link to profile');
+        console.log(err);
+      }
     },
 
     clearPending() {
@@ -234,11 +346,12 @@ export default Vue.extend({
 
       this.pendingLink = {
         id: '',
-        sortOrder: 0,
+        sortOrder: this.links.length,
         label: '',
         subtitle: '',
         url: '',
         customCss: '',
+        useDeepLink: false
       };
     },
 
@@ -252,6 +365,7 @@ export default Vue.extend({
         subtitle: link.subtitle,
         customCss: link.customCss,
         url: link.url,
+        useDeepLink: link.useDeepLink
       };
 
       this.openModal('edit');
@@ -259,7 +373,7 @@ export default Vue.extend({
 
     async updateLinkOrder(event: any) {
       try {
-        let response = await this.$axios.$post('/link/reorder', {
+        const response = await this.$axios.$post('/link/reorder', {
           token: this.$store.getters['auth/getToken'],
           target: event.moved.element.id,
           newIndex: event.moved.newIndex,
@@ -277,12 +391,14 @@ export default Vue.extend({
 
     refreshPreview() {
       if (process.client) {
-        let iframe = <HTMLIFrameElement>document.getElementById('preview-frame');
+        const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
 
-        if (iframe.contentWindow)
+        if (iframe.contentWindow) {
           iframe.contentWindow.location.reload();
+        }
       }
     }
+
   }
 });
 </script>

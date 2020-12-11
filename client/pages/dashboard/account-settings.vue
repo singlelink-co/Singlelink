@@ -50,7 +50,7 @@
             <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
             <select
               id="visibility"
-              v-model="this.user.activeProfile.visibility"
+              v-model="user.activeProfile.visibility"
               class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
             >
               <option value="unpublished">
@@ -181,19 +181,19 @@ export default Vue.extend({
 
   methods: {
     openInfoModal() {
-      return this.infoModal = true;
+      this.infoModal = true;
     },
 
     closeInfoModal() {
-      return this.infoModal = false;
+      this.infoModal = false;
     },
 
     openModal() {
-      return this.modalActive = true;
+      this.modalActive = true;
     },
 
     closeModal() {
-      return this.modalActive = false;
+      this.modalActive = false;
     },
 
     attemptDelete() {

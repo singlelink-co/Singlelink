@@ -102,7 +102,7 @@ export class LinkService extends DatabaseService {
    *
    * @param linkId The id of the link to delete
    */
-  async deleteLink(linkId: string): Promise<Link[]> {
+  async deleteLink(linkId: string): Promise<string> {
     let queryResult = await this.pool.query<DbLink>(
       "delete from app.links where id=$1 returning profile_id",
       [linkId]);
@@ -111,7 +111,7 @@ export class LinkService extends DatabaseService {
       throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
     }
 
-    return this.listLinks(queryResult.rows[0].profile_id);
+    return queryResult.rows[0].profile_id;
   }
 
   /**
@@ -137,7 +137,7 @@ export class LinkService extends DatabaseService {
    * @param profileId The profile associated with the links.
    */
   async getProfileLinkCount(profileId: string): Promise<number> {
-    return (await this.pool.query("select count(*) from app.links where profile_id=$1", [profileId])).rowCount;
+    return (await this.pool.query("select count(*) from app.links where profile_id=$1", [profileId])).rows[0].count;
   }
 
   /**

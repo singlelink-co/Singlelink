@@ -8,12 +8,12 @@
       <p class="text-gray-700 text-sm">Or, <a class="text-indigo-600 hover:text-indigo-700" href="/">sign in to your
         existing account</a></p>
       <div
-        v-if="this.error"
+        v-if="error"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
       >
         <img style="width: 12px;" src="/caution.svg">
         <div class="flex flex-col ml-2">
-          {{ this.error }}
+          {{ error }}
         </div>
       </div>
       <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col">
@@ -24,6 +24,7 @@
             class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border"
             type="email"
             placeholder="e.g. jane@gmail.com"
+            aria-label="email"
           >
         </div>
         <div class="flex flex-col mb-4">
@@ -31,9 +32,9 @@
           <div class="flex flex-row p-2 pl-0 pt-0 pb-0 mt-2 text-sm border-solid border-gray-200 rounded-sm border">
             <span
               class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
-            >{{
-              origin
-            }}/u/</span>
+            >
+              {{ origin }}/u/
+            </span>
             <input id="handle" v-model="handle" class="p-2 flex-grow" type="text" placeholder="e.g. janedoe">
           </div>
         </div>
@@ -44,6 +45,7 @@
             class="p-2 mt-2 text-sm border-solid border-gray-200 rounded-sm border"
             type="password"
             placeholder="e.g. your password"
+            aria-label="password"
           >
         </div>
         <button
@@ -61,15 +63,9 @@
   </div>
 </template>
 
-<style lang="sass">
-.NeutronLogo
-  width: 180px
-</style>
-
 <script lang="ts">
 import Vue from "vue";
 import {StatusCodes} from "http-status-codes";
-import {Cookies} from "~/middleware/cookies";
 
 export default Vue.extend({
   name: 'CreateAccount',
@@ -89,6 +85,8 @@ export default Vue.extend({
       if (process.client) {
         return window.location.origin.replace('https://', '').replace('http://', '');
       }
+
+      return '';
     }
   },
 
@@ -118,7 +116,7 @@ export default Vue.extend({
           password: this.password,
         });
 
-        Cookies.setCookie('singlelink_token', response.data.token, 7);
+        // Cookies.setCookie('singlelink_token', response.data.token, 7);
         this.$store.commit('auth/login', response.data.token);
         this.$nuxt.$loading.finish();
 
@@ -146,3 +144,9 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+.NeutronLogo {
+  width: 180px
+}
+</style>
