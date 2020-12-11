@@ -218,12 +218,12 @@ export default Vue.extend({
       try {
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
-          imageUrl: this.user.activeProfile.imageUrl || null,
-          headline: this.user.activeProfile.headline || null,
-          subtitle: this.user.activeProfile.subtitle || null,
-          handle: this.user.activeProfile.handle || null,
-          visibility: this.user.activeProfile.visibility || null,
-          customDomain: this.user.activeProfile.customDomain || null
+          imageUrl: this.user.activeProfile.imageUrl ?? null,
+          headline: this.user.activeProfile.headline ?? null,
+          subtitle: this.user.activeProfile.subtitle ?? null,
+          handle: this.user.activeProfile.handle ?? null,
+          visibility: this.user.activeProfile.visibility ?? null,
+          customDomain: this.user.activeProfile.customDomain ?? null
         });
 
         if (process.client) {
