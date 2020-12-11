@@ -142,6 +142,7 @@ export default Vue.extend({
     return {
       apiUrl: process.env.API_URL,
       profile: {
+        themeId: '',
         customHtml: '',
         customCss: '',
         imageUrl: '',

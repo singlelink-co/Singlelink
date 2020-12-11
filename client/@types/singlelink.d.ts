@@ -8,7 +8,25 @@ interface Link {
   useDeepLink: boolean
 }
 
+interface Theme {
+  id: string,
+  label: string,
+  colors: {
+    fill: {
+      primary: string,
+      secondary: string
+    },
+    text: {
+      primary: string,
+      secondary: string
+    }
+  },
+  customHtml: string | undefined,
+  customCss: string | undefined
+}
+
 interface Profile {
+  themeId: string,
   customHtml: string,
   customCss: string,
   imageUrl: string,

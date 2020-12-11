@@ -106,7 +106,7 @@
       </button>
     </div>
     <div
-      v-if="modal"
+      v-if="modalActive"
       class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
       style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
       @click="closeModal"

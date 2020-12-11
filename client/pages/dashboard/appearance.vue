@@ -10,7 +10,7 @@
       <div class="flex flex-row">
         <div
           class="rounded nc-theme bg-gray-200"
-          :class="{'active': !activeTheme || activeTheme == null}"
+          :class="{'active': !activeTheme}"
           @click="selectTheme(null)"
         >
           <div class="nc-inner bg-white">
@@ -197,6 +197,8 @@
 <script lang="ts">
 import Vue from "vue";
 
+type ModalIntent = "create" | "edit";
+
 export default Vue.extend({
   name: 'DashboardAppearance',
   layout: 'dashboard',
@@ -205,12 +207,12 @@ export default Vue.extend({
   data() {
     return {
       error: '',
-      themes: new Array<any>(),
+      themes: new Array<Theme>(),
       activeTheme: '',
       customCss: '',
       customHtml: '',
       modalActive: false,
-      modalIntent: 'create',
+      modalIntent: 'create' as ModalIntent,
       pendingTheme: {
         label: '',
         colors: {
@@ -244,7 +246,7 @@ export default Vue.extend({
           theme: theme.id,
         });
 
-        this.activeTheme = response.theme;
+        this.activeTheme = response.themeId;
         this.refreshPreview();
       } catch (error) {
         console.log('Failed to activate theme');
@@ -264,19 +266,19 @@ export default Vue.extend({
       }
     },
 
-    async saveTheme(close: any) {
+    async saveTheme(close: boolean) {
       try {
         const response = await this.$axios.$post('/theme/create', {
           token: this.$store.getters['auth/getToken'],
           label: this.pendingTheme.label,
           colors: {
             fill: {
-              primary: this.pendingTheme.colors.fill.primary || 'rgba(255,255,255,1)',
-              secondary: this.pendingTheme.colors.fill.secondary || 'rgba(255,255,255,.85)'
+              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
+              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
             },
             text: {
-              primary: this.pendingTheme.colors.text.primary || 'rgba(0,0,0,1)',
-              secondary: this.pendingTheme.colors.text.secondary || 'rgba(0,0,0,.85)'
+              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
+              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
             }
           }
         });
@@ -297,8 +299,8 @@ export default Vue.extend({
       }
     },
 
-    setPending(theme: any) {
-      if (theme === null) {
+    setPending(theme: Theme | null) {
+      if (!theme) {
         this.pendingTheme = {
           label: '',
           colors: {
@@ -312,13 +314,12 @@ export default Vue.extend({
             }
           }
         };
+      } else {
+        this.pendingTheme = theme;
       }
-
-      this.pendingTheme = theme;
     },
 
     openModal() {
-      this.setPending(null);
       this.modalActive = true;
     },
 
@@ -341,11 +342,11 @@ export default Vue.extend({
       try {
         const token = this.$store.getters['auth/getToken'];
 
-        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+        const profileResponse = await this.$axios.$post<Profile>('/profile/active-profile', {
           token
         });
 
-        this.activeTheme = profileResponse.theme ?? null;
+        this.activeTheme = profileResponse.themeId ?? null;
         this.customCss = profileResponse.customCss ?? '';
         this.customHtml = profileResponse.customHtml ?? '';
       } catch (err) {
