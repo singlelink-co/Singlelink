@@ -26,8 +26,14 @@
           class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
           @click="editLink(link)"
         >
-          {{ link.label }}
-          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-1">{{ link.subtitle }}</span>
+          <span>{{ link.label }}
+            <span v-if="link.useDeepLink" class="ml-2 text-black text-xl">
+              <i class="fas fa-mobile-alt"/>
+            </span>
+          </span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-1">
+            {{ link.subtitle }}
+          </span>
         </div>
       </draggable>
     </div>
@@ -112,7 +118,12 @@
 
           <div class="flex flex-col mb-3">
             <label class="font-medium text-sm text-gray-800" for="custom_css">
-              Create Deep Link <a href="https://en.wikipedia.org/wiki/Deep_linking">(?) 📱</a>
+              Create Deep Link
+              <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
+                <span class="ml-2 text-black text-xl">
+                  <i class="fas fa-mobile-alt"/>
+                </span>
+              </a>
             </label>
             <input
               id="deep_link"

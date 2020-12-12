@@ -58,6 +58,7 @@
       </a>
 
       <div v-html="profile.customHtml"/>
+      <div v-if="theme" v-html="theme.customHtml"/>
 
       <component :is="'style'" v-if="theme">
         .sl-headline {
@@ -84,6 +85,10 @@
 
       <component :is="'style'">
         {{ profile.customCss || null }}
+      </component>
+
+      <component :is="'style'" v-if="theme">
+        {{ theme.customCss || null }}
       </component>
 
       <component :is="'style'">

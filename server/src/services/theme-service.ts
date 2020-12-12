@@ -82,4 +82,96 @@ export class ThemeService extends DatabaseService {
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
+
+  /**
+   * Updates a theme. Must be owned by the user.
+   *
+   * @param themeId
+   * @param userId
+   * @param label
+   * @param colors
+   * @param customCss
+   * @param customHtml
+   */
+  async updateTheme(
+    themeId: string,
+    userId: string,
+    label: string,
+    colors?: ThemeColors,
+    customCss?: string,
+    customHtml?: string
+  ): Promise<Theme> {
+    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 and user_id=$6 returning *",
+      [
+        label,
+        colors,
+        customCss,
+        customHtml,
+        themeId,
+        userId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to update the theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
+
+  /**
+   * Deletes a theme. Must be owned by the user to delete.
+   *
+   * @param themeId
+   * @param userId
+   */
+  async deleteTheme(
+    themeId: string,
+    userId: string
+  ): Promise<Theme> {
+    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 and user_id=$2 returning *",
+      [
+        themeId,
+        userId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to delete the theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
+
+  /**
+   * Sets a Theme as global (or not).
+   */
+  async setGlobal(themeId: string, global: boolean) {
+    let queryResult = await this.pool.query("update app.themes set global=$1 where id=$2 returning *",
+      [
+        global,
+        themeId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to add a new theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
+
+  /**
+   * Change the owner of a theme.
+   */
+  async setUserId(themeId: string, userId: string) {
+    let queryResult = await this.pool.query("update app.themes set user_id=$1 where id=$2 returning *",
+      [
+        userId,
+        themeId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to add a new theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
 }

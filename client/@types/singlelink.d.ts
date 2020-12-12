@@ -11,6 +11,7 @@ interface Link {
 interface Theme {
   id: string,
   label: string,
+  global: boolean,
   colors: {
     fill: {
       primary: string,

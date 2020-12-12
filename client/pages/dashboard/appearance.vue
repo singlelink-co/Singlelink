@@ -3,6 +3,7 @@
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
       Appearance
     </h1>
+
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Themes
@@ -10,7 +11,7 @@
       <div class="flex flex-row">
         <div
           class="rounded nc-theme bg-gray-200"
-          :class="{'active': !activeTheme}"
+          :class="{'active': !activeThemeId}"
           @click="selectTheme(null)"
         >
           <div class="nc-inner bg-white">
@@ -22,21 +23,27 @@
           v-if="themes"
           :key="theme.id"
           class="rounded nc-theme"
-          :style="'background:'+theme.colors.fill.primary+';'"
-          :class="{'active': activeTheme === theme.id}"
-          @click="selectTheme(theme)"
+          :style="`background:${theme.colors.fill.primary}; position: relative;`"
+          :class="{'active': activeThemeId === theme.id}"
+          @click="selectTheme(theme.id)"
         >
-          <div class="nc-inner" :style="'background:'+theme.colors.fill.secondary+';'">
-            <div class="nc-bottom-inner" :style="'background:'+theme.colors.text.primary+';'"/>
+          <i
+            v-if="!theme.global"
+            class="fas fa-pencil-alt edit-icon"
+            @click.stop="openModal('edit'); pendingTheme=theme;"
+          />
+          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
+            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
           </div>
         </div>
-        <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal">
+        <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal('create')">
           <div class="nc-inner flex items-center justify-center">
             <span class="font-semibold text-gray-700 text-4xl">+</span>
           </div>
         </div>
       </div>
     </div>
+
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Custom HTML
@@ -56,6 +63,7 @@
         Save changes
       </button>
     </div>
+
     <div class="flex flex-col p-6 bg-white shadow rounded w-full">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Custom CSS
@@ -75,6 +83,7 @@
         Save changes
       </button>
     </div>
+
     <div
       v-if="modalActive"
       class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
@@ -99,7 +108,7 @@
             v-if="error"
             class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
           >
-            <img style="width: 12px;" src="/caution.svg">
+            <img style="width: 12px;" src="/caution.svg" alt="caution">
             <div class="flex flex-col ml-2">
               {{ error }}
             </div>
@@ -124,6 +133,13 @@
                 type="text"
                 placeholder="e.g. #5353EC"
               >
+              <input
+                id="primary_fill_picker"
+                v-model="pendingTheme.colors.fill.primary"
+                class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="color"
+                aria-label="primary fill color picker"
+              >
             </div>
             <div class="flex flex-col mb-3 ml-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="secondary_fill">Secondary background fill</label>
@@ -134,8 +150,16 @@
                 type="text"
                 placeholder="e.g. #0094DE"
               >
+              <input
+                id="secondary_fill_picker"
+                v-model="pendingTheme.colors.fill.secondary"
+                class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="color"
+                aria-label="secondary fill color picker"
+              >
             </div>
           </div>
+
           <div class="flex flex-row">
             <div class="flex flex-col mb-3 mr-3 w-1/2">
               <label class="font-medium text-sm text-gray-800" for="primary_text_fill">Primary text fill</label>
@@ -145,6 +169,13 @@
                 class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                 type="text"
                 placeholder="e.g. #FFFFFF"
+              >
+              <input
+                id="primary_text_fill_picker"
+                v-model="pendingTheme.colors.text.primary"
+                class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="color"
+                aria-label="primary text fill color picker"
               >
             </div>
             <div class="flex flex-col mb-3 ml-3 w-1/2">
@@ -156,7 +187,40 @@
                 type="text"
                 placeholder="e.g. rgba(255,255,255,.75)"
               >
+              <input
+                id="secondary_text_fill_picker"
+                v-model="pendingTheme.colors.text.secondary"
+                class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="color"
+                aria-label="secondary text fill picker"
+              >
             </div>
+          </div>
+
+          <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+            <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+              Custom HTML
+            </h2>
+            <textarea
+              v-model="pendingTheme.customHtml"
+              rows="5"
+              class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+              placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
+              aria-label="Custom HTML"
+            />
+          </div>
+
+          <div class="flex flex-col p-6 bg-white shadow rounded w-full">
+            <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+              Custom CSS
+            </h2>
+            <textarea
+              v-model="pendingTheme.customCss"
+              rows="5"
+              class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+              placeholder="e.g. a { color: rgba(0,0,0,.8); }"
+              aria-label="Custom CSS"
+            />
           </div>
         </form>
         <div
@@ -166,16 +230,36 @@
           <button
             type="button"
             class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="saveTheme(true)"
+            @click="saveCreateTheme(true)"
           >
             Save and add theme
           </button>
           <button
             type="button"
             class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
-            @click="saveTheme(false)"
+            @click="saveCreateTheme(false)"
           >
             Save theme and continue
+          </button>
+        </div>
+
+        <div
+          v-if="modalIntent === 'edit'"
+          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+        >
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+            @click="saveEditTheme"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="inline-flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+            @click="deleteTheme"
+          >
+            Delete
           </button>
         </div>
         <!--        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"-->
@@ -208,13 +292,15 @@ export default Vue.extend({
     return {
       error: '',
       themes: new Array<Theme>(),
-      activeTheme: '',
+      activeThemeId: '',
       customCss: '',
       customHtml: '',
       modalActive: false,
       modalIntent: 'create' as ModalIntent,
       pendingTheme: {
+        id: '',
         label: '',
+        global: false,
         colors: {
           fill: {
             primary: '',
@@ -224,8 +310,11 @@ export default Vue.extend({
             primary: '',
             secondary: ''
           }
-        }
-      }
+        },
+        customCss: undefined,
+        customHtml: undefined,
+      } as Theme,
+      userId: ''
     };
   },
 
@@ -235,18 +324,14 @@ export default Vue.extend({
   },
 
   methods: {
-    async selectTheme(theme: any) {
-      if (!theme) {
-        theme = {id: null};
-      }
-
+    async selectTheme(id: string | null) {
       try {
-        const response = await this.$axios.$post('/profile/activate-theme', {
+        const response = await this.$axios.$post<Profile>('/profile/activate-theme', {
           token: this.$store.getters['auth/getToken'],
-          theme: theme.id,
+          theme: id,
         });
 
-        this.activeTheme = response.themeId;
+        this.activeThemeId = response.themeId;
         this.refreshPreview();
       } catch (error) {
         console.log('Failed to activate theme');
@@ -257,7 +342,7 @@ export default Vue.extend({
     async loadThemes() {
       try {
         // Grab themes from response
-        this.themes = (await this.$axios.$post('/theme', {
+        this.themes = (await this.$axios.$post<Theme[]>('/theme', {
           token: this.$store.getters['auth/getToken']
         }));
       } catch (error) {
@@ -266,9 +351,9 @@ export default Vue.extend({
       }
     },
 
-    async saveTheme(close: boolean) {
+    async saveCreateTheme(close: boolean) {
       try {
-        const response = await this.$axios.$post('/theme/create', {
+        const response = await this.$axios.$post<Theme>('/theme/create', {
           token: this.$store.getters['auth/getToken'],
           label: this.pendingTheme.label,
           colors: {
@@ -280,7 +365,9 @@ export default Vue.extend({
               primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
               secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
             }
-          }
+          },
+          customCss: this.pendingTheme.customCss,
+          customHtml: this.pendingTheme.customHtml,
         });
 
         this.themes.push(response);
@@ -295,31 +382,75 @@ export default Vue.extend({
       } catch (error) {
         this.error = 'Failed to create theme';
         console.log('Failed to create theme');
-        this.error = error;
+      }
+    },
+
+    async saveEditTheme() {
+      try {
+        const response = await this.$axios.$post<Theme>('/theme/update', {
+          token: this.$store.getters['auth/getToken'],
+          id: this.pendingTheme.id,
+          label: this.pendingTheme.label,
+          colors: {
+            fill: {
+              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
+              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
+            },
+            text: {
+              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
+              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
+            }
+          },
+          customCss: this.pendingTheme.customCss,
+          customHtml: this.pendingTheme.customHtml,
+        });
+
+        const themeId = response.id;
+        const index = this.themes.findIndex(x => x.id === themeId);
+
+        this.themes[index] = this.pendingTheme;
+
+        this.closeModal();
+        this.refreshPreview();
+        return;
+      } catch (error) {
+        this.error = 'Failed to create theme';
+        console.log('Failed to create theme');
+      }
+    },
+
+    async deleteTheme() {
+      try {
+        const response = await this.$axios.$post<Theme>('/theme/delete', {
+          token: this.$store.getters['auth/getToken'],
+          id: this.pendingTheme.id,
+        });
+
+        const themeId = response.id;
+        const index = this.themes.findIndex(x => x.id === themeId);
+
+        this.themes.splice(index, 1);
+
+        this.closeModal();
+        this.setPending(null);
+        this.refreshPreview();
+        return;
+      } catch (error) {
+        this.error = 'Failed to create theme';
+        console.log('Failed to create theme');
       }
     },
 
     setPending(theme: Theme | null) {
       if (!theme) {
-        this.pendingTheme = {
-          label: '',
-          colors: {
-            fill: {
-              primary: '',
-              secondary: ''
-            },
-            text: {
-              primary: '',
-              secondary: ''
-            }
-          }
-        };
+        this.pendingTheme = this.getNewTheme();
       } else {
         this.pendingTheme = theme;
       }
     },
 
-    openModal() {
+    openModal(intent: ModalIntent) {
+      this.modalIntent = intent;
       this.modalActive = true;
     },
 
@@ -346,7 +477,7 @@ export default Vue.extend({
           token
         });
 
-        this.activeTheme = profileResponse.themeId ?? null;
+        this.activeThemeId = profileResponse.themeId ?? null;
         this.customCss = profileResponse.customCss ?? '';
         this.customHtml = profileResponse.customHtml ?? '';
       } catch (err) {
@@ -367,6 +498,26 @@ export default Vue.extend({
       } catch (err) {
         console.log(err);
       }
+    },
+
+    getNewTheme(): Theme {
+      return {
+        id: '',
+        label: '',
+        global: false,
+        colors: {
+          fill: {
+            primary: '',
+            secondary: ''
+          },
+          text: {
+            primary: '',
+            secondary: ''
+          }
+        },
+        customCss: undefined,
+        customHtml: undefined,
+      };
     }
   }
 });
@@ -387,12 +538,20 @@ export default Vue.extend({
   }
 
   .nc-inner {
+    position: relative;
     width: 40px;
     height: 40px;
     border-radius: 40px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+  }
+
+  .edit-icon {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: #3e39ab;
   }
 
   .nc-bottom-inner {
