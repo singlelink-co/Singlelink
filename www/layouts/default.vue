@@ -5,7 +5,7 @@
       <div class="flex flex-row w-full bg-black items-center justify-center p-3">
         <div class="w-full max-w-6xl flex-row flex items-center justify-center">
           <img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
-          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white ml-2">Read more 👉</span></span>
+          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>
 		  <!-- <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span> -->
         </div>
       </div>
@@ -28,9 +28,9 @@
           <iframe class="mr-2" style="transform: scale(.9);" src="https://ghbtns.com/github-btn.html?user=Neutron-Creative&repo=Singlelink&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
         </ul>
         <a href="https://app.singlelink.co/create-account" class="ml-auto md:flex hidden">
-          <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">
+          <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">
             Create your free profile
-            <span class="ml-2">👉</span>
+            <img src='/r-finger-emoji.svg' class="w-4 ml-2"/>
           </button>
         </a>
         <li style="list-style: none;" @click="toggle_menu" class="ml-auto md:hidden text-xs p-2 pl-4 pr-4 bg-indigo-600 md:text-sm uppercase tracking-wide rounded shadow text-white hover:bg-indigo-700 font-medium cursor-pointer">
