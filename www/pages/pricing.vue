@@ -44,11 +44,11 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Multiple profiles (Up to 10)
+                    Multiple profiles (1-5)
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Limitless customization & branding
+                    Full access to profile customizations
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -60,11 +60,11 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Page & link analytics (Past 30 days)
+                    Detailed page & link analytics (30 days)
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Code export with cloud-profile sync
+                    Code export with sync via CLI
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -75,8 +75,8 @@
                     A Singlelink of your choice
                   </li>
                   <li class="mb-2">
-                    <span class="mr-2">❌</span>
-                    No annoying advertisements
+                    <span class="mr-2">✅</span>
+                    No forced advertisements
                   </li>
                 </ul>
                 <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
@@ -109,7 +109,7 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Unlimited analytics (Full retention)
+                    One year analytics data rentention
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -125,23 +125,19 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Unlimited team members (Coming soon)
+                    Unlimited team members & guests
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Access to private Discord community 🐳
+                    Easy code-export for static hosting
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Access to profile verification services
+                    Premium themes and extensions
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
                     Direct support via Discord Messages
-                  </li>
-                  <li class="mb-2">
-                    <span class="mr-2">✅</span>
-                    Early access to new features
                   </li>
                 </ul>
                 <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
@@ -168,6 +164,10 @@
 						<span class="mr-2">✅</span>
 						Managed dedicated hosted instance</span>
 					</li>
+          <li>
+						<span class="mr-2">✅</span>
+						Lifetime and/or privatized analytics retention</span>
+					</li>
 					<li>
 						<span class="mr-2">✅</span>
 						24/7 Support via Phone, Discord &amp; Email
@@ -176,14 +176,18 @@
 				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
 					<li>
 						<span class="mr=2">✅</span>
-						Managed private fork, custom experience
+						Private fork development & maintainence
+					</li>
+          <li>
+						<span class="mr=2">✅</span>
+						Custom features & 100% unique expirience
 					</li>
 					<li>
 						<span class="mr=2">✅</span>
 						Prioritized issue resolution on Github
 					</li>
 					<li>
-						<span class="mr-2">✅</span>
+						<span class="mr=2">✅</span>
 						Uncrashable static hosting on Global CDN
 					</li>
 				</ul>
