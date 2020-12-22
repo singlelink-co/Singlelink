@@ -2,6 +2,7 @@ import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
 import AWS from 'aws-sdk';
 import {appConfig} from "./config/app-config";
 import {Controller} from "./controllers/controller";
+import {CustomDomainHandler} from "./utils/custom-domains";
 
 /**
  * The Capture Server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.
@@ -24,20 +25,6 @@ export class SingleLinkServer {
       this.controllers = controllers;
     else
       this.controllers = [];
-
-    this.fastify.register(require('fastify-favicon'), {
-      path: `${__dirname}/../assets/`
-    });
-
-    this.fastify.register(require('fastify-rate-limit'), {
-      max: 200,
-      timeWindow: '1 minute'
-    });
-
-    // Allow anyone
-    this.fastify.register(require('fastify-cors'), {
-      origin: '*'
-    });
 
     AWS.config.update({
       region: appConfig.aws.region,
@@ -68,6 +55,31 @@ export class SingleLinkServer {
   }
 
   registerDefaultRoutes() {
+    this.fastify.register(require('fastify-favicon'), {
+      path: `${__dirname}/../assets/`
+    });
+
+    this.fastify.register(require('fastify-rate-limit'), {
+      max: 200,
+      timeWindow: '1 minute'
+    });
+
+    // Allow anyone
+    this.fastify.register(require('fastify-cors'), {
+      origin: '*'
+    });
+
+    /*
+     We have to do this because JS does weird things when you pass functions. So instead of passing the function directly,
+     you need to pass call the function from an arrow function instead.
+
+     Unlike the controllers where you can bind(this) to the function to change the context, that won't work here since the
+     context is irrelevant.
+    */
+    this.fastify.addHook('preHandler', ((request, reply) => {
+      return CustomDomainHandler.checkRoute(request, reply);
+    }));
+
     this.fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
       return await this.Index(request, reply);
     });

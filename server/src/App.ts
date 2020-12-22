@@ -5,8 +5,9 @@ import {LinkController} from "./controllers/link-controller";
 import {ProfileController} from "./controllers/profile-controller";
 import {ThemeController} from "./controllers/theme-controller";
 import {UserController} from "./controllers/user-controller";
-import {AuthOpts} from "./utils/auth";
 import {InfoController} from "./controllers/info-controller";
+import {AuthOpts} from "./utils/auth";
+import {CustomDomainHandler} from "./utils/custom-domains";
 
 console.log("Initializing Singlelink");
 
@@ -14,12 +15,14 @@ let server: SingleLinkServer = new SingleLinkServer();
 let database = new DatabaseManager();
 
 start().then(() => {
-  console.log("Neutron Capture Enterprise is listening for requests!");
+  console.log("Singlelink is listening for requests!");
 });
 
 async function start() {
   await database.initialize();
+
   AuthOpts.initialize(database.pool);
+  CustomDomainHandler.initialize(database.pool);
 
   // SingleLink main controllers
   server.addController(new AnalyticsController(server.fastify, database));

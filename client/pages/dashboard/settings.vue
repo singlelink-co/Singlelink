@@ -86,7 +86,7 @@
           >
         </div>
         <div class="flex flex-col w-full mb-6">
-          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (🐳 Whales only!)</label>
+          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (hostname only) (🐳 Whales only!)</label>
           <input
             id="custom_domain"
             v-model="user.activeProfile.customDomain"
