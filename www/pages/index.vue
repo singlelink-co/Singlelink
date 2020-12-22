@@ -5,7 +5,7 @@
         <section class="w-full flex items-center bg-gray-100">
           <div data-aos="fade-up" data-aos-duration="1000" class="w-full mx-auto max-w-6xl text-center p-0 md:p-0 items-center flex flex-col md:flex-col">
             <a href="https://beta-app.singlelink.co">
-              <h3 class="md:text-lg text-indigo-600 font-medium uppercase tracking-wider">🎉 Version 2 is out now! 🎉</h3>
+              <h3 class="md:text-lg text-indigo-600 font-medium uppercase tracking-wider flex flex-row items-center justify-center"><img src="/confetti-emoji.svg" class="w-6 mx-2"> Version 2 is out now! <img src="/confetti-emoji.svg" class="w-6 mx-2"></h3>
             </a>
             <h1 class="text-4xl md:text-6xl font-bold leading-tight my-4">A single link for everything</h1>
             <p class="leading-relaxed text-gray-600 text-2xl mb-8">Singlelink is the free & improved link builder for social media built for the community, by the community. Build your profile in seconds and get online today!</p>
@@ -13,7 +13,7 @@
         </section>
         <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex flex-col items-center justify-center bg-gray-100">
           <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">Create your free Singlelink profile in seconds<span class="ml-2">👉</span></button>
+            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
           </a>
           <a href="https://github.com/Neutron-Creative/Singlelink" class="text-gray-600 hover:underline hover:text-gray-700">Or, clone the repository</a>
         </section>
@@ -34,7 +34,7 @@
           </div>
           </a>
           <a data-aos="fade-up" data-aos-duration="1000" href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">Create your free Singlelink profile in seconds<span class="ml-2">👉</span></button>
+            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
           </a>
         </section>
       </div>
@@ -51,7 +51,7 @@
           <h2 class="text-4xl font-bold mb-2">Get started in seconds</h2>
           <p class="text-gray-600 text-2xl leading-relaxed mb-6">Singlelink has minimal onboarding, is easy to use, and quick to publish. Build your custom profile in seconds with one-click.</p>
           <a href="https://app.singlelink.co/create-account">
-            <button class="mx-auto md:mx-0 bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content; width: fit-content;">Create your free profile<span class="ml-2">👉</span></button>
+            <button class="mx-auto md:mx-0 bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content; width: fit-content;">Create your free profile<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
           </a>
         </div>
         <form data-aos="fade-up" data-aos-duration="1000" class="hidden md:flex shadow-lg relative w-full md:w-1/3 min-w-sm max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col aos-init" style="transform: perspective(1000px) rotate(0deg) rotateX(-2deg) rotateY(-12deg) scale(1.25);">
@@ -143,7 +143,7 @@
           <h2 class="font-bold text-5xl mb-4">Join our community</h2>
           <p class="text-gray-600 text-xl font-medium leading-relaxed mb-8">Join one of the fastest organically growing communities on the web and see why {{ users }} other members choose Singlelink.</p>
           <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">Create your free Singlelink profile in seconds<span class="ml-2">👉</span></button>
+            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
           </a>
       </div>
     </section>

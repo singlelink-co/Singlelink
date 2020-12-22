@@ -8,6 +8,25 @@
           <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">Create your free Singlelink profile in seconds<span class="ml-2">👉</span></button>
         </a>
         <a href="https://github.com/Neutron-Creative/Singlelink" data-aos="fade-up" data-aos-duration="1000" class=" text-gray-600 hover:underline hover:text-gray-700">Looking for the full-featured, free, self-hosted Singlelink?</a>
+        
+        <!-- here -->
+        <section data-aos="fade-up" data-aos-duration="1000" class="shadow-lg overflow-hidden pt-10 relative w-full max-w-xl font-medium p-4 text-center bg-white rounded text-grey-400 text-sm mt-8">
+          <div class="absolute top-0 left-0 right-0 flex flex-row text-white bg-red-500 w-full p-1 text-xs text-center items-center justify-center font-medium">
+            Attention: Singlelink is currently 100% Free!
+          </div>
+          <span class="text-gray-700">
+          Singlelink hosted is currently 100% free & unlimited in beta v2.0.0, but when it reaches public v3.0.0 in 2021 we will activate the pricing plans below.<br/>
+          Sign up today to reserve three months free of whale tier for 2021!
+          </span>
+        </section>
+
+        <!-- coming soon -->
+        <section class="text-center w-full mt-12 mb-8 text-sm text-gray-500 italic">
+          -----------------------
+          coming in 2021
+          -----------------------
+        </section>
+        
         <section data-aos="fade-up" data-aos-duration="1000" class="py-8 text-left">
           <div class="flex flex-wrap md:w-11/12 mx-auto">
             <div class="w-full md:w-1/2 p-4 mb-2 md:mb-0 text-center md:text-left">
@@ -25,11 +44,11 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Multiple profiles (Up to 10)
+                    Multiple profiles (1-5)
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Limitless customization & branding
+                    Full access to profile customizations
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -41,11 +60,11 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Page & link analytics (Past 30 days)
+                    Detailed page & link analytics (30 days)
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Code export with cloud-profile sync
+                    Code export with sync via CLI
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -56,8 +75,8 @@
                     A Singlelink of your choice
                   </li>
                   <li class="mb-2">
-                    <span class="mr-2">❌</span>
-                    No annoying advertisements
+                    <span class="mr-2">✅</span>
+                    No forced advertisements
                   </li>
                 </ul>
                 <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
@@ -67,10 +86,19 @@
               </div>
             </div>
             <div class="w-full md:w-1/2 p-4 mb-2 md:mb-0 text-center md:text-left">
-              <div class="p-8 rounded-lg bg-white shadow-lg">
-                <div class="flex flex-col md:flex-row mb-4 items-center">
+				<div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden">
+				<div class="absolute top-0 left-0 right-0 flex flex-row text-white bg-gray-500 w-full p-1 text-xs text-center items-center justify-center font-medium">
+					<!--<span v-if="remaining > 0">Limited time launch sale! Only {{remaining}}/50 remaining!</span>
+					<span v-if="remaining <= 0">Price increases soon, buy now for the lowest price!</span>-->
+          Launch sale coming soon, first 50 memberships only $3/mo!
+				</div>
+                <div class="flex flex-col md:flex-row mb-4 mt-4 items-center">
                   <h3 class="text-3xl font-heading font-semibold">Whale tier 🐳</h3>
-                  <h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">$3/Month</h4>
+				  <div class="flex flex-col items-center justify-end md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2" v-if="remaining > 0">
+				  	<h4 class="text-2xl font-bold text-gray-500">$3/Month</h4>
+					<h4 class="text-sm font-bold text-gray-400 line-through">$6/Month</h4>
+				  </div>
+				  <h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2" v-if="remaining <= 0">$6/Month</h4>
                 </div>
                 <p class="mb-8 text-gray-600 font-medium leading-relaxed">For those that go above and beyond, our whale tier is the perfect choice to grow without limits.</p>
                 <h3 class="mb-3 font-heading font-semibold">Includes the following</h3>
@@ -81,7 +109,7 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Unlimited analytics (Full retention)
+                    One year analytics data rentention
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -97,23 +125,19 @@
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Unlimited team members (Coming soon)
+                    Unlimited team members & guests
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Access to the Whale Discord community 🐳
+                    Easy code-export for static hosting
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
-                    Access to profile verification services
+                    Premium themes and extensions
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
                     Direct support via Discord Messages
-                  </li>
-                  <li class="mb-2">
-                    <span class="mr-2">✅</span>
-                    Early access to new features
                   </li>
                 </ul>
                 <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
@@ -123,6 +147,55 @@
               </div>
             </div>
         </div>
+		<div class="w-11/12 p-8 rounded border mx-auto mt-8 max-w-5xl flex flex-col">
+			<div class="flex flex-col md:flex-row mb-4 items-center">
+				<h3 class="text-3xl font-heading font-semibold">Singlelink Enterprise</h3>
+				<h4 class="text-xl font-bold text-indigo-600 md:ml-auto md:mr-0 mx-auto md:mt-0 mt-2">Starting from $30/Month</h4>
+			</div>
+			<p class="mb-8 text-gray-600 font-medium leading-relaxed">Custom tailored plans for business customers that depend on Singlelink.</p>
+			<h3 class="mb-3 font-heading font-semibold">Go further with</h3>
+			<div class="flex flex-col md:flex-row md:space-x-4">
+				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
+					<li>
+						<span class="mr-2">✅</span>
+						100% Uptime SLA
+					</li>
+					<li>
+						<span class="mr-2">✅</span>
+						Managed dedicated hosted instance</span>
+					</li>
+          <li>
+						<span class="mr-2">✅</span>
+						Lifetime and/or privatized analytics retention</span>
+					</li>
+					<li>
+						<span class="mr-2">✅</span>
+						24/7 Support via Phone, Discord &amp; Email
+					</li>
+				</ul>
+				<ul class="w-full space-y-2 md:w-1/2 mb-8 list-inside text-gray-600">
+					<li>
+						<span class="mr=2">✅</span>
+						Private fork development & maintainence
+					</li>
+          <li>
+						<span class="mr=2">✅</span>
+						Custom features & 100% unique expirience
+					</li>
+					<li>
+						<span class="mr=2">✅</span>
+						Prioritized issue resolution on Github
+					</li>
+					<li>
+						<span class="mr=2">✅</span>
+						Uncrashable static hosting on Global CDN
+					</li>
+				</ul>
+			</div>
+			<a href="mailto:support@neutroncreative.com" class="text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold">
+				Contact sales - private beta available now
+			</a>
+		</div>
         </section>
       </div>
     </section>
@@ -161,6 +234,11 @@
         },
 
       ],
-    }
+    },
+	  data: function() {
+		return {
+			remaining:50
+		};
+	  }
   };
 </script>
