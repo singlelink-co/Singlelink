@@ -20,7 +20,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'A single link for everything. Build your profile in seconds and get started for free!' },
-      { name: 'og:image', content: 'https://singlelink.co/SingleLink-Hero-v2.png' },
+      { name: 'og:image', content: 'https://singlelink.co/open-graph-image.png' },
       { name: 'og:title', content: 'Singlelink - A single link for everything 🔗🔥' },
       { name: 'og:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
       { name: 'twitter:image', content: 'https://singlelink.co/SingleLink-Hero-v2.png' },
