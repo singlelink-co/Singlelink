@@ -1,7 +1,7 @@
 <h1 align="center">
     <br>
     <br>
-    <a href="https://singlelink.co"><img src="client/static/singlelink-brandmark.svg" width="225"/></a>
+    <a href="https://singlelink.co"><img src="client/static/singlelink-brandmark-background@2x.png" width="215"/></a>
     <br>
     <br>
 </h1>
@@ -28,6 +28,15 @@
 </p>
 
 <p align="center">
+	<a href="https://twitter.com/neutroncreative">
+		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/neutroncreative?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
+	</a
+	<a href="https://discord.gg/BUbmgV4">
+		<img src="https://img.shields.io/discord/739822478276165675?color=%237289da&label=Join%20our%20community%20on%20Discord"/>
+	</a>
+</p>
+
+<p align="center">
   <a href="#key-features">Key Features</a> •
   <a href="#get-started">Get started</a> •
   <a href="#frequently-asked-questions">Frequently Asked Questions</a> •
@@ -39,6 +48,17 @@
 
 <!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
 <img src="www/static/SingleLink-Larger-Hero.png" alt="Singlelink promotional graphic"/>
+
+<br>
+
+---------------------
+## Attention
+
+The readme for this repository is severely outdated, but will be updated soon in v2.1.<br>
+For the most up to date info, please visit the future-update branch.
+
+---------------------
+<br>
 
 <h2 id="key-features">Key features</h2>
 
