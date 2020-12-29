@@ -332,7 +332,7 @@ export default Vue.extend({
         });
 
         this.activeThemeId = response.themeId;
-        this.refreshPreview();
+        this.$root.$emit('refreshUserProfileView');
       } catch (error) {
         console.log('Failed to activate theme');
         console.log(error);
@@ -378,7 +378,8 @@ export default Vue.extend({
         }
 
         this.setPending(null);
-        this.refreshPreview();
+        this.$root.$emit('refreshUserProfileView');
+
       } catch (error) {
         this.error = 'Failed to create theme';
         console.log('Failed to create theme');
@@ -411,7 +412,8 @@ export default Vue.extend({
         this.themes[index] = this.pendingTheme;
 
         this.closeModal();
-        this.refreshPreview();
+        this.$root.$emit('refreshUserProfileView');
+
         return;
       } catch (error) {
         this.error = 'Failed to create theme';
@@ -433,7 +435,8 @@ export default Vue.extend({
 
         this.closeModal();
         this.setPending(null);
-        this.refreshPreview();
+        this.$root.$emit('refreshUserProfileView');
+
         return;
       } catch (error) {
         this.error = 'Failed to create theme';
@@ -457,16 +460,6 @@ export default Vue.extend({
     closeModal() {
       this.setPending(null);
       this.modalActive = false;
-    },
-
-    refreshPreview() {
-      if (process.client) {
-        const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
-
-        if (iframe.contentWindow) {
-          iframe.contentWindow.location.reload();
-        }
-      }
     },
 
     async getUserData() {
@@ -494,7 +487,7 @@ export default Vue.extend({
           customHtml: this.customHtml
         });
 
-        this.refreshPreview();
+        this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log(err);
       }

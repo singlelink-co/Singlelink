@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-row w-screen h-screen">
+
     <section
       class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
       style="width: 70px; max-width: 70px;"
@@ -19,6 +20,7 @@
           class="absolute bottom-0 rounded shadow bg-white border border-gray-200"
           style="left: 60px; width: 245px;"
         >
+
           <li
             v-for="profile in profiles"
             :key="profile.headline"
@@ -36,6 +38,7 @@
               <span class="text-xs text-gray-700">{{ profile.headline }}</span>
             </div>
           </li>
+
           <li class=" flex flex-row items-center justify-center">
             <div class="flex flex-row items-center justify-center w-full">
               <span
@@ -45,9 +48,11 @@
               <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
             </div>
           </li>
+
         </ul>
       </div>
     </section>
+
     <section class="flex flex-col flex-grow">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
         <n-link to="/dashboard">
@@ -81,30 +86,59 @@
       >Changelog</a>]
       </div>
     </section>
+
+    <!-- Preview Section-->
     <section
-      class="flex flex-col w-4/12 items-center justify-center border boder-t-0 border-b-0 border-r-0 bg-gray-100"
+      class="relative flex flex-col w-4/12 items-center border border-t-0 border-b-0 border-r-0 bg-gray-100"
     >
+
+      <!-- Preview Navbar-->
       <div
-        class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white"
-        style="height: 57px;"
+        class="absolute top-0 flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white"
+        style="height: 58px;"
       >
         <p class="font-medium mr-2 text-gray-800">
-          Your Singlelink:
+          Your Singlelink:&nbsp;
         </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline" :href="profileUrl">{{ profileUrl }}</a>
       </div>
-      <div class="phone-display">
-        <iframe id="preview-frame" :src="previewUrl"/>
+
+      <!-- Preview Mode selector -->
+      <div class="absolute" style="top: 70px">
+        <label for="user-profile-view-type">Preview Mode:&nbsp;</label>
+        <select id="user-profile-view-type" v-model="previewMode">
+          <option value="mobile">
+            Mobile <i class="fas fa-mobile-alt"/>
+          </option>
+          <option value="desktop">
+            Desktop <i class="fas fa-laptop"/>
+          </option>
+        </select>
       </div>
+
+      <div class="user-profile-preview-parent">
+        <div v-if="originalHandle" :class="checkPreviewMode()">
+          <UserProfileView
+            :authenticated="true"
+          />
+        </div>
+      </div>
+
     </section>
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import UserProfileView from "~/components/profile/UserProfileView.vue";
 
 export default Vue.extend({
   name: 'Dashboard',
+
+  components: {
+    UserProfileView
+  },
 
   data() {
     return {
@@ -119,8 +153,8 @@ export default Vue.extend({
       profiles: [],
       profileSelect: false,
       profileUrl: "",
-      previewUrl: "",
-      version: "Version loading..."
+      version: "Version loading...",
+      previewMode: 'mobile'
     };
   },
 
@@ -140,13 +174,6 @@ export default Vue.extend({
     } catch (err) {
       console.log(err);
       this.profileUrl = 'https://singlelink.co/';
-    }
-
-    try {
-      this.previewUrl = window.location.origin + '/u-preview/' + this.user.activeProfile.handle;
-    } catch (err) {
-      console.log(err);
-      this.previewUrl = 'https://singlelink.co/';
     }
 
     try {
@@ -241,6 +268,15 @@ export default Vue.extend({
         console.log('Error getting user data');
         console.log(err);
       }
+    },
+
+    checkPreviewMode() {
+      switch (this.previewMode) {
+        case "mobile":
+          return 'phone-display';
+        case "desktop":
+          return 'desktop-display';
+      }
     }
   },
 });
@@ -273,21 +309,41 @@ html {
   margin: 0;
 }
 
-.phone-display {
+.user-profile-preview-parent {
   display: flex;
-  margin: 20px auto auto auto;
+  align-items: center;
+  justify-content: center;
+  margin-top: 120px;
+  width: 100%;
+}
+
+.phone-display {
+  display: block;
   border-radius: 50px;
   background: #000;
   padding: 14px;
   width: 280px;
   height: 606px;
+  overflow: hidden;
 }
 
-.phone-display > iframe {
-  border: none;
+.desktop-display {
+  display: block;
+}
+
+.phone-display > #user-profile-view {
   width: 100%;
   height: 100%;
+  min-height: auto !important;
   border-radius: 35px;
+}
+
+.desktop-display > #user-profile-view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 100% !important;
 }
 
 .nc-item-link:hover {

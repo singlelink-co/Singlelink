@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
+  <div id="user-profile-view" class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
       <img
         v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
@@ -50,11 +50,11 @@
         }
       </component>
 
-      <component :is="'style'">
+      <component :is="'style'" v-if="profile.customCss">
         {{ profile.customCss || null }}
       </component>
 
-      <component :is="'style'" v-if="theme">
+      <component :is="'style'" v-if="(theme ? theme.customCss : false)">
         {{ theme.customCss || null }}
       </component>
 
@@ -84,8 +84,17 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'UShowProfilePreview',
-  middleware: 'authenticated',
+  name: 'UserProfileView',
+
+  props: {
+    profileHandle: {
+      type: String,
+    },
+    authenticated: {
+      type: Boolean,
+      default: false
+    },
+  },
 
   data() {
     return {
@@ -102,25 +111,61 @@ export default Vue.extend({
         avatarUrl: null
       },
       theme: null,
-      links: null
+      links: null,
     };
   },
 
   async mounted() {
-    try {
-      const response: any = await this.$axios.$post('/profile/preview', {
-        token: this.$store.getters['auth/getToken']
-      });
+    await this.refresh();
 
-      this.profile = response.profile;
-      this.links = response.links?.sort(function (a: Link, b: Link) {
-        return a.sortOrder - b.sortOrder;
-      });
-      this.user = response.user;
-      this.theme = response.theme || null;
-    } catch (err) {
-      console.log('Error getting profile');
-      console.log(err);
+    this.$root.$on('refreshUserProfileView', () => {
+      this.refresh();
+    });
+  },
+
+  methods: {
+    async refresh() {
+      if (this.authenticated) {
+        await this.getAuthenticatedProfile();
+      } else {
+        await this.getProfile();
+      }
+    },
+
+    async getProfile() {
+      try {
+        const response = await this.$axios.$post(`/profile/${this.profileHandle}`, {
+          token: this.$store.getters['auth/getToken']
+        });
+
+        this.profile = response.profile;
+        this.links = response.links.sort(function (a: any, b: any) {
+          return a.sortOrder - b.sortOrder;
+        });
+        this.user = response.user;
+        this.theme = response.theme || null;
+      } catch (err) {
+        console.log('Error getting profile');
+        console.log(err);
+      }
+    },
+
+    async getAuthenticatedProfile() {
+      try {
+        const response: any = await this.$axios.$post('/profile/preview', {
+          token: this.$store.getters['auth/getToken']
+        });
+
+        this.profile = response.profile;
+        this.links = response.links?.sort(function (a: Link, b: Link) {
+          return a.sortOrder - b.sortOrder;
+        });
+        this.user = response.user;
+        this.theme = response.theme || null;
+      } catch (err) {
+        console.log('Error getting profile');
+        console.log(err);
+      }
     }
   }
 });

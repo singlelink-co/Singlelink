@@ -287,7 +287,6 @@ export default Vue.extend({
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
         this.links.splice(index, 1);
 
-        this.refreshPreview();
         this.closeModal();
       } catch (err) {
         console.log('Link destruction unsuccessful');
@@ -310,7 +309,6 @@ export default Vue.extend({
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
         this.links[index] = this.pendingLink;
 
-        this.refreshPreview();
         this.closeModal();
       } catch (err) {
         console.log('Link changes unsuccessful');
@@ -344,7 +342,6 @@ export default Vue.extend({
         });
 
         this.links.push(response.data);
-        this.refreshPreview();
         this.clearPending();
       } catch (err) {
         console.log('Error adding new link to profile');
@@ -393,23 +390,11 @@ export default Vue.extend({
 
         console.log('Successfully reordered links');
         this.links = response;
-        this.refreshPreview();
       } catch (err) {
         console.log('Error reordering links');
         console.log(err);
       }
     },
-
-    refreshPreview() {
-      if (process.client) {
-        const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
-
-        if (iframe.contentWindow) {
-          iframe.contentWindow.location.reload();
-        }
-      }
-    }
-
   }
 });
 </script>

@@ -34,6 +34,7 @@
     "vue/html-closing-bracket-spacing": "off",
     "vue/require-default-prop": "off",
     "vue/no-use-v-if-with-v-for": "off",
+    "vue/html-indent": "off",
     "object-curly-spacing": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "no-array-constructor": "off",

@@ -86,7 +86,8 @@
           >
         </div>
         <div class="flex flex-col w-full mb-6">
-          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (hostname only) (🐳 Whales only!)</label>
+          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (hostname only) (🐳 Whales
+            only!)</label>
           <input
             id="custom_domain"
             v-model="user.activeProfile.customDomain"
@@ -204,16 +205,6 @@ export default Vue.extend({
   },
 
   methods: {
-    refreshPreview() {
-      if (process.client) {
-        const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
-
-        if (iframe.contentWindow) {
-          iframe.contentWindow.location.reload();
-        }
-      }
-    },
-
     async saveChanges() {
       try {
         await this.$axios.$post('/profile/update', {
@@ -231,9 +222,9 @@ export default Vue.extend({
             location.reload();
             return;
           }
-        }
 
-        this.refreshPreview();
+          this.$root.$emit('refreshUserProfileView');
+        }
       } catch (err) {
         if (err.response) {
           if (err.response.status === StatusCodes.CONFLICT) {
