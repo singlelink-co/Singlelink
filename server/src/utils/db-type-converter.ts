@@ -120,4 +120,12 @@ export class DbTypeConverter {
     };
   }
 
+  static toPermGroup(perms: DbPermissionGroup): PermissionGroup {
+    return {
+      id: perms.id,
+      userId: perms.user_id,
+      groupName: perms.group_name
+    };
+  }
+
 }

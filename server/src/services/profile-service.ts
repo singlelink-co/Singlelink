@@ -165,7 +165,7 @@ export class ProfileService extends DatabaseService {
    * @param userId The user id associated with the profiles.
    */
   async getProfileCount(userId: string): Promise<number> {
-    return (await this.pool.query<{count: number}>("select count(*) from app.profiles where user_id=$1", [userId])).rows[0].count;
+    return (await this.pool.query<{ count: number }>("select count(*) from app.profiles where user_id=$1", [userId])).rows[0].count;
   }
 
   /**
@@ -241,7 +241,7 @@ export class ProfileService extends DatabaseService {
       throw new HttpError(StatusCodes.NOT_FOUND, "The user doesn't own this profile.");
     }
 
-    profilesResult.splice(profilesResult.indexOf(profileRow));
+    profilesResult.splice(profilesResult.indexOf(profileRow), 1);
 
     if (await this.getProfileCount(userId) <= 1) {
       throw new HttpError(StatusCodes.BAD_REQUEST, "You cannot delete your only profile.");

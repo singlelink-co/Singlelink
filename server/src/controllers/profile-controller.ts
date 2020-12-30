@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {ProfileService} from "../services/profile-service";
@@ -44,6 +44,16 @@ interface UpdateProfileRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+const createProfileRequestOpts = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '5 minutes'
+    }
+  },
+  preHandler: <preHandlerHookHandler>AuthOpts.validateAuthWithData
+};
+
 /**
  * This controller maps and provides for all the controllers under /profile.
  */
@@ -74,7 +84,7 @@ export class ProfileController extends Controller {
     this.fastify.post<AuthenticatedRequest>('/profiles', AuthOpts.ValidateWithData, this.ListProfiles.bind(this));
     this.fastify.post<AuthenticatedRequest>('/profile/links', AuthOpts.ValidateWithData, this.ListProfileLinks.bind(this));
 
-    this.fastify.post<CreateProfileRequest>('/profile/create', AuthOpts.ValidateWithData, this.CreateProfile.bind(this));
+    this.fastify.post<CreateProfileRequest>('/profile/create', createProfileRequestOpts, this.CreateProfile.bind(this));
     this.fastify.post<UpdateProfileRequest>('/profile/update', AuthOpts.ValidateWithData, this.UpdateProfile.bind(this));
     this.fastify.post<AuthenticatedRequest>('/profile/delete', AuthOpts.ValidateWithData, this.DeleteProfile.bind(this));
 

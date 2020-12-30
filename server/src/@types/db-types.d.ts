@@ -109,3 +109,9 @@ interface DbAnalyticsGlobalStats {
   total_links: number;
   total_themes: number;
 }
+
+interface DbPermissionGroup {
+  id: string,
+  user_id: string,
+  group_name: string
+}

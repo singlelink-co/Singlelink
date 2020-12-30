@@ -125,3 +125,9 @@ interface AnalyticsGlobalStats {
   totalLinks: number;
   totalThemes: number;
 }
+
+interface PermissionGroup {
+  id: string,
+  userId: string,
+  groupName: string
+}

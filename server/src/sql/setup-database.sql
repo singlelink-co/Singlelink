@@ -166,6 +166,19 @@ create index if not exists links_profile_id on app.links (profile_id);
 create index if not exists links_url_index on app.links (url);
 
 /*
+ Creates a table for permission groups.
+ */
+create table if not exists app.permgroups
+(
+    id          bigserial primary key unique,
+    user_id     bigint references app.users (id) on update cascade on delete cascade,
+    group_name  text not null,
+    permissions text
+);
+
+create index if not exists admins_group_name on app.permgroups (group_name);
+
+/*
  Creates a table for visiting analytics.
  type: The type of visit this was.
  referral_id: The link or page this visit points to.

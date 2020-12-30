@@ -65,7 +65,7 @@ export class AuthOpts {
    * @param reply
    * @param done
    */
-  private static validateAuth(request: FastifyRequest<{ Body: { token: string } }>, reply: FastifyReply, done: Function) {
+  static validateAuth(request: FastifyRequest<{ Body: { token: string } }>, reply: FastifyReply, done: Function) {
     let body = request.body;
     let token: string | null | undefined = body?.token;
 
@@ -108,7 +108,7 @@ export class AuthOpts {
    * @param reply
    * @param done
    */
-  private static validateAuthWithData(request: FastifyRequest<{ Body: { token?: string, user?: User, profile?: Profile } }>, reply: FastifyReply, done: Function) {
+  static validateAuthWithData(request: FastifyRequest<{ Body: { token?: string, user?: User, profile?: Profile } }>, reply: FastifyReply, done: Function) {
     let body = request.body;
     let token: string | null | undefined = body?.token;
 

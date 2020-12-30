@@ -56,6 +56,7 @@ export default Vue.extend({
         customCss: '',
         imageUrl: '',
         headline: '',
+        handle: '',
         subtitle: '',
         visibility: ''
       },

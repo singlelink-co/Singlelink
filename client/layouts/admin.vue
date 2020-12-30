@@ -16,27 +16,15 @@
           @click="toggleProfileSelect"
         >
 
-        <div
-          v-if="error"
-          class="error"
-        >
-          {{ error }}
-        </div>
-
         <ul
-          v-if="selectingProfile"
+          v-if="profileSelect"
           class="absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list"
           style="left: 60px; width: 245px;"
         >
 
           <li class="flex flex-row items-center justify-left profile-search">
             <!-- Create new profile-->
-            <input
-              type="text"
-              placeholder="Filter profiles..."
-              aria-label="Filter profiles"
-              @input="onFilterProfilesInput"
-            >
+            <input type="text" placeholder="Filter profiles..." aria-label="Filter profiles" @input="filterProfiles">
             <i class="search-icon fas fa-search"/>
           </li>
 
@@ -44,7 +32,6 @@
             v-for="profile in filteredProfiles"
             :key="profile.handle"
             class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
-            :style="!profile.handle ? 'max-height: 51px;' : ''"
             @click="selectProfile(profile.id)"
           >
             <img
@@ -58,7 +45,7 @@
             <div
               v-if="!profile.handle"
               class="mr-2 rounded-full"
-              style="width: 100%; max-width: 35px; max-height: 58px; margin-right: 10px;"
+              style="width: 100%; max-width: 35px; margin-right: 10px;"
             >
               &nbsp;
               <br>
@@ -168,7 +155,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {StatusCodes} from "http-status-codes";
 import UserProfileView from "~/components/profile/UserProfileView.vue";
 
 export default Vue.extend({
@@ -191,9 +177,7 @@ export default Vue.extend({
       selectingProfile: false,
       profileUrl: "",
       version: "Version loading...",
-      previewMode: 'mobile',
-      error: '',
-      errorIntervalHandler: undefined as any
+      previewMode: 'mobile'
     };
   },
 
@@ -229,37 +213,13 @@ export default Vue.extend({
     },
 
     async createNewProfile() {
-      try {
-        const profile = await this.$axios.$post<Profile>('/profile/create', {
-          token: this.$store.getters['auth/getToken']
-        });
+      await this.$axios.$post('/profile/create', {
+        token: this.$store.getters['auth/getToken']
+      });
 
-        this.profiles.push(profile);
+      this.selectingProfile = false;
 
-        this.filteredProfiles = this.profiles;
-
-        this.filteredProfiles.sort(function (a, b) {
-          return a.handle.localeCompare(b.handle);
-        });
-      } catch (err) {
-        if (err.response) {
-          if (err.response.status === StatusCodes.TOO_MANY_REQUESTS) {
-            this.error = `Slow down! You are making profiles too quickly. Error: ${err.response.data.message}`;
-          } else {
-            this.error = `Error: ${err.response.data.message}`;
-          }
-
-          console.error(err);
-        } else {
-          throw err;
-        }
-
-        clearInterval(this.errorIntervalHandler);
-
-        this.errorIntervalHandler = setTimeout(() => {
-          this.error = '';
-        }, 5000);
-      }
+      location.reload();
     },
 
     async selectProfile(profile: any) {
@@ -281,10 +241,6 @@ export default Vue.extend({
       });
 
       this.filteredProfiles = this.profiles;
-
-      this.filteredProfiles.sort(function (a, b) {
-        return a.handle.localeCompare(b.handle);
-      });
     },
 
     getActiveStyles(page: any) {
@@ -363,10 +319,6 @@ export default Vue.extend({
       const profiles = this.profiles as Profile[];
 
       this.filteredProfiles = profiles.filter(x => x.handle.toLowerCase().startsWith(filterSearch));
-
-      this.filteredProfiles.sort(function (a, b) {
-        return a.handle.localeCompare(b.handle);
-      });
 
       const diff = this.profiles.length - this.filteredProfiles.length;
 
@@ -453,18 +405,6 @@ html {
 
 .nc-item-link:hover {
   border-bottom: solid 2px rgba(235, 244, 255, var(--bg-opacity));
-}
-
-.error {
-  @apply bottom-0 rounded shadow border border-gray-200;
-  position: absolute;
-  width: 30em;
-  bottom: 5px;
-  left: 70px;
-  color: mintcream;
-  background-color: red;
-  padding: 7px;
-  z-index: 25;
 }
 
 .profile-list {

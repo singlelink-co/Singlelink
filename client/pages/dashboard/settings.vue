@@ -139,7 +139,7 @@
         <button
           type="button"
           class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold"
-          @click="attemptDelete"
+          @click="deleteProfile"
         >
           Yes, delete this profile
         </button>
@@ -255,7 +255,7 @@ export default Vue.extend({
       this.modalActive = false;
     },
 
-    async attemptDelete() {
+    async deleteProfile() {
       this.$nuxt.$loading.start();
 
       await this.$axios.$post('/profile/delete', {
@@ -264,7 +264,7 @@ export default Vue.extend({
 
       this.$nuxt.$loading.finish();
 
-      location.replace('/dashboard');
+      location.reload();
     },
 
     async getUserData() {
