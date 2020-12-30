@@ -4,15 +4,18 @@
       Profile settings
     </h1>
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-      <div
-        v-if="error"
-        class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
-      >
-        <img style="width: 12px;" src="/caution.svg">
-        <div class="flex flex-col ml-2">
-          {{ error }}
+      <transition name="fade">
+        <div
+          v-if="error"
+          class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+        >
+          <img style="width: 12px;" src="/caution.svg" alt="caution">
+          <div class="flex flex-col ml-2">
+            {{ error }}
+          </div>
         </div>
-      </div>
+      </transition>
+
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Details
       </h2>
@@ -122,51 +125,58 @@
         Delete this profile
       </button>
     </div>
-    <!-- Confirm profile deletion modal -->
-    <div
-      v-if="modalActive"
-      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-      @click="closeModal"
-    >
-      <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
-        <h2 class="text-gray-800 font-semibold text-xl">
-          Are you sure?
-        </h2>
-        <p class="text-gray-600 text-sm">
-          Deleting this profile is irreversible, please confirm to continue.
-        </p>
-        <button
-          type="button"
-          class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold"
-          @click="deleteProfile"
-        >
-          Yes, delete this profile
-        </button>
+
+    <transition name="fade">
+      <!-- Confirm profile deletion modal -->
+      <div
+        v-if="modalActive"
+        class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+        style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+        @click="closeModal"
+      >
+        <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
+          <h2 class="text-gray-800 font-semibold text-xl">
+            Are you sure?
+          </h2>
+          <p class="text-gray-600 text-sm">
+            Deleting this profile is irreversible, please confirm to continue.
+          </p>
+          <button
+            type="button"
+            class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded font-semibold"
+            @click="deleteProfile"
+          >
+            Yes, delete this profile
+          </button>
+        </div>
       </div>
-    </div>
-    <!-- Password reset confirmation modal -->
-    <div
-      v-if="infoModal"
-      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-      @click="closeInfoModal"
-    >
-      <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
-        <h2 class="text-gray-800 font-semibold text-xl">
-          Password reset requested
-        </h2>
-        <p class="text-gray-600 text-sm">A password reset link has been sent to your account email inbox successfully.
-          Make sure to check your spam folder.</p>
-        <button
-          type="button"
-          class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
-          @click="closeInfoModal"
-        >
-          Close
-        </button>
+    </transition>
+
+    <transition name="fade">
+      <!-- Password reset confirmation modal -->
+      <div
+        v-if="infoModal"
+        class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+        style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+        @click="closeInfoModal"
+      >
+        <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
+          <h2 class="text-gray-800 font-semibold text-xl">
+            Password reset requested
+          </h2>
+          <p class="text-gray-600 text-sm">A password reset link has been sent to your account email inbox successfully.
+            Make sure to check your spam folder.</p>
+          <button
+            type="button"
+            class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
+            @click="closeInfoModal"
+          >
+            Close
+          </button>
+        </div>
       </div>
-    </div>
+    </transition>
+
   </section>
 </template>
 
@@ -290,3 +300,13 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>

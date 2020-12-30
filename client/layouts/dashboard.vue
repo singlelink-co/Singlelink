@@ -16,12 +16,14 @@
           @click="toggleProfileSelect"
         >
 
-        <div
-          v-if="error"
-          class="error"
-        >
-          {{ error }}
-        </div>
+        <transition name="fade">
+          <div
+            v-if="error"
+            class="error"
+          >
+            {{ error }}
+          </div>
+        </transition>
 
         <ul
           v-if="selectingProfile"
@@ -109,7 +111,10 @@
           </div>
         </n-link>
       </div>
+
+      <!-- Render Nuxt-->
       <Nuxt/>
+
       <div class="p-4 text-md">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
         {{ version }}
@@ -163,6 +168,8 @@
 
     </section>
 
+    <GDPRContentModal/>
+
   </div>
 </template>
 
@@ -170,9 +177,11 @@
 import Vue from "vue";
 import {StatusCodes} from "http-status-codes";
 import UserProfileView from "~/components/profile/UserProfileView.vue";
+import GDPRContentModal from "~/components/utilities/GDPRConsentPopup.vue";
 
 export default Vue.extend({
   components: {
+    GDPRContentModal,
     UserProfileView
   },
 
@@ -492,5 +501,17 @@ html {
     bottom: 0;
     background-color: #FFFFFF;
   }
+}
+
+/**
+  Animations
+ */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

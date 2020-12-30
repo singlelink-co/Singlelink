@@ -8,6 +8,7 @@
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Themes
       </h2>
+
       <div class="flex flex-row">
         <div
           class="rounded nc-theme bg-gray-200"
@@ -18,6 +19,7 @@
             <div class="nc-bottom-inner bg-gray-600"/>
           </div>
         </div>
+
         <div
           v-for="theme in themes"
           v-if="themes"
@@ -36,12 +38,14 @@
             <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
           </div>
         </div>
+
         <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal('create')">
           <div class="nc-inner flex items-center justify-center">
             <span class="font-semibold text-gray-700 text-4xl">+</span>
           </div>
         </div>
       </div>
+
     </div>
 
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
@@ -84,197 +88,199 @@
       </button>
     </div>
 
-    <div
-      v-if="modalActive"
-      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-      @click="closeModal"
-    >
-      <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
-        <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
-          <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
-            Create new theme
-          </h2>
-          <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
-            Edit theme
-          </h2>
-          <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add your new
-            theme.</p>
-          <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
-            theme changes.</p>
-        </div>
-        <form class="p-6 pt-4 bg-gray-100 w-full">
-          <div
-            v-if="error"
-            class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
-          >
-            <img style="width: 12px;" src="/caution.svg" alt="caution">
-            <div class="flex flex-col ml-2">
-              {{ error }}
-            </div>
+    <transition name="fade">
+      <div
+        v-if="modalActive"
+        class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+        style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+        @click="closeModal"
+      >
+        <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
+          <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+            <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
+              Create new theme
+            </h2>
+            <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
+              Edit theme
+            </h2>
+            <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add your new
+              theme.</p>
+            <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
+              theme changes.</p>
           </div>
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="label">Label</label>
-            <input
-              id="label"
-              v-model="pendingTheme.label"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              type="text"
-              placeholder="e.g. 🌈 Colorful theme"
+          <form class="p-6 pt-4 bg-gray-100 w-full">
+            <div
+              v-if="error"
+              class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
             >
-          </div>
-          <div class="flex flex-row">
-            <div class="flex flex-col mb-3 mr-3 w-1/2">
-              <label class="font-medium text-sm text-gray-800" for="primary_fill">Primary background fill</label>
+              <img style="width: 12px;" src="/caution.svg" alt="caution">
+              <div class="flex flex-col ml-2">
+                {{ error }}
+              </div>
+            </div>
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="label">Label</label>
               <input
-                id="primary_fill"
-                v-model="pendingTheme.colors.fill.primary"
+                id="label"
+                v-model="pendingTheme.label"
                 class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                 type="text"
-                placeholder="e.g. #5353EC"
-              >
-              <input
-                id="primary_fill_picker"
-                v-model="pendingTheme.colors.fill.primary"
-                class="mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="color"
-                aria-label="primary fill color picker"
+                placeholder="e.g. 🌈 Colorful theme"
               >
             </div>
-            <div class="flex flex-col mb-3 ml-3 w-1/2">
-              <label class="font-medium text-sm text-gray-800" for="secondary_fill">Secondary background fill</label>
-              <input
-                id="secondary_fill"
-                v-model="pendingTheme.colors.fill.secondary"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="text"
-                placeholder="e.g. #0094DE"
-              >
-              <input
-                id="secondary_fill_picker"
-                v-model="pendingTheme.colors.fill.secondary"
-                class="mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="color"
-                aria-label="secondary fill color picker"
-              >
+            <div class="flex flex-row">
+              <div class="flex flex-col mb-3 mr-3 w-1/2">
+                <label class="font-medium text-sm text-gray-800" for="primary_fill">Primary background fill</label>
+                <input
+                  id="primary_fill"
+                  v-model="pendingTheme.colors.fill.primary"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="text"
+                  placeholder="e.g. #5353EC"
+                >
+                <input
+                  id="primary_fill_picker"
+                  v-model="pendingTheme.colors.fill.primary"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="color"
+                  aria-label="primary fill color picker"
+                >
+              </div>
+              <div class="flex flex-col mb-3 ml-3 w-1/2">
+                <label class="font-medium text-sm text-gray-800" for="secondary_fill">Secondary background fill</label>
+                <input
+                  id="secondary_fill"
+                  v-model="pendingTheme.colors.fill.secondary"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="text"
+                  placeholder="e.g. #0094DE"
+                >
+                <input
+                  id="secondary_fill_picker"
+                  v-model="pendingTheme.colors.fill.secondary"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="color"
+                  aria-label="secondary fill color picker"
+                >
+              </div>
             </div>
-          </div>
 
-          <div class="flex flex-row">
-            <div class="flex flex-col mb-3 mr-3 w-1/2">
-              <label class="font-medium text-sm text-gray-800" for="primary_text_fill">Primary text fill</label>
-              <input
-                id="primary_text_fill"
-                v-model="pendingTheme.colors.text.primary"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="text"
-                placeholder="e.g. #FFFFFF"
-              >
-              <input
-                id="primary_text_fill_picker"
-                v-model="pendingTheme.colors.text.primary"
-                class="mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="color"
-                aria-label="primary text fill color picker"
-              >
+            <div class="flex flex-row">
+              <div class="flex flex-col mb-3 mr-3 w-1/2">
+                <label class="font-medium text-sm text-gray-800" for="primary_text_fill">Primary text fill</label>
+                <input
+                  id="primary_text_fill"
+                  v-model="pendingTheme.colors.text.primary"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="text"
+                  placeholder="e.g. #FFFFFF"
+                >
+                <input
+                  id="primary_text_fill_picker"
+                  v-model="pendingTheme.colors.text.primary"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="color"
+                  aria-label="primary text fill color picker"
+                >
+              </div>
+              <div class="flex flex-col mb-3 ml-3 w-1/2">
+                <label class="font-medium text-sm text-gray-800" for="secondary_text_fill">Secondary text fill</label>
+                <input
+                  id="secondary_text_fill"
+                  v-model="pendingTheme.colors.text.secondary"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="text"
+                  placeholder="e.g. rgba(255,255,255,.75)"
+                >
+                <input
+                  id="secondary_text_fill_picker"
+                  v-model="pendingTheme.colors.text.secondary"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  type="color"
+                  aria-label="secondary text fill picker"
+                >
+              </div>
             </div>
-            <div class="flex flex-col mb-3 ml-3 w-1/2">
-              <label class="font-medium text-sm text-gray-800" for="secondary_text_fill">Secondary text fill</label>
-              <input
-                id="secondary_text_fill"
-                v-model="pendingTheme.colors.text.secondary"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="text"
-                placeholder="e.g. rgba(255,255,255,.75)"
-              >
-              <input
-                id="secondary_text_fill_picker"
-                v-model="pendingTheme.colors.text.secondary"
-                class="mt-2 text-sm border-solid border-gray-300 rounded border"
-                type="color"
-                aria-label="secondary text fill picker"
-              >
+
+            <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+              <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+                Custom HTML
+              </h2>
+              <textarea
+                v-model="pendingTheme.customHtml"
+                rows="5"
+                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+                placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
+                aria-label="Custom HTML"
+              />
             </div>
-          </div>
 
-          <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-            <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-              Custom HTML
-            </h2>
-            <textarea
-              v-model="pendingTheme.customHtml"
-              rows="5"
-              class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
-              placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-              aria-label="Custom HTML"
-            />
-          </div>
-
-          <div class="flex flex-col p-6 bg-white shadow rounded w-full">
-            <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-              Custom CSS
-            </h2>
-            <textarea
-              v-model="pendingTheme.customCss"
-              rows="5"
-              class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
-              placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-              aria-label="Custom CSS"
-            />
-          </div>
-        </form>
-        <div
-          v-if="modalIntent === 'create'"
-          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-        >
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="saveCreateTheme(true)"
+            <div class="flex flex-col p-6 bg-white shadow rounded w-full">
+              <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+                Custom CSS
+              </h2>
+              <textarea
+                v-model="pendingTheme.customCss"
+                rows="5"
+                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+                placeholder="e.g. a { color: rgba(0,0,0,.8); }"
+                aria-label="Custom CSS"
+              />
+            </div>
+          </form>
+          <div
+            v-if="modalIntent === 'create'"
+            class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
           >
-            Save and add theme
-          </button>
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
-            @click="saveCreateTheme(false)"
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="saveCreateTheme(true)"
+            >
+              Save and add theme
+            </button>
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              @click="saveCreateTheme(false)"
+            >
+              Save theme and continue
+            </button>
+          </div>
+
+          <div
+            v-if="modalIntent === 'edit'"
+            class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
           >
-            Save theme and continue
-          </button>
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="saveEditTheme"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="deleteTheme"
+            >
+              Delete
+            </button>
+          </div>
+          <!--        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"-->
+          <!--             v-if="modalIntent === 'edit'">-->
+          <!--          <button @click="saveLinkChanges" type="button"-->
+          <!--                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">-->
+          <!--            Save changes-->
+          <!--          </button>-->
+          <!--          <button @click="deleteLink" type="button"-->
+          <!--                  class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center">-->
+          <!--            Delete link-->
+          <!--          </button>-->
+          <!--        </div>-->
         </div>
-
-        <div
-          v-if="modalIntent === 'edit'"
-          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-        >
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="saveEditTheme"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="deleteTheme"
-          >
-            Delete
-          </button>
-        </div>
-        <!--        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"-->
-        <!--             v-if="modalIntent === 'edit'">-->
-        <!--          <button @click="saveLinkChanges" type="button"-->
-        <!--                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">-->
-        <!--            Save changes-->
-        <!--          </button>-->
-        <!--          <button @click="deleteLink" type="button"-->
-        <!--                  class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center">-->
-        <!--            Delete link-->
-        <!--          </button>-->
-        <!--        </div>-->
       </div>
-    </div>
+    </transition>
   </section>
 </template>
 
@@ -561,5 +567,17 @@ export default Vue.extend({
     transform: scale(1);
   }
 
+}
+
+/**
+  Animations
+ */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

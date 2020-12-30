@@ -5,7 +5,7 @@
         v-if="!links || links.length === 0"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
       >
-        You don't have any links to display<br>Click the button below to create one!
+        You don't have any links to display.<br>Click the button below to create one!
       </div>
       <button
         type="button"
@@ -14,6 +14,7 @@
       >
         Add new link
       </button>
+
       <draggable
         v-if="links && links.length > 0"
         v-model="sortedLinks"
@@ -38,148 +39,153 @@
       </draggable>
     </div>
 
-    <div
-      v-if="modalActive"
-      class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
-      style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-      @click="closeModal"
-    >
+    <transition name="fade">
+      <div
+        v-if="modalActive"
+        class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
+        style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
+        @click="closeModal"
+      >
 
-      <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
+        <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
 
-        <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
-          <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
-            Create new link
-          </h2>
-          <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
-            Edit link
-          </h2>
-          <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add a new link to
-            your page.</p>
-          <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
-            link changes.</p>
-        </div>
+          <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+            <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
+              Create new link
+            </h2>
+            <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
+              Edit link
+            </h2>
+            <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add a new link
+              to
+              your page.</p>
+            <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
+              link changes.</p>
+          </div>
 
-        <form class="p-6 pt-4 bg-gray-100 w-full">
+          <form class="p-6 pt-4 bg-gray-100 w-full">
 
-          <div
-            v-if="error"
-            class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
-          >
-            <img style="width: 12px;" src="/caution.svg" alt="caution">
-            <div class="flex flex-col ml-2">
-              {{ error }}
+            <transition name="fade">
+              <div
+                v-if="error"
+                class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+              >
+                <img style="width: 12px;" src="/caution.svg" alt="caution">
+                <div class="flex flex-col ml-2">
+                  {{ error }}
+                </div>
+              </div>
+            </transition>
+
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="label">Label</label>
+              <input
+                id="label"
+                v-model="pendingLink.label"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. My Calendar"
+              >
             </div>
-          </div>
 
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="label">Label</label>
-            <input
-              id="label"
-              v-model="pendingLink.label"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              type="text"
-              placeholder="e.g. My Calendar"
-            >
-          </div>
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle (optional)</label>
+              <input
+                id="subtitle"
+                v-model="pendingLink.subtitle"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. A list of all my events and available times"
+              >
+            </div>
 
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle (optional)</label>
-            <input
-              id="subtitle"
-              v-model="pendingLink.subtitle"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              type="text"
-              placeholder="e.g. A list of all my events and available times"
-            >
-          </div>
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
+              <input
+                id="link"
+                v-model="pendingLink.url"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="text"
+                placeholder="e.g. Jane Doe"
+              >
+            </div>
 
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
-            <input
-              id="link"
-              v-model="pendingLink.url"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              type="text"
-              placeholder="e.g. Jane Doe"
-            >
-          </div>
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
+              <textarea
+                id="custom_css"
+                v-model="pendingLink.customCss"
+                rows="3"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                placeholder="e.g. background: #5353EC;"
+              />
+            </div>
 
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
-            <textarea
-              id="custom_css"
-              v-model="pendingLink.customCss"
-              rows="3"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              placeholder="e.g. background: #5353EC;"
-            />
-          </div>
-
-          <div class="flex flex-col mb-3">
-            <label class="font-medium text-sm text-gray-800" for="custom_css">
-              Create Deep Link
-              <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
-                <span class="ml-2 text-black text-xl">
+            <div class="flex flex-col mb-3">
+              <label class="font-medium text-sm text-gray-800" for="custom_css">
+                Create Deep Link
+                <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
+                  <span class="ml-2 text-black text-xl">
                   <i class="fas fa-mobile-alt"/>
                 </span>
-              </a>
-            </label>
-            <input
-              id="deep_link"
-              v-model="pendingLink.useDeepLink"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
-              type="checkbox"
-              placeholder="e.g. background: #5353EC;"
-              aria-label="create deep link"
+                </a>
+              </label>
+              <input
+                id="deep_link"
+                v-model="pendingLink.useDeepLink"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                type="checkbox"
+                placeholder="e.g. background: #5353EC;"
+                aria-label="create deep link"
+              >
+            </div>
+
+          </form>
+
+          <div
+            v-if="modalIntent === 'create'"
+            class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+          >
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="saveAndClose"
             >
+              Save and add link
+            </button>
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              @click="saveAndContinue"
+            >
+              Save and continue
+            </button>
           </div>
 
-        </form>
+          <div
+            v-if="modalIntent === 'edit'"
+            class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+          >
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="saveLinkChanges"
+            >
+              Save changes
+            </button>
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              @click="deleteLink"
+            >
+              Delete link
+            </button>
+          </div>
 
-        <div
-          v-if="modalIntent === 'create'"
-          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-        >
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="saveAndClose"
-          >
-            Save and add link
-          </button>
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
-            @click="saveAndContinue"
-          >
-            Save and continue
-          </button>
-        </div>
-
-        <div
-          v-if="modalIntent === 'edit'"
-          class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
-        >
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
-            @click="saveLinkChanges"
-          >
-            Save changes
-          </button>
-          <button
-            type="button"
-            class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
-            @click="deleteLink"
-          >
-            Delete link
-          </button>
         </div>
 
       </div>
-
-    </div>
+    </transition>
 
   </section>
 </template>
@@ -268,13 +274,16 @@ export default Vue.extend({
       this.modalActive = false;
     },
 
-    saveAndClose() {
-      this.addNewLink();
-      this.closeModal();
+    async saveAndClose() {
+      const result = await this.addNewLink();
+
+      if (result) {
+        this.closeModal();
+      }
     },
 
-    saveAndContinue() {
-      this.addNewLink();
+    async saveAndContinue() {
+      await this.addNewLink();
     },
 
     async deleteLink() {
@@ -288,6 +297,8 @@ export default Vue.extend({
         this.links.splice(index, 1);
 
         this.closeModal();
+
+        this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log('Link destruction unsuccessful');
         console.log(err);
@@ -310,6 +321,7 @@ export default Vue.extend({
         this.links[index] = this.pendingLink;
 
         this.closeModal();
+        this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log('Link changes unsuccessful');
         console.log(err);
@@ -320,15 +332,15 @@ export default Vue.extend({
       this.error = '';
     },
 
-    async addNewLink() {
+    async addNewLink(): Promise<boolean> {
       if (!this.pendingLink.label) {
         this.error = 'Link label required';
-        return;
+        return false;
       }
 
       if (!this.pendingLink.url) {
         this.error = 'Link URL required';
-        return;
+        return false;
       }
 
       try {
@@ -343,9 +355,13 @@ export default Vue.extend({
 
         this.links.push(response.data);
         this.clearPending();
+
+        this.$root.$emit('refreshUserProfileView');
+        return true;
       } catch (err) {
         console.log('Error adding new link to profile');
         console.log(err);
+        return true;
       }
     },
 
@@ -390,6 +406,8 @@ export default Vue.extend({
 
         console.log('Successfully reordered links');
         this.links = response;
+
+        this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log('Error reordering links');
         console.log(err);
@@ -398,3 +416,17 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+/**
+  Animations
+ */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
