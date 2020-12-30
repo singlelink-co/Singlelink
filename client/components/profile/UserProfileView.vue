@@ -31,22 +31,49 @@
         .sl-headline {
         color: {{ theme.colors.text.primary }};
         }
+
         .sl-subtitle {
         opacity: .85;
         color: {{ theme.colors.text.primary }};
         }
+
         .sl-bg {
         background: {{ theme.colors.fill.primary }};
         }
+
         .sl-item {
         background: {{ theme.colors.fill.secondary }};
         }
+
         .sl-label {
         color: {{ theme.colors.text.secondary }};
         }
+
         .sl-link-subtitle {
         opacity: .85;
         color: {{ theme.colors.text.secondary }};
+        }
+      </component>
+
+      <component :is="'style'">
+        .nc-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 1000px;
+        }
+
+        .nc-link {
+        @apply rounded shadow bg-white p-4 w-full font-medium mb-3;
+        cursor: pointer;
+        transition: .15s ease-in-out;
+        }
+
+        .nc-link:hover {
+        transform: scale(1.02);
+        }
+
+        .nc-link:active {
+        transform: scale(1);
         }
       </component>
 
@@ -56,25 +83,6 @@
 
       <component :is="'style'" v-if="(theme ? theme.customCss : false)">
         {{ theme.customCss || null }}
-      </component>
-
-      <component :is="'style'">
-        .nc-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 1000px;
-        }
-        .nc-link {
-        @apply rounded shadow bg-white p-4 w-full font-medium mb-3;
-        cursor: pointer;
-        transition: .15s ease-in-out;
-        }
-        .nc-link:hover {
-        transform: scale(1.02);
-        }
-        .nc-link:active {
-        transform: scale(1);
-        }
       </component>
     </section>
   </div>
@@ -170,26 +178,3 @@ export default Vue.extend({
   }
 });
 </script>
-
-<style lang="scss" scoped>
-.nc-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 1000px;
-
-  .nc-link {
-    cursor: pointer;
-    transition: .15s ease-in-out;
-    overflow: hidden;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-}
-
-</style>

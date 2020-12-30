@@ -15,38 +15,58 @@
           alt="avatar"
           @click="toggleProfileSelect"
         >
+
         <ul
           v-if="profileSelect"
-          class="absolute bottom-0 rounded shadow bg-white border border-gray-200"
+          class="absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list"
           style="left: 60px; width: 245px;"
         >
 
+          <li class="flex flex-row items-center justify-left profile-search">
+            <!-- Create new profile-->
+            <input type="text" placeholder="Filter profiles..." aria-label="Filter profiles" @input="filterProfiles">
+            <i class="search-icon fas fa-search"/>
+          </li>
+
           <li
-            v-for="profile in profiles"
-            :key="profile.headline"
+            v-for="profile in filteredProfiles"
+            :key="profile.handle"
             class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
             @click="selectProfile(profile.id)"
           >
             <img
+              v-if="profile.handle"
               class="mr-2 rounded-full"
-              style="width: 100%;max-width: 35px;"
-              :src="profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+              style="width: 100%; max-width: 35px; margin-right: 10px;"
+              :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
               alt="avatar"
             >
+
+            <div
+              v-if="!profile.handle"
+              class="mr-2 rounded-full"
+              style="width: 100%; max-width: 35px; margin-right: 10px;"
+            >
+              &nbsp;
+              <br>
+              &nbsp;
+            </div>
+
             <div class="flex flex-col">
-              <span class="text-sm font-medium capitalize">{{ profile.handle }}</span>
+              <span class="text-sm font-medium">{{ profile.handle }}</span>
               <span class="text-xs text-gray-700">{{ profile.headline }}</span>
             </div>
           </li>
 
-          <li class=" flex flex-row items-center justify-center">
-            <div class="flex flex-row items-center justify-center w-full">
-              <span
-                class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
-                @click="createNewProfile"
-              >Create new</span>
-              <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
-            </div>
+          <li class="flex flex-row items-center justify-center button-controls">
+            <!-- Create new profile-->
+            <span
+              class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+              @click="createNewProfile"
+            >Create new</span>
+
+            <!-- Logout-->
+            <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
           </li>
 
         </ul>
@@ -106,14 +126,18 @@
       <!-- Preview Mode selector -->
       <div class="absolute" style="top: 70px">
         <label for="user-profile-view-type">Preview Mode:&nbsp;</label>
-        <select id="user-profile-view-type" v-model="previewMode">
-          <option value="mobile">
-            Mobile <i class="fas fa-mobile-alt"/>
+        <select
+          id="user-profile-view-type"
+          v-model="previewMode"
+        >
+          <option selected value="mobile">
+            Mobile
           </option>
           <option value="desktop">
-            Desktop <i class="fas fa-laptop"/>
+            Desktop
           </option>
         </select>
+        <i :class="getPreviewModeIcon()"/>
       </div>
 
       <div class="user-profile-preview-parent">
@@ -150,7 +174,8 @@ export default Vue.extend({
           handle: ''
         }
       },
-      profiles: [],
+      profiles: [] as Profile[],
+      filteredProfiles: [] as Profile[],
       profileSelect: false,
       profileUrl: "",
       version: "Version loading...",
@@ -216,6 +241,8 @@ export default Vue.extend({
       this.profiles = await this.$axios.$post('/profiles', {
         token: this.$store.getters['auth/getToken']
       });
+
+      this.filteredProfiles = this.profiles;
     },
 
     getActiveStyles(page: any) {
@@ -270,6 +297,15 @@ export default Vue.extend({
       }
     },
 
+    getPreviewModeIcon() {
+      switch (this.previewMode) {
+        case "mobile":
+          return 'fas fa-mobile-alt';
+        case "desktop":
+          return 'fas fa-tv';
+      }
+    },
+
     checkPreviewMode() {
       switch (this.previewMode) {
         case "mobile":
@@ -277,7 +313,30 @@ export default Vue.extend({
         case "desktop":
           return 'desktop-display';
       }
-    }
+    },
+
+    filterProfiles(event: any) {
+      const target = event.target;
+      const filterSearch = target.value.toLowerCase();
+      const profiles = this.profiles as Profile[];
+
+      this.filteredProfiles = profiles.filter(x => x.handle.toLowerCase().startsWith(filterSearch));
+
+      const diff = this.profiles.length - this.filteredProfiles.length;
+
+      for (let i = 0; i < diff; i++) {
+        this.filteredProfiles.push({
+          customCss: "",
+          customHtml: "",
+          handle: "",
+          headline: "",
+          imageUrl: "",
+          subtitle: "",
+          themeId: "",
+          visibility: ""
+        });
+      }
+    },
   },
 });
 </script>
@@ -348,5 +407,32 @@ html {
 
 .nc-item-link:hover {
   border-bottom: solid 2px rgba(235, 244, 255, var(--bg-opacity));
+}
+
+.profile-list {
+  max-height: 400px !important;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  .profile-search {
+    position: sticky;
+    top: 0;
+    background-color: #FFFFFF;
+
+    input {
+      width: 180px;
+      padding-left: 10px;
+    }
+
+    i.search-icon {
+      margin-left: 5px;
+    }
+  }
+
+  .button-controls {
+    position: sticky;
+    bottom: 0;
+    background-color: #FFFFFF;
+  }
 }
 </style>

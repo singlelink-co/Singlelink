@@ -32,6 +32,7 @@ interface Profile {
   customCss: string,
   imageUrl: string,
   headline: string,
+  handle: string,
   subtitle: string,
   visibility: string
 }

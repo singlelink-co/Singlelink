@@ -28,12 +28,12 @@
       <div
         v-for="link in analytics.linkVisits"
         :key="link.id"
-        class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center md:flex-row flex-col"
+        class="rounded shadow bg-white p-4 w-full font-medium mb-3 flex items-center justify-center md:flex-row flex-col"
         :style="link.link.customCss"
       >
         <div class="text-left mr-4 flex flex-col justify-start">
-          <span class="font-medium text-gray-900 sl-label mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url" class="text-sm text-gray-700 sl-link-subtitle">{{ link.link.url }}</span>
+          <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
+          <span v-if="link.link.url" class="text-sm text-gray-700">{{ link.link.url }}</span>
         </div>
         <div class="ml-auto flex flex-col justify-end items-center">
           <span class="text-sm uppercase text-gray-700 font-semibold mb-2">Total clicks</span>
