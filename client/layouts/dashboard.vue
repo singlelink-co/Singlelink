@@ -110,6 +110,11 @@
             Settings
           </div>
         </n-link>
+        <n-link to="/dashboard/admin">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-admin')">
+            Admin
+          </div>
+        </n-link>
       </div>
 
       <!-- Render Nuxt-->
@@ -318,8 +323,8 @@ export default Vue.extend({
           case "dashboard-settings":
             this.active = "dashboard-settings";
             break;
-          case "dashboard-account-settings":
-            this.active = "dashboard-account-settings";
+          case "dashboard-admin":
+            this.active = "dashboard-admin";
             break;
         }
       } catch (err) {

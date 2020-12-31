@@ -42,7 +42,8 @@ class Converter {
       connectionString: this.pgUrl,
       ssl: {
         rejectUnauthorized: false
-      }
+      },
+      max: 22
     });
 
     console.log("Pooled PostgreSQL.");
@@ -154,6 +155,9 @@ class Converter {
             obj.oldId = user._id.toString();
 
             pgAccounts.push(obj);
+
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Added ${addedAccounts} accounts.`);
           } catch (err) {
             console.log(err);
           }
@@ -195,6 +199,9 @@ class Converter {
             obj.oldId = theme._id.toString();
 
             pgThemes.push(obj);
+
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Added ${addedThemes} themes.`);
           } catch (err) {
             console.log(err);
           }
@@ -250,6 +257,9 @@ class Converter {
             obj.oldId = profile._id.toString();
 
             pgProfiles.push(obj);
+
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Wrote ${addedProfiles} profiles.`);
           } catch (err) {
             console.log(err);
           }
@@ -292,6 +302,9 @@ class Converter {
             obj.oldId = link._id.toString();
 
             pgLinks.push(obj);
+
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Added ${addedLinks} links.`);
           } catch (err) {
             console.log(err);
           }
@@ -334,6 +347,9 @@ class Converter {
               addedVisits++;
             }
 
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Added ${addedVisits} visits.`);
+
           } catch (err) {
             console.log(err);
           }
@@ -349,26 +365,28 @@ class Converter {
       console.log("Committing " + accountQueries.length + " account queries");
       await Promise.all(accountQueries.map(x => x()));
 
+      console.log();
+
       console.log("Committing " + themeQueries.length + " theme queries");
       await Promise.all(themeQueries.map(x => x()));
+
+      console.log();
 
       console.log("Committing " + profileQueries.length + " profile queries");
       await Promise.all(profileQueries.map(x => x()));
 
+      console.log();
+
       console.log("Committing " + linkQueries.length + " link queries");
       await Promise.all(linkQueries.map(x => x()));
+
+      console.log();
 
       console.log("Committing " + visitQueries.length + " visit queries");
       await Promise.all(visitQueries.map(x => x()));
 
-      console.log(`Added ${addedAccounts} account(s).`);
-      console.log(`Added ${addedThemes} themes(s).`);
-      console.log(`Added ${addedProfiles} profiles(s).`);
-      console.log(`Added ${addedLinks} links(s).`);
-      console.log(`Added ${addedVisits} visit(s).`);
-
       if (badThemes || badProfiles || badLinks || badVisits)
-        console.log("\n---- Some invalid data was detected, and was ignored! ----");
+        console.log("\n\n---- Some invalid data was detected, and was ignored! ----");
 
       if (badThemes)
         console.log(badThemes + " theme(s) couldn't be transferred. (Bad data)");

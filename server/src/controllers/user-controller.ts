@@ -167,7 +167,7 @@ export class UserController extends Controller {
       let body = request.body;
 
       if (!body.email) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
+        reply.status(StatusCodes.NOT_FOUND).send(ReplyUtils.error("No email was provided."));
         return;
       }
 

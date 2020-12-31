@@ -96,7 +96,7 @@
         @click="closeModal"
       >
         <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
-          <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+          <div class="relative p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
             <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
               Create new theme
             </h2>
@@ -107,7 +107,20 @@
               theme.</p>
             <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
               theme changes.</p>
+
+            <!-- Theme preview icon-->
+            <div
+              :key="pendingTheme.id"
+              class="rounded nc-theme"
+              :style="`background:${pendingTheme.colors.fill.primary}; position: absolute; top: 12px; right: 12px`"
+            >
+              <div class="nc-inner" :style="`background:${pendingTheme.colors.fill.secondary};`">
+                <div class="nc-bottom-inner" :style="`background:${pendingTheme.colors.text.primary};`"/>
+              </div>
+            </div>
+
           </div>
+
           <form class="p-6 pt-4 bg-gray-100 w-full">
             <div
               v-if="error"

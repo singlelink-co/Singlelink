@@ -176,7 +176,7 @@ create table if not exists app.permgroups
     permissions text
 );
 
-create index if not exists admins_group_name on app.permgroups (group_name);
+create index if not exists permgroups_group_name on app.permgroups (group_name);
 
 /*
  Creates a table for visiting analytics.

@@ -108,6 +108,34 @@
         </button>
       </form>
     </div>
+
+    <!-- Reset Password -->
+    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-1/2">
+        <h2 class="text-gray-800 font-semibold text-lg w-full">
+          Reset your password
+        </h2>
+        <p class="text-gray-600 font-medium">
+          An email will be sent to you with a password reset link. Please type in the same email you used to sign up
+          for this account to confirm.
+        </p>
+        <input
+          id="passwordResetEmail"
+          v-model="passwordEmail"
+          class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+          type="email"
+          placeholder="e.g. youremail@singlelink.co"
+        >
+      </div>
+      <button
+        type="button"
+        class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
+        @click="setPasswordModalActive(true)"
+      >
+        Reset Password
+      </button>
+    </div>
+
     <!-- Delete profile -->
     <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-1/2">
@@ -120,7 +148,7 @@
       <button
         type="button"
         class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
-        @click="openModal"
+        @click="setDeleteProfileModalActive(true)"
       >
         Delete this profile
       </button>
@@ -129,10 +157,10 @@
     <transition name="fade">
       <!-- Confirm profile deletion modal -->
       <div
-        v-if="modalActive"
+        v-if="deleteProfileModalActive"
         class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-        @click="closeModal"
+        @click="setDeleteProfileModalActive(false)"
       >
         <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
           <h2 class="text-gray-800 font-semibold text-xl">
@@ -155,21 +183,27 @@
     <transition name="fade">
       <!-- Password reset confirmation modal -->
       <div
-        v-if="infoModal"
+        v-if="resetPasswordModalActive"
         class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
-        @click="closeInfoModal"
+        @click="setPasswordModalActive(false)"
       >
         <div class="flex flex-col p-6 bg-white shadow rounded w-full max-w-lg" @click.stop>
           <h2 class="text-gray-800 font-semibold text-xl">
-            Password reset requested
+            {{ passwordError ? "Error on password request!" : "Password reset requested" }}
           </h2>
-          <p class="text-gray-600 text-sm">A password reset link has been sent to your account email inbox successfully.
+          <p v-if="!passwordError" class="text-gray-600 text-sm">A password reset link has been sent to your account
+            email inbox successfully.
             Make sure to check your spam folder.</p>
+
+          <p v-if="passwordError" class="text-gray-600 text-sm">
+            <i class="fas fa-exclamation-triangle"/>
+            {{ passwordError }}
+          </p>
           <button
             type="button"
             class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
-            @click="closeInfoModal"
+            @click="setPasswordModalActive(false)"
           >
             Close
           </button>
@@ -181,6 +215,7 @@
 </template>
 
 <script lang="ts">
+import crypto from "crypto";
 import Vue from "vue";
 import {StatusCodes} from "http-status-codes";
 
@@ -191,12 +226,12 @@ export default Vue.extend({
 
   data() {
     return {
-      infoModal: false,
-      modalActive: false,
+      resetPasswordModalActive: false,
+      deleteProfileModalActive: false,
       originalHandle: '',
       user: {
         name: '',
-        email: '',
+        emailHash: '',
         activeProfile: {
           imageUrl: '',
           headline: '',
@@ -206,7 +241,9 @@ export default Vue.extend({
           visibility: ''
         }
       },
-      error: ''
+      error: '',
+      passwordError: '',
+      passwordEmail: ''
     };
   },
 
@@ -249,20 +286,32 @@ export default Vue.extend({
       }
     },
 
-    openInfoModal() {
-      this.infoModal = true;
+    setPasswordModalActive(active: boolean) {
+      this.resetPasswordModalActive = active;
+
+      if (active) {
+        if (!this.passwordEmail) {
+          this.passwordError = "Please enter a valid email.";
+          return;
+        } else {
+          this.passwordError = '';
+        }
+
+        const md5 = crypto.createHash('md5').update(this.passwordEmail).digest('hex');
+
+        console.log(md5);
+        console.log(this.user.emailHash);
+
+        if (md5 !== this.user.emailHash) {
+          this.passwordError = "Please enter the same email you used for this account.";
+          return;
+        }
+        this.requestPasswordReset();
+      }
     },
 
-    closeInfoModal() {
-      this.infoModal = false;
-    },
-
-    openModal() {
-      this.modalActive = true;
-    },
-
-    closeModal() {
-      this.modalActive = false;
+    setDeleteProfileModalActive(active: boolean) {
+      this.deleteProfileModalActive = active;
     },
 
     async deleteProfile() {
@@ -295,6 +344,35 @@ export default Vue.extend({
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
+      }
+    },
+
+    async requestPasswordReset() {
+      try {
+        const request = await this.$axios.post('/user/request-reset-password', {
+          email: this.passwordEmail
+        });
+        if (request.status && request.status === 200) {
+          this.passwordError = '';
+        }
+      } catch (err) {
+        console.error(err);
+
+        this.passwordError = err.toString();
+
+        if (err.response) {
+          if (err.response.status === StatusCodes.NOT_FOUND) {
+            this.passwordError = "The email couldn't be found, please make sure it's correct.";
+          }
+
+          if (err.response.status === StatusCodes.TOO_MANY_REQUESTS) {
+            this.passwordError = `Whoa, slow down! Error: ${err.response.data.message}`;
+          }
+
+          return;
+        }
+
+        throw err;
       }
     },
   }
