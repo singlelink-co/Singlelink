@@ -30,7 +30,7 @@ export class ThemeService extends DatabaseService {
   }
 
   /**
-   * Gets all the themes that are available to a user.
+   * Gets includeGlobal the themes that are available to a user.
    *
    * @param userId
    * @param includeGlobal Should global themes be included in the results?
@@ -43,6 +43,19 @@ export class ThemeService extends DatabaseService {
     } else {
       queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1", [userId]);
     }
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "No themes were found.");
+    }
+
+    return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
+  }
+
+  /**
+   * Gets all the global themes that are on the server.
+   */
+  async listGlobalThemes(): Promise<Theme[]> {
+    let queryResult: QueryResult<DbTheme> = await this.pool.query<DbTheme>("select * from app.themes where global=true");
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(StatusCodes.NOT_FOUND, "No themes were found.");
@@ -101,7 +114,7 @@ export class ThemeService extends DatabaseService {
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {
-    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 and user_id=$6 returning *",
+    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 and (user_id=$6 or global=true) returning *",
       [
         label,
         colors,
@@ -128,7 +141,7 @@ export class ThemeService extends DatabaseService {
     themeId: string,
     userId: string
   ): Promise<Theme> {
-    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 and user_id=$2 returning *",
+    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 and (user_id=$2 or global=true) returning *",
       [
         themeId,
         userId

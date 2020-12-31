@@ -132,6 +132,10 @@ export default {
     PORT: process.env.PORT ?? 3000,
   },
 
+  sitemap: {
+    hostname: 'https://' + process.env.HOST ?? 'app.singlelink.co'
+  },
+
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/

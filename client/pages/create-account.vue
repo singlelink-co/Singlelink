@@ -116,7 +116,6 @@ export default Vue.extend({
           password: this.password,
         });
 
-        // Cookies.setCookie('singlelink_token', response.data.token, 7);
         this.$store.commit('auth/login', response.data.token);
         this.$nuxt.$loading.finish();
 

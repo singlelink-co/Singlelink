@@ -4,21 +4,13 @@
       Appearance
     </h1>
 
+    <!-- Your Themes-->
     <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Themes
+        Your Themes
       </h2>
 
       <div class="flex flex-row">
-        <div
-          class="rounded nc-theme bg-gray-200"
-          :class="{'active': !activeThemeId}"
-          @click="selectTheme(null)"
-        >
-          <div class="nc-inner bg-white">
-            <div class="nc-bottom-inner bg-gray-600"/>
-          </div>
-        </div>
 
         <div
           v-for="theme in themes"
@@ -42,6 +34,44 @@
         <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal('create')">
           <div class="nc-inner flex items-center justify-center">
             <span class="font-semibold text-gray-700 text-4xl">+</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Global Themes-->
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        Global Themes
+      </h2>
+
+      <div class="flex flex-row">
+        <div
+          class="rounded nc-theme bg-gray-200"
+          :class="{'active': !activeThemeId}"
+          @click="selectTheme(null)"
+        >
+          <div class="nc-inner bg-white">
+            <div class="nc-bottom-inner bg-gray-600"/>
+          </div>
+        </div>
+
+        <div
+          v-for="theme in globalThemes"
+          v-if="globalThemes"
+          :key="theme.id"
+          class="rounded nc-theme"
+          :style="`background:${theme.colors.fill.primary}; position: relative;`"
+          :class="{'active': activeThemeId === theme.id}"
+          @click="selectTheme(theme.id)"
+        >
+          <i
+            class="fas fa-eye edit-icon"
+            @click.stop="openModal('view'); pendingTheme=theme;"
+          />
+          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
+            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
           </div>
         </div>
       </div>
@@ -97,12 +127,17 @@
       >
         <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
           <div class="relative p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+            <h2 v-if="modalIntent === 'view'" class="text-gray-800 font-semibold text-xl">
+              Theme details
+            </h2>
             <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
               Create new theme
             </h2>
             <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
               Edit theme
             </h2>
+            <p v-if="modalIntent === 'view'" class="text-gray-600 text-sm">Viewing theme details
+            </p>
             <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add your new
               theme.</p>
             <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
@@ -139,6 +174,7 @@
                 class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                 type="text"
                 placeholder="e.g. 🌈 Colorful theme"
+                :disabled="modalIntent === 'view'"
               >
             </div>
             <div class="flex flex-row">
@@ -150,6 +186,7 @@
                   class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="text"
                   placeholder="e.g. #5353EC"
+                  :disabled="modalIntent === 'view'"
                 >
                 <input
                   id="primary_fill_picker"
@@ -157,6 +194,7 @@
                   class="mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="color"
                   aria-label="primary fill color picker"
+                  :disabled="modalIntent === 'view'"
                 >
               </div>
               <div class="flex flex-col mb-3 ml-3 w-1/2">
@@ -167,6 +205,7 @@
                   class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="text"
                   placeholder="e.g. #0094DE"
+                  :disabled="modalIntent === 'view'"
                 >
                 <input
                   id="secondary_fill_picker"
@@ -174,6 +213,7 @@
                   class="mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="color"
                   aria-label="secondary fill color picker"
+                  :disabled="modalIntent === 'view'"
                 >
               </div>
             </div>
@@ -187,6 +227,7 @@
                   class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="text"
                   placeholder="e.g. #FFFFFF"
+                  :disabled="modalIntent === 'view'"
                 >
                 <input
                   id="primary_text_fill_picker"
@@ -194,6 +235,7 @@
                   class="mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="color"
                   aria-label="primary text fill color picker"
+                  :disabled="modalIntent === 'view'"
                 >
               </div>
               <div class="flex flex-col mb-3 ml-3 w-1/2">
@@ -204,6 +246,7 @@
                   class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="text"
                   placeholder="e.g. rgba(255,255,255,.75)"
+                  :disabled="modalIntent === 'view'"
                 >
                 <input
                   id="secondary_text_fill_picker"
@@ -211,8 +254,27 @@
                   class="mt-2 text-sm border-solid border-gray-300 rounded border"
                   type="color"
                   aria-label="secondary text fill picker"
+                  :disabled="modalIntent === 'view'"
                 >
               </div>
+            </div>
+
+            <div v-if="isAdmin" class="mt-4 mb-4">
+              <h1>Admin Options</h1>
+
+              <div class="flex flex-row mt-2" style="align-items: center">
+                <input
+                  id="themeGlobal"
+                  v-model="pendingTheme.global"
+                  type="checkbox"
+                  class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                  :disabled="modalIntent === 'view'"
+                >
+                <label for="themeGlobal" class="ml-2 block text-md leading-5 text-gray-700">
+                  Set Global
+                </label>
+              </div>
+
             </div>
 
             <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
@@ -225,6 +287,7 @@
                 class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
                 placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
                 aria-label="Custom HTML"
+                :disabled="modalIntent === 'view'"
               />
             </div>
 
@@ -238,6 +301,7 @@
                 class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
                 placeholder="e.g. a { color: rgba(0,0,0,.8); }"
                 aria-label="Custom CSS"
+                :disabled="modalIntent === 'view'"
               />
             </div>
           </form>
@@ -280,17 +344,19 @@
               Delete
             </button>
           </div>
-          <!--        <div class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"-->
-          <!--             v-if="modalIntent === 'edit'">-->
-          <!--          <button @click="saveLinkChanges" type="button"-->
-          <!--                  class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2">-->
-          <!--            Save changes-->
-          <!--          </button>-->
-          <!--          <button @click="deleteLink" type="button"-->
-          <!--                  class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center">-->
-          <!--            Delete link-->
-          <!--          </button>-->
-          <!--        </div>-->
+
+          <div
+            v-if="modalIntent === 'view'"
+            class="flex flex-row p-6 pt-3 pb-3 white border border-gray-200 border-r-0 border-l-0 border-b-0"
+          >
+            <button
+              type="button"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              @click="closeModal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </transition>
@@ -300,7 +366,7 @@
 <script lang="ts">
 import Vue from "vue";
 
-type ModalIntent = "create" | "edit";
+type ThemeModalIntent = "create" | "edit" | "view";
 
 export default Vue.extend({
   name: 'DashboardAppearance',
@@ -311,11 +377,12 @@ export default Vue.extend({
     return {
       error: '',
       themes: new Array<Theme>(),
+      globalThemes: new Array<Theme>(),
       activeThemeId: '',
       customCss: '',
       customHtml: '',
       modalActive: false,
-      modalIntent: 'create' as ModalIntent,
+      modalIntent: 'create' as ThemeModalIntent,
       pendingTheme: {
         id: '',
         label: '',
@@ -333,13 +400,23 @@ export default Vue.extend({
         customCss: undefined,
         customHtml: undefined,
       } as Theme,
-      userId: ''
+      userId: '',
+
+      isAdmin: false
     };
   },
 
-  mounted() {
-    this.getUserData();
-    this.loadThemes();
+  async beforeMount() {
+    const permGroup = await this.$axios.$post("/admin/perm-group", {
+      token: this.$store.getters['auth/getToken']
+    });
+
+    this.isAdmin = permGroup["groupName"] === 'admin';
+  },
+
+  async mounted() {
+    await this.getUserData();
+    await this.loadThemes();
   },
 
   methods: {
@@ -361,8 +438,14 @@ export default Vue.extend({
     async loadThemes() {
       try {
         // Grab themes from response
-        this.themes = (await this.$axios.$post<Theme[]>('/theme', {
-          token: this.$store.getters['auth/getToken']
+        this.themes = (await this.$axios.$post<Theme[]>('/themes', {
+          token: this.$store.getters['auth/getToken'],
+          includeGlobal: false
+        }));
+
+        this.globalThemes = (await this.$axios.$post<Theme[]>('/themes', {
+          token: this.$store.getters['auth/getToken'],
+          onlyGlobal: true
         }));
       } catch (error) {
         console.log('Failed to get themes');
@@ -391,6 +474,16 @@ export default Vue.extend({
 
         this.themes.push(response);
 
+        if (this.pendingTheme.global) {
+          const token = this.$store.getters['auth/getToken'];
+
+          await this.$axios.$post('theme/set-global', {
+            token,
+            id: response.id,
+            global: this.pendingTheme.global
+          });
+        }
+
         if (close) {
           this.closeModal();
           return;
@@ -398,7 +491,6 @@ export default Vue.extend({
 
         this.setPending(null);
         this.$root.$emit('refreshUserProfileView');
-
       } catch (error) {
         this.error = 'Failed to create theme';
         console.log('Failed to create theme');
@@ -429,6 +521,16 @@ export default Vue.extend({
         const index = this.themes.findIndex(x => x.id === themeId);
 
         this.themes[index] = this.pendingTheme;
+
+        if (this.pendingTheme.global) {
+          const token = this.$store.getters['auth/getToken'];
+
+          await this.$axios.$post('theme/set-global', {
+            token,
+            id: response.id,
+            global: this.pendingTheme.global
+          });
+        }
 
         this.closeModal();
         this.$root.$emit('refreshUserProfileView');
@@ -471,7 +573,7 @@ export default Vue.extend({
       }
     },
 
-    openModal(intent: ModalIntent) {
+    openModal(intent: ThemeModalIntent) {
       this.modalIntent = intent;
       this.modalActive = true;
     },

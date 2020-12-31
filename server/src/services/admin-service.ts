@@ -17,17 +17,17 @@ export class AdminService extends DatabaseService {
    * Returns all data as -1 if the database was unable to be queried.
    */
   async getPermGroup(userId: string): Promise<PermissionGroup> {
-    let queryResult = await this.pool.query<DbPermissionGroup>("select * from analytics.global_stats");
+    let queryResult = await this.pool.query<DbPermissionGroup>("select * from app.perm_groups where user_id=$1", [userId]);
 
-    let dbPermissionGroup = queryResult.rows[0];
-
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1) {
       return {
         id: '',
         userId: '',
         groupName: ''
       };
     }
+
+    let dbPermissionGroup = queryResult.rows[0];
 
     return DbTypeConverter.toPermGroup(dbPermissionGroup);
   }

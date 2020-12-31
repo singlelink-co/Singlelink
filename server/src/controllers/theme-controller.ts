@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {AdminRequest, AuthenticatedRequest, AuthOpts} from "../utils/auth";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
@@ -9,7 +9,8 @@ import {StatusCodes} from "http-status-codes";
 
 interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
-    includeGlobal: boolean
+    includeGlobal: boolean,
+    onlyGlobal: boolean
   } & AuthenticatedRequest["Body"]
 }
 
@@ -39,18 +40,18 @@ interface DeleteThemeRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
-interface SetGlobalRequest extends AuthenticatedRequest {
+interface SetGlobalRequest extends AdminRequest {
   Body: {
     id: string,
     global: boolean
-  } & AuthenticatedRequest["Body"]
+  } & AdminRequest["Body"]
 }
 
-interface SetUserIdRequest extends AuthenticatedRequest {
+interface SetUserIdRequest extends AdminRequest {
   Body: {
     id: string,
     userId: string
-  } & AuthenticatedRequest["Body"]
+  } & AdminRequest["Body"]
 }
 
 /**
@@ -66,27 +67,29 @@ export class ThemeController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.post<GetThemeRequest>('/theme', AuthOpts.ValidateWithData, this.GetTheme.bind(this));
+    this.fastify.post<GetThemeRequest>('/themes', AuthOpts.ValidateWithData, this.GetThemes.bind(this));
     this.fastify.post<CreateThemeRequest>('/theme/create', AuthOpts.ValidateWithData, this.CreateTheme.bind(this));
     this.fastify.post<UpdateThemeRequest>('/theme/update', AuthOpts.ValidateWithData, this.UpdateTheme.bind(this));
     this.fastify.post<DeleteThemeRequest>('/theme/delete', AuthOpts.ValidateWithData, this.DeleteTheme.bind(this));
 
-    //TODO: Add permissions authentication for these endpoints, disable for now
-
-    // this.fastify.post<SetGlobalRequest>('/theme/set-global', AuthOpts.ValidateOnly, this.SetGlobal.bind(this));
-    // this.fastify.post<SetUserIdRequest>('/theme/set-user-id', AuthOpts.ValidateOnly, this.SetUserId.bind(this));
+    this.fastify.post<SetGlobalRequest>('/theme/set-global', AuthOpts.ValidateAdminWithData, this.SetGlobal.bind(this));
+    this.fastify.post<SetUserIdRequest>('/theme/set-user-id', AuthOpts.ValidateAdminWithData, this.SetUserId.bind(this));
   }
 
   /**
-   * Route for /theme
+   * Route for /themes
    * @param request
    * @param reply
    */
-  async GetTheme(request: FastifyRequest<GetThemeRequest>, reply: FastifyReply) {
+  async GetThemes(request: FastifyRequest<GetThemeRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
-      return await this.themeService.listThemes(body.user.id, body.includeGlobal);
+      if (body.onlyGlobal) {
+        return await this.themeService.listGlobalThemes();
+      } else {
+        return await this.themeService.listThemes(body.user.id, body.includeGlobal);
+      }
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

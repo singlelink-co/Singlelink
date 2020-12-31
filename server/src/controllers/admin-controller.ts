@@ -22,13 +22,11 @@ export class AdminController extends Controller {
 
   registerRoutes(): void {
     // Authenticated
-    this.fastify.all<GetGroupRequest>('/admin/permgroup', AuthOpts.ValidateWithData, this.GetPermGroup.bind(this));
+    this.fastify.all<GetGroupRequest>('/admin/perm-group', AuthOpts.ValidateWithData, this.GetPermGroup.bind(this));
   }
 
   /**
-   * Route for /admin/permgroup
-   *
-   * Used to get general SingleLink analytics.
+   * Route for /admin/perm-group
    *
    * @param request
    * @param reply

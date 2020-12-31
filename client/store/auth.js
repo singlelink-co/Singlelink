@@ -33,7 +33,5 @@ export const mutations = {
         maxAge: 0
       });
     }
-  }
+  },
 };
-
-export const actions = {};

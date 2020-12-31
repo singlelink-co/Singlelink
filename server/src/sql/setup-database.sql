@@ -168,7 +168,7 @@ create index if not exists links_url_index on app.links (url);
 /*
  Creates a table for permission groups.
  */
-create table if not exists app.permgroups
+create table if not exists app.perm_groups
 (
     id          bigserial primary key unique,
     user_id     bigint references app.users (id) on update cascade on delete cascade,
@@ -176,7 +176,7 @@ create table if not exists app.permgroups
     permissions text
 );
 
-create index if not exists permgroups_group_name on app.permgroups (group_name);
+create index if not exists perm_groups_group_name on app.perm_groups (group_name);
 
 /*
  Creates a table for visiting analytics.

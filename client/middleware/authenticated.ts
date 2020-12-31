@@ -11,10 +11,8 @@ export default async function (context: Context) {
             {
               token: singlelinkToken
             });
-        // context.store.commit('user/set_user', response);
+
         context.store.commit('auth/login', singlelinkToken);
-        // verify token
-        // context.store.commit('user/set_user', response)
       } catch (err) {
         console.log('Error getting self');
         console.log(err);

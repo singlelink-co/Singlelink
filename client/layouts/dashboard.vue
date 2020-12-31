@@ -110,7 +110,7 @@
             Settings
           </div>
         </n-link>
-        <n-link to="/dashboard/admin">
+        <n-link v-if="isAdmin" to="/dashboard/admin">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-admin')">
             Admin
           </div>
@@ -207,7 +207,9 @@ export default Vue.extend({
       version: "Version loading...",
       previewMode: 'mobile',
       error: '',
-      errorIntervalHandler: undefined as any
+      errorIntervalHandler: undefined as any,
+
+      isAdmin: false
     };
   },
 
@@ -215,6 +217,14 @@ export default Vue.extend({
     $route() {
       this.setActive();
     }
+  },
+
+  async beforeMount() {
+    const permGroup = await this.$axios.$post("/admin/perm-group", {
+      token: this.$store.getters['auth/getToken']
+    });
+
+    this.isAdmin = permGroup["groupName"] === 'admin';
   },
 
   async mounted() {
