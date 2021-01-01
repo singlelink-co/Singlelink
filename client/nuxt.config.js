@@ -17,8 +17,8 @@ export default {
   },
 
   server: {
-    host: process.env.HOST ?? 'app.singlelink.co',
-    port: process.env.PORT ?? 3000
+    host: process.env.HOST ?? '0.0.0.0',
+    port: process.env.PORT ?? 80
   },
 
   /*
@@ -120,12 +120,12 @@ export default {
 
   env: {
     API_URL: process.env.API_URL ?? 'https://api.singlelink.co',
-    HOST: process.env.HOST ?? 'app.singlelink.co',
+    HOSTNAME: process.env.HOSTNAME ?? 'app.singlelink.co',
     PORT: process.env.PORT ?? 3000,
   },
 
   sitemap: {
-    hostname: 'https://' + process.env.HOST ?? 'app.singlelink.co'
+    hostname: 'https://' + process.env.HOSTNAME ?? 'app.singlelink.co'
   },
 
   /*
