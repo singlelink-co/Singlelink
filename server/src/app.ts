@@ -16,7 +16,7 @@ let server: SingleLinkServer = new SingleLinkServer();
 let database = new DatabaseManager();
 
 start().then(() => {
-  console.log("Singlelink is listening for requests!");
+  // do nothing
 });
 
 async function start() {

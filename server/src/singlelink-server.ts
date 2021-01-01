@@ -12,7 +12,7 @@ export class SingleLinkServer {
 
   fastify = fastifyInit({
     logger: true,
-    ignoreTrailingSlash: true
+    ignoreTrailingSlash: true,
   });
 
   /**

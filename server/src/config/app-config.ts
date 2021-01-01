@@ -24,6 +24,13 @@ if (process.env.CAPTURE_KEY) {
 /**
  * The port that the server will use.
  */
+if (process.env.HOST) {
+  appConfig.port = process.env.HOST;
+}
+
+/**
+ * The port that the server will use.
+ */
 if (process.env.PORT) {
   appConfig.port = process.env.PORT;
 }
@@ -119,8 +126,6 @@ if (process.env.S3_ACCESS_KEY) {
 if (process.env.S3_SECRET_KEY) {
   appConfig.s3Bucket.secretKey = process.env.S3_SECRET_KEY;
 }
-
-
 
 
 // Extra logic for debug messages
