@@ -1,30 +1,32 @@
 <template>
-  <div data-upview="" id="user-profile-view" class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
+  <div
+      id="user-profile-view"
+      class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
+  >
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-
       <component :is="'style'" v-if="theme">
-        .sl-headline[data-upview] {
+        .sl-headline {
         color: {{ theme.colors.text.primary }};
         }
 
-        .sl-subtitle[data-upview] {
+        .sl-subtitle {
         opacity: .85;
         color: {{ theme.colors.text.primary }};
         }
 
-        .sl-bg[data-upview] {
+        .sl-bg {
         background: {{ theme.colors.fill.primary }};
         }
 
-        .sl-item[data-upview] {
+        .sl-item {
         background: {{ theme.colors.fill.secondary }};
         }
 
-        .sl-label[data-upview] {
+        .sl-label {
         color: {{ theme.colors.text.secondary }};
         }
 
-        .sl-link-subtitle[data-upview] {
+        .sl-link-subtitle {
         opacity: .85;
         color: {{ theme.colors.text.secondary }};
         }
@@ -39,26 +41,27 @@
       </component>
 
       <img
-        v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
-        class="nc-avatar mb-2"
-        :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
-        alt="profile image"
+          v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
+          class="nc-avatar mb-2"
+          :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+          alt="profile image"
       >
-      <h1 data-upview="" class="text-black font-semibold text-2xl sl-headline">
+      <h1 class="text-black font-semibold text-2xl sl-headline">
         {{ profile.headline || user.name }}
       </h1>
-      <h3 data-upview="" class="text-gray-600 mb-4 sl-subtitle">
+      <h3 class="text-gray-600 mb-4 sl-subtitle">
         {{ profile.subtitle }}
       </h3>
 
       <a v-for="link in links" :key="link.id" :href="link.url" class="w-full">
         <div
-          data-upview=""
-          class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
-          :style="link.customCss"
+            class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
+            :style="link.customCss"
         >
-          <span data-upview="" class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
-          <span data-upview="" v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
+          <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{
+              link.subtitle
+            }}</span>
         </div>
       </a>
 

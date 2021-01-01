@@ -165,9 +165,7 @@
 
       <div class="user-profile-preview-parent">
         <div v-if="originalHandle" :class="checkPreviewMode()">
-          <UserProfileView
-            :authenticated="true"
-          />
+          <iframe id="preview-frame" :src="`/u/${user.activeProfile.handle}`" scrolling="no"/>
         </div>
       </div>
 
@@ -181,13 +179,11 @@
 <script lang="ts">
 import Vue from "vue";
 import {StatusCodes} from "http-status-codes";
-import UserProfileView from "~/components/profile/UserProfileView.vue";
 import GDPRContentModal from "~/components/utilities/GDPRConsentPopup.vue";
 
 export default Vue.extend({
   components: {
     GDPRContentModal,
-    UserProfileView
   },
 
   data() {
@@ -245,6 +241,18 @@ export default Vue.extend({
     } catch (err) {
       console.warn("Failed to retrieve version from server.");
     }
+
+    this.$root.$on('refreshUserProfileView', () => {
+      const iFrame = document.getElementById('preview-frame') as HTMLIFrameElement;
+
+      if (iFrame) {
+        const contentWindow = iFrame.contentWindow;
+
+        if (contentWindow) {
+          contentWindow?.location.reload();
+        }
+      }
+    });
   },
 
   methods: {
@@ -447,32 +455,34 @@ html {
 }
 
 .phone-display {
-  display: block;
+  display: flex;
+  margin: 20px auto auto auto;
   border-radius: 50px;
   background: #000;
   padding: 14px;
   width: 280px;
   height: 606px;
-  overflow: hidden;
 }
 
-.desktop-display {
-  display: block;
-}
-
-.phone-display > #user-profile-view {
+.phone-display > iframe {
+  border: none;
   width: 100%;
   height: 100%;
-  min-height: auto !important;
   border-radius: 35px;
 }
 
-.desktop-display > #user-profile-view {
+.desktop-display {
   display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  margin: 20px auto auto auto;
+  padding: 14px;
+  width: 500px;
+  height: 800px;
+}
+
+.desktop-display > iframe {
+  border: none;
   width: 100%;
-  min-height: 100% !important;
+  height: 100%;
 }
 
 .nc-item-link:hover {

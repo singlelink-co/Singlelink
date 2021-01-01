@@ -41,7 +41,7 @@ export class ThemeService extends DatabaseService {
     if (includeGlobal) {
       queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1 or global=true", [userId]);
     } else {
-      queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1", [userId]);
+      queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1 and global=false", [userId]);
     }
 
     if (queryResult.rowCount <= 0) {

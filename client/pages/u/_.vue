@@ -38,12 +38,29 @@
 <script lang="ts">
 import Vue from "vue";
 import UserProfileView from "~/components/profile/UserProfileView.vue";
+import {Context} from "@nuxt/types";
 
 export default Vue.extend({
   name: 'UShowProfile',
 
   components: {
     UserProfileView
+  },
+
+  asyncData(ctx: Context) {
+    try {
+      return {
+        profileHandle: ctx.route.path.replace('/u/', '')
+      };
+    } catch (err) {
+      console.log('Error getting profile');
+      console.log(err);
+
+      ctx.error({
+        statusCode: 404,
+        message: "Page not found"
+      });
+    }
   },
 
   data() {
@@ -56,9 +73,9 @@ export default Vue.extend({
         customCss: '',
         imageUrl: '',
         headline: '',
-        handle: '',
         subtitle: '',
-        visibility: ''
+        visibility: '',
+        handle: ''
       },
       ageVerificationRequired: true
     };
