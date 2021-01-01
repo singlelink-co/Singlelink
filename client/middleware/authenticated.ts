@@ -1,30 +1,16 @@
 import {Context} from "@nuxt/types";
 
 export default async function (context: Context) {
-  const singlelinkToken = context.store.getters["auth/getToken"];
+  let singlelinkToken = context.store.getters["auth/getToken"];
 
-  if (singlelinkToken) {
-    if (!context.store.getters['auth/login']) {
-      try {
-        await context.$axios
-          .$post('/user',
-            {
-              token: singlelinkToken
-            });
+  if (!singlelinkToken) {
+    const token = context.app.$cookies.get('auth_token');
+    await context.store.commit("auth/setToken", token);
 
-        context.store.commit('auth/login', singlelinkToken);
-      } catch (err) {
-        console.log('Error getting self');
-        console.log(err);
-        // context.store.commit('auth/login', singlelink_token);
-        context.store.commit('auth/login', null);
-        location.replace('/');
-        // verify token
-      }
-    } else {
-      context.store.commit('auth/login', singlelinkToken);
-    }
-  } else {
+    singlelinkToken = token;
+  }
+
+  if (!singlelinkToken) {
     context.redirect('/');
   }
 }

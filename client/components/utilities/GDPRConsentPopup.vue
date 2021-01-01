@@ -37,7 +37,8 @@ export default Vue.extend({
   },
 
   mounted() {
-    if (this.$route.fullPath.includes("privacy-policy")) {
+    if (this.$route.fullPath.includes("privacy-policy") ||
+      this.$route.fullPath.includes("/u/")) {
       return;
     }
 
