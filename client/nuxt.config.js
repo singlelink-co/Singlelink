@@ -9,15 +9,7 @@ export default {
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
-  target: 'static',
-
-  /*
-  ** Hosting 404 Hotfix
-  ** See https://ko.nuxtjs.org/faq/netlify-deployment/
-  */
-  generate: {
-    fallback: true
-  },
+  target: 'server',
 
   loading: {
     color: '#4C51BF',

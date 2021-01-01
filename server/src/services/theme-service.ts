@@ -45,7 +45,7 @@ export class ThemeService extends DatabaseService {
     }
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "No themes were found.");
+      return [];
     }
 
     return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
@@ -58,7 +58,7 @@ export class ThemeService extends DatabaseService {
     let queryResult: QueryResult<DbTheme> = await this.pool.query<DbTheme>("select * from app.themes where global=true");
 
     if (queryResult.rowCount <= 0) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "No themes were found.");
+      return [];
     }
 
     return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
