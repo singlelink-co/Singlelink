@@ -17,7 +17,7 @@ export default {
   },
 
   server: {
-    host: process.env.HOST ?? '0.0.0.0',
+    host: process.env.SERVER_HOST ?? '0.0.0.0',
     port: process.env.PORT ?? 80
   },
 
@@ -92,7 +92,8 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxt/typescript-build',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/dotenv'
   ],
   /*
   ** Nuxt.js modules
