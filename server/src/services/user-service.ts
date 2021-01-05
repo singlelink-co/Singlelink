@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import {appConfig} from "../config/app-config";
+import {config} from "../config/config";
 import * as jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
 import {DatabaseManager} from "../data/database-manager";
@@ -125,7 +125,7 @@ export class UserService extends DatabaseService {
    * @param password
    */
   async setPasswordWithToken(token: string, password: string) {
-    let decoded: any = jwt.verify(token, appConfig.secret, {
+    let decoded: any = jwt.verify(token, config.secret, {
       maxAge: "15m"
     });
 
@@ -161,11 +161,11 @@ export class UserService extends DatabaseService {
         userId: user.id,
         passwordReset: true
       },
-      appConfig.secret,
+      config.secret,
       {expiresIn: '15m'}
     );
 
-    let url = appConfig.clientDomain + "/forgot-password/change?";
+    let url = config.clientDomain + "/forgot-password/change?";
     const params = new URLSearchParams({token});
     url += params.toString();
 
@@ -179,16 +179,16 @@ export class UserService extends DatabaseService {
         Message: {
           Body: {
             Text: {
-              Charset: appConfig.messages.passwordResetEmail.messageCharset,
-              Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.message, {url})
+              Charset: config.messages.passwordResetEmail.messageCharset,
+              Data: StringUtils.parseTemplate(config.messages.passwordResetEmail.message, {url})
             }
           },
           Subject: {
-            Charset: appConfig.messages.passwordResetEmail.subjectCharset,
-            Data: StringUtils.parseTemplate(appConfig.messages.passwordResetEmail.subject, {url})
+            Charset: config.messages.passwordResetEmail.subjectCharset,
+            Data: StringUtils.parseTemplate(config.messages.passwordResetEmail.subject, {url})
           }
         },
-        Source: appConfig.aws.senderEmailAddress
+        Source: config.aws.senderEmailAddress
       };
 
       await new AWS.SES().sendEmail(emailParams).promise();
@@ -219,7 +219,7 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.UNAUTHORIZED, "The password was incorrect.");
     }
 
-    let token = jwt.sign({email: user.email}, appConfig.secret, {expiresIn: '168h'});
+    let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
 
     return {
       user: {

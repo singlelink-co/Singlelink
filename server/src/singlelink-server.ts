@@ -1,6 +1,6 @@
 import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
 import AWS from 'aws-sdk';
-import {appConfig} from "./config/app-config";
+import {config} from "./config/config";
 import {Controller} from "./controllers/controller";
 import {CustomDomainHandler} from "./utils/custom-domains";
 
@@ -27,10 +27,10 @@ export class SingleLinkServer {
       this.controllers = [];
 
     AWS.config.update({
-      region: appConfig.aws.region,
+      region: config.aws.region,
       credentials: {
-        accessKeyId: appConfig.aws.accessKey,
-        secretAccessKey: appConfig.aws.secretKey
+        accessKeyId: config.aws.accessKey,
+        secretAccessKey: config.aws.secretKey
       },
       apiVersion: '2010-12-01'
     });
@@ -40,7 +40,7 @@ export class SingleLinkServer {
    * Starts the fastify server with the controllers provided.
    */
   startServer() {
-    this.fastify.listen(appConfig.port, appConfig.host, (err: Error, address: string) => {
+    this.fastify.listen(config.port, config.host, (err: Error, address: string) => {
       if (err)
         throw err;
     });

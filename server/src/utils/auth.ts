@@ -6,7 +6,7 @@ import {
   RouteShorthandOptions
 } from "fastify";
 import jwt, {VerifyErrors} from "jsonwebtoken";
-import {appConfig} from "../config/app-config";
+import {config} from "../config/config";
 import {Pool} from "pg";
 import {ReplyUtils} from "./reply-utils";
 import {StatusCodes} from "http-status-codes";
@@ -96,7 +96,7 @@ export class AuthOpts {
 
     jwt.verify(
       token,
-      appConfig.secret,
+      config.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -144,7 +144,7 @@ export class AuthOpts {
 
     jwt.verify(
       token,
-      appConfig.secret,
+      config.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -254,7 +254,7 @@ export class AuthOpts {
 
     jwt.verify(
       token,
-      appConfig.secret,
+      config.secret,
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));

@@ -7,7 +7,7 @@ import {StatusCodes} from "http-status-codes";
 import {HttpError} from "../utils/http-error";
 import {ProfileService} from "../services/profile-service";
 import * as jwt from "jsonwebtoken";
-import {appConfig} from "../config/app-config";
+import {config} from "../config/config";
 import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
 
 interface LoginUserRequest extends RequestGenericInterface {
@@ -140,7 +140,7 @@ export class UserController extends Controller {
       let profile = await this.profileService.createProfile(user.id, body.handle);
       await this.userService.setActiveProfile(user.id, profile.id);
 
-      let token = jwt.sign({email: user.email}, appConfig.secret, {expiresIn: '168h'});
+      let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
 
       return {
         user,

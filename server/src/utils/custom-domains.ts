@@ -1,6 +1,6 @@
 import {FastifyReply, FastifyRequest} from "fastify";
 import {Pool} from "pg";
-import {appConfig} from "../config/app-config";
+import {config} from "../config/config";
 
 /**
  * A convenience class for Fastify Handler options regarding authentication.
@@ -28,11 +28,11 @@ export class CustomDomainHandler {
    */
   public static async checkRoute(request: FastifyRequest, reply: FastifyReply) {
     let customDomain = request.hostname;
-    let clientDomain = appConfig.clientDomain;
+    let clientDomain = config.clientDomain;
 
     // Disallow setting the domain as the client or api domain.
     // This is to prevent feedback loops.
-    if (customDomain === appConfig.clientDomain || customDomain === appConfig.apiDomain) {
+    if (customDomain === config.clientDomain || customDomain === config.apiDomain) {
       return;
     }
 

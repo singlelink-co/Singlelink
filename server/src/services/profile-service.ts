@@ -1,7 +1,7 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import Axios, {AxiosResponse} from "axios";
-import {appConfig} from "../config/app-config";
+import {config} from "../config/config";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {StatusCodes} from "http-status-codes";
@@ -87,7 +87,7 @@ export class ProfileService extends DatabaseService {
     };
 
     try {
-      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${appConfig.captureKey}&url=${appConfig.clientDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
+      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${config.captureKey}&url=${config.clientDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
       thumbnail = await Axios.get<ArrayBuffer>(url, {
         responseType: "arraybuffer"
       });
