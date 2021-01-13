@@ -345,6 +345,27 @@ export default Vue.extend({
   },
 
   methods: {
+    async getUserData() {
+      try {
+        const token = this.$store.getters['auth/getToken'];
+
+        const userResponse = await this.$axios.$post('/user', {
+          token
+        });
+
+        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
+        });
+
+        this.user = userResponse;
+        this.user.activeProfile = profileResponse;
+        this.originalHandle = this.user.activeProfile.handle;
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
+    },
+
     async selectTheme(id: string | null) {
       try {
         await this.$axios.$post<Profile>('/profile/activate-theme', {
@@ -522,28 +543,7 @@ export default Vue.extend({
         customCss: undefined,
         customHtml: undefined,
       };
-    },
-
-    async getUserData() {
-      try {
-        const token = this.$store.getters['auth/getToken'];
-
-        const userResponse = await this.$axios.$post('/user', {
-          token
-        });
-
-        const profileResponse = await this.$axios.$post('/profile/active-profile', {
-          token
-        });
-
-        this.user = userResponse;
-        this.user.activeProfile = profileResponse;
-        this.originalHandle = this.user.activeProfile.handle;
-      } catch (err) {
-        console.log('Error getting user data');
-        console.log(err);
-      }
-    },
+    }
   }
 });
 </script>

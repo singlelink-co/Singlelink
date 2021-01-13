@@ -90,6 +90,7 @@ interface Profile {
     link: string,
     alt: string
   },
+  showWatermark: boolean,
   customCss: string,
   customHtml: string,
   customDomain: string,

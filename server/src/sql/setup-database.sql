@@ -91,20 +91,21 @@ create index if not exists themes_user_id_index on app.themes (user_id);
  */
 create table if not exists app.profiles
 (
-    id            bigserial primary key unique,
-    handle        text unique not null,                                                        -- The name of the profile in the url
-    user_id       bigint,
-    image_url     text,
-    headline      text,                                                                        -- The name that shows up on the page
-    subtitle      text,                                                                        -- The name underneath a profile's avatar
-    social        jsonb                default '{}',
-    custom_css    text,
-    custom_html   text,
-    custom_domain text unique,
-    theme_id      bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
-    visibility    visibility_t         default 'unpublished',
-    metadata      jsonb                default '{}',
-    created_on    timestamp   not null default current_timestamp
+    id             bigserial primary key unique,
+    handle         text unique not null,                                                        -- The name of the profile in the url
+    user_id        bigint,
+    image_url      text,
+    headline       text,                                                                        -- The name that shows up on the page
+    subtitle       text,                                                                        -- The name underneath a profile's avatar
+    social         jsonb                default '{}',
+    show_watermark bool                 default true,                                           -- The "Proudly built with Singlelink" underneath people's profiles
+    custom_css     text,
+    custom_html    text,
+    custom_domain  text unique,
+    theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
+    visibility     visibility_t         default 'unpublished',
+    metadata       jsonb                default '{}',
+    created_on     timestamp   not null default current_timestamp
 );
 
 create index if not exists profiles_user_id_index on app.profiles (user_id);

@@ -37,8 +37,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import UserProfileView from "~/components/profile/UserProfileView.vue";
 import {Context} from "@nuxt/types";
+import UserProfileView from "~/components/profile/UserProfileView.vue";
 
 export default Vue.extend({
   name: 'UShowProfile',
@@ -75,6 +75,7 @@ export default Vue.extend({
         headline: '',
         subtitle: '',
         visibility: '',
+        showWatermark: true,
         handle: ''
       },
       ageVerificationRequired: true

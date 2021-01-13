@@ -38,6 +38,7 @@ interface UpdateProfileRequest extends AuthenticatedRequest {
     subtitle: string,
     handle: string,
     visibility: string,
+    showWatermark: boolean,
     customCss: string,
     customHtml: string,
     customDomain: string
@@ -74,13 +75,11 @@ export class ProfileController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated controllers
-    this.fastify.all<ProfileHandleRequest>('/profile', this.GetProfile.bind(this));
     this.fastify.all<ProfileHandleRequest>('/profile/:handle', this.GetProfile.bind(this));
     this.fastify.all<ProfileHandleRequest>('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
 
     // Authenticated
     this.fastify.all<AuthenticatedRequest>('/profile/preview', AuthOpts.ValidateWithData, this.GetProfilePreview.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/profile/preview/:handle', AuthOpts.ValidateWithData, this.GetProfilePreview.bind(this));
     this.fastify.post<AuthenticatedRequest>('/profiles', AuthOpts.ValidateWithData, this.ListProfiles.bind(this));
     this.fastify.post<AuthenticatedRequest>('/profile/links', AuthOpts.ValidateWithData, this.ListProfileLinks.bind(this));
 
@@ -185,7 +184,6 @@ export class ProfileController extends Controller {
 
   /**
    * Route for /profile/preview
-   * /profile/preview/:handle
    *
    * @param request
    * @param reply
@@ -323,6 +321,7 @@ export class ProfileController extends Controller {
         body.subtitle,
         body.handle,
         body.visibility,
+        body.showWatermark,
         body.customCss,
         body.customHtml,
         body.customDomain

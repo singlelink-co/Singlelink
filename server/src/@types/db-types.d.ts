@@ -68,6 +68,7 @@ interface DbProfile {
     link: string,
     alt: string
   },
+  show_watermark: boolean,
   custom_css: string,
   custom_html: string,
   custom_domain: string,

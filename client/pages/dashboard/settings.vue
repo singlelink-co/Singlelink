@@ -88,6 +88,7 @@
             placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
           >
         </div>
+
         <div class="flex flex-col w-full mb-6">
           <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (hostname only) (🐳 Whales
             only!)</label>
@@ -99,6 +100,28 @@
             placeholder="e.g. neutroncreative.com (no http/https)"
           >
         </div>
+
+        <!-- Watermark Toggle -->
+        <div class="flex flex-row w-full mb-6">
+          <input
+            id="themeGlobal"
+            v-model="user.activeProfile.showWatermark"
+            type="checkbox"
+            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+          >
+
+          <label for="themeGlobal" class="ml-2 block text-md leading-5 text-gray-700">
+            Display Watermark ("Proudly built with Singlelink!")
+            <br>
+            <span
+              v-show="showWatermarkNotice"
+              style="color: rgba(0, 0, 0, .65); font-size: 13px"
+            >
+              This is completely optional, but it really helps us out! Otherwise, mind spreading the word about Singlelink?
+            </span>
+          </label>
+        </div>
+
         <button
           type="button"
           class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center"
@@ -125,6 +148,7 @@
           class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
           type="email"
           placeholder="e.g. youremail@singlelink.co"
+          aria-label="password reset email"
         >
       </div>
       <button
@@ -226,6 +250,7 @@ export default Vue.extend({
 
   data() {
     return {
+      loaded: false,
       resetPasswordModalActive: false,
       deleteProfileModalActive: false,
       originalHandle: '',
@@ -238,20 +263,64 @@ export default Vue.extend({
           subtitle: '',
           handle: '',
           customDomain: '',
-          visibility: ''
+          visibility: '',
+          showWatermark: false,
         }
       },
       error: '',
       passwordError: '',
-      passwordEmail: ''
+      passwordEmail: '',
+      showWatermarkNotice: false
     };
+  },
+
+  watch: {
+    'user.activeProfile.showWatermark': {
+      handler(val) {
+        this.showWatermarkNotice = (!val && this.loaded);
+      }
+    }
   },
 
   async mounted() {
     await this.getUserData();
+
+    this.loaded = true;
   },
 
   methods: {
+    async getUserData() {
+      try {
+        const token = this.$store.getters['auth/getToken'];
+
+        const userResponse = await this.$axios.$post('/user', {
+          token
+        });
+
+        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
+        });
+
+        this.user.name = userResponse.name;
+        this.user.emailHash = userResponse.emailHash;
+
+        this.user.activeProfile.imageUrl = profileResponse.imageUrl;
+        this.user.activeProfile.headline = profileResponse.headline;
+        this.user.activeProfile.subtitle = profileResponse.subtitle;
+        this.user.activeProfile.handle = profileResponse.handle;
+        this.user.activeProfile.customDomain = profileResponse.customDomain;
+        this.user.activeProfile.visibility = profileResponse.visibility;
+        this.user.activeProfile.showWatermark = profileResponse.showWatermark;
+
+        this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
+
+        this.originalHandle = this.user.activeProfile.handle;
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
+    },
+
     async saveChanges() {
       try {
         await this.$axios.$post('/profile/update', {
@@ -261,7 +330,8 @@ export default Vue.extend({
           subtitle: this.user.activeProfile.subtitle ?? null,
           handle: this.user.activeProfile.handle ?? null,
           visibility: this.user.activeProfile.visibility ?? null,
-          customDomain: this.user.activeProfile.customDomain ?? null
+          customDomain: this.user.activeProfile.customDomain ?? null,
+          showWatermark: this.user.activeProfile.showWatermark ?? true,
         });
 
         if (process.client) {
@@ -326,27 +396,6 @@ export default Vue.extend({
       location.reload();
     },
 
-    async getUserData() {
-      try {
-        const token = this.$store.getters['auth/getToken'];
-
-        const userResponse = await this.$axios.$post('/user', {
-          token
-        });
-
-        const profileResponse = await this.$axios.$post('/profile/active-profile', {
-          token
-        });
-
-        this.user = userResponse;
-        this.user.activeProfile = profileResponse;
-        this.originalHandle = this.user.activeProfile.handle;
-      } catch (err) {
-        console.log('Error getting user data');
-        console.log(err);
-      }
-    },
-
     async requestPasswordReset() {
       try {
         const request = await this.$axios.post('/user/request-reset-password', {
@@ -374,7 +423,7 @@ export default Vue.extend({
 
         throw err;
       }
-    },
+    }
   }
 });
 </script>

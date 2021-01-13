@@ -177,6 +177,7 @@ export class ProfileService extends DatabaseService {
    * @param subtitle
    * @param handle
    * @param visibility
+   * @param showWatermark
    * @param customCss
    * @param customHtml
    * @param customDomain
@@ -188,6 +189,7 @@ export class ProfileService extends DatabaseService {
     subtitle?: string,
     handle?: string,
     visibility?: string,
+    showWatermark?: boolean,
     customCss?: string,
     customHtml?: string,
     customDomain?: string
@@ -195,13 +197,14 @@ export class ProfileService extends DatabaseService {
     let queryResult: QueryResult<DbProfile>;
 
     try {
-      queryResult = await this.pool.query<DbProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), custom_css=coalesce($6, custom_css), custom_html=coalesce($7, custom_html), custom_domain=coalesce($8, custom_domain) where id=$9 returning *;",
+      queryResult = await this.pool.query<DbProfile>("update app.profiles set image_url=coalesce($1, image_url), headline=coalesce($2, headline), subtitle=coalesce($3, subtitle), handle=coalesce($4, handle), visibility=coalesce($5, visibility), show_watermark=coalesce($6, show_watermark), custom_css=coalesce($7, custom_css), custom_html=coalesce($8, custom_html), custom_domain=coalesce($9, custom_domain) where id=$10 returning *;",
         [
           imageUrl,
           headline,
           subtitle,
           handle,
           visibility,
+          showWatermark,
           customCss,
           customHtml,
           customDomain,
@@ -216,8 +219,6 @@ export class ProfileService extends DatabaseService {
 
       throw err;
     }
-
-    // TODO Use custom domain handle to update custom domain on proxies
 
     if (queryResult.rowCount <= 0) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");

@@ -1,7 +1,7 @@
 <template>
   <div
-      id="user-profile-view"
-      class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
+    id="user-profile-view"
+    class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
   >
     <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
       <component :is="'style'" v-if="theme">
@@ -41,10 +41,10 @@
       </component>
 
       <img
-          v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
-          class="nc-avatar mb-2"
-          :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
-          alt="profile image"
+        v-if="profile.imageUrl || user.avatarUrl || user.emailHash"
+        class="nc-avatar mb-2"
+        :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
+        alt="profile image"
       >
       <h1 class="text-black font-semibold text-2xl sl-headline">
         {{ profile.headline || user.name }}
@@ -55,8 +55,8 @@
 
       <a v-for="link in links" :key="link.id" :href="link.url" class="w-full">
         <div
-            class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
-            :style="link.customCss"
+          class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
+          :style="link.customCss"
         >
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
           <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{
@@ -64,6 +64,28 @@
             }}</span>
         </div>
       </a>
+
+      <div v-if="loaded && !user.emailHash">
+        <h1 class="text-black font-semibold text-2xl sl-headline">
+          Error 404
+        </h1>
+        <h3 class="text-gray-600 mb-4 sl-subtitle">
+          Oops! This profile doesn't exist or isn't public!
+          <br>
+        </h3>
+      </div>
+
+      <div v-if="loaded && profile.showWatermark">
+        <p v-if="theme" :style="`color:${theme.colors.text.primary}`" class="mt-4 text-sm">
+          Proudly built with Singlelink 🔗
+        </p>
+        <p v-else style="color:rgba(0,0,0,1);" class="mt-4 text-sm">
+          Proudly built with Singlelink 🔗
+        </p>
+        <a class="text-indigo-600 hover:underline text-sm" href="https://app.singlelink.co/create-account">Create your
+          free profile in seconds</a>
+        <base target="_blank">
+      </div>
 
       <div v-html="profile.customHtml"/>
       <div v-if="theme" v-html="theme.customHtml"/>
@@ -89,12 +111,14 @@ export default Vue.extend({
 
   data() {
     return {
+      loaded: false,
       profile: {
         customHtml: null,
         customCss: null,
         imageUrl: null,
         headline: null,
         subtitle: null,
+        showWatermark: true
       },
       user: {
         name: null,
@@ -139,6 +163,8 @@ export default Vue.extend({
         console.log('Error getting profile');
         console.log(err);
       }
+
+      this.loaded = true;
     },
 
     async getAuthenticatedProfile() {
@@ -157,6 +183,8 @@ export default Vue.extend({
         console.log('Error getting profile');
         console.log(err);
       }
+
+      this.loaded = true;
     }
   }
 });

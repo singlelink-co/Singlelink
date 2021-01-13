@@ -34,7 +34,8 @@ interface Profile {
   headline: string,
   handle: string,
   subtitle: string,
-  visibility: string
+  visibility: string,
+  showWatermark: boolean
 }
 
 interface LinkVisit {

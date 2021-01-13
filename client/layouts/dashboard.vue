@@ -411,7 +411,8 @@ export default Vue.extend({
           imageUrl: "",
           subtitle: "",
           themeId: "",
-          visibility: ""
+          visibility: "",
+          showWatermark: true
         });
       }
     },

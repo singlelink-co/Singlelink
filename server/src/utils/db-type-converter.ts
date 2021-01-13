@@ -70,6 +70,7 @@ export class DbTypeConverter {
       headline: profile.headline,
       subtitle: profile.subtitle,
       social: profile.social,
+      showWatermark: profile.show_watermark,
       customCss: profile.custom_css,
       customHtml: profile.custom_html,
       customDomain: profile.custom_domain,
