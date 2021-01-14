@@ -95,6 +95,9 @@
         <a href="https://status.singlelink.co">
           <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Status</li>
         </a>
+        <a href="https://discord.com/invite/3pBM4Px">
+          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Support</li>
+        </a>
 		<a href="https://singlel.ink/analytics">
 			<li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Realtime Statistics</li>
 		</a>
