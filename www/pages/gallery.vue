@@ -24,10 +24,10 @@
 				</div>
 				<div class="flex flex-col items-center justify-center w-full lg:w-1/3">
 					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(0.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
-						<iframe src="https://app.singlelink.co/u/daje"></iframe>
+						<iframe src="https://app.singlelink.co/u/gloomytoons"></iframe>
 					</div>
-					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:undeline" href="https://app.singlelink.co/u/daje">https://singlel.ink/u/daje</a>
-					<span class="text-gray-500 font-medium text-sm">Daje</span>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:undeline" href="https://app.singlelink.co/u/gloomytoons">https://singlel.ink/u/gloomytoons</a>
+					<span class="text-gray-500 font-medium text-sm">Gloomytoons</span>
 				</div>
 			</div>
 			<div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
@@ -47,10 +47,10 @@
 				</div>
 				<div class="flex flex-col items-center justify-center w-full lg:w-1/3 space-y-2">
 					<div class="overflow-hidden phone-display" style="box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
-						<iframe src="https://singlel.ink/u/gloomytoons"/>
+						<iframe src="https://singlel.ink/u/daje"/>
 					</div>
-					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/gloomytoons">https://singlel.ink/u/gloomytoons</a>
-					<span class="text-gray-500 font-medium text-sm">Gloomytoons</span>
+					<a style="margin-top:-85px;" class="font-medium text-sm text-indigo-600 hover:underline" href="https://singlel.ink/u/daje">https://singlel.ink/u/daje</a>
+					<span class="text-gray-500 font-medium text-sm">Daje</span>
 				</div>
 			</div>
 			<div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">

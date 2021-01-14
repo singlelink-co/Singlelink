@@ -1,21 +1,22 @@
 <template>
   <div class="w-screen min-h-screen flex flex-col">
-    <a href="https://neutroncreative.com/">
+    <a href="/blog/planned-outage-01-14-21" style="z-index:99;">
 	<!--<a href="/blog/outage-report-10-29-20">-->
       <div class="flex flex-row w-full bg-black items-center justify-center p-3">
         <div class="w-full max-w-6xl flex-row flex items-center justify-center">
-          <img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
-          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>
-		  <!-- <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span> -->
+          <!--<img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
+          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>-->
+          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer text-center">Singlelink will have a brief outage between 6PM-11PM EST on 11/14/21 for an update.<span class="hidden font-bold text-white lg:flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>
+      <!-- <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span> -->
         </div>
       </div>
     </a>
-    <nav class="sticky top-0 z-50 flex flex-row p-3 border border-l-0 border-r-0 border-t-0 border-gray-200 bg-gray-100 items-center justify-center">
+    <nav style="background:rgba(255,255,255,.5);backdrop-filter:blur(5px);border-color:rgba(255,255,255,.15) !important;" class="sticky top-0 z-50 flex flex-row p-3 border border-l-0 border-r-0 border-t-0 items-center justify-center">
       <div class="relative w-full max-w-6xl flex-row flex">
         <n-link to="/" class="flex items-center justify-center lg:mr-40">
           <img src="/singlelink-brandmark.svg"/>
         </n-link>
-        <ul class="hidden md:flex flex-row text-gray-600 text-sm items-center justify-end ml-auto">
+        <ul class="hidden md:flex flex-row text-gray-700 text-sm items-center justify-end ml-auto">
           <n-link to="/">
             <li class="p-2 mr-2 hover:text-black cursor-pointer">Overview</li>
           </n-link>
@@ -64,7 +65,7 @@
         </a>
       </ul>
     </nav>
-    <Nuxt class="bg-gray-100 flex flex-grow w-full h-auto justify-start flex-col" />
+    <Nuxt class="bg-gray-100 flex flex-grow w-full h-auto justify-start flex-col" style="padding-top:73px;position:relative;transform:translateY(-73px);margin-bottom:-73px;" />
     <footer class="bg-gray-100 border border-gray-200 border-l-0 border-r-0 border-b-0 p-10">
       <!--<a href="https://beta-app.singlelink.co/create-account" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
         <span class="p-2 mr-2 hover:text-gray-800 cursor-pointer flex-row items-center justify-center">Get access to Singlelink beta!<span class="ml-2">🤫</span></span>
