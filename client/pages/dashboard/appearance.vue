@@ -424,7 +424,7 @@ export default Vue.extend({
       try {
         const response = await this.$axios.$post<Profile>('/profile/activate-theme', {
           token: this.$store.getters['auth/getToken'],
-          theme: id,
+          id,
         });
 
         this.activeThemeId = response.themeId;
@@ -477,7 +477,7 @@ export default Vue.extend({
         if (this.pendingTheme.global) {
           const token = this.$store.getters['auth/getToken'];
 
-          await this.$axios.$post('theme/set-global', {
+          await this.$axios.$post('theme/admin/set-global', {
             token,
             id: response.id,
             global: this.pendingTheme.global
@@ -525,7 +525,7 @@ export default Vue.extend({
         if (this.pendingTheme.global) {
           const token = this.$store.getters['auth/getToken'];
 
-          await this.$axios.$post('theme/set-global', {
+          await this.$axios.$post('theme/admin/set-global', {
             token,
             id: response.id,
             global: this.pendingTheme.global

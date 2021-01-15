@@ -35,7 +35,7 @@ export class ThemeService extends DatabaseService {
    * @param userId
    * @param includeGlobal Should global themes be included in the results?
    */
-  async listThemes(userId: string, includeGlobal: boolean = true): Promise<Theme[]> {
+  async listUserThemes(userId: string, includeGlobal: boolean = true): Promise<Theme[]> {
     let queryResult: QueryResult<DbTheme>;
 
     if (includeGlobal) {
@@ -106,7 +106,7 @@ export class ThemeService extends DatabaseService {
    * @param customCss
    * @param customHtml
    */
-  async updateTheme(
+  async updateUserTheme(
     themeId: string,
     userId: string,
     label: string,
@@ -114,7 +114,7 @@ export class ThemeService extends DatabaseService {
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {
-    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 and (user_id=$6 or global=true) returning *",
+    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 and user_id=$6 returning *",
       [
         label,
         colors,
@@ -137,11 +137,11 @@ export class ThemeService extends DatabaseService {
    * @param themeId
    * @param userId
    */
-  async deleteTheme(
+  async deleteUserTheme(
     themeId: string,
     userId: string
   ): Promise<Theme> {
-    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 and (user_id=$2 or global=true) returning *",
+    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 and user_id=$2 returning *",
       [
         themeId,
         userId
@@ -153,6 +153,8 @@ export class ThemeService extends DatabaseService {
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
+
+  // region Admin Methods
 
   /**
    * Sets a Theme as global (or not).
@@ -187,4 +189,58 @@ export class ThemeService extends DatabaseService {
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
+
+  /**
+   * Updates ANY theme. *Dangerous, make sure you know what you're doing!*
+   *
+   * @param themeId
+   * @param label
+   * @param colors
+   * @param customCss
+   * @param customHtml
+   */
+  async updateTheme(
+    themeId: string,
+    label: string,
+    colors?: ThemeColors,
+    customCss?: string,
+    customHtml?: string
+  ): Promise<Theme> {
+    let queryResult = await this.pool.query<DbTheme>("update app.themes set label=$1, colors=$2, custom_css=$3, custom_html=$4 where id=$5 returning *",
+      [
+        label,
+        colors,
+        customCss,
+        customHtml,
+        themeId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to update the theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
+
+  /**
+   * Deletes ANY theme. *Dangerous, make sure you know what you're doing!*
+   *
+   * @param themeId
+   */
+  async deleteTheme(
+    themeId: string,
+  ): Promise<Theme> {
+    let queryResult = await this.pool.query<DbTheme>("delete from app.themes where id=$1 returning *",
+      [
+        themeId
+      ]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "Failed to delete the theme because the id couldn't be found.");
+    }
+
+    return DbTypeConverter.toTheme(queryResult.rows[0]);
+  }
+
+  // endregion
 }

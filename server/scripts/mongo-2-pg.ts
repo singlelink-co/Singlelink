@@ -77,7 +77,7 @@ class Converter {
 
       try {
         // language=PostgreSQL
-        let truncateQuery = "drop table app.users, app.links, app.profiles, app.themes, analytics.visits cascade";
+        let truncateQuery = "drop table app.users, app.links, app.profiles, app.themes, app.perm_groups, analytics.visits cascade";
         await this.pool.query(truncateQuery);
       } catch (err) {
         console.log("An error occurred, you can probably ignore this as it'll give an error if the schema or tables don't exist yet.");

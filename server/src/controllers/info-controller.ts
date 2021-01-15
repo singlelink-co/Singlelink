@@ -17,6 +17,7 @@ export class InfoController extends Controller {
   }
 
   registerRoutes(): void {
+    // Unauthenticated
     this.fastify.all('/info/version', this.GetVersion.bind(this));
   }
 

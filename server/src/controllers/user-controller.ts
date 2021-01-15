@@ -8,7 +8,7 @@ import {HttpError} from "../utils/http-error";
 import {ProfileService} from "../services/profile-service";
 import * as jwt from "jsonwebtoken";
 import {config} from "../config/config";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 
 interface LoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -81,10 +81,10 @@ export class UserController extends Controller {
     this.fastify.all<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
 
     // Authenticated
-    this.fastify.all<AuthenticatedRequest>('/user', AuthOpts.ValidateWithData, this.GetUser.bind(this));
-    this.fastify.all<UpdateUserRequest>('/user/update', AuthOpts.ValidateWithData, this.UpdateUser.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/user/delete', AuthOpts.ValidateWithData, this.DeleteUser.bind(this));
-    this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', AuthOpts.ValidateWithData, this.SetActiveProfile.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/user', Auth.ValidateWithData, this.GetUser.bind(this));
+    this.fastify.all<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
+    this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
   }
 
   /**
@@ -222,7 +222,7 @@ export class UserController extends Controller {
    * @param reply
    */
   async GetUser(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
-    return request.body.user;
+    return request.body.authUser;
   }
 
   //TODO Implement UpdateUser
@@ -254,7 +254,9 @@ export class UserController extends Controller {
    */
   async DeleteUser(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
+      reply.code(StatusCodes.NOT_IMPLEMENTED);
 
+      return ReplyUtils.error("Sorry, this is not implemented yet.");
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -274,7 +276,7 @@ export class UserController extends Controller {
   async SetActiveProfile(request: FastifyRequest<SetActiveProfileRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
-      let user = body.user;
+      let user = body.authUser;
       let newProfileId = body.newProfileId;
 
       if (!newProfileId) {

@@ -5,8 +5,10 @@ import {StatusCodes} from "http-status-codes";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {AuthenticatedRequest, Auth} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
+import {DatabaseService} from "../services/database-service";
+import {DbTypeConverter} from "../utils/db-type-converter";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
   Params: {
@@ -39,7 +41,7 @@ export class AnalyticsController extends Controller {
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
 
     // Authenticated
-    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', AuthOpts.ValidateWithData, this.GetProfileAnalytics.bind(this));
+    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', Auth.ValidateWithData, this.GetProfileAnalytics.bind(this));
   }
 
   /**
@@ -114,14 +116,14 @@ export class AnalyticsController extends Controller {
    */
   async GetProfileAnalytics(request: FastifyRequest<GetProfileAnalyticsRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
       // TODO Grab dateRange/dayRange and pass it in for time specific analytics
 
-      return await this.analyticsService.getProfileAnalyticsData(request.body.profile.id);
+      return await this.analyticsService.getProfileAnalyticsData(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
