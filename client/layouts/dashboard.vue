@@ -4,7 +4,7 @@
       <n-link to="/dashboard"><img src="/Icon.svg" style="width: 35px;"/></n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img @click="toggle_profile_select" v-if="user && profiles.length>=1" style="width: 100%; border-radius: 100px;" :src="user.active_profile.image_url || 'https://www.gravatar.com/avatar/' + user.hash"/>
-        <ul v-if="profile_select" class="absolute bottom-0 rounded shadow bg-white border border-gray-200" style="left: 60px; width: 245px;">
+        <ul v-if="profile_select" class="z-10 absolute bottom-0 rounded shadow bg-white border border-gray-200" style="left: 60px; width: 245px;">
           <li v-for="profile in profiles" @click="select_profile(profile._id)" class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start">
             <img class="mr-2 rounded-full" style="width: 100%;max-width: 35px;" :src="profile.image_url || 'https://www.gravatar.com/avatar/' + user.hash" />
             <div class="flex flex-col">
@@ -21,7 +21,7 @@
         </ul>
       </div>
     </section>
-    <section class="flex flex-col flex-grow">
+    <section class="flex flex-col flex-grow relative h-screen overflow-y-scroll overflow-x-hidden bg-gray-100">
       <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
         <n-link to="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="get_active_styles('dashboard')">
@@ -55,6 +55,12 @@
         <iframe id="preview-frame" :src="preview_url"></iframe>
       </div>
     </section>
+    <!-- Migration window alert -->
+      <div v-if="time_until_maintenance" class="p-4 mx-auto rounded-lg text-sm bg-indigo-600 text-white font-medium shadow-lg w-full flex flex-row items-center justify-center" style="position:fixed;bottom:20px;left: 90px;width:calc(66% - 110px);">
+        <span class="font-extrabold mr-2">Warning:</span> Singlelink will be down for a brief period at 6:00PM EST ({{ time_until_maintenance }})
+        <button @click="time_until_maintenance=null" type="button" class="ourline-none bg-indigo-500 rounded ml-auto px-3 py-1 font-semibold">Dismiss</button>
+      </div>
+    <!-- End migration window alert -->
   </div>
 </template>
 
@@ -113,6 +119,7 @@ html {
         user: null,
         profiles: [],
         profile_select: false,
+        time_until_maintenance: null,
       };
     },
     computed: {
@@ -135,6 +142,7 @@ html {
         }
       }
     },
+    middleware: 'maintenance',
     methods: {
       attempt_logout() {
         return this.$nuxt.$router.push('/logout');
@@ -196,12 +204,39 @@ html {
             console.log('Error fetching user data');
             console.log(error);
           });
+      },
+      get_maintenance: function() {
+        // Current date
+        const current_date = new Date();
+        // Get maintenance date from environment variable
+        const maintenance_date = new Date(process.env.migration_date);
+        // If current date is later than migration date, redirect to maintenace page 
+        if(current_date > maintenance_date) return this.$router.push('/maintenance-underway');
+        // Get time difference between current date & maintenace window
+        let seconds = Math.floor((maintenance_date - (current_date))/1000);
+        let minutes = Math.floor(seconds/60);
+        let hours = Math.floor(minutes/60);
+        let days = Math.floor(hours/24);
+        hours = hours-(days*24);
+        minutes = minutes-(days*24*60)-(hours*60);
+        seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+        console.log('Days ' + days);
+        console.log('Hours ' + hours);
+        console.log('Minutes ' + minutes);
+        console.log('Seconds ' + seconds);
+        // Assemble notification string from time difference
+        if(days > 0) return this.time_until_maintenance= null;
+        if(hours > 0) return this.time_until_maintenance = hours + ' hours';
+        if(minutes > 0) return this.time_until_maintenance = minutes + ' minutes';
+        if(seconds > 0) return this.time_until_maintenance = seconds + ' seconds';
+        return this.time_until_maintenance = 'Happening now!';
       }
     },
     mounted: function() {
       this.set_active();
       this.fetch_user_data();
       this.fetch_profiles();
+      this.get_maintenance();
     },
     watch: {
       $route () {

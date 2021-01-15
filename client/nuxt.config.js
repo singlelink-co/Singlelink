@@ -20,6 +20,10 @@ export default {
     color: '#4C51BF',
     height: '3px'
   },
+  // Environment variables
+  env: {
+    migration_date: new Date(Date.parse('15 Jan 2021 18:00:00 EST'))
+  },
   /*
   ** Headers of the page
   ** See https://nuxtjs.org/api/configuration-head

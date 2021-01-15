@@ -1,6 +1,7 @@
 import Cookies from "~/middleware/utils";
 
 export default function (context) {
+  
   const singlelink_token = Cookies.getCookieValue('singlelink_token', context) || context.store.getters.get_token;
 
   if (singlelink_token) {

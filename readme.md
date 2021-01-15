@@ -9,7 +9,7 @@
 <br>
 
 <h4 align="center">
-    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
+    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
 </h4>
 
 <p align="center">
@@ -37,9 +37,9 @@
 </p>
 
 <p align="center">
-  <a href="#key-features">Key Features</a> •
   <a href="#get-started">Get started</a> •
-  <a href="#frequently-asked-questions">Frequently Asked Questions</a> •
+  <a href="#development">Development</a> •
+  <a href="#deployment">Deployment</a> •
   <a href="#credits">Credits</a> •
   <a href="#related">Related</a> •
   <a href="#license">License</a>
@@ -47,73 +47,165 @@
 <br>
 
 <!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
-<img src="www/static/SingleLink-Larger-Hero.png" alt="Singlelink promotional graphic"/>
+<img src="www/static/open-graph-image-rounded.png" alt="Singlelink promotional graphic"/>
 
 <br>
-
----------------------
-## Attention
-
-The readme for this repository is severely outdated, but will be updated soon in v2.1.<br>
-For the most up to date info, please visit the future-update branch.
-
----------------------
-<br>
-
-<h2 id="key-features">Key features</h2>
-
-<ul>
-    <li>Link management for unlimited links</li>
-    <li>Unlimited profiles per account</li>
-    <li>Fully customizable profiles with custom CSS/HTML</li>
-    <li>Sensitive content warnings for profiles with NSFW content</li>
-    <li>Page & link tracking with analytics dashboard (coming soon)</li>
-    <li>Custom domain support (coming soon)</li>
-    <li>Self-hosted mode (coming soon)</li>
-</ul>
 
 <h2 id="get-started">Get started</h2>
 
 <p>There are a few pre-requisites you need to have before hosting Singlelink, seen below.</p>
 
 <ul>
-    <li>A NodeJS server (ex: $5/mo DigitalOcean Droplet)</li>
-    <li>A MongoDB database (ex: Free MongoDB Atlas via GCP)</li>
-    <li>A static file host (ex: Netlify GCDN)</li>
+    <li>Two NodeJS servers (ex: $5/mo DigitalOcean Droplet)</li>
+    <li>A MongoDB database (ex: Free MongoDB Atlas M0 Cluster via GCP)</li>
 </ul>
 
-<p>Once you have the following established, it's time to begin installing & configuring your local instance.</p>
+<p>Once you have the following established, it's time to begin installing & configuring your installation.</p>
 
-<h4>Installing Singlelink on your NodeJS Server</h4>
+<h3>Client</h3>
 
-```bash
-git clone git@github.com:Neutron-Creative/Singlelink-Client.git
-cd Singlelink-Client
+```Bash
+# Clone repostiory to local device
+git clone git@github.com:Neutron-Creative/Singlelink.git
+
+# Enter client of new project
+cd Singlelink
+
+# Install necessary dependencies
 npm install
-```
-<h4>Installing Singlelink on your Static File Host</h4>
+sudo npm install -g nuxt-start
 
-```bash
-git clone git@github.com:Neutron-Creative/Singlelink-Client.git
-cd Singlelink-Client/dist
-npm run generate
-# Website can now be hosted directly from Singlelink-Client/dist
-```
+# Set API Url
+export BASE_URL=<your-api-url>
 
-<h4>Creating your configuration file</h4>
-<p><b>NOTE:</b> this configuration profile should be the same across all Singlelink installation locations previously detailed.</p>
+# Run first build
+npm run build
 
-```bash
-cd Singlelink-Client
-touch config.js
-echo "{'database':'','secret':'','port':80}" >> config.js
+# Start your server
+npm start
+
 ```
 
-<h2 id="frequently-asked-questions">Frequently asked questions</h2>
-<p>Coming soon...</p>
+<h3>Server</h3>
+
+```Bash
+# Clone repostiory to local device (don't need to repeat if performed previously for client)
+git clone git@github.com:Neutron-Creative/Singlelink.git
+
+# Enter client of new project
+cd Singlelink/server
+
+# Install necessary dependencies
+npm install
+
+# Generate config from example
+cp config-example.js config.js
+
+# Modify config.js (set API domain to localhost & client domain as neccessary)
+vim config.js
+
+# Install necessary dev dependencies
+sudo npm install -g forever nodemon
+
+# Start your server
+forever start index.js
+
+```
+
+<br>
+
+<h2 id="development">Development</h2>
+<h3>Client</h3>
+<p>Develop on the client if you're looking to make changes to the interface or styles of the application.<br>Note, pay attention to the notice below. You'll need to build & start the client before each usage to have your changes reflect properly in the application.</p>
+
+```Bash
+# ---------------------------------------------------------------------------------- #
+# NOTICE: Anytime you make changes, kill the server, rebuild, and restart as follows #
+# ---------------------------------------------------------------------------------- #
+
+## CD into Client
+cd Singlink/client
+
+# Rebuild application (compiles .vue files into raw html, css, and js)
+npm run build
+
+# Restart server
+npm start
+
+```
+
+<h4>Server</h4>
+<p>Develop on the server if you're looking to make changes to the logic of the application.<br>Developing on the server is a bit simpler, in that there is no "rebuild" process. With nodemon, changes are reloaded live instantaneously.</p>
+
+```Bash
+## CD into Server
+cd Singlink/server
+
+# Start nodemon
+nodemon index.js
+```
+
+<br>
+
+<h2 id="deployment">Deployment</h2>
+<p>Use the following instructions for deploying changes made locally to your production servers.<br>Note, before following the next steps - ensure you have pushed all changes to the git master branch!</p>
+<h3>Client</h3>
+
+```Bash
+
+# SSH into server
+ssh root@<your-server-ip>
+
+# Enter tmux session (if first time then tmux && cd Singlelink)
+tmux attach
+
+# Break existing client host session
+# Not to be typed, press both keys simultaneously
+# Ctrl + C
+
+# Pull changes from remote origin master branch
+git pull
+
+# Rebuild Nuxt JS
+npm run build
+
+# Restart server session
+nuxt-start ./ -H <your-client-ip> -p 80
+
+# Exit tmux session
+# Not to be typed, press both keys simultaneously
+# Ctrl + b
+# Afterwhich, press the following key
+# d
+
+# Exit server, changes are deployed!
+
+
+```
+
+<h3>Server</h3>
+
+``` Bash
+
+# SSH into server
+ssh root@<your-server-ip>
+
+# Enter correct directory
+cd ~/Singlelink/server/
+
+# Pull latest changes from git
+git pull
+
+# Restart server with changes (if first time then forever start index.js)
+forever restart index.js
+
+# Exit server, changes are deployed!
+
+```
+
 
 <h2 id="credits">Credits</h2>
-Singlelink was built by the following individuals.
+Singlelink was built by the following individuals.<br><br>
 <ul>
     <li>Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
     <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
@@ -127,7 +219,7 @@ Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelin
 <p><a target="_blank" href="https://singlelink.co">Singlelink</a> is Neutron Creative product, created and hosted free of charge in the mission of open-source. To learn more about our mission, visit <a href="https://neutroncreative.com" target="_blank">neutroncreative.com</a></p>
 
 <h2 id="license">License</h2>
-<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
+<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
     <p>Copyright (C) 2020  Neutron Creative Inc.</p>
 
     This program is free software: you can redistribute it and/or modify

@@ -33,3 +33,9 @@ html {
 }
 
 </style>
+
+<script>
+export default {
+  middleware: 'maintenance'
+};
+</script>
