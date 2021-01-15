@@ -3,7 +3,6 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {InfoService} from "../services/info-service";
 
-// TODO Implement server info controller
 /**
  * This controller maps and provides for all the controllers under /info.
  */

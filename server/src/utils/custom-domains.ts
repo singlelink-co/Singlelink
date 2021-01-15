@@ -51,7 +51,7 @@ export class CustomDomainHandler {
 
     let url = `${clientDomain}/u/${profile.handle}`;
 
-    reply.status(200).send(`<!DOCTYPE html>
+    reply.status(200).type('text/html').send(`<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- SEO Title -->
