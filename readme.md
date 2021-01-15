@@ -9,18 +9,18 @@
 <br>
 
 <h4 align="center">
-    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
+    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.
 </h4>
 
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/beta-2.0.1-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/Public%20Beta-2.1.6-%2303d2d4" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
-        <img src="https://img.shields.io/badge/license-GPL-%236ab04c" alt="License"/>
+        <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
     </a>
     <a href="https://app.singlelink.co/analytics"/>
-        <img src="https://img.shields.io/badge/dynamic/json?color=FF4081&label=Users&query=users&url=https%3A%2F%2Fbeta-api.singlelink.co%2Fanalytics%2Ffetch" alt="Users"/>
+        <img src="https://img.shields.io/badge/dynamic/json?color=FF4081&label=Hosted%20Users&query=users&url=https%3A%2F%2Fbeta-api.singlelink.co%2Fanalytics%2Ffetch" alt="Users"/>
     </a>
     <a href="https://neutroncreative.com">
         <img src="https://img.shields.io/badge/-Built%20by%20Neutron%20Creative-%235353EC?logo=data:image/png;base64,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"/>
@@ -37,83 +37,176 @@
 </p>
 
 <p align="center">
-  <a href="#key-features">Key Features</a> •
   <a href="#get-started">Get started</a> •
-  <a href="#frequently-asked-questions">Frequently Asked Questions</a> •
+  <a href="#development">Development</a> •
+  <a href="#deployment">Deployment</a> •
   <a href="#credits">Credits</a> •
+  <a href="#support">Support</a> •
   <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
 <br>
 
 <!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
-<img src="www/static/SingleLink-Larger-Hero.png" alt="Singlelink promotional graphic"/>
+<img src="www/static/open-graph-image-rounded.png" alt="Singlelink promotional graphic"/>
 
 <br>
-
----------------------
-## Attention
-
-The readme for this repository is severely outdated, but will be updated soon in v2.1.<br>
-For the most up to date info, please visit the future-update branch.
-
----------------------
-<br>
-
-<h2 id="key-features">Key features</h2>
-
-<ul>
-    <li>Link management for unlimited links</li>
-    <li>Unlimited profiles per account</li>
-    <li>Fully customizable profiles with custom CSS/HTML</li>
-    <li>Sensitive content warnings for profiles with NSFW content</li>
-    <li>Page & link tracking with analytics dashboard (coming soon)</li>
-    <li>Custom domain support (coming soon)</li>
-    <li>Self-hosted mode (coming soon)</li>
-</ul>
 
 <h2 id="get-started">Get started</h2>
 
 <p>There are a few pre-requisites you need to have before hosting Singlelink, seen below.</p>
 
 <ul>
-    <li>A NodeJS server (ex: $5/mo DigitalOcean Droplet)</li>
-    <li>A MongoDB database (ex: Free MongoDB Atlas via GCP)</li>
-    <li>A static file host (ex: Netlify GCDN)</li>
+    <li>Two NodeJS servers (ex: $5/mo DigitalOcean Droplet)</li>
+    <li>A PostgreSQL database (ex: Free Heroku DBaaS)</li>
 </ul>
 
-<p>Once you have the following established, it's time to begin installing & configuring your local instance.</p>
+<p>Once you have the following established, it's time to begin installing & configuring your installation.</p>
 
-<h4>Installing Singlelink on your NodeJS Server</h4>
+<h3>Client</h3>
 
-```bash
-git clone git@github.com:Neutron-Creative/Singlelink-Client.git
-cd Singlelink-Client
+```Bash
+# Clone repostiory to local device
+git clone git@github.com:Neutron-Creative/Singlelink.git
+
+# Enter client of new project
+cd Singlelink
+
+# Install necessary dependencies
 npm install
-```
-<h4>Installing Singlelink on your Static File Host</h4>
+sudo npm install -g nuxt-start
 
-```bash
-git clone git@github.com:Neutron-Creative/Singlelink-Client.git
-cd Singlelink-Client/dist
-npm run generate
-# Website can now be hosted directly from Singlelink-Client/dist
-```
+# Set API Url
+export API_URL=<your-api-url>
 
-<h4>Creating your configuration file</h4>
-<p><b>NOTE:</b> this configuration profile should be the same across all Singlelink installation locations previously detailed.</p>
+# Run first build
+npm run build
 
-```bash
-cd Singlelink-Client
-touch config.js
-echo "{'database':'','secret':'','port':80}" >> config.js
+# Start your server
+npm start
+
 ```
 
-<h2 id="frequently-asked-questions">Frequently asked questions</h2>
-<p>Coming soon...</p>
+<h3>Server</h3>
 
+```Bash
+# Clone repostiory to local device (don't need to repeat if performed previously for client)
+git clone git@github.com:Neutron-Creative/Singlelink.git
+
+# Enter client of new project
+cd Singlelink/server
+
+# Install necessary dependencies
+npm install
+
+# Generate config from example
+cp config-example.js config.js
+
+# Modify config.js (set API domain to localhost & client domain as neccessary)
+vim config.js
+
+# Install necessary dev dependencies
+sudo npm install -g forever nodemon
+
+# Start your server
+forever start index.js
+
+```
+
+<br>
+
+<h2 id="development">Development</h2>
+<h3>Client</h3>
+<p>Develop on the client if you're looking to make changes to the interface or styles of the application.<br>Note, pay attention to the notice below. You'll need to build & start the client before each usage to have your changes reflect properly in the application.</p>
+
+```Bash
+# ---------------------------------------------------------------------------------- #
+# NOTICE: Anytime you make changes, kill the server, rebuild, and restart as follows #
+# ---------------------------------------------------------------------------------- #
+
+## CD into Client
+cd Singlelink/client
+
+# Rebuild application (compiles .vue files into raw html, css, and js)
+npm run build
+
+# Restart server
+npm start
+
+```
+
+<h4>Server</h4>
+<p>Develop on the server if you're looking to make changes to the logic of the application.<br>Developing on the server is a bit simpler, in that there is no "rebuild" process. With nodemon, changes are reloaded live instantaneously.</p>
+
+```Bash
+## CD into Server
+cd Singlelink/server
+
+# Start nodemon
+nodemon index.js
+```
+
+<br>
+
+<h2 id="deployment">Deployment</h2>
+<p>Use the following instructions for deploying changes made locally to your production servers.<br>Note, before following the next steps - ensure you have pushed all changes to the git master branch!</p>
+<h3>Client</h3>
+
+```Bash
+
+# SSH into server
+ssh root@<your-server-ip>
+
+# Enter tmux session (if first time then tmux && cd Singlelink)
+tmux attach
+
+# Break existing client host session
+# Not to be typed, press both keys simultaneously
+# Ctrl + C
+
+# Pull changes from remote origin master branch
+git pull
+
+# Rebuild Nuxt JS
+npm run build
+
+# Restart server session
+nuxt-start ./ -H <your-client-ip> -p 80
+
+# Exit tmux session
+# Not to be typed, press both keys simultaneously
+# Ctrl + b
+# Afterwhich, press the following key
+# d
+
+# Exit server, changes are deployed!
+
+
+```
+
+<h3>Server</h3>
+
+``` Bash
+
+# SSH into server
+ssh root@<your-server-ip>
+
+# Enter correct directory
+cd ~/Singlelink/server/
+
+# Pull latest changes from git
+git pull
+
+# Restart server with changes (if first time then forever start index.js)
+forever restart index.js
+
+# Exit server, changes are deployed!
+
+```
+
+<br>
 <h2 id="credits">Credits</h2>
-Singlelink was built by the following individuals.
+Singlelink was built by the following individuals.<br><br>
 <ul>
     <li>Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
     <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
@@ -123,11 +216,48 @@ Singlelink was built by the following individuals.
 Currently, Singlelink lacks contributors outside its founders at Neutron Creative, but, you can help.
 Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelink/issues">issues page</a> today and create your first pull request to get featured here!
 
+<br><br>
+<h2 id="support">Support</h2>
+Need help? Our <a href="https://discord.com/invite/3pBM4Px" target="_blank">community support </a> is online 9AM-5PM EST M-F, and our <a href="mailto:support@neutroncreative.com">enterprise support team</a> is available 24/7/365 via (<a href="mailto:support@neutroncreative.com">email</a> or <a href="tel:+19196530790">phone</a>). Don't hesitate to get in touch, we love to help and we're often able to resolve issues within the hour!
+<br><br>
+Additionally, we've listed a few frequently asked questions below.
+
+##### Help, my API isn't working!
+
+Often, this is caused by an incomplete config.js file in Singlelink/server/config.js, be sure this is complete!
+
+##### My client isn't working properly!
+
+This is most often caused by an incomplete/incorrect build, with missing environment variables or something of the like. To fix, ensure that the $API_URL environment variable is properly set on your client server, and run npm run build inside your client directory to manually rebuild the project.
+
+##### How can I host this on Netlify?
+
+Unfortunately, we discontinued static platform support in late 2020 when moving to v2.0 to gain features such as dynamic open-graph images, search engine optimization, alongside custom meta data.
+
+##### When will you have *x* feature?
+
+Check our <a href="https://github.com/Neutron-Creative/Singlelink/projects">roadmap</a>! We're regularly adding new features, and list our most up-to-date plans on Github.
+
+##### I'm having trouble installing Singlelink. Can I pay you to install & it for me?
+
+Yes! As of January 2020, you can reach out to support@neutroncreative.com and we'll be glad to help you get set up (incurs $100 install + $35/mo hosting fees). We offer full installation, management, and maintenance services for Enterprise clients starting at just $35/mo.
+
+##### How can I suggest a feature/report a bug?
+
+The <a href="https://github.com/Neutron-Creative/Singlelink/issues" target="_blank">Github issue tracker</a> is the best place to do that! No matter your experience & ability creating Github issues, this is the best way for us to see & respond quickly to your requests.
+
+##### Do you have a community I can join?
+
+Yes! We're actively daily on <a href="https://discord.com/invite/3pBM4Px" target="_blank">Discord</a> and would love to have you!
+
+
+<br><br>
 <h2 id="related">Related</h2>
 <p><a target="_blank" href="https://singlelink.co">Singlelink</a> is Neutron Creative product, created and hosted free of charge in the mission of open-source. To learn more about our mission, visit <a href="https://neutroncreative.com" target="_blank">neutroncreative.com</a></p>
 
+<br>
 <h2 id="license">License</h2>
-<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, and <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.</p>
+<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.</p>
     <p>Copyright (C) 2020  Neutron Creative Inc.</p>
 
     This program is free software: you can redistribute it and/or modify
@@ -141,4 +271,4 @@ Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelin
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://www.gnu.org/licenses/>
