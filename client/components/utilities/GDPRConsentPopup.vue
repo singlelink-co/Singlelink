@@ -5,15 +5,15 @@
         v-if="consentBannerActive"
         class="consent-banner"
       >
-        <p class="text-gray-600 text-lg">
-          By using Singlelink, you agree to our <a href="/privacy-policy" target="_blank" style="color: #5353EC">Privacy
+        <p class="text-gray-600 text-sm">
+          By using Singlelink, you agree to our <a class="text-indigo-600 hover:underline" href="/privacy-policy" target="_blank">Privacy
           Policy</a>.
         </p>
         <br>
 
         <button
           type="button"
-          class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+          class="flex px-3 py-1 text-sm ml-auto text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
           @click="consentToPolicy"
         >
           I accept
@@ -67,13 +67,7 @@ export default Vue.extend({
   left: 25%;
   right: 25%;
   width: 50%;
-  padding: 5px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  @apply p-2 rounded shadow-lg flex items-center justify-center bg-white;
 }
 
 .close {

@@ -116,7 +116,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.API_URL ?? 'https://api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
+    baseURL: process.env.API_URL ?? 'https://sickomode-api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
   },
 
   env: {
