@@ -1,5 +1,6 @@
 <template>
   <div class="privacy-container">
+    <a href="https://neutroncreative.com" target="_blank"><img class="w-48 mb-8 opacity-75 lg:mt-16" style="filter:invert(1);" src="https://neutroncreative.com/Sidebar-brandmark.svg"/></a>
     <div class="privacy-policy">
       <h1>Privacy Policy for Neutron Creative Inc.</h1>
       <br>
@@ -12,18 +13,14 @@
 
       <p>This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards
         to the information that they shared and/or collect in Singlelink. This policy is not applicable to any
-        information collected offline or via channels other than this website. Our Privacy Policy was created with the
-        help of the <a href="https://www.privacypolicygenerator.info">Privacy Policy Generator</a> and the <a
-          href="https://www.privacypolicies.com/privacy-policy-generator/"
-        >Free Privacy Policy Generator</a>.</p>
+        information collected offline or via channels other than this website.</p>
 
       <br>
       <h2>Consent</h2>
       <br>
 
       <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms. For our Terms and
-        Conditions, please visit the <a href="https://www.privacypolicyonline.com/terms-conditions-generator/">Terms &
-          Conditions Generator</a>.</p>
+        Conditions, please visit the <a href="https://www.privacypolicyonline.com/terms-conditions-generator/">Terms & Conditions Generator</a>.</p>
 
       <br>
       <h2>Information we collect</h2>
@@ -44,12 +41,12 @@
       <p>We use the information we collect in various ways, including to:</p>
 
       <ul>
-        <li>Provide, operate, and maintain our webste</li>
-        <li>Improve, personalize, and expand our webste</li>
-        <li>Understand and analyze how you use our webste</li>
+        <li>Provide, operate, and maintain our website</li>
+        <li>Improve, personalize, and expand our website</li>
+        <li>Understand and analyze how you use our website</li>
         <li>Develop new products, services, features, and functionality</li>
         <li>Communicate with you, either directly or through one of our partners, including for customer service, to
-          provide you with updates and other information relating to the webste, and for marketing and promotional
+          provide you with updates and other information relating to the website, and for marketing and promotional
           purposes
         </li>
         <li>Send you emails</li>
@@ -149,9 +146,10 @@
         If you think that your child provided this kind of information on our website, we strongly encourage you to
         contact us immediately and we will do our best efforts to promptly remove such information from our records.</p>
     </div>
-
-    <br>
-    <h1><a href="/">Go Back</a></h1>
+    <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-8 items-center jusitfy-center">
+      <a class="w-full text-center lg:w-auto text-lg bg-indigo-600 hover:bg-indigo-500 py-4 px-8 rounded-lg font-semibold" style="color:#FFF !important;" href="/">Return to Singlelink</a>
+      <a href="https://neutroncreative.com" target="_blank" class="inline">Or, learn more about Neutron Creative</a>
+    </div>
   </div>
 </template>
 
@@ -164,28 +162,52 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.privacy-container {
-  display: block;
-  position: relative;
-  margin: 0 auto;
-  max-width: 1200px;
-}
+  .privacy-container {
+    @apply w-11/12 max-w-2xl mx-auto p-8;
+  }
 
-h1 {
-  text-align: center;
-  font-size: 2em;
-}
+  .privacy-policy {
+    @apply mb-8 flex flex-col;
+  }
 
-h2 {
-  text-align: center;
-  font-size: 1.5em;
-}
+  h1, h2, h3 {
+    @apply text-gray-900;
+  }
 
-p {
-  font-size: 1em;
-}
+  h1 {
+    @apply font-bold text-3xl;
+  }
 
-a {
-  color: #5353EC;
-}
+  h2 {
+    @apply font-semibold text-2xl;
+  }
+
+  h3 {
+    @apply font-semibold text-xl;
+  }
+
+  p {
+    @apply text-gray-600 leading-loose text-lg mb-4;
+  }
+
+  a {
+    @apply text-indigo-600;
+  }
+
+  a.inline {
+    @apply text-gray-600 text-sm
+  }
+
+  a:hover {
+    @apply underline;
+  }
+
+  ul {
+    @apply px-6;
+  }
+
+  li {
+    list-style: disc;
+    @apply text-sm text-gray-600 leading-relaxed mb-4;
+  }
 </style>
