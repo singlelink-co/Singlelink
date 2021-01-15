@@ -6,7 +6,7 @@ import {ProfileController} from "./controllers/profile-controller";
 import {ThemeController} from "./controllers/theme-controller";
 import {UserController} from "./controllers/user-controller";
 import {InfoController} from "./controllers/info-controller";
-import {AuthOpts} from "./utils/auth";
+import {Auth} from "./utils/auth";
 import {CustomDomainHandler} from "./utils/custom-domains";
 import {AdminController} from "./controllers/admin-controller";
 
@@ -22,7 +22,7 @@ start().then(() => {
 async function start() {
   await database.initialize();
 
-  AuthOpts.initialize(database.pool);
+  Auth.initialize(database.pool);
   CustomDomainHandler.initialize(database.pool);
 
   // SingleLink main controllers

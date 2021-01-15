@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {LinkService} from "../services/link-service";
 import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
@@ -28,13 +28,13 @@ interface UpdateLinkRequest extends RequestGenericInterface {
     style: string,
     customCss: string,
     useDeepLink: boolean
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 interface DeleteLinkRequest extends RequestGenericInterface {
   Body: {
     id?: string
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 interface ReorderLinkRequest extends AuthenticatedRequest {
@@ -57,11 +57,11 @@ export class LinkController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.post<CreateLinkRequest>('/link/create', AuthOpts.ValidateWithData, this.CreateLink.bind(this));
-    this.fastify.post<UpdateLinkRequest>('/link/update', AuthOpts.ValidateOnly, this.UpdateLink.bind(this));
-    this.fastify.post<DeleteLinkRequest>('/link/delete', AuthOpts.ValidateOnly, this.DeleteLink.bind(this));
+    this.fastify.post<CreateLinkRequest>('/link/create', Auth.ValidateWithData, this.CreateLink.bind(this));
+    this.fastify.post<UpdateLinkRequest>('/link/update', Auth.ValidateWithData, this.UpdateLink.bind(this));
+    this.fastify.post<DeleteLinkRequest>('/link/delete', Auth.ValidateWithData, this.DeleteLink.bind(this));
 
-    this.fastify.post<ReorderLinkRequest>('/link/reorder', AuthOpts.ValidateWithData, this.ReorderLink.bind(this));
+    this.fastify.post<ReorderLinkRequest>('/link/reorder', Auth.ValidateWithData, this.ReorderLink.bind(this));
   }
 
   /**
@@ -75,7 +75,7 @@ export class LinkController extends Controller {
   async CreateLink(request: FastifyRequest<CreateLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
-      let profile = request.body.profile;
+      let profile = request.body.authProfile;
 
       if (!profile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
@@ -131,6 +131,8 @@ export class LinkController extends Controller {
         return;
       }
 
+      await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
+
       return await this.linkService.updateLink(
         body.id,
         body.url,
@@ -168,6 +170,8 @@ export class LinkController extends Controller {
         return;
       }
 
+      await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
+
       return await this.linkService.deleteLink(body.id);
     } catch (e) {
       if (e instanceof HttpError) {
@@ -191,7 +195,7 @@ export class LinkController extends Controller {
     try {
       let body = request.body;
 
-      if (!body.profile) {
+      if (!body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
@@ -206,7 +210,7 @@ export class LinkController extends Controller {
         return;
       }
 
-      return await this.linkService.reorderLinks(body.profile.id, body.oldIndex, body.newIndex);
+      return await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

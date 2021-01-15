@@ -370,7 +370,7 @@ export default Vue.extend({
       try {
         await this.$axios.$post<Profile>('/profile/activate-theme', {
           token: this.$store.getters['auth/getToken'],
-          theme: id,
+          id,
         });
 
         this.$root.$emit('refreshUserProfileView');
@@ -428,7 +428,7 @@ export default Vue.extend({
 
         const token = this.$store.getters['auth/getToken'];
 
-        await this.$axios.$post('theme/set-global', {
+        await this.$axios.$post('theme/admin/set-global', {
           token,
           id: response.id,
           global: true
@@ -449,7 +449,7 @@ export default Vue.extend({
 
     async saveEditTheme() {
       try {
-        const response = await this.$axios.$post<Theme>('/theme/update', {
+        const response = await this.$axios.$post<Theme>('/theme/admin/update', {
           token: this.$store.getters['auth/getToken'],
           id: this.pendingTheme.id,
           label: this.pendingTheme.label,
@@ -474,7 +474,7 @@ export default Vue.extend({
 
         const token = this.$store.getters['auth/getToken'];
 
-        await this.$axios.$post('theme/set-global', {
+        await this.$axios.$post('theme/admin/set-global', {
           token,
           id: response.id,
           global: this.pendingTheme.global
@@ -496,7 +496,7 @@ export default Vue.extend({
 
     async deleteTheme() {
       try {
-        const response = await this.$axios.$post<Theme>('/theme/delete', {
+        const response = await this.$axios.$post<Theme>('/theme/admin/delete', {
           token: this.$store.getters['auth/getToken'],
           id: this.pendingTheme.id,
         });

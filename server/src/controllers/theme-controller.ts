@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {AdminRequest, AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {AdminRequest, Auth, AuthenticatedRequest} from "../utils/auth";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
@@ -67,13 +67,17 @@ export class ThemeController extends Controller {
   }
 
   registerRoutes(): void {
-    this.fastify.post<GetThemeRequest>('/themes', AuthOpts.ValidateWithData, this.GetThemes.bind(this));
-    this.fastify.post<CreateThemeRequest>('/theme/create', AuthOpts.ValidateWithData, this.CreateTheme.bind(this));
-    this.fastify.post<UpdateThemeRequest>('/theme/update', AuthOpts.ValidateWithData, this.UpdateTheme.bind(this));
-    this.fastify.post<DeleteThemeRequest>('/theme/delete', AuthOpts.ValidateWithData, this.DeleteTheme.bind(this));
+    // Authenticated
+    this.fastify.post<GetThemeRequest>('/themes', Auth.ValidateWithData, this.GetThemes.bind(this));
+    this.fastify.post<CreateThemeRequest>('/theme/create', Auth.ValidateWithData, this.CreateTheme.bind(this));
+    this.fastify.post<UpdateThemeRequest>('/theme/update', Auth.ValidateWithData, this.UpdateTheme.bind(this));
+    this.fastify.post<DeleteThemeRequest>('/theme/delete', Auth.ValidateWithData, this.DeleteTheme.bind(this));
 
-    this.fastify.post<SetGlobalRequest>('/theme/set-global', AuthOpts.ValidateAdminWithData, this.SetGlobal.bind(this));
-    this.fastify.post<SetUserIdRequest>('/theme/set-user-id', AuthOpts.ValidateAdminWithData, this.SetUserId.bind(this));
+    // Admin Authenticated
+    this.fastify.post<SetGlobalRequest>('/theme/admin/set-global', Auth.ValidateAdminWithData, this.AdminSetGlobal.bind(this));
+    this.fastify.post<SetUserIdRequest>('/theme/admin/set-user-id', Auth.ValidateAdminWithData, this.AdminSetUserId.bind(this));
+    this.fastify.post<UpdateThemeRequest>('/theme/admin/update', Auth.ValidateAdminWithData, this.AdminUpdateTheme.bind(this));
+    this.fastify.post<DeleteThemeRequest>('/theme/admin/delete', Auth.ValidateAdminWithData, this.AdminDeleteTheme.bind(this));
   }
 
   /**
@@ -88,7 +92,7 @@ export class ThemeController extends Controller {
       if (body.onlyGlobal) {
         return await this.themeService.listGlobalThemes();
       } else {
-        return await this.themeService.listThemes(body.user.id, body.includeGlobal);
+        return await this.themeService.listUserThemes(body.authUser.id, body.includeGlobal);
       }
     } catch (e) {
       if (e instanceof HttpError) {
@@ -114,7 +118,7 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.createTheme(body.user.id, body.label, body.colors, body.customCss, body.customHtml);
+      return await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -139,7 +143,7 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.updateTheme(body.id, body.user.id, body.label, body.colors, body.customCss, body.customHtml);
+      return await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -159,7 +163,7 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      return await this.themeService.deleteTheme(body.id, body.user.id);
+      return await this.themeService.deleteUserTheme(body.id, body.authUser.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -170,12 +174,14 @@ export class ThemeController extends Controller {
     }
   }
 
+  // region Admin Routes
+
   /**
    * Route for /theme/set-global
    * @param request
    * @param reply
    */
-  async SetGlobal(request: FastifyRequest<SetGlobalRequest>, reply: FastifyReply) {
+  async AdminSetGlobal(request: FastifyRequest<SetGlobalRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
@@ -195,7 +201,7 @@ export class ThemeController extends Controller {
    * @param request
    * @param reply
    */
-  async SetUserId(request: FastifyRequest<SetUserIdRequest>, reply: FastifyReply) {
+  async AdminSetUserId(request: FastifyRequest<SetUserIdRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
 
@@ -209,4 +215,51 @@ export class ThemeController extends Controller {
       throw e;
     }
   }
+
+  /**
+   * Route for /theme/admin/update
+   * @param request
+   * @param reply
+   */
+  async AdminUpdateTheme(request: FastifyRequest<UpdateThemeRequest>, reply: FastifyReply) {
+    try {
+      let body = request.body;
+
+      if (!body.label) {
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
+        return;
+      }
+
+      return await this.themeService.updateTheme(body.id, body.label, body.colors, body.customCss, body.customHtml);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /theme/admin/update
+   * @param request
+   * @param reply
+   */
+  async AdminDeleteTheme(request: FastifyRequest<DeleteThemeRequest>, reply: FastifyReply) {
+    try {
+      let body = request.body;
+
+      return await this.themeService.deleteTheme(body.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  // endregion
 }

@@ -1,6 +1,6 @@
 import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ProfileService} from "../services/profile-service";
 import {StatusCodes} from "http-status-codes";
 import {ReplyUtils} from "../utils/reply-utils";
@@ -27,7 +27,7 @@ interface CreateProfileRequest extends AuthenticatedRequest {
 
 interface ActivateProfileThemeRequest extends AuthenticatedRequest {
   Body: {
-    theme: string
+    id: string
   } & AuthenticatedRequest["Body"]
 }
 
@@ -52,7 +52,7 @@ const createProfileRequestOpts = {
       timeWindow: '5 minutes'
     }
   },
-  preHandler: <preHandlerHookHandler>AuthOpts.validateAuthWithData
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
 /**
@@ -79,16 +79,16 @@ export class ProfileController extends Controller {
     this.fastify.all<ProfileHandleRequest>('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
 
     // Authenticated
-    this.fastify.all<AuthenticatedRequest>('/profile/preview', AuthOpts.ValidateWithData, this.GetProfilePreview.bind(this));
-    this.fastify.post<AuthenticatedRequest>('/profiles', AuthOpts.ValidateWithData, this.ListProfiles.bind(this));
-    this.fastify.post<AuthenticatedRequest>('/profile/links', AuthOpts.ValidateWithData, this.ListProfileLinks.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/profile/preview', Auth.ValidateWithData, this.GetProfilePreview.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/profiles', Auth.ValidateWithData, this.ListProfiles.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/profile/links', Auth.ValidateWithData, this.ListProfileLinks.bind(this));
 
     this.fastify.post<CreateProfileRequest>('/profile/create', createProfileRequestOpts, this.CreateProfile.bind(this));
-    this.fastify.post<UpdateProfileRequest>('/profile/update', AuthOpts.ValidateWithData, this.UpdateProfile.bind(this));
-    this.fastify.post<AuthenticatedRequest>('/profile/delete', AuthOpts.ValidateWithData, this.DeleteProfile.bind(this));
+    this.fastify.post<UpdateProfileRequest>('/profile/update', Auth.ValidateWithData, this.UpdateProfile.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/profile/delete', Auth.ValidateWithData, this.DeleteProfile.bind(this));
 
-    this.fastify.post<AuthenticatedRequest>('/profile/active-profile', AuthOpts.ValidateWithData, this.GetActiveProfile.bind(this));
-    this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', AuthOpts.ValidateWithData, this.ActivateProfileTheme.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/profile/active-profile', Auth.ValidateWithData, this.GetActiveProfile.bind(this));
+    this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', Auth.ValidateWithData, this.ActivateProfileTheme.bind(this));
   }
 
   /**
@@ -190,13 +190,13 @@ export class ProfileController extends Controller {
    */
   async GetProfilePreview(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      let user = request.body.user;
-      let profile = request.body.profile;
+      let user = request.body.authUser;
+      let profile = request.body.authProfile;
       let profiles = await this.profileService.listProfiles(user.id);
       let links;
       let theme;
@@ -238,12 +238,12 @@ export class ProfileController extends Controller {
    */
   async ListProfiles(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.profileService.listProfiles(request.body.user.id);
+      return await this.profileService.listProfiles(request.body.authUser.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -262,12 +262,12 @@ export class ProfileController extends Controller {
    */
   async ListProfileLinks(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.linkService.listLinks(request.body.profile.id);
+      return await this.linkService.listLinks(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -288,7 +288,7 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      return await this.profileService.createProfile(body.user.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+      return await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -309,13 +309,13 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      if (!body.profile) {
+      if (!body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
       return await this.profileService.updateProfile(
-        body.profile.id,
+        body.authProfile.id,
         body.imageUrl,
         body.headline,
         body.subtitle,
@@ -344,12 +344,12 @@ export class ProfileController extends Controller {
    */
   async DeleteProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.profileService.deleteProfile(request.body.user.id, request.body.profile.id);
+      return await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -368,12 +368,12 @@ export class ProfileController extends Controller {
    */
   async GetActiveProfile(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
-      if (!request.body.profile) {
+      if (!request.body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return request.body.profile;
+      return request.body.authProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -394,12 +394,16 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      if (!body.profile) {
+      if (!body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      return await this.profileService.setActiveTheme(body.profile.id, body.theme);
+      if (body.id) {
+        await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true);
+      }
+
+      return await this.profileService.setActiveTheme(body.authProfile.id, body.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

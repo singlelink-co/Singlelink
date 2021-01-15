@@ -1,8 +1,11 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
-import {AuthenticatedRequest, AuthOpts} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {AdminService} from "../services/admin-service";
+import {StatusCodes} from "http-status-codes";
+import {ReplyUtils} from "../utils/reply-utils";
+import {HttpError} from "../utils/http-error";
 
 interface GetGroupRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
@@ -22,7 +25,7 @@ export class AdminController extends Controller {
 
   registerRoutes(): void {
     // Authenticated
-    this.fastify.all<GetGroupRequest>('/admin/perm-group', AuthOpts.ValidateWithData, this.GetPermGroup.bind(this));
+    this.fastify.all<GetGroupRequest>('/admin/perm-group', Auth.ValidateWithData, this.GetPermGroup.bind(this));
   }
 
   /**
@@ -33,6 +36,6 @@ export class AdminController extends Controller {
    * @constructor
    */
   async GetPermGroup(request: FastifyRequest<GetGroupRequest>, reply: FastifyReply) {
-    return await this.adminService.getPermGroup(request.body.user.id);
+    return await this.adminService.getPermGroup(request.body.authUser.id);
   }
 }

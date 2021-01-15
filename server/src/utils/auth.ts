@@ -11,6 +11,8 @@ import {Pool} from "pg";
 import {ReplyUtils} from "./reply-utils";
 import {StatusCodes} from "http-status-codes";
 import {DbTypeConverter} from "./db-type-converter";
+import {DatabaseService} from "../services/database-service";
+import {HttpError} from "./http-error";
 
 /**
  * A Fastify request that has been properly authenticated via a JWT token.
@@ -19,8 +21,8 @@ import {DbTypeConverter} from "./db-type-converter";
 export interface AuthenticatedRequest extends RequestGenericInterface {
   Body: {
     token: string,
-    user: User,
-    profile: Profile
+    authUser: User,
+    authProfile: Profile
   }
 }
 
@@ -30,8 +32,8 @@ export interface AuthenticatedRequest extends RequestGenericInterface {
 export interface AdminRequest extends RequestGenericInterface {
   Body: {
     token: string,
-    user: User,
-    profile: Profile
+    authUser: User,
+    authProfile: Profile
     permGroup: PermissionGroup
   }
 }
@@ -39,14 +41,14 @@ export interface AdminRequest extends RequestGenericInterface {
 /**
  * A convenience class for Fastify Handler options regarding authentication.
  */
-export class AuthOpts {
+export class Auth {
 
   /**
    * Authenticate only, do not pass in an AuthenticatedRequest. This has better performance
    * since the server does not need to communicate with the database.
    */
   static ValidateOnly: RouteShorthandOptions = {
-    preHandler: <preHandlerHookHandler>AuthOpts.validateAuth,
+    preHandler: <preHandlerHookHandler>Auth.validateAuth,
   };
 
   /**
@@ -54,14 +56,14 @@ export class AuthOpts {
    * you need user and profile data.
    */
   static ValidateWithData: RouteShorthandOptions = {
-    preHandler: <preHandlerHookHandler>AuthOpts.validateAuthWithData,
+    preHandler: <preHandlerHookHandler>Auth.validateAuthWithData,
   };
 
   /**
    * Authenticate Admin privileges and pass in an Admin request.
    */
   static ValidateAdminWithData: RouteShorthandOptions = {
-    preHandler: <preHandlerHookHandler>AuthOpts.validateAdminWithData,
+    preHandler: <preHandlerHookHandler>Auth.validateAdminWithData,
   };
 
   /**
@@ -139,8 +141,8 @@ export class AuthOpts {
 
     // Throw away passed in data (important!)
     // Otherwise someone could fake a valid token.
-    body.user = <any>undefined;
-    body.profile = <any>undefined;
+    body.authUser = <any>undefined;
+    body.authProfile = <any>undefined;
 
     jwt.verify(
       token,
@@ -167,7 +169,7 @@ export class AuthOpts {
 
           // First, we need to grab the user account from the token.
 
-          let accountQuery = await AuthOpts.pool.query<DbUser>(
+          let accountQuery = await Auth.pool.query<DbUser>(
             "select * from app.users where email=$1",
             [
               dAuthToken.email
@@ -182,11 +184,11 @@ export class AuthOpts {
           let user = accountQuery.rows[0];
 
           let authRequest = request;
-          authRequest.body.user = DbTypeConverter.toUser(user);
+          authRequest.body.authUser = DbTypeConverter.toUser(user);
 
           // Next, we grab the active profile
           {
-            let profileQuery = await AuthOpts.pool.query<DbProfile>(
+            let profileQuery = await Auth.pool.query<DbProfile>(
               "select * from app.profiles where id=$1",
               [
                 user.active_profile_id
@@ -195,11 +197,11 @@ export class AuthOpts {
 
             if (profileQuery.rowCount > 0) {
               let profile = profileQuery.rows[0];
-              authRequest.body.profile = DbTypeConverter.toProfile(profile);
+              authRequest.body.authProfile = DbTypeConverter.toProfile(profile);
             } else {
 
               // No active profile? Fine, let's try to find if the user owns any profiles at all.
-              let searchProfileQuery = await AuthOpts.pool.query<DbProfile>(
+              let searchProfileQuery = await Auth.pool.query<DbProfile>(
                 "select * from app.profiles where user_id=$1",
                 [
                   user.id
@@ -209,7 +211,7 @@ export class AuthOpts {
               // Set the active profile to the first one we see
               if (searchProfileQuery.rowCount > 0) {
                 let profile = searchProfileQuery.rows[0];
-                authRequest.body.profile = DbTypeConverter.toProfile(profile);
+                authRequest.body.authProfile = DbTypeConverter.toProfile(profile);
               }
             }
           }
@@ -249,8 +251,8 @@ export class AuthOpts {
 
     // Throw away passed in data (important!)
     // Otherwise someone could fake a valid token.
-    body.user = <any>undefined;
-    body.profile = <any>undefined;
+    body.authUser = <any>undefined;
+    body.authProfile = <any>undefined;
 
     jwt.verify(
       token,
@@ -277,7 +279,7 @@ export class AuthOpts {
 
           // First, we need to grab the user account from the token.
 
-          let accountQuery = await AuthOpts.pool.query<DbUser>(
+          let accountQuery = await Auth.pool.query<DbUser>(
             "select * from app.users where email=$1",
             [
               dAuthToken.email
@@ -292,11 +294,11 @@ export class AuthOpts {
           let user = accountQuery.rows[0];
 
           let authRequest = request;
-          authRequest.body.user = DbTypeConverter.toUser(user);
+          authRequest.body.authUser = DbTypeConverter.toUser(user);
 
           // Next, we grab the active profile
           {
-            let profileQuery = await AuthOpts.pool.query<DbProfile>(
+            let profileQuery = await Auth.pool.query<DbProfile>(
               "select * from app.profiles where id=$1",
               [
                 user.active_profile_id
@@ -305,11 +307,11 @@ export class AuthOpts {
 
             if (profileQuery.rowCount > 0) {
               let profile = profileQuery.rows[0];
-              authRequest.body.profile = DbTypeConverter.toProfile(profile);
+              authRequest.body.authProfile = DbTypeConverter.toProfile(profile);
             } else {
 
               // No active profile? Fine, let's try to find if the user owns any profiles at all.
-              let searchProfileQuery = await AuthOpts.pool.query<DbProfile>(
+              let searchProfileQuery = await Auth.pool.query<DbProfile>(
                 "select * from app.profiles where user_id=$1",
                 [
                   user.id
@@ -319,7 +321,7 @@ export class AuthOpts {
               // Set the active profile to the first one we see
               if (searchProfileQuery.rowCount > 0) {
                 let profile = searchProfileQuery.rows[0];
-                authRequest.body.profile = DbTypeConverter.toProfile(profile);
+                authRequest.body.authProfile = DbTypeConverter.toProfile(profile);
               }
 
             }
@@ -327,7 +329,7 @@ export class AuthOpts {
 
           // Find the permgroup for this user, check if it is admin
           {
-            let permQuery = await AuthOpts.pool.query<DbPermissionGroup>(
+            let permQuery = await Auth.pool.query<DbPermissionGroup>(
               "select * from app.perm_groups where user_id=$1",
               [
                 user.id
@@ -364,4 +366,37 @@ export class AuthOpts {
       });
   }
 
+  /**
+   * Validates ownership of the requested resource.
+   */
+  static async checkLinkOwnership(service: DatabaseService, linkId: string, profile: Profile) {
+    const pool = service.pool;
+
+    let queryResult = await pool.query<{ count: number }>("select count(*) from app.links where id=$1 and profile_id=$2",
+      [linkId, profile.id]);
+
+    if (queryResult.rows[0].count <= 0) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource");
+    }
+  }
+
+  /**
+   * Validates ownership of the requested resource.
+   */
+  static async checkThemeOwnership(service: DatabaseService, themeId: string, user: User, includeGlobal: boolean) {
+    const pool = service.pool;
+
+    let queryResult;
+
+    if (includeGlobal) {
+      queryResult = await pool.query<{ count: number }>("select count(*) from app.themes where id=$1 and (user_id=$2 or global=true)", [themeId, user.id]);
+    } else {
+      queryResult = await pool.query<{ count: number }>("select count(*) from app.themes where id=$1 and (user_id=$2)", [themeId, user.id]);
+    }
+
+
+    if (queryResult.rows[0].count <= 0) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource");
+    }
+  }
 }
