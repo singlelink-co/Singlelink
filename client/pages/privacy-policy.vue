@@ -152,8 +152,8 @@
         <a href="https://neutroncreative.com" target="_blank" class="inline">Or, learn more about Neutron Creative</a>
       </div>
     </div>
-    <section class="flex text-left text-gray-600 text-sm mt-auto mb-4 pt-20 w-full max-w-2xl px-8">Copyright ©2020
-      Neutron Creative Inc, All rights reserved.
+    <section class="flex text-center items-center justify-center lg:justify-start lg:text-left text-gray-600 text-xs lg:text-sm mt-auto mb-4 pt-20 w-full max-w-2xl px-8">Copyright ©2020
+      Neutron Creative Inc<span class="lg:flex hidden mr-2">,</span> <br class="flex lg:hidden">All rights reserved.
     </section>
   </div>
 </template>
