@@ -88,8 +88,8 @@
       </div>
     </section>
 
-    <section class="flex flex-col flex-grow">
-      <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full">
+    <section class="flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
+      <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
         <n-link to="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard')">
             Links
@@ -118,21 +118,21 @@
       </div>
 
       <!-- Render Nuxt-->
-      <Nuxt/>
+      <Nuxt class="overflow-y-scroll flex flex-grow"/>
 
-      <div class="p-4 text-md">
+      <div class="p-4 text-sm bg-white text-gray-600 flex items-center justify-start flex-row">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
-        {{ version }}
-        [<a
-        class="text-indigo-700 bg-blue-100"
+        <span class="pr-4">{{ version }}</span>
+        <a
+        class="text-indigo-600 flex bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-2 font-medium"
         href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
-      >Changelog</a>]
+      >Changelog</a>
       </div>
     </section>
 
     <!-- Preview Section-->
     <section
-      class="relative flex flex-col w-4/12 items-center border border-t-0 border-b-0 border-r-0 bg-gray-100"
+      class="relative  flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
     >
 
       <!-- Preview Navbar-->

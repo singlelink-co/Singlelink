@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen">
+  <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen overflow-y-scroll">
     <section class="flex items-center justify-center flex-col mt-auto w-screen">
       <img src="/icon.svg">
       <h1 class="font-semibold text-3xl mt-2">
