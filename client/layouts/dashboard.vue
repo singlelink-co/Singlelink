@@ -6,7 +6,8 @@
       style="width: 70px; max-width: 70px;"
     >
       <n-link to="/dashboard">
-        <img :src="icon_url" style="width: 35px;" alt="icon"></n-link>
+        <img :src="icon_url" style="width: 35px;" alt="icon">
+      </n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img
           v-if="user && profiles.length>=1"
@@ -171,7 +172,7 @@
 
       <div class="user-profile-preview-parent">
         <div v-if="originalHandle" :class="checkPreviewMode()">
-          <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative" style="max-height:calc(100vh - 300px);">
+          <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
             <iframe class="w-full" id="preview-frame" onload="this.style.height='10000px';" :src="`/u-preview/${user.activeProfile.handle}`" scrolling="no"/>
           </div>
         </div>
@@ -509,6 +510,7 @@ html {
 
 .desktop-display > div {
   @apply rounded-lg;
+  max-height:calc(100vh - 300px);
 }
 
 .desktop-display {

@@ -79,6 +79,18 @@ sudo npm install -g nuxt-start
 # Set API Url
 export API_URL=<your-api-url>
 
+# Optionally, customize your instance
+export META_TITLE=<your-seo-meta-title>
+export META_DESCRIPTION=<your-seo-meta-description>
+export META_IMAGE=<your-meta-image>
+export FAVICON=<your-favicon-url>
+export HOSTNAME=<your-installation-hostname>
+export APP_NAME=<your-app-name>
+export ICON_URL=<your-icon-url>
+export ICON_WIDTH=<your-icon-width>
+export ORGANIZATION=<your-organization>
+export FREE_SIGNUP=<is-freesignup-enabled>
+
 # Run first build
 npm run build
 
@@ -131,7 +143,7 @@ cd Singlelink/client
 npm run build
 
 # Restart server
-npm start
+npm run start
 
 ```
 
