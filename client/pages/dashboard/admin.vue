@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-scroll">
+  <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-x-hidden overflow-y-scroll">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
       Admin Dashboard
     </h1>
