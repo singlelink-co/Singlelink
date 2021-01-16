@@ -14,6 +14,7 @@
           style="width: 100%; border-radius: 100px;"
           :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
           alt="avatar"
+          onerror="this.src='https://www.gravatar.com/avatar'"
           @click="toggleProfileSelect"
         >
 
