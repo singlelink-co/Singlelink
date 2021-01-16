@@ -39,9 +39,19 @@ export default {
         content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
       {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+      },
+      {
         hid: 'og:image',
         name: 'og:image',
-        content: process.env.META_IMAGE ?? 'https://singlelink.co/social-hero.png'
+        content: process.env.META_IMAGE ?? 'https://singlelink.co/open-graph-image-v2.png'
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content: process.env.META_IMAGE ?? 'https://singlelink.co/open-graph-image-v2.png'
       },
       {
         hid: 'og:title',
@@ -49,10 +59,25 @@ export default {
         content: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative'
       },
       {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative'
+      },
+      {
         hid: 'og:description',
         name: 'og:description',
         content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
+      {
+        hid: 'twitter:url',
+        name: 'twitter:url',
+        content: ('https://' + process.env.HOSTNAME) ?? 'https://app.singlelink.co'
+      },
+      {
+        hid: 'twitter:card',
+        name: 'twitter:card',
+        content: 'summary_large_image'
+      }
     ],
     link: [
       {
