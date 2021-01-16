@@ -3,17 +3,17 @@
       <div class="privacy-container">
       <a href="https://neutroncreative.com" target="_blank"><img class="w-48 mb-8 opacity-75 lg:mt-16" style="filter:invert(1);" src="https://neutroncreative.com/Sidebar-brandmark.svg"/></a>
       <div class="privacy-policy">
-        <h1>Privacy Policy for Neutron Creative Inc.</h1>
+        <h1>Privacy Policy for {{ organization }}</h1>
         <br>
-        <p>At Singlelink, accessible from https://singlelink.co, one of our main priorities is the privacy of our
+        <p>At {{ app_name }}, accessible from https://{{ hostname }}, one of our main priorities is the privacy of our
           visitors. This Privacy Policy document contains types of information that is collected and recorded by
-          Singlelink and how we use it.</p>
+          {{ app_name }} and how we use it.</p>
 
         <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to
           contact us.</p>
 
         <p>This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards
-          to the information that they shared and/or collect in Singlelink. This policy is not applicable to any
+          to the information that they shared and/or collect in {{ app_name }}. This policy is not applicable to any
           information collected offline or via channels other than this website.</p>
 
         <br>
@@ -58,7 +58,7 @@
         <h2>Log Files</h2>
         <br>
 
-        <p>Singlelink follows a standard procedure of using log files. These files log visitors when they visit websites.
+        <p>{{ app_name }} follows a standard procedure of using log files. These files log visitors when they visit websites.
           All hosting companies do this and a part of hosting services' analytics. The information collected by log files
           include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp,
           referring/exit pages, and possibly the number of clicks. These are not linked to any information that is
@@ -69,7 +69,7 @@
         <h2>Cookies and Web Beacons</h2>
         <br>
 
-        <p>Like any other website, Singlelink uses 'cookies'. These cookies are used to store information including
+        <p>Like any other website, {{ app_name }} uses 'cookies'. These cookies are used to store information including
           visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is
           used to optimize the users' experience by customizing our web page content based on visitors' browser type
           and/or other information.</p>
@@ -81,22 +81,22 @@
         <h2>Advertising Partners Privacy Policies</h2>
         <br>
 
-        <P>You may consult this list to find the Privacy Policy for each of the advertising partners of Singlelink.</p>
+        <P>You may consult this list to find the Privacy Policy for each of the advertising partners of {{ app_name }}.</p>
 
         <p>Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used
-          in their respective advertisements and links that appear on Singlelink, which are sent directly to users'
+          in their respective advertisements and links that appear on {{ app_name }}, which are sent directly to users'
           browser. They automatically receive your IP address when this occurs. These technologies are used to measure the
           effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on
           websites that you visit.</p>
 
-        <p>Note that Singlelink has no access to or control over these cookies that are used by third-party
+        <p>Note that {{ app_name }} has no access to or control over these cookies that are used by third-party
           advertisers.</p>
 
         <br>
         <h2>Third Party Privacy Policies</h2>
         <br>
 
-        <p>Singlelink's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to
+        <p>{{ app_name }}'s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to
           consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may
           include their practices and instructions about how to opt-out of certain options. </p>
 
@@ -143,12 +143,12 @@
         <p>Another part of our priority is adding protection for children while using the internet. We encourage parents
           and guardians to observe, participate in, and/or monitor and guide their online activity.</p>
 
-        <p>Singlelink does not knowingly collect any Personal Identifiable Information from children under the age of 13.
+        <p>{{ app_name }} does not knowingly collect any Personal Identifiable Information from children under the age of 13.
           If you think that your child provided this kind of information on our website, we strongly encourage you to
           contact us immediately and we will do our best efforts to promptly remove such information from our records.</p>
       </div>
       <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-8 items-center jusitfy-center">
-        <a class="w-full text-center lg:w-auto text-lg bg-indigo-600 hover:bg-indigo-500 py-4 px-8 rounded-lg font-semibold" style="color:#FFF !important;" href="/">Return to Singlelink</a>
+        <a class="w-full text-center lg:w-auto text-lg bg-indigo-600 hover:bg-indigo-500 py-4 px-8 rounded-lg font-semibold" style="color:#FFF !important;" href="/">Return to {{ app_name }}</a>
         <a href="https://neutroncreative.com" target="_blank" class="inline">Or, learn more about Neutron Creative</a>
       </div>
     </div>
@@ -162,7 +162,13 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "PrivacyPolicy"
+  name: "PrivacyPolicy",
+  data() {
+    return {
+      organization: process.env.ORGANIZATION,
+      app_name: process.env.APP_NAME
+    }
+  }
 });
 </script>
 
