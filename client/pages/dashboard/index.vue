@@ -1,6 +1,6 @@
 <template>
-  <section class="flex flex-col items-center w-full h-full bg-gray-100">
-    <div class="flex flex-col p-8 max-w-lg items-center justify-center w-full">
+  <section class="flex flex-col items-center w-full h-full bg-gray-100 flex-shrink-0">
+    <div class="flex flex-col p-8 max-w-lg items-center justify-center w-full flex-shrink-0">
       <div
         v-if="!links || links.length === 0"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
@@ -18,13 +18,13 @@
       <draggable
         v-if="links && links.length > 0"
         v-model="sortedLinks"
-        class="flex flex-col w-full"
+        class="flex flex-col w-full flex-shrink-0"
         @change="updateLinkOrder"
       >
         <div
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
+          class="flex flex-col flex-shrink-0 text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
           @click="editLink(link)"
         >
           <span>{{ link.label }}
@@ -417,7 +417,8 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style>
+* { flex-shrink: 0; flex-basis: auto !important;}
 /**
   Animations
  */

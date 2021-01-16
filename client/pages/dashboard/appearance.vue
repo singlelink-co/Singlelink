@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col p-8 items-center bg-gray-100 flex-grow overflow-x-hidden overflow-y-scroll">
+  <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 flex-grow overflow-x-hidden overflow-y-scroll">
     <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
       Appearance
     </h1>

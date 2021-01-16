@@ -137,7 +137,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style>
 .NeutronLogo {
   width: 180px;
 }

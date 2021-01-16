@@ -94,14 +94,14 @@
     </section>
 
     <!-- Mobile Navbar -->
-    <section class="relative shadow flex lg:hidden flex-row items-center justify-between w-full px-4 py-2 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
+    <section class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
       <n-link to="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></n-link>
       <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded text-white font-semibold tracking-wide" style="outline: none !important;">
         <span v-if="!mobile_menu" class="mr-2">Open</span>
         <span v-if="mobile_menu" class="mr-2">Close</span>
         menu
       </button>
-      <nav v-if="mobile_menu" class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full" style="top: 48px;">
+      <nav v-if="mobile_menu" class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full" style="top: 64px;">
         <n-link to="/dashboard" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard')">
             Links
@@ -162,7 +162,7 @@
       </div>
 
       <!-- Render Nuxt-->
-      <Nuxt class="overflow-y-scroll flex flex-grow"/>
+      <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto"/>
 
       <div class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
@@ -175,13 +175,19 @@
     </section>
 
     <!-- Mobile Preview Section -->
-    <section class="bg-white lg:hidden flex flex-col items-center justify-center relative" style="box-shadow: 0 1px -5px  rgba(0,0,0,.1);">
-      <button @click="mobile_preview=!mobile_preview" class="w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
+    <section class="bg-white lg:hidden flex flex-col items-center justify-center absolute z-10 bottom-0 left-0 right-0" style="box-shadow: 0 1px -5px  rgba(0,0,0,.1);max-height:100vh;">
+      <!--<button @click="mobile_preview=!mobile_preview" class="w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
         <span v-if="!mobile_preview" class="mr-2">Open</span>
         <span v-if="mobile_preview" class="mr-2">Close</span>
         preview
-        </button>
-      <iframe v-if="mobile_preview" :src="`/u-preview/${user.activeProfile.handle}`" class="w-full" style="height:calc(100vh - 47px);"/>
+        </button>-->
+        <a :href="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`" class="text-center w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
+        <span class="mr-2">Open</span>
+        preview
+        </a>
+      <div v-if="mobile_preview" class="w-full overflow-y-scroll flex flex-col items-center justify-center" style="max-height: calc(100vh - 100px);">
+        <iframe :src="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`" style="height: 10000px;" class="w-full"/>
+      </div>
     </section>
 
     <!-- Preview Section-->
@@ -292,12 +298,12 @@
           <li class="flex flex-row items-center justify-center button-controls">
             <!-- Create new profile-->
             <span
-              class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+              class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
               @click="createNewProfile"
             >Create new</span>
 
             <!-- Logout-->
-            <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
+            <span class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
           </li>
 
         </ul>
@@ -342,6 +348,7 @@ export default Vue.extend({
       app_name: process.env.APP_NAME,
       icon_url: process.env.ICON_URL,
       logo_url: process.env.LOGO_URL,
+      hostname: process.env.HOSTNAME,
       mobile_menu: false,
       mobile_preview: false
     };
@@ -560,6 +567,25 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+
+@media(max-width:1024px) {
+  html, body {
+    overflow-y:hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+  .content-container {
+    height: calc(100% - 111px);
+    max-height: calc(100% - 111px);
+    min-height: calc(100% - 111px);
+    position:absolute;
+    top: 64px;
+    left:0;
+    right:0;
+    z-index: 0;
+    overflow-y: scroll;
+  }
+}
 
 @media(min-width: 1650px) {
   .visibility-alert {
