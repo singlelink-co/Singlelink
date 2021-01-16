@@ -82,7 +82,7 @@
         <p v-else style="color:rgba(0,0,0,1);" class="mt-4 text-sm">
           Proudly built with {{ app_name }} 🔗
         </p>
-        <a class="text-indigo-600 hover:underline text-sm" :href="'https://' + hostname + '/create-account'">Create your
+        <a v-if="free_signup" class="text-indigo-600 hover:underline text-sm" :href="'https://' + hostname + '/create-account'">Create your
           free profile in seconds</a>
         <base target="_blank">
       </div>
@@ -129,7 +129,8 @@ export default Vue.extend({
       links: null,
       hostname: process.env.HOSTNAME,
       app_name: process.env.APP_NAME,
-      icon_url: process.env.ICON_URL
+      icon_url: process.env.ICON_URL,
+      free_signup: process.env.FREE_SIGNUP
     };
   },
 

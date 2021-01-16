@@ -6,7 +6,7 @@
         class="consent-banner"
       >
         <p class="text-gray-600 text-sm">
-          By using Singlelink, you agree to our <a class="text-indigo-600 hover:underline" href="/privacy-policy" target="_blank">Privacy
+          By using {{ app_name }}, you agree to our <a class="text-indigo-600 hover:underline" href="/privacy-policy" target="_blank">Privacy
           Policy</a>.
         </p>
         <br>
@@ -33,6 +33,7 @@ export default Vue.extend({
   data() {
     return {
       consentBannerActive: false,
+      app_name: process.env.APP_NAME,
     };
   },
 
