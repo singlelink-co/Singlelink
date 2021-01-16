@@ -34,7 +34,6 @@
         v-for="link in analytics.linkVisits"
         :key="link.id"
         class="rounded shadow bg-white p-4 w-full font-medium mb-3 flex items-center justify-center md:flex-row flex-col"
-        :style="link.link.customCss"
       >
         <div class="text-left mr-4 flex flex-col justify-start">
           <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
