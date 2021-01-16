@@ -41,7 +41,7 @@
   "homepage": "https://github.com/Neutron-Creative/Singlelink#readme",
   "dependencies": {
     "aws-sdk": "^2.796.0",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "fastify": "^3.8.0",
     "fastify-cors": "^4.1.0",
