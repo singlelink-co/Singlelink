@@ -135,7 +135,7 @@
 
     <!-- Preview Section-->
     <section
-      class="relative  flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
+      class="relative overflow-y-hidden flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
     >
 
       <!-- Preview Navbar-->
@@ -171,7 +171,9 @@
 
       <div class="user-profile-preview-parent">
         <div v-if="originalHandle" :class="checkPreviewMode()">
-          <iframe id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
+          <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative" style="max-height:calc(100vh - 300px);">
+            <iframe class="w-full" id="preview-frame" onload="this.style.height='10000px';" :src="`/u-preview/${user.activeProfile.handle}`" scrolling="no"/>
+          </div>
         </div>
       </div>
 
@@ -427,6 +429,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.iframe-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
 html {
   font-family: 'Inter',
   -apple-system,
@@ -465,6 +472,7 @@ html {
   display: flex;
   margin: 20px auto auto auto;
   border-radius: 50px;
+  overflow: hidden;
   background: #000;
   padding: 14px;
   width: 280px;
@@ -475,7 +483,14 @@ html {
   border: none;
   width: 100%;
   height: 100%;
+}
+
+.phone-display > div {
   border-radius: 35px;
+}
+
+.desktop-display > div {
+  @apply rounded-lg;
 }
 
 .desktop-display {
