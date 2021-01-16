@@ -38,8 +38,10 @@
               placeholder="Filter profiles..."
               aria-label="Filter profiles"
               @input="onFilterProfilesInput"
+              class="text-sm p-2 mr-auto"
+              style="outline:none !important;"
             >
-            <i class="search-icon fas fa-search"/>
+            <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
           </li>
 
           <li
@@ -52,6 +54,7 @@
             <img
               v-if="profile.handle"
               class="mr-2 rounded-full"
+              onerror="this.src='https://www.gravatar.com/avatar'"
               style="width: 100%; max-width: 35px; margin-right: 10px;"
               :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
               alt="avatar"
