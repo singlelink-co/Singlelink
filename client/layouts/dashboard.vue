@@ -132,7 +132,7 @@
     </section>
     <!-- End mobile navbar -->
 
-    <section class="flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
+    <section class="middle flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
       <div class="hidden lg:flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
         <n-link to="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard')">
@@ -162,7 +162,7 @@
       </div>
 
       <!-- Render Nuxt-->
-      <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto"/>
+      <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto content-nuxt"/>
 
       <div class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
@@ -567,6 +567,15 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+
+@media(min-width: 1024px) {
+  .middle {
+    width: calc(66.66vw - 70px);
+  }
+  .content-nuxt {
+    height: calc(100vh - 122px);
+  }
+}
 
 @media(max-width:1024px) {
   html, body {

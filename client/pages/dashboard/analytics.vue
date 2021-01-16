@@ -25,7 +25,7 @@
       </div>
     </transition>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 lg:mr-2">
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-4">
         Link engagement
       </h2>
