@@ -1,150 +1,105 @@
 <template>
-  <div class="bg-gray-100">
-    <section class="w-full flex items-center bg-gray-100">
-      <div class="w-11/12 mx-auto max-w-6xl text-left p-4 py-8 md:p-20  flex flex-col md:flex-col">
-        <section class="w-full flex items-center bg-gray-100">
-          <div data-aos="fade-up" data-aos-duration="1000" class="w-full mx-auto max-w-6xl text-center p-0 md:p-0 items-center flex flex-col md:flex-col">
+  <div class="hero">
+    <section class="w-full flex items-center">
+      <div class="w-11/12 mx-auto max-w-6xl text-left p-4 py-8 lg:pt-20 flex flex-col lg:flex-col">
+        <section class="w-full flex items-center">
+          <div data-aos="fade-up" data-aos-duration="1000" class="w-full mx-auto max-w-6xl text-center p-0 lg:p-0 items-center flex flex-col lg:flex-col">
             <a href="https://beta-app.singlelink.co">
-              <h3 class="md:text-lg text-indigo-600 font-medium uppercase tracking-wider flex flex-row items-center justify-center"><img src="/confetti-emoji.svg" class="w-6 mx-2"> Version 2 is out now! <img src="/confetti-emoji.svg" class="w-6 mx-2"></h3>
+              <h3 class="lg:text-lg text-white font-semibold uppercase tracking-wider flex flex-row items-center justify-center"><img src="/confetti-emoji.svg" class="w-6 mx-2"><span class="hidden lg:flex mr-2">100% </span>Free limited time only! <img src="/confetti-emoji.svg" class="w-6 mx-2"></h3>
             </a>
-            <h1 class="text-4xl md:text-6xl font-bold leading-tight my-4">A single link for everything</h1>
-            <p class="leading-relaxed text-gray-600 text-2xl mb-8">Singlelink is the free & improved link builder for social media built for the community, by the community. Build your profile in seconds and get online today!</p>
-          </div>
-        </section>
-        <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex flex-col items-center justify-center bg-gray-100">
-          <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
-          </a>
-          <a href="https://github.com/Neutron-Creative/Singlelink" class="text-gray-600 hover:underline hover:text-gray-700">Or, clone the repository</a>
-        </section>
-        <section class="mt-12 flex flex-col items-center justify-center">
-          <div data-v-40f3ad8e="" class="phone-display w-full">
-            <div class="iframe-container">
-              <iframe v-if="active_profile" data-v-40f3ad8e="" id="preview-frame" :src="active_profile">
-              </iframe>
-            </div>
-            <img class="hidden md:flex real-users" src="/real-users.svg"/>
-          </div>
-          <div data-aos="fade-up" data-aos-duration="1000" class="dashed-line"></div>
-          <a v-if="active_profile" class="w-full flex flex-col justify-center items-center" :href="active_profile.replace('app.singlelink.co/', 'singlel.ink/')">
-          <div data-aos="fade-up" data-aos-duration="1000" class="flex relative shadow-lg bg-white flex-row border-2 border-indigo-600 rounded-full px-8 py-4 mb-8 w-full max-w-xl flex justify-center items-center text-xl">
-            <span class="mr-2">🔗</span>
-            <span class="text-gray-700 font-medium">{{ active_profile.replace('https://', '').replace('http://', '').replace('app.singlelink.co/', 'singlel.ink/') }}</span>
-            <img class="hidden md:flex custom-domain" src="/custom-domain.svg"/>
-          </div>
-          </a>
-          <a data-aos="fade-up" data-aos-duration="1000" href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
-          </a>
-        </section>
-      </div>
-    </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex items-center">
-      <div class="w-11/12 mx-auto max-w-6xl text-left px-8 md:px-20 py-12 items-center justify-center text-center flex flex-col md:flex-col">
-        <h2 class="text-5xl font-bold mb-2">Why Singlelink?</h2>
-        <p class="text-2xl text-gray-600">Take a look at a few of the reasons why our community uses & loves Singlelink.</p>
-      </div>
-    </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex items-center">
-      <div class=" w-11/12 mx-auto max-w-4xl text-left p-8 md:p-20 px-0 md:px-0 items-center justify-center flex flex-col md:flex-row">
-        <div class="flex flex-col w-full md:w-2/3 justify-center md:mr-20 md:text-left text-center">
-          <h2 class="text-4xl font-bold mb-2">Get started in seconds</h2>
-          <p class="text-gray-600 text-2xl leading-relaxed mb-6">Singlelink has minimal onboarding, is easy to use, and quick to publish. Build your custom profile in seconds with one-click.</p>
-          <a href="https://app.singlelink.co/create-account">
-            <button class="mx-auto md:mx-0 bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content; width: fit-content;">Create your free profile<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
-          </a>
-        </div>
-        <form data-aos="fade-up" data-aos-duration="1000" class="hidden md:flex shadow-lg relative w-full md:w-1/3 min-w-sm max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col aos-init" style="transform: perspective(1000px) rotate(0deg) rotateX(-2deg) rotateY(-12deg) scale(1.25);">
-          <div class="flex flex-col mb-2"><label class="font-medium text-xs">Email Address</label>
-            <input type="email" placeholder="e.g. jane@gmail.com" class="p-2 mt-1 text-xs border-solid border-gray-200 rounded-sm border">
-          </div>
-          <div class="flex flex-col mb-2"><label class="font-medium text-xs text-gray-800">Handle</label>
-            <div class="flex flex-row p-2 pl-0 pt-0 pr-0 pb-0 mt-1 text-xs border-solid border-gray-200 rounded-sm border">
-              <span class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0 text-xs">app.singlelink.co/u/</span>
-              <input type="text" placeholder="e.g. janedoe" class="p-2 flex-grow w-full text-xs"></div>
-          </div>
-          <div class="flex flex-col mb-2">
-            <label class="font-medium text-xs">Password</label>
-            <input type="password" placeholder="e.g. your password" class="p-2 mt-1 text-xs border-solid border-gray-200 rounded-sm border">
-          </div>
-          <button type="button" class="mt-1 w-full p-3 text-center text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold">Sign up instantly</button>
-        </form>
-      </div>
-    </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex items-center">
-      <div class=" w-11/12 mx-auto max-w-4xl text-left p-8 md:p-20 px-0 md:px-0 items-center justify-center flex flex-col md:flex-row">
-        <div class="w-full md:w-1/3 hidden md:flex" style="height: fit-content;">
-          <div class="phone-display wider w-full" style="box-shadow:-10px 15px 30px rgba(0,0,0,.2);transform: perspective(1040px) rotate(0deg) rotateX(-2deg) rotateY(12deg) translateZ(10px)">
-            <div class="iframe-container">
-              <iframe v-if="active_profile" data-v-40f3ad8e="" id="preview-frame-2" :src="active_profile" >
-              </iframe>
+            <h1 style="text-shadow: 0 2px 25px rgba(0,0,0,.25);" class="text-4xl lg:text-6xl font-bold leading-tight my-4 text-white">There's a Singlelink for everything</h1>
+            <p style="text-shadow: 0 2px 25px rgba(0,0,0,.25);" class="max-w-4xl leading-relaxed text-gray-200 text-2xl mb-8">Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!</p>
+            <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
+              <button data-v-4b07093c="" class="bg-black hover:bg-gray-900 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
+            </a>
+            <a href="https://github.com/Neutron-Creative/Singlelink" class="text-gray-300 hover:underline hover:text-gray-400">Or, clone the repository</a>
+            
+            <div class="hidden lg:flex flex-col items-center justify-center w-full rounded-lg relative mt-8 bg-gray-800" style="height:55vh">
+              <div class="rounded-b-none w-full py-2 px-4 flex flex-row items-center justify-start space-x-4 bg-gray-900 rounded-lg">
+                <div class="bg-red-600 rounded-full w-3 h-3"></div>
+                <div class="bg-yellow-600 rounded-full w-3 h-3"></div>
+                <div class="bg-green-600 rounded-full w-3 h-3"></div>
+                <div class="flex flex-row items-center justify-start bg-black py-1 px-4 text-sm text-gray-200 rounded w-full max-w-xl text-left">
+                  <span>https://jimbiseni.us</span>
+                </div>
+              </div>
+              <iframe src="https://jimbiseni.us" class="rounded-lg rounded-t-none w-full h-full"></iframe>
+              <div class="absolute z-10 rounded overflow-hidden h-0" style="background:url(https://api.singlelink.co/profile/thumbnail/jim);box-shadow: rgba(0,0,0,.2) -10px 15px 30px;background-size:cover;min-height:150px;background-repeat:no-repeat;right:-20px;bottom:35px;width:100%;max-width:360px;padding-bottom:17%;transform:rotateX(-2deg) rotateY(-12deg) perspective(1040px);"></div>
+              <div class="overflow-hidden phone-display" style="left:-60px;top:-60px;position:absolute !important;box-shadow: rgba(0,0,0,.2) -10px 15px 30px; transform: perspective(1040px) rotate(0deg) scale(0.65) rotateX(-2deg) rotateY(12deg) translateZ(10px);">
+                <iframe class="" src="https://jimbiseni.us"/>
+              </div>
+              <div class="absolute z-10 w-screen flex flex-col items-center justify-center" style="bottom:-5rem;height:0;padding-bottom:10vw;background-image:url('hero-sm.svg');background-position:bottom center;background-repeat:none;background-size:cover;"></div>
+              <!--<div style="bottom: -20px;height:140px;" class="flex flex-col items-center justify-start space-y-4 absolute z-20 absolute z-20 ">
+                <div style="border-radius:12px;" class="cta-gradient mx-auto flex flex-row items-center justify-center text-white p-1">
+                  <div class="flex flex-row items-center justify-center flex-grow bg-gray-800 px-8 py-4 rounded-lg">
+                    <img src="/favicon.ico" class="w-5 mr-8"/>
+                    <span class="text-lg">singlel.ink/</span>
+                    <input v-model="handle_query" class="bg-transparent text-lg " style="width:155px;" type="text" placeholder="yournamehere"/>
+                  </div>
+                </div>
+                <span class="italic text-sm text-gray-200" v-if="!handle_query">Is your singlelink available? Check now</span>
+                <a v-if="handle_query" href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full mb-4">
+                  <button data-v-4b07093c="" class="bg-black hover:bg-gray-900 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
+                </a>
+              </div>-->
             </div>
           </div>
-        </div>
-        <div class="flex flex-col w-full justify-center md:ml-20 md:text-left text-center w-full md:w-2/3">
-          <h2 class="text-4xl font-bold mb-2">Make it yours</h2>
-          <p class="text-gray-600 text-2xl leading-relaxed mb-6">We don't cut stops out for our free version. With domain support, themes, and custom HTML/CSS, your possibilites are endless.</p>
-          <a href="#preview-frame">
-            <button class="mx-auto md:mx-0 bg-gray-600 hover:bg-gray-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content; width: fit-content;">View our community examples<span class="ml-2">👪</span></button>
-          </a>
-        </div>
+        </section>      
       </div>
     </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex items-center">
-      <div class=" w-11/12 mx-auto max-w-4xl text-left p-8 md:p-20 px-0 md:px-0  items-center justify-center flex flex-col md:flex-row">
-        <div class="flex flex-col w-full justify-center md:mr-20 md:text-left text-center w-full md:w-2/3">
-          <h2 class="text-4xl font-bold mb-2">Constantly improving</h2>
-          <p class="text-gray-600 text-2xl leading-relaxed mb-6">Singlelink is an active open-source project, with new features added monthly.</p>
-          <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-            <button class="mx-auto md:mx-0 flex flex-row items-center justify-center bg-gray-600 hover:bg-gray-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content; width: fit-content;">View our roadmap on Github<img src="/github-mark.svg" class="ml-2" style="filter:invert(1);width: 18px;"/></button>
-          </a>
+    <section class="bg-white w-full flex items-center relative">
+      <div class="absolute z-10 w-screen flex flex-col lg:flex-row items-center justify-center top-0" style="transform:rotateX(180deg);bottom:-5rem;height:0;padding-bottom:10vw;background-image:url('hero-sm.svg');background-position:bottom center;background-repeat:none;background-size:cover;"></div>
+      <div class="relative z-20 w-11/12 mx-auto max-w-5xl text-center lg:text-left p-4 py-8 pt-16 lg:py-20 lg:pt-64 lg:pb-32 flex flex-col lg:flex-row">
+        <div class="w-full lg:w-1/2 flex flex-col justify-center">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Use it everywhere</h2>
+          <p class="text-xl text-gray-700 leading-relaxed">The ultimate link for all your social media accounts. Go further with social optimized profiles that let users see your page before they click.</p>
+          <a href="https://app.singlelink.co/create-account" class="hidden lg:flex mt-8 bg-black hover:bg-gray-900 text-white p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content; width:fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></a>
         </div>
-       <div class="hidden md:flex flex-col bg-white rounded-lg px-6 py-4 w-full md:w-1/3 relative" style="transform: perspective(650px) rotate(0deg) rotateX(-2deg) rotateY(-12deg) scale(1.4) translateY(-20px);">
-         <span class="text-black font-bold text-xs relative z-10">New update available!</span>
-         <span class="text-gray-600 font-medium text-xs relative z-10">Singlelink version 2 is now available.</span>
-         <div class="bg-white w-full h-full absolute top-0 left-0 right-0 bottom-0 rounded border border-gray-200 shadow"></div>
-         <div class="bg-red-600 border border-red-700 rounded-full flex items-center justify-center shadow absolute text-white font-semibold" style="font-size:9px;width:18px;height:18px;right:-5px;top:-5px;line-height:1;">3</div>
-         <div class="bg-white border border-gray-200 shadow-lg rounded w-full h-full absolute" style="top:10px;left:10px;z-index:-1;"></div>
-         <div class="bg-white border border-gray-200 shadow-lg rounded w-full h-full absolute" style="top:18px;left:18px;z-index:-2;"></div>
-       </div>
-      </div>
-    </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="w-full flex items-center">
-      <div class=" w-11/12 mx-auto max-w-4xl text-left p-8 md:p-20 px-0 md:px-0 md:pb-8 pb-8 items-center justify-center flex flex-col md:flex-row">
-        <div style="transform: perspective(1040px) rotate(0deg) rotateX(-2deg) rotateY(12deg) translateZ(10px) scale(1.25);" class="w-full md:w-1/3 p-4 mb-2 md:mb-0 text-center md:text-left hidden md:flex">
-          <div class="p-8 rounded border bg-white shadow-lg">
-            <div class="flex flex-col md:flex-row mb-2 items-center">
-              <h3 class="text-lg font-heading font-bold">Forever free</h3>
-              <h4 class="text-xs font-bold text-indigo-600 mx-auto md:ml-auto md:mr-0 md:mt-0 mt-2">$0/Month</h4>
-            </div>
-            <p class="mb-4 text-gray-600 font-medium leading-relaxed text-xs">Including everything our competition offers and more.</p>
-            <ul class="mb-2 list-inside text-gray-600 text-xs">
-              <li class="mb-2"><span class="mr-2">✅</span>Unlimited links</li>
-              <li class="mb-2"><span class="mr-2">✅</span>Unlimited customization</li>
-              <li class="mb-2"><span class="mr-2">✅</span>Unlimited visits &amp; clicks</li>
-              <li class="mb-2"><span class="mr-2">✅</span>Page &amp; link analytics</li>
-              <li class="mb-2"><span class="mr-2">✅</span>Up to 10 profiles</li>
-              <li class="mb-2"><span class="mr-2">✅</span>Deeplink support</li>
-              <li class="mb-2"><span class="mr-2">✅</span>And so much more...</li>
-            </ul>
+        <div class="flex-grow hidden lg:flex flex-col w-full lg:w-1/2" style="height:280px;">
+          <div class="shadow-xl" style="border-radius:15px;position:absolute;bottom:-100px; right:130px; z-index:3; transform: rotateX(2deg) perspective(1040px) rotateY(10deg) scale(.4);width:400px;height:580px;background-image:url('/nintendorable-insta-preview.png');background-repeat:no-repeat;background-size:cover;background-position:top left;"></div>
+          <div class="overflow-hidden phone-display" style="position:absolute;top:70px;right:40px;transform: scale(.55) rotateX(2deg) perspective(1040px) rotateY(-10deg);">
+              <iframe class="" src="https://nintendorable.com"/>
           </div>
         </div>
-        <div class="flex flex-col w-full md:w-2/3 justify-center md:ml-20 md:text-left text-center">
-          <h2 class="text-4xl font-bold mb-2">Forever free</h2>
-          <p class="text-gray-600 text-2xl leading-relaxed mb-6">Singlelink is free forever and our entire codebase is made open-source, because you deserve better software.</p>
-          <a href="https://neutroncreative.com">
-            <button class="mx-auto md:mx-0 bg-gray-800 hover:bg-gray-700 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold" style="height: fit-content; width: fit-content;">Learn more about our mission<span class="ml-2">🌎</span></button>
-          </a>
+      </div>
+    </section>
+    <section class="w-full flex items-center relative bg-gray-100">
+      <div class="relative z-20 w-11/12 mx-auto max-w-5xl text-center lg:text-left p-4 py-8 lg:py-20 flex flex-col lg:flex-row">
+        <div class="w-full lg:w-1/2 flex flex-col justify-center order-last">
+          <h2 class="text-3xl lg:text-4xl text-gray-900 font-bold mb-2">Link to anything</h2>
+          <p class="text-xl text-gray-700 leading-relaxed max-w-lg">Proudly SW & LGBTQ+ safe, link to any and all of your followers favorite content without worry.</p>
+          <a href="https://app.singlelink.co/create-account" class="hidden lg:flex mt-8 bg-black hover:bg-gray-900 text-white p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content; width:fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></a>
+        </div>
+        <div class="flex-grow hidden lg:flex flex-col w-full lg:w-1/2" style="height:280px;">
+        <div class="shadow-xl" style="border-radius:30px;position:absolute;bottom:-30px; left:20px; z-index:3; transform: rotateX(2deg) perspective(1040px) rotateY(-10deg) scale(.4);width:600px;height:250px;background-image:url('/onlyfans.png');background-repeat:no-repeat;background-size:cover;background-position:center;"></div>
+        <div class="overflow-hidden phone-display" style="position:absolute;top:-135px;left:40px;transform: scale(.55) rotateX(2deg) perspective(1040px) rotateY(12deg);">
+              <iframe class="" src="https://singlel.ink/u/fayeolayo"/>
+          </div>
         </div>
       </div>
     </section>
-    <section data-aos="fade-up" data-aos-duration="1000" class="flex flex-col w-full items-center justify-content p-10 md:p-20">
-      <div class="flex flex-col w-full items-center justify-center text-center max-w-2xl">
-          <h2 class="font-bold text-5xl mb-4">Join our community</h2>
-          <p class="text-gray-600 text-xl font-medium leading-relaxed mb-8">Join one of the fastest organically growing communities on the web and see why {{ users }} other members choose Singlelink.</p>
-          <a href="https://app.singlelink.co/create-account" class="flex items-center justify-center w-full">
-            <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></button>
-          </a>
+    <section class="bg-white w-full flex items-center relative">
+      <div class="relative z-20 w-11/12 mx-auto max-w-5xl text-center lg:text-left p-4 py-8 lg:py-20 flex flex-col lg:flex-row">
+        <div class="w-full lg:w-1/2 flex flex-col justify-center">
+          <h2 class="text-3xl lg:text-4xl text-gray-900 font-bold mb-2">Control in seconds</h2>
+          <p class="text-xl text-gray-700 leading-relaxed">Customize your profile without limits. Go further with Custom HTML, CSS, and JS for free - we'll even help you <a class="text-indigo-600 hover:underline" href="/gallery">make it your own.</a></p>
+          <a href="https://app.singlelink.co/create-account" class="hidden lg:flex mt-8 bg-black hover:bg-gray-900 text-white p-4 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content; width:fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></a>
+        </div>
+        <div class="flex-grow hidden lg:flex flex-col w-full lg:w-1/2" style="height: 250px;">
+        <div class="shadow-xl" style="border-radius:15px;position:absolute;bottom:20px; right:130px; z-index:3; transform: rotateX(2deg) perspective(1040px) rotateY(12deg) scale(.75);width:300px;height:100px;background-image:url('/singlelink-themes.png');background-repeat:no-repeat;background-size:cover;background-position:top left;"></div>
+          <div class="overflow-hidden phone-display" style="position:absolute;top:-145px;right:40px;transform: scale(.55) rotateX(2deg) perspective(1040px) rotateY(-10deg);">
+              <iframe class="" src="https://singlel.ink/u/gloomytoons"/>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="bg-white w-full flex items-center relative bg-gray-100">
+      <div class="relative z-20 w-11/12 mx-auto max-w-4xl text-center p-4 py-8 lg:py-20 flex flex-col items-center justify-center">
+        <p class="text-gray-600 mb-2">Join our community and see why {{ users }} others chose Singlelink!</p>
+        <h2 class="leading-tight lg:leading-relaxed text-5xl text-gray-900 font-bold mb-4">Create your free profile in seconds</h2>
+        <p class="max-w-4xl leading-relaxed text-gray-800 text-xl lg:ext-2xl mb-4 lg:mb-8">For a limited time only, Singlelink is 100% free. Sign up and now a free profile customization and three months of premium free!</p>
+        <a href="https://app.singlelink.co/create-account" class="mb-4 bg-indigo-600 hover:bg-indigo-500 text-white p-4 px-6 rounded-lg shadow text-lg font-semibold flex flex-row items-center justify-center" style="height: fit-content; width:fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></a>
+        <p class="text-sm text-gray-600">No catch, 100% free - no credit card required.</p>
       </div>
     </section>
   </div>
@@ -153,32 +108,32 @@
 <script>
   export default {
     head: {
-      title: 'Singlelink - A single link for everything 🔗🔥',
+      title: 'Singlelink - There\'s a single link for everything 🔗🔥',
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
-          content: 'Singlelink - A single link for everything 🔗🔥'
+          content: 'Singlelink - There\'s a single link for everything 🔗🔥'
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: 'Singlelink - A single link for everything 🔗🔥'
+          content: 'Singlelink - There\'s a single link for everything 🔗🔥'
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
         },
         {
           hid: 'description',
           name: 'description',
-          content: 'A single link for everything. Build your profile in seconds and get started for free!'
+          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
         },
       ],
     },
@@ -199,7 +154,8 @@
         active_profile: null,
         i: 0,
         total_run: 0,
-        users: 0
+        users: 0,
+        handle_query: null
       };
     },
     mounted: function() {
@@ -242,6 +198,19 @@
 </script>
 
 <style>
+
+  .cta-gradient {
+    background: #f12711;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .hero {
+    background: #fc00ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #00dbde, #fc00ff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #00dbde, #fc00ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
   .phone-display.wider {
     width: 210px;
     height: 400px;
@@ -279,6 +248,7 @@
     border: none;
     width: 100%;
     height: 100%;
+    border-radius: 35px !important;
   }
   .dashed-line {
     width: 2px;

@@ -19,15 +19,15 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'A single link for everything. Build your profile in seconds and get started for free!' },
-      { name: 'og:image', content: 'https://singlelink.co/open-graph-image.png' },
-      { name: 'og:title', content: 'Singlelink - A single link for everything 🔗🔥' },
-      { name: 'og:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
-      { name: 'twitter:image', content: 'https://singlelink.co/open-graph-image.png' },
-      { name: 'twitter:title', content: 'Singlelink - A single link for everything 🔗🔥' },
-      { name: 'twitter:description', content: 'A single link for everything. Build your profile in seconds and get started for free!'},
+      { hid: 'description', name: 'description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!' },
+      { name: 'og:image', content: 'https://singlelink.co/open-graph-image-v2.png' },
+      { name: 'og:title', content: 'Singlelink - There\'s a single link for everything 🔗🔥' },
+      { name: 'og:description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'},
+      { name: 'twitter:image', content: 'https://singlelink.co/open-graph-image-v2.png' },
+      { name: 'twitter:title', content: 'Singlelink - There\'s a single link for everything 🔗🔥' },
+      { name: 'twitter:description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'},
       { name: 'twitter:card', content: 'summary_large_image'},
-    { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
+      { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
