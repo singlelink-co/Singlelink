@@ -81,12 +81,12 @@
           <li class="flex flex-row items-center justify-center button-controls">
             <!-- Create new profile-->
             <span
-              class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+              class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
               @click="createNewProfile"
             >Create new</span>
 
             <!-- Logout-->
-            <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
+            <span class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
           </li>
 
         </ul>
