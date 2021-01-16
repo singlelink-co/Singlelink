@@ -177,6 +177,13 @@
         </div>
       </div>
 
+      <!-- Visibility notification -->
+      <n-link to="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
+        <span class="font-semibold pr-1">Warning:</span>
+        <span>Your profile is currently hidden!</span>
+        <div class="hidden visibility-alert bg-indigo-500 rounded font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Goto settings</div>
+      </n-link>
+
     </section>
 
     <GDPRContentModal/>
@@ -202,7 +209,7 @@ export default Vue.extend({
         emailHash: '',
         activeProfile: {
           handle: ''
-        }
+        },
       },
       profiles: [] as Profile[],
       filteredProfiles: [] as Profile[],
@@ -212,7 +219,7 @@ export default Vue.extend({
       previewMode: 'mobile',
       error: '',
       errorIntervalHandler: undefined as any,
-
+      profile_visibility: null as String,
       isAdmin: false
     };
   },
@@ -238,6 +245,7 @@ export default Vue.extend({
 
     try {
       this.profileUrl = window.location.origin + '/u/' + this.user.activeProfile.handle;
+      this.profile_visibility = this.user.activeProfile.visibility;
     } catch (err) {
       console.log(err);
       this.profileUrl = 'https://singlelink.co/';
@@ -429,6 +437,13 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+
+@media(min-width: 1650px) {
+  .visibility-alert {
+    display: flex;
+  }
+}
+
 .iframe-container::-webkit-scrollbar {
     width: 0px;
     background: transparent; /* make scrollbar transparent */
