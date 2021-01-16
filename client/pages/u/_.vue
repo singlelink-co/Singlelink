@@ -112,7 +112,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           name: 'og:image',
-          content: 'https://api.singlelink.co/profile/thumbnail/' + this.$route.path.replace('/u/', '')
+          content: process.env.API_URL + '/profile/thumbnail/' + this.$route.path.replace('/u/', '')
         }
       ]
     };

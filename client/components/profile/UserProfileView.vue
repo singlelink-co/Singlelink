@@ -77,12 +77,12 @@
 
       <div v-if="loaded && profile.showWatermark">
         <p v-if="theme" :style="`color:${theme.colors.text.primary}`" class="mt-4 text-sm">
-          Proudly built with Singlelink 🔗
+          Proudly built with {{ app_name }} 🔗
         </p>
         <p v-else style="color:rgba(0,0,0,1);" class="mt-4 text-sm">
-          Proudly built with Singlelink 🔗
+          Proudly built with {{ app_name }} 🔗
         </p>
-        <a class="text-indigo-600 hover:underline text-sm" href="https://app.singlelink.co/create-account">Create your
+        <a class="text-indigo-600 hover:underline text-sm" :href="'https://' + hostname + '/create-account'">Create your
           free profile in seconds</a>
         <base target="_blank">
       </div>
@@ -127,6 +127,9 @@ export default Vue.extend({
       },
       theme: null,
       links: null,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL
     };
   },
 

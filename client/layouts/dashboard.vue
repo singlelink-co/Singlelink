@@ -6,7 +6,7 @@
       style="width: 70px; max-width: 70px;"
     >
       <n-link to="/dashboard">
-        <img src="/icon.svg" style="width: 35px;" alt="icon"></n-link>
+        <img :src="icon_url" style="width: 35px;" alt="icon"></n-link>
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img
           v-if="user && profiles.length>=1"
@@ -144,7 +144,7 @@
         style="height: 58px;"
       >
         <p class="font-medium mr-2 text-gray-800">
-          Your Singlelink:&nbsp;
+          Your {{ app_name }}:&nbsp;
         </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline" :href="profileUrl">{{ profileUrl }}</a>
       </div>
@@ -208,7 +208,8 @@ export default Vue.extend({
       user: {
         emailHash: '',
         activeProfile: {
-          handle: ''
+          handle: '',
+          visibility: ''
         },
       },
       profiles: [] as Profile[],
@@ -219,8 +220,10 @@ export default Vue.extend({
       previewMode: 'mobile',
       error: '',
       errorIntervalHandler: undefined as any,
-      profile_visibility: null as String,
-      isAdmin: false
+      profile_visibility: '' as String,
+      isAdmin: false,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL
     };
   },
 

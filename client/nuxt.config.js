@@ -26,7 +26,7 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: 'Singlelink - A free & open-source Linktree alternative',
+    title: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative',
     meta: [
       {charset: 'utf-8'},
       {
@@ -36,29 +36,29 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
       {
         hid: 'og:image',
         name: 'og:image',
-        content: 'https://singlelink.co/social-hero.png'
+        content: process.env.META_IMAGE ?? 'https://singlelink.co/social-hero.png'
       },
       {
         hid: 'og:title',
         name: 'og:title',
-        content: 'Singlelink - A free & open-source Linktree alternative'
+        content: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative'
       },
       {
         hid: 'og:description',
         name: 'og:description',
-        content: 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
       },
     ],
     link: [
       {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/favicon.ico'
+        href: process.env.FAVICON ?? '/favicon.ico'
       },
       {
         rel: 'stylesheet',
@@ -116,13 +116,18 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.API_URL ?? 'https://sickomode-api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
+    baseURL: process.env.API_URL ?? 'https://api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
   },
 
   env: {
     API_URL: process.env.API_URL ?? 'https://api.singlelink.co',
     HOSTNAME: process.env.HOSTNAME ?? 'app.singlelink.co',
     PORT: process.env.PORT ?? 3000,
+    APP_NAME: process.env.APP_NAME ?? 'Singlelink',
+    ICON_URL: process.env.ICON_URL ?? '/icon.svg',
+    ICON_WIDTH: process.env.ICON_WIDTH ?? '46px',
+    ORGANIZATION: process.env.ORGANIZATION ?? 'Neutron Creative Inc.',
+    FREE_SIGNUP: process.env.FREE_SIGNUP ?? true,
   },
 
   sitemap: {

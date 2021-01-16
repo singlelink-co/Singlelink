@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen overflow-y-scroll">
+  <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen overflow-y-scroll overflow-x-hidden">
     <section class="flex items-center justify-center flex-col mt-auto w-screen">
-      <img src="/icon.svg">
+      <img :src="icon_url" :width="icon_width">
       <h1 class="font-semibold text-3xl mt-2">
         Sign in to your account
       </h1>
-      <p class="text-gray-700 text-sm">Or, <a class="text-indigo-600 hover:text-indigo-700" href="/create-account">create
+      <p v-if="free_signup" class="text-gray-700 text-sm">Or, <a class="text-indigo-600 hover:text-indigo-700" href="/create-account">create
         your new account for free</a></p>
       <div
         v-if="error"
@@ -65,8 +65,8 @@
         </button>
       </form>
     </section>
-    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©2020
-      Neutron Creative Inc.
+    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
+      {{ organization }}
     </section>
   </div>
 </template>
@@ -84,7 +84,13 @@ export default Vue.extend({
       email: '',
       password: '',
       error: '',
-      rememberMe: false
+      rememberMe: false,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL,
+      organization: process.env.ORGANIZATION,
+      free_signup: process.env.FREE_SIGNUP,
+      icon_width: process.env.ICON_WIDTH
     };
   },
 

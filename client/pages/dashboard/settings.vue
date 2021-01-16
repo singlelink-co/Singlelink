@@ -48,7 +48,7 @@
             <div class="flex flex-row rounded border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
                 class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
-              >singlelink.co/u/</span>
+              >{{ hostname }}/u/</span>
               <input
                 id="handle"
                 v-model="user.activeProfile.handle"
@@ -111,13 +111,13 @@
           >
 
           <label for="themeGlobal" class="ml-2 block text-md leading-5 text-gray-700">
-            Display Watermark ("Proudly built with Singlelink!")
+            Display Watermark ("Proudly built with {{ app_name }}!")
             <br>
             <span
               v-show="showWatermarkNotice"
-              style="color: rgba(0, 0, 0, .65); font-size: 13px"
+              class="mt-2 flex text-sm text-gray-600"
             >
-              This is completely optional, but it really helps us out! Otherwise, mind spreading the word about Singlelink?
+              This is completely optional, but it really helps us out! Mind spreading the word about {{ app_name }}?
             </span>
           </label>
         </div>
@@ -147,7 +147,7 @@
           v-model="passwordEmail"
           class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
           type="email"
-          placeholder="e.g. youremail@singlelink.co"
+          :placeholder="'e.g. jane@' + hostname"
           aria-label="password reset email"
         >
       </div>
@@ -270,7 +270,10 @@ export default Vue.extend({
       error: '',
       passwordError: '',
       passwordEmail: '',
-      showWatermarkNotice: false
+      showWatermarkNotice: false,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL
     };
   },
 

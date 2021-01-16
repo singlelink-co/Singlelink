@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center bg-gray-50 min-h-screen">
+  <div class="flex flex-col items-center justify-center bg-gray-50 min-h-screen overflow-x-hidden">
     <section class="flex items-center justify-center flex-col mt-auto w-screen">
-      <img src="/icon.svg">
+      <img :src="icon_url" :width="icon_width">
       <h1 class="font-semibold text-3xl mt-2">
         Create a new account
       </h1>
@@ -33,7 +33,7 @@
             <span
               class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
             >
-              {{ origin }}/u/
+              {{ hostname }}/u/
             </span>
             <input id="handle" v-model="handle" class="p-2 flex-grow" type="text" placeholder="e.g. janedoe">
           </div>
@@ -57,8 +57,8 @@
         </button>
       </form>
     </section>
-    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©2020
-      Neutron Creative Inc.
+    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
+      {{ organization }}
     </section>
   </div>
 </template>
@@ -76,7 +76,12 @@ export default Vue.extend({
       email: '',
       password: '',
       handle: '',
-      error: ''
+      error: '',
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL,
+      organization: process.env.ORGANIZATION,
+      icon_width: process.env.ICON_WIDTH
     };
   },
 

@@ -6,10 +6,10 @@
       <div class="w-11/12 max-w-6xl flex flex-col md:flex-row">
         <div class="flex flex-col md:mr-4 text-center justify-center md:justify-start md:text-left">
           <h1 class="text-3xl font-medium mb-2">
-            Singlelink global analytics
+            {{ app_name }} global analytics
           </h1>
           <p class="text-lg text-gray-700 mb-2">
-            A public dashboard of all available Singlelink member analytics.
+            A public dashboard of all available {{ app_name }} member analytics.
           </p>
           <span class="text-gray-500 mr-4 mb-4 md:mb-0">Last updated on {{ new Date().toLocaleString('en-US') }}</span>
         </div>
@@ -113,7 +113,10 @@ export default Vue.extend({
         profilesPublished: 0
       },
       hourlyGrowthRate: 0,
-      projectedUsers: 0
+      projectedUsers: 0,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL
     };
   },
 
