@@ -95,7 +95,7 @@
 
           </div>
 
-          <form class="p-6 pt-4 bg-gray-100 w-full">
+          <form class="p-6 pt-4 bg-gray-100 w-full overflow-y-scroll" style="max-height:calc(100vh - 217px);">
             <div
               v-if="themeError"
               class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
