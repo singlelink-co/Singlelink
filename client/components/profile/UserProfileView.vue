@@ -45,6 +45,7 @@
         class="nc-avatar mb-2"
         :src="profile.imageUrl || user.avatarUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
         alt="profile image"
+        onerror="this.src='https://www.gravatar.com/avatar'"
       >
       <h1 class="text-black font-semibold text-2xl sl-headline">
         {{ profile.headline || user.name }}

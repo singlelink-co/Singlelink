@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-row w-screen h-screen">
+  <div class="flex flex-col lg:flex-row w-screen h-screen">
 
     <section
-      class="flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
+      class="hidden lg:flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
       style="width: 70px; max-width: 70px;"
     >
       <n-link to="/dashboard">
@@ -28,7 +28,7 @@
 
         <ul
           v-if="selectingProfile"
-          class="absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list"
+          class="absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list z-30"
           style="left: 60px; width: 245px;"
         >
 
@@ -92,8 +92,47 @@
       </div>
     </section>
 
+    <!-- Mobile Navbar -->
+    <section class="relative shadow flex lg:hidden flex-row items-center justify-between w-full px-4 py-2 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
+      <n-link to="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></n-link>
+      <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded text-white font-semibold tracking-wide" style="outline: none !important;">
+        <span v-if="!mobile_menu" class="mr-2">Open</span>
+        <span v-if="mobile_menu" class="mr-2">Close</span>
+        menu
+      </button>
+      <nav v-if="mobile_menu" class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full" style="top: 48px;">
+        <n-link to="/dashboard" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard')">
+            Links
+          </div>
+        </n-link>
+        <n-link to="/dashboard/analytics" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-analytics')">
+            Analytics
+          </div>
+        </n-link>
+        <n-link to="/dashboard/appearance" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-appearance')">
+            Appearance
+          </div>
+        </n-link>
+        <n-link to="/dashboard/settings" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-settings')">
+            Settings
+          </div>
+        </n-link>
+        <n-link v-if="isAdmin" to="/dashboard/admin" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-admin')">
+            Admin
+          </div>
+        </n-link>
+        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect">Profiles</div>
+      </nav>
+    </section>
+    <!-- End mobile navbar -->
+
     <section class="flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
-      <div class="flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
+      <div class="hidden lg:flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
         <n-link to="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard')">
             Links
@@ -124,7 +163,7 @@
       <!-- Render Nuxt-->
       <Nuxt class="overflow-y-scroll flex flex-grow"/>
 
-      <div class="p-4 text-sm bg-white text-gray-600 flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
+      <div class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
         <span class="pr-4">{{ version }}</span>
         <a
@@ -134,9 +173,19 @@
       </div>
     </section>
 
+    <!-- Mobile Preview Section -->
+    <section class="bg-white lg:hidden flex flex-col items-center justify-center relative" style="box-shadow: 0 1px -5px  rgba(0,0,0,.1);">
+      <button @click="mobile_preview=!mobile_preview" class="w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
+        <span v-if="!mobile_preview" class="mr-2">Open</span>
+        <span v-if="mobile_preview" class="mr-2">Close</span>
+        preview
+        </button>
+      <iframe v-if="mobile_preview" :src="`/u-preview/${user.activeProfile.handle}`" class="w-full" style="height:calc(100vh - 47px);"/>
+    </section>
+
     <!-- Preview Section-->
     <section
-      class="relative overflow-y-hidden flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
+      class="relative overflow-y-hidden hidden lg:flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
     >
 
       <!-- Preview Navbar-->
@@ -187,6 +236,72 @@
 
     </section>
 
+    <!-- Mobile profile selector -->
+      <ul
+          v-if="selectingProfile"
+          class="lg:hidden absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list z-30"
+          style="left:0;bottom:0;right:0;width: 100%;"
+        >
+
+          <li class="flex flex-row items-center justify-left profile-search">
+            <!-- Create new profile-->
+            <input
+              type="text"
+              placeholder="Filter profiles..."
+              aria-label="Filter profiles"
+              @input="onFilterProfilesInput"
+              class="text-sm p-2 mr-auto flex-grow lg:flex-auto"
+              style="outline:none !important;"
+            >
+            <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
+          </li>
+
+          <li
+            v-for="profile in filteredProfiles"
+            :key="profile.handle"
+            class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
+            :style="!profile.handle ? 'max-height: 51px;' : ''"
+            @click="selectProfile(profile.id)"
+          >
+            <img
+              v-if="profile.handle"
+              class="mr-2 rounded-full"
+              onerror="this.src='https://www.gravatar.com/avatar'"
+              style="width: 100%; max-width: 35px; margin-right: 10px;"
+              :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
+              alt="avatar"
+            >
+
+            <div
+              v-if="!profile.handle"
+              class="mr-2 rounded-full"
+              style="width: 100%; max-width: 35px; max-height: 58px; margin-right: 10px;"
+            >
+              &nbsp;
+              <br>
+              &nbsp;
+            </div>
+
+            <div class="flex flex-col">
+              <span class="text-sm font-medium">{{ profile.handle }}</span>
+              <span class="text-xs text-gray-700">{{ profile.headline }}</span>
+            </div>
+          </li>
+
+          <li class="flex flex-row items-center justify-center button-controls">
+            <!-- Create new profile-->
+            <span
+              class="text-center w-full hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+              @click="createNewProfile"
+            >Create new</span>
+
+            <!-- Logout-->
+            <span class="text-center w-full hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
+          </li>
+
+        </ul>
+    <!-- End profile selector -->
+
     <GDPRContentModal/>
 
   </div>
@@ -224,7 +339,10 @@ export default Vue.extend({
       profile_visibility: '' as String,
       isAdmin: false,
       app_name: process.env.APP_NAME,
-      icon_url: process.env.ICON_URL
+      icon_url: process.env.ICON_URL,
+      logo_url: process.env.LOGO_URL,
+      mobile_menu: false,
+      mobile_preview: false
     };
   },
 

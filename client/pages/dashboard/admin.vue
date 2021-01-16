@@ -24,10 +24,11 @@
 
       <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
 
-        <div class="flex flex-row">
+        <div class="flex flex-row overflow-x-scroll hide-scrollbar">
           <div
             class="rounded nc-theme bg-gray-200"
             @click="selectTheme(null)"
+            style="min-width:78px;min-height:80px;"
           >
             <div class="nc-inner bg-white">
               <div class="nc-bottom-inner bg-gray-600"/>
@@ -39,7 +40,7 @@
             v-if="themes"
             :key="theme.id"
             class="rounded nc-theme"
-            :style="`background:${theme.colors.fill.primary}; position: relative;`"
+            :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;min-height:80px;`"
             @click="selectTheme(theme.id)"
           >
             <i

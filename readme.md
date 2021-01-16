@@ -14,7 +14,7 @@
 
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/Public%20Beta-2.1.6-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/Public%20Beta-2.1.7-%2303d2d4" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
         <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>

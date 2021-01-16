@@ -1,6 +1,6 @@
 {
   "name": "singlelink",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "A single link for everything.",
   "main": "dist/app.js",
   "scripts": {

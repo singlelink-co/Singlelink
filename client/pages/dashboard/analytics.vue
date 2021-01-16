@@ -5,8 +5,8 @@
     </h1>
 
     <transition name="fade">
-      <div class="flex md:flex-row flex-col items-center justify-center w-full">
-        <div class="flex flex-col p-6 bg-white shadow rounded w-full md:w-1/2 mb-8 md:mr-2">
+      <div class="flex lg:flex-row flex-col items-center justify-center w-full">
+        <div class="flex flex-col p-6 bg-white shadow rounded w-full lg:w-1/2 mb-8 lg:mr-2">
           <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Total views
           </h2>
@@ -14,7 +14,7 @@
             {{ analytics.totalProfileViews }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-white shadow rounded w-full md:w-1/2 mb-8 md:ml-2">
+        <div class="flex flex-col p-6 bg-white shadow rounded w-full lg:w-1/2 mb-8 lg:ml-2">
           <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Click through rate
           </h2>
@@ -25,7 +25,7 @@
       </div>
     </transition>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 md:mr-2">
+    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8 lg:mr-2">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-4">
         Link engagement
       </h2>
@@ -33,15 +33,16 @@
       <div
         v-for="link in analytics.linkVisits"
         :key="link.id"
-        class="rounded shadow bg-white p-4 w-full font-medium mb-3 flex items-center justify-center md:flex-row flex-col"
+        class="rounded shadow bg-white p-4 w-full font-medium mb-3 flex items-center justify-center lg:flex-row flex-col"
       >
-        <div class="text-left mr-4 flex flex-col justify-start">
+        <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
           <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url" class="text-sm text-gray-700">{{ link.link.url }}</span>
+          <span v-if="link.link.url" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
         </div>
-        <div class="ml-auto flex flex-col justify-end items-center">
-          <span class="text-sm uppercase text-gray-700 font-semibold mb-2">Total clicks</span>
-          <h4 class="ml-auto text-indigo-600 text-lg">
+        <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
+          <span class="text-sm uppercase text-gray-700 font-semibold mr-1 lg:mr-0 lg:mb-2">Total clicks</span>
+          <span class="lg:hidden text-sm uppercase text-gray-700 font-semibold mr-2 lg:mr-0 lg:mb-2">:</span>
+          <h4 class="lg:ml-auto text-indigo-600 text-lg">
             {{ link.views }}
           </h4>
         </div>

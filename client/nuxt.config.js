@@ -149,10 +149,11 @@ export default {
     HOSTNAME: process.env.HOSTNAME ?? 'app.singlelink.co',
     PORT: process.env.PORT ?? 3000,
     APP_NAME: process.env.APP_NAME ?? 'Singlelink',
+    LOGO_URL: process.env.LOGO_URL ?? '/logo.svg',
     ICON_URL: process.env.ICON_URL ?? '/icon.svg',
     ICON_WIDTH: process.env.ICON_WIDTH ?? '46px',
     ORGANIZATION: process.env.ORGANIZATION ?? 'Neutron Creative Inc.',
-    FREE_SIGNUP: process.env.FREE_SIGNUP ?? true,
+    FREE_SIGNUP: process.env.FREE_SIGNUP || true,
   },
 
   sitemap: {

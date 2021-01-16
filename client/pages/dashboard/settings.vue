@@ -20,8 +20,8 @@
         Details
       </h2>
       <form class="flex flex-col">
-        <div class="flex flex-row mb-3">
-          <div class="flex flex-col w-1/2 mr-4">
+        <div class="flex flex-col lg:flex-row mb-3">
+          <div class="flex flex-col w-full lg:w-1/2 mr-4 mb-3 lg:mb-0">
             <label class="font-medium text-sm text-gray-800" for="name">Headline</label>
             <input
               id="name"
@@ -31,7 +31,7 @@
               placeholder="e.g. Jane Doe, 21"
             >
           </div>
-          <div class="flex flex-col w-1/2">
+          <div class="flex flex-col w-full lg:w-1/2">
             <label class="font-medium text-sm text-gray-800" for="email">Subtitle</label>
             <input
               id="email"
@@ -42,8 +42,8 @@
             >
           </div>
         </div>
-        <div class="flex flex-row mb-4">
-          <div class="flex flex-col w-1/2 mr-3">
+        <div class="flex flex-col lg:flex-row mb-4">
+          <div class="flex flex-col w-full lg:w-1/2 mr-3 mb-3 lg:mb-0">
             <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
             <div class="flex flex-row rounded border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
@@ -59,7 +59,7 @@
               >
             </div>
           </div>
-          <div class="flex flex-col w-1/2">
+          <div class="flex flex-col w-full lg:w-1/2">
             <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
             <select
               id="visibility"
@@ -133,8 +133,8 @@
     </div>
 
     <!-- Reset Password -->
-    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
-      <div class="flex flex-col mr-auto w-1/2">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-gray-800 font-semibold text-lg w-full">
           Reset your password
         </h2>
@@ -153,7 +153,7 @@
       </div>
       <button
         type="button"
-        class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
+        class="w-full lg:w-auto mt-4 lg:mt-0 lg:ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
         @click="setPasswordModalActive(true)"
       >
         Reset Password
@@ -161,8 +161,8 @@
     </div>
 
     <!-- Delete profile -->
-    <div class="flex flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
-      <div class="flex flex-col mr-auto w-1/2">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-gray-800 font-semibold text-lg w-full">
           Delete this profile
         </h2>
@@ -171,7 +171,7 @@
       </div>
       <button
         type="button"
-        class="ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
+        class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-1/3 justify-center align-center"
         @click="setDeleteProfileModalActive(true)"
       >
         Delete this profile

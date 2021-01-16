@@ -10,14 +10,14 @@
         Your Themes
       </h2>
 
-      <div class="flex flex-row">
+      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
 
         <div
           v-for="theme in themes"
           v-if="themes"
           :key="theme.id"
           class="rounded nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;`"
+          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;min-height:80px;`"
           :class="{'active': activeThemeId === theme.id}"
           @click="selectTheme(theme.id)"
         >
@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="rounded nc-theme nc-add bg-gray-200" @click="openModal('create')">
+        <div class="rounded nc-theme nc-add bg-gray-200" style="min-width:78px;min-height:80pxpx;" @click="openModal('create')">
           <div class="nc-inner flex items-center justify-center">
             <span class="font-semibold text-gray-700 text-4xl">+</span>
           </div>
@@ -46,9 +46,10 @@
         Global Themes
       </h2>
 
-      <div class="flex flex-row">
+      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
         <div
           class="rounded nc-theme bg-gray-200"
+          style="min-width:78px;min-height:80px;"
           :class="{'active': !activeThemeId}"
           @click="selectTheme(null)"
         >
@@ -62,7 +63,7 @@
           v-if="globalThemes"
           :key="theme.id"
           class="rounded nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;`"
+          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;height:80px;`"
           :class="{'active': activeThemeId === theme.id}"
           @click="selectTheme(theme.id)"
         >
@@ -177,8 +178,8 @@
                 :disabled="modalIntent === 'view'"
               >
             </div>
-            <div class="flex flex-row">
-              <div class="flex flex-col mb-3 mr-3 w-1/2">
+            <div class="flex flex-col lg:flex-row">
+              <div class="flex flex-col mb-3 mr-3 w-full lg:w-1/2 mb-3 lg:mb-0">
                 <label class="font-medium text-sm text-gray-800" for="primary_fill">Primary background fill</label>
                 <input
                   id="primary_fill"
@@ -197,7 +198,7 @@
                   :disabled="modalIntent === 'view'"
                 >
               </div>
-              <div class="flex flex-col mb-3 ml-3 w-1/2">
+              <div class="flex flex-col mb-3 lg:ml-3 w-full lg:w-1/2">
                 <label class="font-medium text-sm text-gray-800" for="secondary_fill">Secondary background fill</label>
                 <input
                   id="secondary_fill"
@@ -218,8 +219,8 @@
               </div>
             </div>
 
-            <div class="flex flex-row">
-              <div class="flex flex-col mb-3 mr-3 w-1/2">
+            <div class="flex flex-col lg:flex-row">
+              <div class="flex flex-col mb-3 mr-3 w-full lg:w-1/2 mb-3 lg:mb-0">
                 <label class="font-medium text-sm text-gray-800" for="primary_text_fill">Primary text fill</label>
                 <input
                   id="primary_text_fill"
@@ -238,7 +239,7 @@
                   :disabled="modalIntent === 'view'"
                 >
               </div>
-              <div class="flex flex-col mb-3 ml-3 w-1/2">
+              <div class="flex flex-col mb-3 lg:ml-3 w-full lg:w-1/2">
                 <label class="font-medium text-sm text-gray-800" for="secondary_text_fill">Secondary text fill</label>
                 <input
                   id="secondary_text_fill"
@@ -636,6 +637,15 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style>
+
+.hide-scrollbar::-webkit-scrollbar {
+    width: 0px !important;
+    background: transparent !important; /* make scrollbar transparent */
+}
+
+</style>
 
 <style lang="scss" scoped>
 .nc-theme {
