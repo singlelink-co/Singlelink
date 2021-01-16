@@ -123,7 +123,7 @@
       <!-- Render Nuxt-->
       <Nuxt class="overflow-y-scroll flex flex-grow"/>
 
-      <div class="p-4 text-sm bg-white text-gray-600 flex items-center justify-start flex-row">
+      <div class="p-4 text-sm bg-white text-gray-600 flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
         <span class="pr-4">{{ version }}</span>
         <a
@@ -150,11 +150,13 @@
       </div>
 
       <!-- Preview Mode selector -->
-      <div class="absolute" style="top: 70px">
-        <label for="user-profile-view-type">Preview Mode:&nbsp;</label>
+      <div class="absolute flex flex-col items-center justify-center space-y-2" style="top: 70px">
+        <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview Mode:&nbsp;</label>
+        <div class="flex flex-row items-center justify-center space-x-2 w-full">
         <select
           id="user-profile-view-type"
           v-model="previewMode"
+          class="text-sm text-gray-600 p-2 rounded font-medium flex-grow flex"
         >
           <option selected value="mobile">
             Mobile
@@ -164,6 +166,7 @@
           </option>
         </select>
         <i :class="getPreviewModeIcon()"/>
+        </div>
       </div>
 
       <div class="user-profile-preview-parent">
@@ -454,7 +457,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 120px;
+  margin-top: 130px;
   width: 100%;
 }
 
