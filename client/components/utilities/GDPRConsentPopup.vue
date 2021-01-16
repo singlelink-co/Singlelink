@@ -13,7 +13,7 @@
 
         <button
           type="button"
-          class="flex px-3 py-1 text-sm ml-auto text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+          class="flex px-3 py-1 text-sm ml-auto text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded font-semibold w-auto max-w-xs justify-center align-center"
           @click="consentToPolicy"
         >
           I accept
