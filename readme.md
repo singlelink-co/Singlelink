@@ -112,7 +112,7 @@ cd Singlelink/server
 npm install
 
 # Generate config from example
-cp config-example.js config.js
+cp src/config.example.js src/config.js
 
 # Modify config.js (set API domain to localhost & client domain as neccessary)
 vim config.js
