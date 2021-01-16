@@ -171,7 +171,7 @@
 
       <div class="user-profile-preview-parent">
         <div v-if="originalHandle" :class="checkPreviewMode()">
-          <iframe id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`" scrolling="no"/>
+          <iframe id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
         </div>
       </div>
 
