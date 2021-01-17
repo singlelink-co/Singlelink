@@ -244,7 +244,7 @@ export class UserService extends DatabaseService {
     // Force lowercase
     email = email.toLowerCase();
 
-    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, email_hash, pass_hash, full_name) values ($1, $2, $3, $4) on conflict do nothing returning (id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on)",
+    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, email_hash, pass_hash, full_name) values ($1, $2, $3, $4) on conflict do nothing returning *",
       [
         email,
         crypto.createHash("md5").update(email).digest("hex"),
@@ -256,7 +256,9 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
 
-    return DbTypeConverter.toSensitiveUser(userInsertQuery.rows[0]);
+    let dbSensitiveUser = userInsertQuery.rows[0];
+
+    return DbTypeConverter.toSensitiveUser(dbSensitiveUser);
   }
 
   /**

@@ -109,9 +109,13 @@ export class ProfileService extends DatabaseService {
    * @param subtitle
    */
   async createProfile(userId: string, handle?: string, imageUrl?: string, headline?: string, subtitle?: string): Promise<Profile> {
+    if (!handle) {
+      handle = StringUtils.generateRandomSlug();
+    }
+
     let queryResult = await this.pool.query<DbProfile>("insert into app.profiles (handle, user_id, image_url, headline, subtitle) values ($1, $2, $3, $4, $5) on conflict do nothing returning *",
       [
-        handle ?? StringUtils.generateRandomSlug(),
+        handle,
         userId,
         imageUrl,
         headline,
@@ -119,7 +123,6 @@ export class ProfileService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount <= 0) {
-      console.log("Handle already exists in database, couldn't add new profile.");
       throw new HttpError(StatusCodes.CONFLICT, "The profile couldn't be added because it is already being used.");
     }
 

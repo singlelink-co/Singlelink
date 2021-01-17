@@ -136,6 +136,22 @@ export class UserController extends Controller {
         return;
       }
 
+      try {
+        let checkProfile = await this.profileService.getProfileByHandle(body.handle, false);
+
+        if (checkProfile) {
+          reply.code(StatusCodes.CONFLICT);
+          return ReplyUtils.error("The profile couldn't be added because it is already being used.");
+        }
+      } catch (e) {
+        if (e instanceof HttpError) {
+          if (e.statusCode !== StatusCodes.NOT_FOUND) {
+            reply.code(e.statusCode);
+            return ReplyUtils.error(e.message, e);
+          }
+        }
+      }
+
       let user = await this.userService.createUser(body.email, body.password, body.name);
       let profile = await this.profileService.createProfile(user.id, body.handle);
       await this.userService.setActiveProfile(user.id, profile.id);
