@@ -67,7 +67,7 @@
 
 ```Bash
 # Clone repostiory to local device
-git clone git@github.com:Neutron-Creative/Singlelink.git
+git clone https://github.com/Neutron-Creative/Singlelink.git
 
 # Enter client of new project
 cd Singlelink
@@ -103,7 +103,7 @@ npm start
 
 ```Bash
 # Clone repostiory to local device (don't need to repeat if performed previously for client)
-git clone git@github.com:Neutron-Creative/Singlelink.git
+git clone https://github.com/Neutron-Creative/Singlelink.git
 
 # Enter client of new project
 cd Singlelink/server
