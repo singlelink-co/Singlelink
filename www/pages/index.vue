@@ -96,7 +96,7 @@
     <section class="bg-white w-full flex items-center relative bg-gray-100">
       <div class="relative z-20 w-11/12 mx-auto max-w-4xl text-center p-4 py-8 lg:py-20 flex flex-col items-center justify-center">
         <p class="text-gray-600 mb-2">Join our community and see why {{ users }} others chose Singlelink!</p>
-        <h2 class="leading-tight lg:leading-relaxed text-5xl text-gray-900 font-bold mb-4">Create your free profile in seconds</h2>
+        <h2 class="leading-tight lg:leading-relaxed text-5xl text-gray-900 font-bold mb-4">Create your free profile in seconds<span class="ml-2 sm:hidden inline">from your phone</span></h2>
         <p class="max-w-4xl leading-relaxed text-gray-800 text-xl lg:ext-2xl mb-4 lg:mb-8">For a limited time only, Singlelink is 100% free. Sign up and now a free profile customization and three months of premium free!</p>
         <a href="https://app.singlelink.co/create-account" class="mb-4 bg-indigo-600 hover:bg-indigo-500 text-white p-4 px-6 rounded-lg shadow text-lg font-semibold flex flex-row items-center justify-center" style="height: fit-content; width:fit-content;">Create your free Singlelink profile in seconds<img src='/r-finger-emoji.svg' class="w-4 ml-2"/></a>
         <p class="text-sm text-gray-600">No catch, 100% free - no credit card required.</p>
