@@ -9,7 +9,7 @@
 <br>
 
 <h4 align="center">
-    Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.
+    <a href="https://singlelink.co">Singlelink</a> is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.
 </h4>
 
 <p align="center">
@@ -54,7 +54,7 @@
 
 <h2 id="get-started">Get started</h2>
 
-<p>There are a few pre-requisites you need to have before hosting Singlelink, seen below.</p>
+<p>There are a few pre-requisites you need to have before hosting <a href="https://singlelink.co">Singlelink</a>, seen below.</p>
 
 <ul>
     <li>Two NodeJS servers (ex: $5/mo DigitalOcean Droplet)</li>
@@ -265,11 +265,20 @@ Yes! We're actively daily on <a href="https://discord.com/invite/3pBM4Px" target
 
 <br><br>
 <h2 id="related">Related</h2>
+<img src="https://neutroncreative.com/og-image.png"/>
 <p><a target="_blank" href="https://singlelink.co">Singlelink</a> is Neutron Creative product, created and hosted free of charge in the mission of open-source. To learn more about our mission, visit <a href="https://neutroncreative.com" target="_blank">neutroncreative.com</a></p>
+
+<h4>Be sure to check out our other products as well!</h4>
+<ul>
+    <li>Capture, Simplified screenshot API (https://capture.neutron.so)</li>
+    <li>Sponsorware, Sell software with Github Sponsors (https://sponsorware.neutron.so)</li>
+    <li>Cowlytics, Real-time Stripe analytics & forcesting for SaaS (https://www.cowlytics.co)</li>
+    <li>Neutron, Faster websites in one-click (https://neutroncreative.com)</li>
+</ul>
 
 <br>
 <h2 id="license">License</h2>
-<p>Singlelink is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.</p>
+<p><a href="https://singlelink.co">Singlelink</a> is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.</p>
     <p>Copyright (C) 2020  Neutron Creative Inc.</p>
 
     This program is free software: you can redistribute it and/or modify
