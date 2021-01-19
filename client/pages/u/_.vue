@@ -96,7 +96,12 @@ export default Vue.extend({
         },
         {
           hid: 'og:title',
-          name: 'title',
+          name: 'og:title',
+          content: profile.headline || ''
+        },
+        {
+          hid: 'twitter:title',
+          name: 'twitter:title',
           content: profile.headline || ''
         },
         {
@@ -106,14 +111,34 @@ export default Vue.extend({
         },
         {
           hid: 'og:description',
-          name: 'description',
+          name: 'og:description',
+          content: profile.subtitle || ''
+        },
+        {
+          hid: 'twitter:description',
+          name: 'twitter:description',
           content: profile.subtitle || ''
         },
         {
           hid: 'og:image',
           name: 'og:image',
           content: process.env.API_URL + '/profile/thumbnail/' + this.$route.path.replace('/u/', '')
-        }
+        },
+        {
+          hid: 'twitter:image',
+          name: 'twitter:image',
+          content: process.env.API_URL + '/profile/thumbnail/' + this.$route.path.replace('/u/', '')
+        },
+        {
+        hid: 'twitter:url',
+        name: 'twitter:url',
+        content: 'https://singlel.ink/u/' + profile.handle
+      },
+      {
+        hid: 'twitter:card',
+        name: 'twitter:card',
+        content: 'summary_large_image'
+      }
       ]
     };
   },
