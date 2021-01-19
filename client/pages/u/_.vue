@@ -47,10 +47,19 @@ export default Vue.extend({
     UserProfileView
   },
 
-  asyncData(ctx: Context) {
+  async asyncData(ctx: Context) {
     try {
+      const url = '/profile/' + ctx.route.path.replace('/u/', '');
+
+      const response = await ctx.$axios.$post(url, {
+        token: ctx.store.getters['auth/getToken']
+      });
+
+      const profile = response.profile;
+
       return {
-        profileHandle: ctx.route.path.replace('/u/', '')
+        profileHandle: ctx.route.path.replace('/u/', ''),
+        profile
       };
     } catch (err) {
       console.log('Error getting profile');
