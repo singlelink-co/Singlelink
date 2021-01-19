@@ -66,6 +66,7 @@ export default Vue.extend({
   data() {
     return {
       apiUrl: process.env.API_URL,
+      hostname: process.env.HOSTNAME,
       profileHandle: this.$route.path.replace('/u/', ''),
       profile: {
         themeId: '',
@@ -130,15 +131,15 @@ export default Vue.extend({
           content: process.env.API_URL + '/profile/thumbnail/' + this.$route.path.replace('/u/', '')
         },
         {
-        hid: 'twitter:url',
-        name: 'twitter:url',
-        content: 'https://singlel.ink/u/' + profile.handle
-      },
-      {
-        hid: 'twitter:card',
-        name: 'twitter:card',
-        content: 'summary_large_image'
-      }
+          hid: 'twitter:url',
+          name: 'twitter:url',
+          content: 'https://' + process.env.HOSTNAME + '/u/' + this.$route.path.replace('/u/', '')
+        },
+        {
+          hid: 'twitter:card',
+          name: 'twitter:card',
+          content: 'summary_large_image'
+        }
       ]
     };
   },
@@ -165,7 +166,7 @@ export default Vue.extend({
 
     rejectAgeVerification() {
       if (process.client) {
-        window.location.href = "https://singlelink.co";
+        window.location.href = "https://" + process.env.HOSTNAME;
       }
     },
   },
@@ -173,6 +174,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+body {
+  overflow-x: hidden;
+}
+
 .nc-avatar {
   width: 60px;
   height: 60px;
