@@ -87,37 +87,37 @@ export default Vue.extend({
     const profile: Profile = this.profile;
 
     return {
-      title: profile.headline ?? '',
+      title: profile.headline || '',
       meta: [
         {
           hid: 'title',
           name: 'title',
-          content: profile.headline ?? ''
+          content: profile.headline || ''
         },
         {
           hid: 'og:title',
           name: 'og:title',
-          content: profile.headline ?? ''
+          content: profile.headline || ''
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: profile.headline ?? ''
+          content: profile.headline || ''
         },
         {
           hid: 'description',
           name: 'description',
-          content: profile.subtitle ?? ''
+          content: profile.subtitle || ''
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: profile.subtitle ?? ''
+          content: profile.subtitle || ''
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: profile.subtitle ?? ''
+          content: profile.subtitle || ''
         },
         {
           hid: 'og:image',
