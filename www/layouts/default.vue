@@ -111,8 +111,8 @@
         </div>
       </div>
       <!-- Plausible JS -->
-      <!--<script async defer data-domain="singlelink.co" src="https://plausible.io/js/plausible.js"></script>-->
-      <script async defer data-domain="singlelink.co" src="/slpa.js"></script>
+      <script async defer data-domain="singlelink.co" src="https://plausible.io/js/plausible.js"></script>
+      <!--<script async defer data-domain="singlelink.co" src="/slpa.js"></script>-->
     </footer>
   </div>
 </template>
