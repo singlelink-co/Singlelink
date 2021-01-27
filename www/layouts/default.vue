@@ -110,9 +110,6 @@
           <a class="text-indigo-600 hover:underline cursor-pointer" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL v3+</a>
         </div>
       </div>
-      <!-- Plausible JS -->
-      <script async defer data-domain="singlelink.co" src="https://plausible.io/js/plausible.js"></script>
-      <!--<script async defer data-domain="singlelink.co" src="/slpa.js"></script>-->
     </footer>
   </div>
 </template>

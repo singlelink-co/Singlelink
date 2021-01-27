@@ -31,6 +31,15 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        hid: 'slpa',
+        src: '/slpa.js',
+        defer: true,
+        'data-domain': 'singlelink.co',
+        async: true
+      }
     ]
   },
   /*
