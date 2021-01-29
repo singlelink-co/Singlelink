@@ -18,7 +18,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
@@ -43,7 +43,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
@@ -68,7 +68,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
@@ -93,7 +93,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
@@ -118,7 +118,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
@@ -143,7 +143,7 @@
         <div class="flex flex-col items-start justify-start space-y-6 mt-1">
             <testimonial name="Tiffany 🌶" handle="spicy_thai69" avatar="/tiffany.png" content="Singlelink is amazing, I honestly love the app I would be nothing without it. It’s so much better looking than the other ones and I love the features with the subtitles too, I can’t believe it’s free." date="Oct 29, 2020" platform="discord"/>
             <testimonial name="Bram De Backer" handle="bramdeback" avatar="/bram.png" content="Are the early bird whale subscriptions already gone, or can I reserve a spot?" date="Jan 9, 2021" platform="email"/>
-            <testimonial name="Phillip" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
+            <testimonial name="Phillip Miele" handle="phillip" avatar="/phillip.png" content="I’m here to help make Singlelink great as I’m invested in it’s success." date="Jan 9, 2020" platform="discord"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
