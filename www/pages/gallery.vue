@@ -6,7 +6,7 @@
 				View our gallery of community examples, get inspiration, then build your Singlelink profile for free in seconds.
 			</p>
 			<div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
-				<a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your Singlelink free</a>
+				<a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Claim your free Singlelink</a>
 				<a class="text-center w-full lg:w-auto text-sm font-medium text-gray-700 px-6 py-6 lg:py-5 rounded-lg bg-gray-300 hover:bg-gray-200" href="/gallery">Get help designing your Singlelink</a>
 			</div>
 		</section>

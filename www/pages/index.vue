@@ -3,7 +3,7 @@
     <section class="mb-32">
       <h1>You don't need a website.<br>You need a <a href="/gallery" class="text-indigo-600 hover:text-indigo-500 underline">Singlelink.</a></h1>
       <p class="mb-8">
-        Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Stop wasting time on a website that doesn't work for you, and create your Singlelink for free - no credit card required - in 30 seconds or less.
+        Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Stop wasting time on a website that doesn't work for you, and create your Singlelink for free, no credit card required, in just 30 seconds.
       </p>
       <div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
         <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your Singlelink free</a>
@@ -12,7 +12,7 @@
     </section>
     <section class="interface mb-24 space-y-16">
       <div class="flex flex-col lg:flex-row items-start justify-between space-y-8 lg:space-y-0 lg:space-x-8">
-        <div class="flex flex-col justify-center items-start lg:w-1/2">
+        <div class="flex flex-col justify-center items-start lg:w-R1/2">
           <h3>Easy to use</h3>
           <p class="text-sm">Singlelink is the easiest way to build a website online. Simply add your content, publish, and share - no code required. Focus on your content and enjoy white-glove managed SEO, SSL, servers, backups, analytics, and more.</p>
         </div>

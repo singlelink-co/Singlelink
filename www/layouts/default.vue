@@ -9,10 +9,10 @@
     <Nuxt class="interface" />
     <footer class="interface">
       <div class="flex-grow pb-20 flex flex-col" style="border-bottom: solid 5px rgba(0,0,100,.07);">
-        <h2>Get started and build your profile in seconds</h2>
+        <h2>Build your free Singlelink profile in seconds</h2>
         <p class="mb-8">Creating your Singlelink profile is free, effortless, and takes just seconds. There's no credit card required and we won't sell your data.</p>
         <div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
-          <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your Singlelink free</a>
+          <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Claim your free Singlelink</a>
           <a class="text-center w-full lg:w-auto text-sm font-medium text-gray-700 px-6 py-6 lg:py-5 rounded-lg bg-gray-400 hover:bg-gray-300" href="/gallery">View community examples</a>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <div class="flex flex-col items-center text-center lg:text-left justify-center lg:justify-start lg:w-1/2">
           <img class="lg:mr-auto mb-2" src="/singlelink-brandmark.svg"/>
           <p class="text-sm font-medium leading-loose mb-2 text-gray-600">You don't need a website, you need a Singlelink.</p>
-          <p class="text-sm font-medium leading-loose mb-2">© Copyright {{ new Date().getFullYear() }} Neutron Creative Inc.</p>
+          <p class="text-sm font-medium leading-loose mb-2 text-gray-700">© Copyright {{ new Date().getFullYear() }} Neutron Creative Inc.</p>
         </div>
         <div class="flex flex-col lg:flex-row items-start justify-between w-full lg:w-1/2">
           <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
@@ -31,6 +31,7 @@
             <a href="https://app.singlelink.co/create-account" class="text-gray-600 font-medium hover:text-indigo-500">Sign up free</a>
             <a href="https://github.com/Neutron-Creative/Singlelink/projects" class="text-gray-600 font-medium hover:text-indigo-500">Roadmap</a>
             <a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md" class="text-gray-600 font-medium hover:text-indigo-500">Changelog</a>
+            <a href="https://status.singlelink.co" class="text-gray-600 font-medium hover:text-indigo-500">Status</a>
           </div>
           <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
             <span class="text-gray-900">Company</span>
@@ -39,6 +40,7 @@
             <a href="https://discord.gg/3pBM4Px" class="text-gray-600 font-medium hover:text-indigo-500">Support</a>
             <a href="https://discord.gg/3pBM4Px" class="text-gray-600 font-medium hover:text-indigo-500">Discord</a>
             <a href="https://twitter.com/neutroncreative" class="text-gray-600 font-medium hover:text-indigo-500">Twitter</a> 
+            <a href="https://github.com/Neutron-Creative/" class="text-gray-600 font-medium hover:text-indigo-500">Github</a>
           </div>
           <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
             <span class="text-gray-900">Resources</span>
@@ -46,13 +48,13 @@
             <a href="https://neutroncreative.com/terms-of-use" class="text-gray-600 font-medium hover:text-indigo-500">Terms of Use</a>
             <a href="https://neutroncreative.com/privacy-policy" class="text-gray-600 font-medium hover:text-indigo-500">Privacy Policy</a>
             <a href="https://neutroncreative.com" class="text-gray-600 font-medium hover:text-indigo-500">Open-source</a>
-            <a href="https://github.com/Neutron-Creative/" class="text-gray-600 font-medium hover:text-indigo-500">Github</a>
+            <a href="https://neutroncreative.com" class="text-gray-600 font-medium hover:text-indigo-500">Blog</a>
           </div>
         </div>
       </div>
     </footer>
     <div class="chat">
-      <img src="/chat.svg" @click="bubble_modal=!bubble_modal" class="bubble-icon"/>
+      <img src="/chat.png" @click="bubble_modal=!bubble_modal" class="bubble-icon"/>
       <div v-if="bubble_modal" class="chat-window">
         <div class="flex flex-row p-4 bg-indigo-600 w-full justify-between items-center">
           <a href="https://discord.gg/3pBM4Px" class="flex flex-col">

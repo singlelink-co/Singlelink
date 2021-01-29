@@ -1,14 +1,10 @@
 <template>
   <div>
-    <section class="mb-20">
+    <section class="mb-12">
       <h1>Own your content, free.</h1>
       <p class="mb-8">
         Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from Singlelink, our whale tier is available for $6/Month and our enterprise plan is available from just $30/Month.
       </p>
-      <div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
-        <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your Singlelink free</a>
-        <a class="text-center w-full lg:w-auto text-sm font-medium text-gray-700 px-6 py-6 lg:py-5 rounded-lg bg-gray-300 hover:bg-gray-200" href="/gallery">View community examples</a>
-      </div>
     </section>
     <section class="mb-20">
       <div class="p-12 rounded-lg shadow bg-white flex flex-col mb-8">
@@ -64,7 +60,7 @@
                     </li>
                   </div>
                 </ul>
-                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your Singlelink free</a>
+                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Claim your free Singlelink</a>
       </div>
       <div class="flex lg:flex-row flex-col space-y-8 lg:space-x-8 lg:space-y-0">
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
