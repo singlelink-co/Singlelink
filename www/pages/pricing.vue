@@ -170,32 +170,32 @@
 <script>
   export default {
     head: {
-      title: 'Pricing & plans - Singlelink',
+      title: 'Pricing - Singlelink',
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
-          content: 'Pricing & plans - Singlelink'
+          content: 'Pricing - Singlelink'
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: 'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+          content: 'View and compare available pricing plans for Singlelink.'
         },
         {
           hid: 'twitter:title',
           name: 'og:title',
-          content: 'Pricing & plans - Singlelink'
+          content: 'Pricing - Singlelink'
         },
         {
           hid: 'twitter:description',
           name: 'og:description',
-          content: 'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+          content: 'View and compare available pricing plans for Singlelink.'
         },
         {
           hid: 'description',
           name: 'description',
-          content:  'View and compare available pricing plans for Singlelink cloud & self-hosted editions.'
+          content:  'View and compare available pricing plans for Singlelink.'
         },
 
       ],

@@ -80,32 +80,32 @@ import wallOfLove from '../components/wall-of-love.vue';
   export default {
   components: { wallOfLove },
     head: {
-      title: 'Singlelink - There\'s a single link for everything 🔗🔥',
+      title: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥',
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
-          content: 'Singlelink - There\'s a single link for everything 🔗🔥'
+          content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥'
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
+          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: 'Singlelink - There\'s a single link for everything 🔗🔥'
+          content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥'
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
+          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'description',
           name: 'description',
-          content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'
+          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
       ],
     },
