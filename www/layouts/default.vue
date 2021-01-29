@@ -29,6 +29,7 @@
             <a href="/pricing" class="text-gray-600 font-medium hover:text-indigo-500">Pricing</a>
             <a href="/gallery" class="text-gray-600 font-medium hover:text-indigo-500">Examples</a>
             <a href="https://app.singlelink.co/create-account" class="text-gray-600 font-medium hover:text-indigo-500">Sign up free</a>
+            <a href="https://status.singlelink.co" class="text-gray-600 font-medium hover:text-indigo-500">Analytics</a>
             <a href="https://github.com/Neutron-Creative/Singlelink/projects" class="text-gray-600 font-medium hover:text-indigo-500">Roadmap</a>
             <a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md" class="text-gray-600 font-medium hover:text-indigo-500">Changelog</a>
             <a href="https://status.singlelink.co" class="text-gray-600 font-medium hover:text-indigo-500">Status</a>
