@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="mb-32">
-      <h1>You don't need a website.<br>You need a <a href="#" class="text-indigo-600 hover:text-indigo-500 underline">Singlelink.</a></h1>
+      <h1>You don't need a website.<br>You need a <a href="/gallery" class="text-indigo-600 hover:text-indigo-500 underline">Singlelink.</a></h1>
       <p class="mb-8">
         Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Stop wasting time on a website that doesn't work for you, and create your Singlelink for free - no credit card required - in 30 seconds or less.
       </p>
