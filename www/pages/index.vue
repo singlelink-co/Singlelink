@@ -12,7 +12,7 @@
     </section>
     <section class="interface mb-24 space-y-16">
       <div class="flex flex-col lg:flex-row items-start justify-between space-y-8 lg:space-y-0 lg:space-x-8">
-        <div class="flex flex-col justify-center items-start lg:w-R1/2">
+        <div class="flex flex-col justify-center items-start lg:w-1/2">
           <h3>Easy to use</h3>
           <p class="text-sm">Singlelink is the easiest way to build a website online. Simply add your content, publish, and share - no code required. Focus on your content and enjoy white-glove managed SEO, SSL, servers, backups, analytics, and more.</p>
         </div>
