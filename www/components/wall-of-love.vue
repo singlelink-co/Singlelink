@@ -2,7 +2,7 @@
     <div class="flex flex-row items-start justify-start space-x-4" style="width:calc(355px * 5)">
         <div class="flex flex-col items-start justify-start space-y-6 mt-2">
             <testimonial name="Guillermo Rauch" handle="rauchg" avatar="/rauchg.png" content="Awesome" date="Jan 2021" platform="twitter"/>
-            <testimonial name="oɔɔoɹsʞooɹq" handle="brooksrocco" avatar="/brooksrocco.png" content="FWIW, I'm very into the free & open source Singlelink, by @neutroncreative" date="Jan 22, 2021" platform="twitter"/>
+            <testimonial name="Ben" handle="ben" avatar="/ben.png" content="I’m looking forward to seeing where y’all go, this is super neat. Props to you for finding a nice little market where your only competitor is a greedy piece of s***." date="Dec 8, 2020" platform="discord"/>
             <testimonial name="Cyrille A. NOEL" handle="xxmasx" avatar="/xxmasx.png" content="Singlelink : une alternative gratuite et open-source à Linktree https://gith..." date="Sep 3, 2020" platform="twitter"/>
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-4">
@@ -22,7 +22,7 @@
         </div>
         <div class="flex flex-col items-start justify-start space-y-6 mt-6">
             <testimonial name="Adrenaline Hunter" handle="adrenline_hunter" avatar="/adrenaline-hunter.png" content="Thank you! What I like is that in 5 minutes I’ve configured everything." date="Dec 18, 2020" platform="discord"/>
-            <testimonial name="Ben" handle="ben" avatar="/ben.png" content="This is just amazing!!!!! You can’t guess how pumped I am right now by joining the org" date="Dec 8, 2020" platform="discord"/>
+            <testimonial name="oɔɔoɹsʞooɹq" handle="brooksrocco" avatar="/brooksrocco.png" content="FWIW, I'm very into the free & open source Singlelink, by @neutroncreative" date="Jan 22, 2021" platform="twitter"/>
             <testimonial name="Wissam Yamout" handle="wyamout" avatar="/wissam.png" content="Yes we are using Singlelink and it is awesome thank you for the effort." date="Dec 18, 2020" platform="github"/>
         </div>
     </div>
