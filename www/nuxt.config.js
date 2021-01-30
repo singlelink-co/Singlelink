@@ -83,5 +83,11 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-  }
+  },
+  /*
+  ** Generate Falback 404 Page
+  */
+ generate: {
+   fallback: true
+ }
 }
