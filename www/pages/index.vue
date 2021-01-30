@@ -43,7 +43,7 @@
       </div>
     </section>-->
     <section class="interface mb-24 text-left">
-      <h2>Singlelink is trusted by {{ users }} creators.</h2>
+      <h2>Singlelink is trusted by {{ users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} creators.</h2>
       <p class="mb-8">Singlelink is trusted by creators of all sizes, from micro-macro. Hear from our users to learn why they love Singlelink, and why you will too.</p>
       <wall-of-love/>
     </section>
@@ -127,7 +127,27 @@ import wallOfLove from '../components/wall-of-love.vue';
         i: 0,
         total_run: 0,
         users: 0,
-        handle_query: null
+        handle_query: null,
+        users: '...',
+        links: '...',
+        profiles: '...',
+        profilesPublished: '...',
+        percentPublished: '...',
+        themes: '...',
+        enterprise_users: [
+            {
+                // Norsegoods, using manual update because lacking https
+                url: false,
+                users: 8,
+                profiles: 10,
+                profiles_published: 3,
+                links: 4,
+                themes: 3
+            },
+            {
+                url: 'https://api.tinypage.app/analytics'
+            }
+        ]
       };
     },
     mounted: function() {
@@ -152,14 +172,51 @@ import wallOfLove from '../components/wall-of-love.vue';
       }.bind(this), interval);
     },
     methods: {
-      fetch_analytics: async function() {
-        try {
-          let analytics = await this.$axios.get('https://api.singlelink.co/analytics/');
-          this.users = analytics.data.users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        } catch(err) {
-          console.log(err);
+        fetch_analytics: async function() {
+              try {
+                  let analytics = await this.$axios.get('https://api.singlelink.co/analytics/');
+                  console.log(analytics);
+                  let users = parseFloat(analytics.data.users);
+                  let links = parseFloat(analytics.data.links);
+                  let profiles = parseFloat(analytics.data.profiles);
+                  let profilesPublished = parseFloat(analytics.data.profilesPublished);
+                  let themes = parseFloat(analytics.data.themes);
+
+                  for(let i=0;i<this.enterprise_users.length;i++) {
+                      if(this.enterprise_users[i].url) {
+                          analytics = await this.$axios.get(this.enterprise_users[i].url);
+                          console.log(analytics);
+                          users += parseFloat(analytics.data.users);
+                          links += parseFloat(analytics.data.links);
+                          profiles += parseFloat(analytics.data.profiles);
+                          if(analytics.data.profiles_published) {
+                              profilesPublished += parseFloat(analytics.data.profiles_published);
+                          } else {
+                              profilesPublished += parseFloat(analytics.data.profilesPublished);
+                          }
+                          themes += parseFloat(analytics.data.themes);
+                      } else {
+                          users += parseFloat(this.enterprise_users[i].users);
+                          links += parseFloat(this.enterprise_users[i].links);
+                          profiles += parseFloat(this.enterprise_users[i].profiles);
+                          if(this.enterprise_users[i].profiles_published) {
+                              profilesPublished += parseFloat(this.enterprise_users[i].profiles_published);
+                          } else {
+                              profilesPublished += parseFloat(this.enterprise_users[i].profilesPublished);
+                          }
+                          themes += parseFloat(this.enterprise_users[i].themes);
+                      }
+                  }
+                  this.users = users;
+                  this.links = links;
+                  this.profiles = profiles;
+                  this.profilesPublished = profilesPublished;
+                  this.themes = themes;
+                  this.percentPublished = ((this.profilesPublished / this.profiles) * 100).toFixed(2) + '%';
+              } catch(err) {
+                  console.log(err);
+              }
         }
-      }
     }
   };
 </script>

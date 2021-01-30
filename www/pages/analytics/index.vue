@@ -11,34 +11,34 @@
             </div>
         </section>
         <section class="mb-24 w-full">
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Total users</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ users }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Total users</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Enterprise accounts</h3>
-                <span class="text-indigo-600 font-semibold text-2xl" v-if="parseInt(this.users)">{{ enterprise_users.length }}</span>
-                <span class="text-indigo-600 font-semibold text-2xl" v-if="!parseInt(this.users)">...</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Enterprise accounts</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto" v-if="parseInt(this.users)">{{ enterprise_users.length }}</span>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto" v-if="!parseInt(this.users)">...</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Total links</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ links }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Total links</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ links.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Total profiles</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ profiles }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Total profiles</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ profiles.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Profiles published (sum)</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ profilesPublished }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Profiles published (#)</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ profilesPublished.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white mb-12">
-                <h3 class="mb-0">Profiles published (%)</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ percentPublished }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white mb-12">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Profiles published (%)</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ percentPublished }}</span>
             </div>
-            <div class="p-8 rounded-lg shadow flex flex-row justify-between items-center bg-white">
-                <h3 class="mb-0">Total themes</h3>
-                <span class="text-indigo-600 font-semibold text-2xl">{{ themes }}</span>
+            <div class="p-8 rounded-lg shadow flex flex-col lg:flex-row justify-between items-center bg-white">
+                <h3 class="mb-0 mb-4 lg:mb-0 lg:mr-2">Total themes</h3>
+                <span class="text-indigo-600 font-semibold text-3xl lg:text-2xl w-full lg:w-auto">{{ themes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
             </div>
         </section>
     </div>
@@ -145,7 +145,7 @@ export default {
                 this.profiles = profiles;
                 this.profilesPublished = profilesPublished;
                 this.themes = themes;
-                this.percentPublished = ((this.profilesPublished / this.profiles) * 100).toFixed(2) + '%';
+                this.percentPublished = ((this.profilesPublished / this.profiles) * 100).toFixed(1) + '%';
             } catch(err) {
                 console.log(err);
             }
