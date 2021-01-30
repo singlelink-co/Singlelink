@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { parse } from 'path';
 export default {
     head: {
       title: 'Analytics - Singlelink',
@@ -86,8 +87,17 @@ export default {
             percentPublished: '...',
             themes: '...',
             enterprise_users: [
-                'http://api.norseapps.com/analytics/fetch',
-                'https://api.tinypage.app/analytics'
+                {
+                    url: false,
+                    users: 8,
+                    profiles: 10,
+                    profiles_published: 3,
+                    links: 4,
+                    themes: 3
+                },
+                {
+                    url: 'https://api.tinypage.app/analytics'
+                }
             ]
         };
     },  
@@ -106,17 +116,29 @@ export default {
                 let themes = parseFloat(analytics.data.themes);
 
                 for(let i=0;i<this.enterprise_users.length;i++) {
-                    analytics = await this.$axios.get(this.enterprise_users[i]);
-                    console.log(analytics);
-                    users += parseFloat(analytics.data.users);
-                    links += parseFloat(analytics.data.links);
-                    profiles += parseFloat(analytics.data.profiles);
-                    if(analytics.data.profiles_published) {
-                        profilesPublished += parseFloat(analytics.data.profiles_published);
+                    if(this.enterprise_users[i].url) {
+                        analytics = await this.$axios.get(this.enterprise_users[i].url);
+                        console.log(analytics);
+                        users += parseFloat(analytics.data.users);
+                        links += parseFloat(analytics.data.links);
+                        profiles += parseFloat(analytics.data.profiles);
+                        if(analytics.data.profiles_published) {
+                            profilesPublished += parseFloat(analytics.data.profiles_published);
+                        } else {
+                            profilesPublished += parseFloat(analytics.data.profilesPublished);
+                        }
+                        themes += parseFloat(analytics.data.themes);
                     } else {
-                        profilesPublished += parseFloat(analytics.data.profilesPublished);
+                        users += parseFloat(this.enterprise_users[i].users);
+                        links += parseFloat(this.enterprise_users[i].links);
+                        profiles += parseFloat(this.enterprise_users[i].profiles);
+                        if(this.enterprise_users[i].profiles_published) {
+                            profilesPublished += parseFloat(this.enterprise_users[i].profiles_published);
+                        } else {
+                            profilesPublished += parseFloat(this.enterprise_users[i].profilesPublished);
+                        }
+                        themes += parseFloat(this.enterprise_users[i].themes);
                     }
-                    themes += parseFloat(analytics.data.themes);
                 }
                 this.users = users;
                 this.links = links;
