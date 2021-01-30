@@ -50,7 +50,7 @@
     <section class="flex flex-col rounded-lg bg-indigo-600 p-10 flex flex-col items-center justify-start mb-24 w-full">
       <h3 class="text-white mb-2">Join us on Discord!</h3>
       <p class="text-gray-300 mb-4">We're active on Discord, and love to meet new people. Join us!</p>
-      <a href="https://discord.gg/3pBM4Px" class="bg-indigo-500 text-white hover:bg-indigo-400 px-6 py-4 text-sm font-medium rounded-lg mr-auto">Join our Discord community</a>
+      <a href="https://discord.gg/3pBM4Px" class="bg-indigo-500 text-white hover:bg-indigo-400 px-6 py-4 text-center text-sm font-medium rounded-lg mr-auto">Join our Discord community</a>
     </section>
     <section class="interface mb-24 text-left">
       <h2>Frequently asked questions</h2>
