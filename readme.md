@@ -48,7 +48,7 @@
 <br>
 
 <!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
-<img src="https://singlelink.co/open-graph-image-rounded.png" alt="Singlelink promotional graphic"/>
+<img src="https://singlelink.co/og-image-rounded.png" alt="Singlelink promotional graphic"/>
 
 <br>
 
