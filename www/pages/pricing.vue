@@ -113,7 +113,7 @@
                     Support via Discord
                   </li>
                 </ul>
-                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="mailto:sales@singlelink.co">Reserve your spot! 49/50 remaining</a>
+                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="mailto:sales@neutroncreative.com">Reserve your spot! 49/50 remaining</a>
         </div>
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
           <div class="flex flex-col lg:flex-row mb-4 items-center justify-center">
@@ -156,7 +156,7 @@
                     Urgent direct suppport
                   </li>
                 </ul>
-                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500 lg:mt-5" href="mailto:sales@singlelink.co">Contact sales</a>
+                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500 lg:mt-5" href="mailto:sales@neutroncreative.com">Contact sales</a>
         </div>
       </div>
     </section>
