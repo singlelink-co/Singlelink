@@ -176,7 +176,7 @@
         <a
         style="margin-right:.5rem !important;"
         class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-        href="/dashboard/account"
+        href="/dashboard/tours"
         >
         <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
         Tours</a>
