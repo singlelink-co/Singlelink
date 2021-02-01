@@ -123,9 +123,22 @@
           </label>
         </div>
 
+        <!-- Privacy mode toggle -->
+        <div class="flex flex-row w-full mb-6 items-start">
+          <input
+            type="checkbox"
+            style="margin-top:3px;"
+            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+          >
+
+          <label class="ml-4 block text-sm leading-5 text-gray-600">
+            Privacy mode (Disables profile analytics & discovery)
+          </label>
+        </div>
+
         <button
           type="button"
-          class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+          class="mt-2 inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
           @click="saveChanges"
         >
           Save changes
