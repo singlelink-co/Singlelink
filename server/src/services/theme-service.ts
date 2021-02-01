@@ -76,7 +76,7 @@ export class ThemeService extends DatabaseService {
   async createTheme(
     userId: string,
     label: string,
-    colors?: ThemeColors,
+    colors?: Theme["colors"],
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {
@@ -110,7 +110,7 @@ export class ThemeService extends DatabaseService {
     themeId: string,
     userId: string,
     label: string,
-    colors?: ThemeColors,
+    colors?: Theme["colors"],
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {
@@ -202,7 +202,7 @@ export class ThemeService extends DatabaseService {
   async updateTheme(
     themeId: string,
     label: string,
-    colors?: ThemeColors,
+    colors?: Theme["colors"],
     customCss?: string,
     customHtml?: string
   ): Promise<Theme> {

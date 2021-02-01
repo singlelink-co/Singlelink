@@ -44,26 +44,13 @@ export class AnalyticsService extends DatabaseService {
   }
 
   /**
-   * Returns a link and increments the links analytics counter.
+   * Increments the links analytics counter.
    * This counts as a user "visiting" a link.
    *
-   * The analytics will only be incremented if "updateAnalytics" is true.
-   *
    * @param linkId The id of the link that is being visited
-   * @param updateAnalytics Should we update analytics?
    */
-  async getLink(linkId: string, updateAnalytics: boolean): Promise<Link> {
-    let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
-
-    if (queryResult.rowCount <= 0) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "The link could not be found.");
-    }
-
-    if (updateAnalytics) {
-      await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
-    }
-
-    return DbTypeConverter.toLink(queryResult.rows[0]);
+  async createLinkVisit(linkId: string) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
   }
 
   /**

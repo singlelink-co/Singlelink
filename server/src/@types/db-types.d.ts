@@ -19,7 +19,10 @@ interface DbUser {
   active_profile_id: string | null,
   subscription_tier: subscription_t | null,
   inventory: unknown | null,
-  metadata: unknown | null,
+
+  // The metadata tag will grow over time as functionality is added.
+  metadata: unknown,
+
   created_on: string
 }
 
@@ -34,22 +37,20 @@ interface DbSensitiveUserWithPassword extends DbUser {
   payment_id: string | null,
 }
 
-interface DbThemeColors {
-  fill: {
-    primary: string,
-    secondary: string
-  },
-  text: {
-    primary: string,
-    secondary: string
-  }
-}
-
 interface DbTheme {
   id: string,
   label: string,
   global: boolean,
-  colors: DbThemeColors | null,
+  colors: {
+    fill: {
+      primary: string,
+      secondary: string
+    },
+    text: {
+      primary: string,
+      secondary: string
+    }
+  } | null,
   custom_css: string | null,
   custom_html: string | null,
   user_id: string,
@@ -74,7 +75,12 @@ interface DbProfile {
   custom_domain: string,
   theme_id: string,
   visibility: visibility_t,
-  metadata: unknown,
+
+  // The metadata tag will grow over time as functionality is added.
+  metadata: {
+    privacyMode: boolean
+  },
+
   created_on: string
 }
 

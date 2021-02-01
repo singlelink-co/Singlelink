@@ -16,6 +16,21 @@ export class LinkService extends DatabaseService {
   }
 
   /**
+   * Returns a link.
+   *
+   * @param linkId The id of the link that is being visited
+   */
+  async getLink(linkId: string): Promise<Link> {
+    let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
+
+    if (queryResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link could not be found.");
+    }
+
+    return DbTypeConverter.toLink(queryResult.rows[0]);
+  }
+
+  /**
    * Creates a link and returns it.
    *
    * @param profileId The profile that owns this link.
