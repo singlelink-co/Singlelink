@@ -7,6 +7,8 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
+import {ProfileService} from "../services/profile-service";
+import {LinkService} from "../services/link-service";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
   Params: {
@@ -27,16 +29,29 @@ interface GetProfileAnalyticsRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+const rateLimitAnalytics = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 second'
+    }
+  }
+};
+
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
 export class AnalyticsController extends Controller {
   private analyticsService: AnalyticsService;
+  private linkService: LinkService;
+  private profileService: ProfileService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
 
     this.analyticsService = new AnalyticsService(databaseManager);
+    this.linkService = new LinkService(databaseManager);
+    this.profileService = new ProfileService(databaseManager);
   }
 
   registerRoutes(): void {
@@ -90,7 +105,16 @@ export class AnalyticsController extends Controller {
         return ReplyUtils.error("The link was not found.");
       }
 
-      let link = await this.analyticsService.getLink(id, true);
+      let link = await this.linkService.getLink(id);
+      const profileId = link.profileId;
+
+      const profile = await this.profileService.getMetadata(profileId, true);
+      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
+        reply.status(StatusCodes.NOT_MODIFIED).send();
+        return;
+      }
+
+      await this.analyticsService.createLinkVisit(id);
 
       if (link.useDeepLink) {
         const userAgent = request.headers["user-agent"];
@@ -132,6 +156,12 @@ export class AnalyticsController extends Controller {
       if (!id) {
         reply.code(StatusCodes.NOT_FOUND);
         return ReplyUtils.error("The profile was not found.");
+      }
+
+      const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id, true);
+      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
+        reply.status(StatusCodes.NOT_MODIFIED).send();
+        return;
       }
 
       await this.analyticsService.createProfileVisit(id);
