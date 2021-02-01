@@ -15,22 +15,31 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: 'Singlelink - A single link for everything 🔗🔥',
+    title: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!' },
-      { name: 'og:image', content: 'https://singlelink.co/open-graph-image-v2.png' },
-      { name: 'og:title', content: 'Singlelink - There\'s a single link for everything 🔗🔥' },
-      { name: 'og:description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'},
-      { name: 'twitter:image', content: 'https://singlelink.co/open-graph-image-v2.png' },
-      { name: 'twitter:title', content: 'Singlelink - There\'s a single link for everything 🔗🔥' },
-      { name: 'twitter:description', content: 'Your beautiful & SEO optimized profile with a Singlelink for your social media bio. Create your free profile in seconds!'},
+      { hid: 'description', name: 'description', content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!' },
+      { name: 'og:image', content: 'https://singlelink.co/og-image.png' },
+      { name: 'og:title', content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥' },
+      { name: 'og:description', content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'},
+      { name: 'twitter:image', content: 'https://singlelink.co/og-image.png' },
+      { name: 'twitter:title', content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥' },
+      { name: 'twitter:description', content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'},
       { name: 'twitter:card', content: 'summary_large_image'},
       { hid: 'robots', name: 'robots', content: 'https://singlelink.co/robots.txt' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        hid: 'slpa',
+        src: '/slpa.js',
+        defer: true,
+        'data-domain': 'singlelink.co',
+        async: true
+      }
     ]
   },
   /*
@@ -74,5 +83,11 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-  }
+  },
+  /*
+  ** Generate Falback 404 Page
+  */
+ generate: {
+   fallback: true
+ }
 }

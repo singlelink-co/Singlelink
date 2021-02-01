@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-col items-center w-full">
-    <section class="flex flex-col p-8 md:p-20 w-full items-center">
-      <div class="flex flex-col w-full max-w-5xl text-center items-center">
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-4xl md:text-6xl font-bold text-black mb-2">Planned outage 01/15/2021</h1>
-        <p data-aos="fade-up" data-aos-duration="1000" class="text-2xl mb-6 text-gray-700">Learn more about our planned outage on Thursday, January 15th, 2021.</p>
-        <section data-aos="fade-up" data-aos-duration="1000" class="py-8 text-left">
-          <div class="flex flex-wrap md:w-11/12 mx-auto">
-            <div class="w-full p-4 text-lg text-gray-700 leading-loose">
+    <div>
+        <section class="mb-12 w-full">
+          <h1>Planned migration to v2.1</h1>
+          <p class="mb-8">
+              Learn more about our planned outage on Thursday, January 15th, 2021.
+          </p>
+        </section>
+        <section class="mb-32">
+          <p class="text-lg leading-loose">
               Later tonight (6PM EST), Singlelink will experience a brief planned outage (~1hr) while we initiate a major migration from v2.0 to v2.1, which includes large changes to our tech stack for better scalbility.
 
               Most notably, we'll be switching to a much more secure build rebuilt from scratch from our CTO & Co-Founder Navid, including a migration from MongoDb to PostgreSQL, Javascript to Typescript, improved self-hosting cababilities & documentation, and so much more.
@@ -22,12 +23,9 @@
               Founder & President of Neutron Creative | Maintainer @ Singlelink<br/>
               Email: <a href="mailto:jim@neutroncreative.com" class="font-medium text-indigo-600 hover:underline">jim@neutroncreative.com</a><br/>
               Phone Number: <a href="tel:+19196530790" class="font-medium text-indigo-600 hover:underline">(919) 653-0790</a>
-            </div>
-        </div>
+            </p>
         </section>
-      </div>
-    </section>
-  </div>
+    </div>
 </template>
 
 <script>

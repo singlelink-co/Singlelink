@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-col items-center w-full">
-    <section class="flex flex-col p-8 md:p-20 w-full items-center">
-      <div class="flex flex-col w-full max-w-5xl text-center items-center">
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-4xl md:text-6xl font-bold text-black mb-2">Outage report 10/29/20</h1>
-        <p data-aos="fade-up" data-aos-duration="1000" class="text-2xl mb-6 text-gray-700">Learn more about our latest outage on Wednesday, October 28th, 2020, and what we're doing to mitigate events like these in the future.</p>
-        <section data-aos="fade-up" data-aos-duration="1000" class="py-8 text-left">
-          <div class="flex flex-wrap md:w-11/12 mx-auto">
-            <div class="w-full p-4 text-lg text-gray-700 leading-loose">
+    <div>
+        <section class="mb-12 w-full">
+          <h1>MongoDB Atlas outage</h1>
+          <p class="mb-8">
+              Learn more about our latest outage on Wednesday, October 28th, 2020, and what we're doing to mitigate events like these in the future.
+          </p>
+        </section>
+        <section class="mb-32">
+          <p class="text-lg leading-loose">
               As many of you noticed, Singlelink experienced an extended outage yesterday as a result of our service provider MongoDB Atlas failing to throttle another user properly on our shared database, leading to a rare cluster-wide crash that proved inoperable by several members staff for over 12 hours, despite it's critical status.<br/><br/>
 
               Despite this, our team worked ruthlessly hard throughout the night and was able to finally obtain access to a backup after several hours and perform a manual restore onto an alternate service provider, being our trusted partners at <a href="https://digitalocean.com" class="font-medium text-indigo-600 hover:underline">DigitalOcean.</a><br/><br/>
@@ -24,12 +25,9 @@
               Founder & President of Neutron Creative | Maintainer @ Singlelink<br/>
               Email: <a href="mailto:jim@neutroncreative.com" class="font-medium text-indigo-600 hover:underline">jim@neutroncreative.com</a><br/>
               Phone Number: <a href="tel:+19196530790" class="font-medium text-indigo-600 hover:underline">(919) 653-0790</a>
-            </div>
-        </div>
+            </p>
         </section>
-      </div>
-    </section>
-  </div>
+    </div>
 </template>
 
 <script>

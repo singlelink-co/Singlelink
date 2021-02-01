@@ -1,126 +1,96 @@
 <template>
-  <div class="w-screen min-h-screen flex flex-col">
-    <a href="https://neutroncreative.com" style="z-index:99;">
-	<!--<a href="/blog/outage-report-10-29-20">-->
-      <div class="flex flex-row w-full bg-black items-center justify-center p-3">
-        <div class="w-full max-w-6xl flex-row flex items-center justify-center">
-          <img style="width: 80px;" class="mr-4" src="https://neutron.so/Sidebar-brandmark.svg"/>
-          <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Singlelink is part of our mission to make the world open-source.<span class="font-bold text-white flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>
-          <!--<span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer text-center">Singlelink will have a brief outage between 6PM-7PM EST on 11/15/21 for an update.<span class="hidden font-bold text-white lg:flex flew-col items-center justify-center ml-2">Read more <img src='/r-finger-emoji.svg' class="w-4 ml-2"/></span></span>-->
-      <!-- <span class="text-gray-400 text-sm flex flex-row items-center justify-center hover:underline hover:text-white cursor-pointer">Unfortunately, Singlelink experienced issues yesterday due to service provider outage from MongoDB Atlas.<span class="font-bold text-white ml-2">Read more 👉</span></span> -->
+  <div class="interface">
+    <!-- Overlay gradients -->
+    <div class="overlays"><div style="background: linear-gradient(to top, rgb(83, 83, 236), transparent); opacity: 0.05; z-index: 5;"></div> <div style="background: linear-gradient(185deg, rgb(255, 0, 229), transparent); opacity: 0.08; z-index: 4;"></div> <div style="background: linear-gradient(135deg, rgb(0, 255, 255), transparent); opacity: 0.08; z-index: 3;"></div> <div style="background: radial-gradient(circle at center top, rgb(83, 83, 236), transparent); opacity: 0.15; z-index: 2;"></div> <div style="background: linear-gradient(rgb(255, 255, 255), transparent); opacity: 0.05; z-index: 1;"></div></div>
+    <header class="my-12 lg:my-24 flex flex-row w-full justify-between items-center">
+      <a href="/"><img src="/singlelink-brandmark.svg"/></a>
+      <a href="https://app.singlelink.co" class="sign-in">Sign in<img class="w-3 ml-2" src="/arrow.svg"/></a>
+    </header>
+    <Nuxt class="interface" />
+    <footer class="interface">
+      <div class="flex-grow pb-20 flex flex-col" style="border-bottom: solid 5px rgba(0,0,100,.07);">
+        <h2>Build your free Singlelink profile in seconds</h2>
+        <p class="mb-8">Creating your Singlelink profile is free, effortless, and takes just seconds. There's no credit card required and we won't sell your data.</p>
+        <div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
+          <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Claim your free Singlelink</a>
+          <a class="text-center w-full lg:w-auto text-sm font-medium text-gray-700 px-6 py-6 lg:py-5 rounded-lg bg-gray-400 hover:bg-gray-300" href="/gallery">View community examples</a>
         </div>
       </div>
-    </a>
-    <nav style="background:rgba(255,255,255,.5);backdrop-filter:blur(5px);border-color:rgba(255,255,255,.15) !important;" class="sticky top-0 z-50 flex flex-row p-3 border border-l-0 border-r-0 border-t-0 items-center justify-center">
-      <div class="relative w-full max-w-6xl flex-row flex">
-        <n-link to="/" class="flex items-center justify-center lg:mr-40">
-          <img src="/singlelink-brandmark.svg"/>
-        </n-link>
-        <ul class="hidden md:flex flex-row text-gray-700 text-sm items-center justify-end ml-auto">
-          <n-link to="/">
-            <li class="p-2 mr-2 hover:text-black cursor-pointer">Overview</li>
-          </n-link>
-          <a href="https://neutroncreative.com/community">
-            <li class="p-2 mr-2 hover:text-black cursor-pointer">Community</li>
-          </a>
-		  <n-link to="gallery"><li class="p-2 mr-2 hover:text-black cursor-pointer">Gallery</li></n-link>
-          <n-link to="/pricing"><li class="p-2 mr-2 hover:text-black cursor-pointer">Pricing</li></n-link>
-          <a href="https://app.singlelink.co"><li class="p-2 mr-2 hover:text-black cursor-pointer">Log in</li></a>
-          <iframe class="mr-2" style="transform: scale(.9);" src="https://ghbtns.com/github-btn.html?user=Neutron-Creative&repo=Singlelink&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-        </ul>
-        <a href="https://app.singlelink.co/create-account" class="ml-auto md:flex hidden">
-          <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold flex flex-row items-center justify-center" style="height: fit-content;">
-            Create your free profile
-            <img src='/r-finger-emoji.svg' class="w-4 ml-2"/>
-          </button>
-        </a>
-        <li style="list-style: none;" @click="toggle_menu" class="ml-auto md:hidden text-xs p-2 pl-4 pr-4 bg-indigo-600 md:text-sm uppercase tracking-wide rounded shadow text-white hover:bg-indigo-700 font-medium cursor-pointer">
-          <span v-if="!mobile_menu">Open </span>
-          <span v-if="mobile_menu">Close </span>
-          Menu
-        </li>
-      </div>
-      <ul v-if="mobile_menu" style="top:100%;" class="shadow-lg absolute bg-gray-100 w-full flex flex-col text-gray-600 text-sm items-center justify-end">
-        <n-link class="" to="/">
-          <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Overview</li>
-        </n-link>
-        <a class="" href="https://neutroncreative.com/community">
-          <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Community</li>
-        </a>
-		<n-link to="/gallery">
-			<li class="p-3 text-sm text-center hover:text-black cursor-pointer">Gallery</li>
-		</n-link>
-        <n-link to="/pricing">
-          <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Pricing</li>
-        </n-link>
-        <a href="https://app.singlelink.co">
-          <li class="p-3 text-sm text-center hover:text-black cursor-pointer">Log in</li>
-        </a>
-        <iframe style="transform: scale(.9);margin:15px auto; transform: translateX(35px);" src="https://ghbtns.com/github-btn.html?user=Neutron-Creative&repo=Singlelink&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-        <a href="https://app.singlelink.co/create-account" class="mb-4">
-          <button data-v-4b07093c="" class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-6 rounded-lg shadow font-semibold" style="height: fit-content;">
-            Create your free profile
-            <span class="ml-2">👉</span>
-          </button>
-        </a>
-      </ul>
-    </nav>
-    <Nuxt class="bg-gray-100 flex flex-grow w-full h-auto justify-start flex-col" style="padding-top:73px;position:relative;transform:translateY(-73px);margin-bottom:-73px;" />
-    <footer class="bg-gray-100 border border-gray-200 border-l-0 border-r-0 border-b-0 p-10">
-      <!--<a href="https://beta-app.singlelink.co/create-account" class="mx-auto text-sm text-gray-600 text-center flex items-center justify-center">
-        <span class="p-2 mr-2 hover:text-gray-800 cursor-pointer flex-row items-center justify-center">Get access to Singlelink beta!<span class="ml-2">🤫</span></span>
-	  </a>-->
-      <ul class="w-full flex flex-col md:flex-row text-gray-600 text-sm items-center justify-center">
-        <n-link to="/">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Overview</li>
-        </n-link>
-        <a href="https://neutroncreative.com/community">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Community</li>
-        </a>
-        <n-link to="/pricing">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Pricing</li>
-        </n-link>
-        <a href="https://app.singlelink.co">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Login</li>
-        </a>
-        <a href="https://app.singlelink.co/create-account">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Get started</li>
-        </a>
-        <a href="https://neutroncreative.com/contact-us/">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Contact us</li>
-        </a>
-        <a href="https://github.com/Neutron-Creative">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Github</li>
-        </a>
-        <a href="https://status.singlelink.co">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Status</li>
-        </a>
-        <a href="https://discord.com/invite/3pBM4Px">
-          <li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Support</li>
-        </a>
-		<a href="https://singlel.ink/analytics">
-			<li class="p-2 mr-2 hover:text-gray-800 cursor-pointer">Realtime Statistics</li>
-		</a>
-      </ul>
-      <div class="text-gray-600 text-sm text-center p-3 leading-relaxed">
-        Built as part of our mission to make the world open-source by the team at <a class="text-indigo-600 hover:underline cursor-pointer" href="https://neutroncreative.com">Neutron Creative Inc.</a>
-        <br/>
-        <div class="mt-2">
-          Singlelink is open-source software licensed via
-          <a class="text-indigo-600 hover:underline cursor-pointer" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL v3+</a>
+      <div class="flex-grow py-20 flex flex-col lg:flex-row items-start justify-center w-full space-y-8 lg:space-y-0 lg:space-x-8">
+        <div class="flex flex-col items-center text-center lg:text-left justify-center lg:justify-start lg:w-1/2">
+          <img class="lg:mr-auto mb-2" src="/singlelink-brandmark.svg"/>
+          <p class="text-sm font-medium leading-loose mb-2 text-gray-600">You don't need a website, you need a Singlelink.</p>
+          <p class="text-sm font-medium leading-loose mb-2 text-gray-700">© Copyright {{ new Date().getFullYear() }} Neutron Creative Inc.</p>
+        </div>
+        <div class="flex flex-col lg:flex-row items-start justify-between w-full lg:w-1/2">
+          <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
+            <span class="text-gray-900">Product</span>
+            <a href="/" class="text-gray-600 font-medium hover:text-indigo-500">Overview</a>
+            <a href="/pricing" class="text-gray-600 font-medium hover:text-indigo-500">Pricing</a>
+            <a href="/gallery" class="text-gray-600 font-medium hover:text-indigo-500">Examples</a>
+            <a href="https://app.singlelink.co/create-account" class="text-gray-600 font-medium hover:text-indigo-500">Sign up free</a>
+            <a href="/analytics" class="text-gray-600 font-medium hover:text-indigo-500">Analytics</a>
+            <a href="https://github.com/Neutron-Creative/Singlelink/projects" class="text-gray-600 font-medium hover:text-indigo-500">Roadmap</a>
+            <a href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md" class="text-gray-600 font-medium hover:text-indigo-500">Changelog</a>
+            <a href="https://status.singlelink.co" class="text-gray-600 font-medium hover:text-indigo-500">Status</a>
+          </div>
+          <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
+            <span class="text-gray-900">Company</span>
+            <a href="https://neutroncreative.com/" class="text-gray-600 font-medium hover:text-indigo-500">Learn more</a>
+            <a href="https://neutroncreative.com/community" class="text-gray-600 font-medium hover:text-indigo-500">Community</a>
+            <a href="https://discord.gg/3pBM4Px" class="text-gray-600 font-medium hover:text-indigo-500">Support</a>
+            <a href="https://discord.gg/3pBM4Px" class="text-gray-600 font-medium hover:text-indigo-500">Discord</a>
+            <a href="https://twitter.com/neutroncreative" class="text-gray-600 font-medium hover:text-indigo-500">Twitter</a> 
+            <a href="https://github.com/Neutron-Creative/" class="text-gray-600 font-medium hover:text-indigo-500">Github</a>
+          </div>
+          <div class="flex flex-col font-semibold lg:text-sm text-center lg:text-left space-y-4 mb-8 lg:mb-0 lg:space-y-2 w-full lg:w-1/3">
+            <span class="text-gray-900">Resources</span>
+            <a href="https://app.singlelink.co" class="text-gray-600 font-medium hover:text-indigo-500">Login</a>
+            <a href="https://neutroncreative.com/terms-of-use" class="text-gray-600 font-medium hover:text-indigo-500">Terms of Use</a>
+            <a href="https://neutroncreative.com/privacy-policy" class="text-gray-600 font-medium hover:text-indigo-500">Privacy Policy</a>
+            <a href="https://neutroncreative.com" class="text-gray-600 font-medium hover:text-indigo-500">Open-source</a>
+            <a href="https://neutroncreative.com" class="text-gray-600 font-medium hover:text-indigo-500">Blog</a>
+          </div>
         </div>
       </div>
     </footer>
+    <div class="chat">
+      <img src="/chat.png" @click="bubble_modal=!bubble_modal" class="bubble-icon"/>
+      <div v-if="bubble_modal" class="chat-window">
+        <div class="flex flex-row p-4 bg-indigo-600 w-full justify-between items-center">
+          <a href="https://discord.gg/3pBM4Px" class="flex flex-col">
+            <span class="text-white font-bold tracking-tight">Get help on Discord!</span>
+            <p class="text-gray-400 text-sm">Office hours: 9AM-5PM ET</p>
+          </a>
+          <div class="w-10 h-10 bg-indigo-500 hover:bg-indigo-400 flex items-center justify-center rounded-lg cursor-pointer" @click="bubble_modal=false">
+            <img src="/ex.svg" class="w-3" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
+@import url('https://rsms.me/inter/inter.css'); 
+
+::selection {
+  background: #FF4081; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #FF4081; /* Gecko Browsers */
+}
+
   html, body {
     width: 100vw;
     min-height: 100vh;
     margin: 0;
     padding: 0;
     overflow-x:hidden;
+    background-image: url('/bg.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 html {
   font-family:
@@ -148,38 +118,92 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-
   * {
     outline: none !important;
+    color: #333B4B;
+  }
+
+  .chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .overlays {
+    z-index: -1;
+  }
+
+  .overlays, .overlays * {
+    position: fixed;
+    top: 0;
+    left:0;
+    right:0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .bubble-icon {
+    @apply shadow-lg rounded-full cursor-pointer;
+    width: 60px;
+    transition: .2s ease-in-out;
+  }
+
+  .bubble-icon:hover {
+    transform: scale(1.025);
+  }
+
+  .chat .chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    @apply flex flex-col items-center justify-center rounded-lg shadow-lg overflow-hidden;
+    width: 315px;
+  }
+
+  .sign-in {
+    @apply flex flex-row items-center justify-center rounded-lg text-sm px-4 py-2;
+    background: rgba(255,255,255,.25);
+    backdrop-filter: blur(5px);
+    border: solid 1px rgba(255,255,255,.5);
+  }
+
+  .sign-in:hover {
+    background:rgba(255,255,255,.45);
+  }
+
+  .interface {
+    @apply flex flex-col items-center justify-center mx-auto w-full;
+    max-width: 750px;
+  }
+
+  @media(max-width:750px) {
+    .interface {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+    .interface > .interface {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  h1 {
+    @apply text-6xl font-extrabold text-black tracking-tighter mb-10 w-full;
+    line-height: 110%;
+  }
+
+  h2 {
+    @apply text-4xl font-extrabold text-black tracking-tighter mb-6 w-full;
+    line-height: 110%;
+  }
+
+  h3 {
+    @apply text-2xl font-extrabold text-black tracking-tighter mb-3 w-full;
+  }
+
+  p {
+    @apply leading-relaxed text-lg w-full;
   }
 </style>
 
@@ -187,7 +211,9 @@ html {
   export default {
     data: function() {
       return {
-        mobile_menu: false
+        mobile_menu: false,
+        message: null,
+        bubble_modal: false
       };
     },
     methods: {

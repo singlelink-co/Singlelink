@@ -89,6 +89,15 @@ export default {
         rel: 'stylesheet',
         href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'
       }
+    ],
+    script: [
+      {
+        hid: 'slpa',
+        src: 'https://singlelink.co/slpa.js',
+        defer: true,
+        'data-domain': 'singlelink.co',
+        async: true
+      }
     ]
   },
   /*
