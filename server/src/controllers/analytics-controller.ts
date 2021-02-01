@@ -5,12 +5,16 @@ import {StatusCodes} from "http-status-codes";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
-import {AuthenticatedRequest, Auth} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
-import {DatabaseService} from "../services/database-service";
-import {DbTypeConverter} from "../utils/db-type-converter";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
+  Params: {
+    id?: string
+  }
+}
+
+interface ProfileAnalyticsRequest extends RequestGenericInterface {
   Params: {
     id?: string
   }
@@ -39,6 +43,7 @@ export class AnalyticsController extends Controller {
     // Unauthenticated
     this.fastify.get('/analytics', this.GetAnalytics.bind(this));
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
+    this.fastify.all('/analytics/profile/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
     this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', Auth.ValidateWithData, this.GetProfileAnalytics.bind(this));
@@ -99,6 +104,39 @@ export class AnalyticsController extends Controller {
       }
 
       reply.redirect(link?.url);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /analytics/profile/:id
+   *
+   * Used to redirect a request to the appropriate link.
+   * Also records analytics on that specific link once called.
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ProfileAnalytics(request: FastifyRequest<ProfileAnalyticsRequest>, reply: FastifyReply) {
+    try {
+      let params = request.params;
+      let id = params.id;
+
+      if (!id) {
+        reply.code(StatusCodes.NOT_FOUND);
+        return ReplyUtils.error("The profile was not found.");
+      }
+
+      await this.analyticsService.createProfileVisit(id);
+
+      reply.code(StatusCodes.OK).send();
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

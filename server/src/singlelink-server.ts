@@ -5,7 +5,7 @@ import {Controller} from "./controllers/controller";
 import {CustomDomainHandler} from "./utils/custom-domains";
 
 /**
- * The Capture Server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.
+ * The server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.
  */
 export class SingleLinkServer {
   private readonly controllers: Controller[];
@@ -77,7 +77,12 @@ export class SingleLinkServer {
      context is irrelevant.
     */
     this.fastify.addHook('preHandler', ((request, reply) => {
-      return CustomDomainHandler.checkRoute(request, reply);
+      try {
+        return CustomDomainHandler.checkRoute(request, reply);
+      } catch (e) {
+        // Fail-safe
+        console.error(e);
+      }
     }));
 
     this.fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
