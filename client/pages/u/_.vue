@@ -47,10 +47,19 @@ export default Vue.extend({
     UserProfileView
   },
 
-  asyncData(ctx: Context) {
+  async asyncData(ctx: Context) {
     try {
+      const url = '/profile/' + ctx.route.path.replace('/u/', '');
+
+      const response = await ctx.$axios.$post(url, {
+        token: ctx.store.getters['auth/getToken']
+      });
+
+      const profile = response.profile;
+
       return {
-        profileHandle: ctx.route.path.replace('/u/', '')
+        profileHandle: ctx.route.path.replace('/u/', ''),
+        profile
       };
     } catch (err) {
       console.log('Error getting profile');
@@ -87,38 +96,38 @@ export default Vue.extend({
     const profile: Profile = this.profile;
 
     return {
-      title: profile.headline || '',
+      title: profile.headline ?? '',
 
       meta: [
         {
           hid: 'title',
           name: 'title',
-          content: profile.headline || ''
+          content: profile.headline ?? ''
         },
         {
           hid: 'og:title',
           name: 'og:title',
-          content: profile.headline || ''
+          content: profile.headline ?? ''
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: profile.headline || ''
+          content: profile.headline ?? ''
         },
         {
           hid: 'description',
           name: 'description',
-          content: profile.subtitle || ''
+          content: profile.subtitle ?? ''
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: profile.subtitle || ''
+          content: profile.subtitle ?? ''
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: profile.subtitle || ''
+          content: profile.subtitle ?? ''
         },
         {
           hid: 'og:image',

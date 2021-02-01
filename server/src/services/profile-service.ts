@@ -263,4 +263,24 @@ export class ProfileService extends DatabaseService {
 
     return nextProfile;
   }
+
+  /**
+   * Enables/Disables privacy mode for a profile. (Hide from analytics and visibility from certain areas.)
+   *
+   * @param profileId
+   * @param privacyModeEnabled
+   */
+  async setPrivacyMode(profileId: string, privacyModeEnabled: boolean): Promise<Profile> {
+    let profileQuery = await this.pool.query<DbProfile>(`update app.profiles
+                                                         set metadata = jsonb_set(metadata::jsonb, '{privacyMode}', $1, true)
+                                                         where id = $2
+                                                         returning *;`,
+      [privacyModeEnabled, profileId]);
+
+    if (profileQuery.rowCount <= 0) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
+    }
+
+    return DbTypeConverter.toProfile(profileQuery.rows[0]);
+  }
 }

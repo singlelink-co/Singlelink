@@ -49,7 +49,7 @@ export class AnalyticsService extends DatabaseService {
    *
    * The analytics will only be incremented if "updateAnalytics" is true.
    *
-   * @param linkId The linkId of the link that is being visited
+   * @param linkId The id of the link that is being visited
    * @param updateAnalytics Should we update analytics?
    */
   async getLink(linkId: string, updateAnalytics: boolean): Promise<Link> {
@@ -64,6 +64,16 @@ export class AnalyticsService extends DatabaseService {
     }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
+  }
+
+  /**
+   * Creates a profile visit analytics record in the database.
+   * This counts as a user "visiting" a page.
+   *
+   * @param pageId The id of the page that is being visited
+   */
+  async createProfileVisit(pageId: string) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['page', pageId]);
   }
 
   /**

@@ -45,6 +45,12 @@ interface UpdateProfileRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+interface SetPrivacyModeRequest extends AuthenticatedRequest {
+  Body: {
+    privacyMode: boolean
+  } & AuthenticatedRequest["Body"]
+}
+
 const createProfileRequestOpts = {
   config: {
     rateLimit: {
@@ -89,6 +95,8 @@ export class ProfileController extends Controller {
 
     this.fastify.post<AuthenticatedRequest>('/profile/active-profile', Auth.ValidateWithData, this.GetActiveProfile.bind(this));
     this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', Auth.ValidateWithData, this.ActivateProfileTheme.bind(this));
+
+    this.fastify.post<SetPrivacyModeRequest>('/profile/set-privacy-mode', Auth.ValidateWithData, this.SetPrivacyMode.bind(this));
   }
 
   /**
@@ -413,4 +421,29 @@ export class ProfileController extends Controller {
       throw e;
     }
   }
+
+  /**
+   * Route for /profile/set-privacy-mode
+   *
+   * @param request
+   * @param reply
+   */
+  async SetPrivacyMode(request: FastifyRequest<SetPrivacyModeRequest>, reply: FastifyReply) {
+    try {
+      if (!request.body.authProfile) {
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
 }
