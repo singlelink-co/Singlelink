@@ -54,7 +54,7 @@
         {{ profile.subtitle }}
       </h3>
 
-      <a v-for="link in links" :key="link.id" :href="link.url" class="w-full">
+      <a v-for="link in links" :key="link.id" :href="api_url + '/analytics/link/' + link.id" class="w-full">
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
           :style="link.customCss"
@@ -129,6 +129,7 @@ export default Vue.extend({
       theme: null,
       links: null,
       hostname: process.env.HOSTNAME,
+      api_url: process.env.API_URL,
       app_name: process.env.APP_NAME,
       icon_url: process.env.ICON_URL,
       free_signup: process.env.FREE_SIGNUP
