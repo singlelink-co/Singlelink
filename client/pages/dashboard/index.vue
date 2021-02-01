@@ -3,13 +3,13 @@
     <div class="flex flex-col p-8 max-w-lg items-center justify-center w-full flex-shrink-0">
       <div
         v-if="!links || links.length === 0"
-        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
+        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded-lg justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
       >
         You don't have any links to display.<br>Click the button below to create one!
       </div>
       <button
         type="button"
-        class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
+        class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
         @click="openModal('create')"
       >
         Add new link
@@ -24,7 +24,7 @@
         <div
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col flex-shrink-0 text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
+          class="flex flex-col flex-shrink-0 text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded-lg shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
           @click="editLink(link)"
         >
           <span>{{ link.label }}
@@ -47,7 +47,7 @@
         @click="closeModal"
       >
 
-        <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
+        <div class="flex flex-col bg-white shadow rounded-lg overflow-hidden w-full max-w-xl" @click.stop>
 
           <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
             <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
@@ -68,7 +68,7 @@
             <transition name="fade">
               <div
                 v-if="error"
-                class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+                class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded-lg w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
               >
                 <img style="width: 12px;" src="/caution.svg" alt="caution">
                 <div class="flex flex-col ml-2">
@@ -82,7 +82,7 @@
               <input
                 id="label"
                 v-model="pendingLink.label"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. My Calendar"
               >
@@ -93,7 +93,7 @@
               <input
                 id="subtitle"
                 v-model="pendingLink.subtitle"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. A list of all my events and available times"
               >
@@ -104,7 +104,7 @@
               <input
                 id="link"
                 v-model="pendingLink.url"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. Jane Doe"
               >
@@ -116,7 +116,7 @@
                 id="custom_css"
                 v-model="pendingLink.customCss"
                 rows="3"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 placeholder="e.g. background: #5353EC;"
               />
             </div>
@@ -133,7 +133,7 @@
               <input
                 id="deep_link"
                 v-model="pendingLink.useDeepLink"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="checkbox"
                 placeholder="e.g. background: #5353EC;"
                 aria-label="create deep link"
@@ -148,14 +148,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveAndClose"
             >
               Save and add link
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="saveAndContinue"
             >
               Save and continue
@@ -168,14 +168,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveLinkChanges"
             >
               Save changes
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="deleteLink"
             >
               Delete link
