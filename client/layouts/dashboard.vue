@@ -185,7 +185,7 @@
         class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
         @click="toggleProfileSelect"
         >
-        <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.25rem !important;"/>
+        <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
         Switch profiles</div>
         <a
         style="margin-right:.5rem !important;"
