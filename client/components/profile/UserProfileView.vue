@@ -60,9 +60,7 @@
           :style="link.customCss"
         >
           <span class="font-medium text-gray-900 sl-label">{{ link.label }}</span>
-          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{
-              link.subtitle
-            }}</span>
+          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-link-subtitle mt-1">{{ link.subtitle }}</span>
         </div>
       </a>
 
@@ -83,7 +81,11 @@
         <p v-else style="color:rgba(0,0,0,1);" class="mt-4 text-sm">
           Proudly built with {{ app_name }} 🔗
         </p>
-        <a v-if="free_signup" class="text-indigo-600 hover:underline text-sm" :href="'https://' + hostname + '/create-account'">Create your
+        <a
+          v-if="free_signup"
+          class="text-indigo-600 hover:underline text-sm"
+          :href="'https://' + hostname + '/create-account'"
+        >Create your
           free profile in seconds</a>
         <base target="_blank">
       </div>
@@ -136,23 +138,25 @@ export default Vue.extend({
     };
   },
 
-  async mounted() {
-    await this.refresh();
+  async fetch() {
+    if (process.server) {
+      console.log("Updating profile data");
+    }
 
+    if (this.authenticated) {
+      await this.getAuthenticatedProfile();
+    } else {
+      await this.getProfile();
+    }
+  },
+
+  mounted() {
     this.$root.$on('refreshUserProfileView', () => {
-      this.refresh();
+      this.$fetch();
     });
   },
 
   methods: {
-    async refresh() {
-      if (this.authenticated) {
-        await this.getAuthenticatedProfile();
-      } else {
-        await this.getProfile();
-      }
-    },
-
     async getProfile() {
       try {
         const response = await this.$axios.$post(`/profile/${this.profileHandle}`, {
