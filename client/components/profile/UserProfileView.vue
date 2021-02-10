@@ -54,7 +54,7 @@
         {{ profile.subtitle }}
       </h3>
 
-      <a v-for="link in links" :key="link.id" :href="api_url + '/analytics/link/' + link.id" class="w-full">
+      <a v-for="link in links" :key="link.id" :href="api_url + '/analytics/link/' + link.id" class="w-full" target="_blank">
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
           :style="link.customCss"
