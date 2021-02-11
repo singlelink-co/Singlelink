@@ -8,10 +8,11 @@
       <n-link to="/dashboard">
         <img :src="icon_url" style="width: 35px;" alt="icon">
       </n-link>
+
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img
           v-if="user && profiles.length>=1"
-          style="width: 100%; border-radius: 100px;"
+          style="width:45px; height:45px; border-radius: 100px;"
           :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
           alt="avatar"
           onerror="this.src='https://www.gravatar.com/avatar'"
@@ -29,7 +30,7 @@
 
         <ul
           v-if="selectingProfile"
-          class="absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list z-30"
+          class="absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
           style="left: 60px; width: 245px;"
         >
 
@@ -57,7 +58,7 @@
               v-if="profile.handle"
               class="mr-2 rounded-full"
               onerror="this.src='https://www.gravatar.com/avatar'"
-              style="width: 100%; max-width: 35px; margin-right: 10px;"
+              style="width: 35px; height:35px; margin-right: 10px;"
               :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
               alt="avatar"
             >
@@ -86,7 +87,7 @@
             >Create new</span>
 
             <!-- Logout-->
-            <span class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
+            <a class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" href="/logout">Logout</a>
           </li>
 
         </ul>
@@ -96,7 +97,7 @@
     <!-- Mobile Navbar -->
     <section class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
       <n-link to="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></n-link>
-      <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded text-white font-semibold tracking-wide" style="outline: none !important;">
+      <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded-lg text-white font-semibold tracking-wide" style="outline: none !important;">
         <span v-if="!mobile_menu" class="mr-2">Open</span>
         <span v-if="mobile_menu" class="mr-2">Close</span>
         menu
@@ -119,7 +120,7 @@
         </n-link>
         <n-link to="/dashboard/settings" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-settings')">
-            Settings
+            Profile Settings
           </div>
         </n-link>
         <n-link v-if="isAdmin" to="/dashboard/admin" class="w-full">
@@ -127,7 +128,7 @@
             Admin
           </div>
         </n-link>
-        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect">Profiles</div>
+        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect();mobile_menu=false;">Profiles</div>
       </nav>
     </section>
     <!-- End mobile navbar -->
@@ -165,8 +166,36 @@
       <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto content-nuxt"/>
 
       <div class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
+        <a
+        style="margin-right:.5rem !important;"
+        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+        href="/dashboard/account"
+        >
+        <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
+        Account</a>
+        <!--<a
+        style="margin-right:.5rem !important;"
+        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+        href="/dashboard/tours"
+        >
+        <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
+        Tours</a>-->
+        <div
+        style="margin-right:.5rem !important;"
+        class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+        @click="toggleProfileSelect"
+        >
+        <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
+        Switch profiles</div>
+        <a
+        style="margin-right:.5rem !important;"
+        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+        href="https://discord.gg/3pBM4Px"
+        >
+        <img src="/Lifepreserver simple.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
+        Get help</a>
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
-        <span class="pr-4">{{ version }}</span>
+        <span style="margin-left:auto !important;" class=" pr-4">{{ version }}</span>
         <a
         class="text-indigo-600 flex bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-2 font-medium"
         href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
@@ -213,7 +242,7 @@
         <select
           id="user-profile-view-type"
           v-model="previewMode"
-          class="text-sm text-gray-600 p-2 rounded font-medium flex-grow flex"
+          class="text-sm text-gray-600 p-2 rounded-lg font-medium flex-grow flex"
         >
           <option selected value="mobile">
             Mobile
@@ -238,7 +267,7 @@
       <n-link to="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
         <span class="font-semibold pr-1">Warning:</span>
         <span>Your profile is currently hidden!</span>
-        <div class="hidden visibility-alert bg-indigo-500 rounded font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Goto settings</div>
+        <div class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Goto settings</div>
       </n-link>
 
     </section>
@@ -246,7 +275,7 @@
     <!-- Mobile profile selector -->
       <ul
           v-if="selectingProfile"
-          class="lg:hidden absolute bottom-0 rounded shadow bg-white border border-gray-200 profile-list z-30"
+          class="lg:hidden absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
           style="left:0;bottom:0;right:0;width: 100%;"
         >
 
@@ -274,7 +303,7 @@
               v-if="profile.handle"
               class="mr-2 rounded-full"
               onerror="this.src='https://www.gravatar.com/avatar'"
-              style="width: 100%; max-width: 35px; margin-right: 10px;"
+              style="width:35px; height:35px; margin-right: 10px;"
               :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
               alt="avatar"
             >
@@ -303,7 +332,7 @@
             >Create new</span>
 
             <!-- Logout-->
-            <span class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" @click="attemptLogout">Logout</span>
+            <a href="/logout" class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</a>
           </li>
 
         </ul>
@@ -686,7 +715,7 @@ html {
 }
 
 .error {
-  @apply bottom-0 rounded shadow border border-gray-200;
+  @apply bottom-0 rounded-lg shadow border border-gray-200;
   position: absolute;
   width: 30em;
   bottom: 5px;

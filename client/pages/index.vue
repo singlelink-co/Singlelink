@@ -1,12 +1,10 @@
 <template>
   <div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen overflow-y-scroll overflow-x-hidden">
-    <section class="flex items-center justify-center flex-col mt-auto w-screen">
+    <section class="flex justify-center flex-col mt-auto w-full max-w-sm p-8">
       <img :src="icon_url" :width="icon_width">
-      <h1 class="font-semibold text-3xl mt-2">
-        Sign in to your account
+      <h1 class="font-bold text-3xl mt-4 tracking-tight">
+        Log into {{ app_name }}
       </h1>
-      <p v-if="free_signup" class="text-gray-700 text-sm">Or, <a class="text-indigo-600 hover:text-indigo-700" href="/create-account">create
-        your new account for free</a></p>
       <div
         v-if="error"
         class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
@@ -16,26 +14,26 @@
           {{ error }}
         </div>
       </div>
-      <form class="w-11/12 max-w-sm mt-4 p-6 bg-white rounded-md shadow-md flex-col">
+      <form class="w-full mt-4 flex-col">
         <div class="flex flex-col mb-4">
-          <label class="font-medium text-sm">Email Address</label>
+          <label class="font-medium">Email Address</label>
           <input
             v-model="email"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+            class="px-2 py-3 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
             type="email"
             placeholder="e.g. jane@gmail.com"
           >
         </div>
-        <div class="flex flex-col mb-4">
-          <label class="font-medium text-sm">Password</label>
+        <div class="flex flex-col mb-6">
+          <label class="font-medium">Password</label>
           <input
             v-model="password"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+            class="px-2 py-3 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
             type="password"
             placeholder="e.g. your password"
           >
         </div>
-        <div class="mb-4 flex items-center justify-between">
+        <div class="mb-5 flex items-center justify-between">
           <div class="flex items-center">
             <input
               id="remember_me"
@@ -50,7 +48,7 @@
           <div class="text-sm leading-5">
             <n-link
               to="/forgot-password"
-              class="font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:underline"
+              class="font-medium text-indigo-600 hover:underline focus:outline-none"
             >
               Forgot your password?
             </n-link>
@@ -58,14 +56,16 @@
         </div>
         <button
           type="button"
-          class="mt-2 w-full p-3 text-center text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded font-semibold"
+          class="mt-2 w-full p-3 text-center text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
           @click="attemptLogin"
         >
           Login
         </button>
+        <p v-if="free_signup" class="mt-6 text-center mx-auto text-gray-700">Or, <a class="text-indigo-600 hover:underline" href="/create-account">create
+        your new account for free</a></p>
       </form>
     </section>
-    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
+    <section class="flex text-center text-gray-600 text-sm mt-auto mb-4 p-8">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
       {{ organization }}
     </section>
   </div>
@@ -140,5 +140,8 @@ export default Vue.extend({
 <style>
 .NeutronLogo {
   width: 180px;
+}
+* {
+  outline: none !important;
 }
 </style>

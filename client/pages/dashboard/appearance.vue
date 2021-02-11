@@ -5,7 +5,7 @@
     </h1>
 
     <!-- Your Themes-->
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Your Themes
       </h2>
@@ -16,7 +16,7 @@
           v-for="theme in themes"
           v-if="themes"
           :key="theme.id"
-          class="rounded nc-theme"
+          class="rounded-lg nc-theme"
           :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;min-height:80px;`"
           :class="{'active': activeThemeId === theme.id}"
           @click="selectTheme(theme.id)"
@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="rounded nc-theme nc-add bg-gray-200" style="min-width:78px;min-height:80pxpx;" @click="openModal('create')">
+        <div class="rounded-lg nc-theme nc-add bg-gray-200" style="min-width:78px;min-height:80pxpx;" @click="openModal('create')">
           <div class="nc-inner flex items-center justify-center">
             <span class="font-semibold text-gray-700 text-4xl">+</span>
           </div>
@@ -41,14 +41,14 @@
     </div>
 
     <!-- Global Themes-->
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Global Themes
       </h2>
 
       <div class="flex flex-row overflow-x-scroll hide-scrollbar">
         <div
-          class="rounded nc-theme bg-gray-200"
+          class="rounded-lg nc-theme bg-gray-200"
           style="min-width:78px;min-height:80px;"
           :class="{'active': !activeThemeId}"
           @click="selectTheme(null)"
@@ -62,7 +62,7 @@
           v-for="theme in globalThemes"
           v-if="globalThemes"
           :key="theme.id"
-          class="rounded nc-theme"
+          class="rounded-lg nc-theme"
           :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;height:80px;`"
           :class="{'active': activeThemeId === theme.id}"
           @click="selectTheme(theme.id)"
@@ -78,41 +78,93 @@
       </div>
 
     </div>
+    
+    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Customization
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
+      <div class="flex flex-col lg:flex-row space-y-2 lg:space-x-4 lg:space-y-0 items-center">
+        <div class="flex flex-col flex-grow">
+        <label class="font-medium text-sm text-gray-800" for="customization_background">Background Color</label>
+        <input
+          id="customization_background"
+          v-model="customization.background"
+          class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+          type="text"
+          placeholder="e.g. #5353EC"
+        >
+        <input
+          id="customization_background_picker"
+          v-model="customization.background"
+          class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+          type="color"
+          aria-label="Color picker"
+        >
+        </div>
+        <span class="text-gray-500 uppercase tracking-wide mx-4 text-xs font-medium">Or</span>
+        <div class="flex flex-col flex-grow ">
+          <label class="font-medium text-sm text-gray-800" for="customization_background">Background Image Url</label>
+          <input
+            id="customization_background"
+            v-model="customization.background"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+            type="text"
+            placeholder="e.g. #5353EC"
+          >
+          <input
+            id="customization_background_picker"
+            v-model="customization.background"
+            class="mt-2 text-sm border-solid border-gray-300 rounded-lg border opacity-0"
+            type="color"
+            aria-label="Color picker"
+          >
+        </div>
+      </div>
+    </div>-->
 
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Custom HTML
-      </h2>
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Custom HTML
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
       <textarea
         v-model="customHtml"
         rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
         placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
         aria-label="Custom HTML"
       />
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
       </button>
     </div>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded w-full">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Custom CSS
-      </h2>
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Custom CSS
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
       <textarea
         v-model="customCss"
         rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
         placeholder="e.g. a { color: rgba(0,0,0,.8); }"
         aria-label="Custom CSS"
       />
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
@@ -126,7 +178,7 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="closeModal"
       >
-        <div class="flex flex-col bg-white shadow rounded overflow-hidden w-full max-w-xl" @click.stop>
+        <div class="flex flex-col bg-white shadow rounded-lg overflow-hidden w-full max-w-xl" @click.stop>
           <div class="relative p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
             <h2 v-if="modalIntent === 'view'" class="text-gray-800 font-semibold text-xl">
               Theme details
@@ -147,7 +199,7 @@
             <!-- Theme preview icon-->
             <div
               :key="pendingTheme.id"
-              class="rounded nc-theme"
+              class="rounded-lg nc-theme"
               :style="`background:${pendingTheme.colors.fill.primary}; position: absolute; top: 12px; right: 12px`"
             >
               <div class="nc-inner" :style="`background:${pendingTheme.colors.fill.secondary};`">
@@ -160,7 +212,7 @@
           <form class="p-6 pt-4 bg-gray-100 w-full overflow-y-scroll" style="max-height:calc(100vh - 217px);">
             <div
               v-if="error"
-              class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+              class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded-lg w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
             >
               <img style="width: 12px;" src="/caution.svg" alt="caution">
               <div class="flex flex-col ml-2">
@@ -172,7 +224,7 @@
               <input
                 id="label"
                 v-model="pendingTheme.label"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. 🌈 Colorful theme"
                 :disabled="modalIntent === 'view'"
@@ -184,7 +236,7 @@
                 <input
                   id="primary_fill"
                   v-model="pendingTheme.colors.fill.primary"
-                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="text"
                   placeholder="e.g. #5353EC"
                   :disabled="modalIntent === 'view'"
@@ -192,7 +244,7 @@
                 <input
                   id="primary_fill_picker"
                   v-model="pendingTheme.colors.fill.primary"
-                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="color"
                   aria-label="primary fill color picker"
                   :disabled="modalIntent === 'view'"
@@ -203,7 +255,7 @@
                 <input
                   id="secondary_fill"
                   v-model="pendingTheme.colors.fill.secondary"
-                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="text"
                   placeholder="e.g. #0094DE"
                   :disabled="modalIntent === 'view'"
@@ -211,7 +263,7 @@
                 <input
                   id="secondary_fill_picker"
                   v-model="pendingTheme.colors.fill.secondary"
-                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="color"
                   aria-label="secondary fill color picker"
                   :disabled="modalIntent === 'view'"
@@ -225,7 +277,7 @@
                 <input
                   id="primary_text_fill"
                   v-model="pendingTheme.colors.text.primary"
-                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="text"
                   placeholder="e.g. #FFFFFF"
                   :disabled="modalIntent === 'view'"
@@ -233,7 +285,7 @@
                 <input
                   id="primary_text_fill_picker"
                   v-model="pendingTheme.colors.text.primary"
-                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="color"
                   aria-label="primary text fill color picker"
                   :disabled="modalIntent === 'view'"
@@ -244,7 +296,7 @@
                 <input
                   id="secondary_text_fill"
                   v-model="pendingTheme.colors.text.secondary"
-                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="text"
                   placeholder="e.g. rgba(255,255,255,.75)"
                   :disabled="modalIntent === 'view'"
@@ -252,7 +304,7 @@
                 <input
                   id="secondary_text_fill_picker"
                   v-model="pendingTheme.colors.text.secondary"
-                  class="mt-2 text-sm border-solid border-gray-300 rounded border"
+                  class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
                   type="color"
                   aria-label="secondary text fill picker"
                   :disabled="modalIntent === 'view'"
@@ -278,28 +330,28 @@
 
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded w-full mb-8">
+            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
               <textarea
                 v-model="pendingTheme.customHtml"
                 rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
                 placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
                 aria-label="Custom HTML"
                 :disabled="modalIntent === 'view'"
               />
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded w-full">
+            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
               <textarea
                 v-model="pendingTheme.customCss"
                 rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded border"
+                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
                 placeholder="e.g. a { color: rgba(0,0,0,.8); }"
                 aria-label="Custom CSS"
                 :disabled="modalIntent === 'view'"
@@ -312,14 +364,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveCreateTheme(true)"
             >
               Save and add theme
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="saveCreateTheme(false)"
             >
               Save theme and continue
@@ -332,14 +384,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveEditTheme"
             >
               Save
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="deleteTheme"
             >
               Delete
@@ -352,7 +404,7 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="closeModal"
             >
               Close
@@ -402,7 +454,31 @@ export default Vue.extend({
         customHtml: undefined,
       } as Theme,
       userId: '',
-
+      customization: {
+          background: null,
+          header: {
+            size: null,
+            color: null,
+            family: null,
+            weight: null,
+          },
+          subtitle: {
+            size: null,
+            color: null,
+            family: null,
+            weight: null
+          },
+          items: {
+            padding: null,
+            background: null,
+            font: {
+              size: null,
+              color: null,
+              family: null,
+              weight: null
+            },
+          }
+        },
       isAdmin: false
     };
   },

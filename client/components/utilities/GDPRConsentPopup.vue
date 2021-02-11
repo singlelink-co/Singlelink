@@ -61,7 +61,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .consent-banner {
   position: fixed;
   bottom: 80px;
