@@ -1,6 +1,6 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 flex-grow overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
+    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
       Appearance
     </h1>
 

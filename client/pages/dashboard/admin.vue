@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col p-8 items-center flex-grow bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
-      Admin Dashboard
+    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
+      Admin dashboard
     </h1>
 
     <!-- Global Themes-->

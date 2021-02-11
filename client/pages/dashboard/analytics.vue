@@ -1,32 +1,39 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
-      Profile analytics
+    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
+      Profile analytics <span class="hidden lg:flex ml-2">(30 days)</span>
     </h1>
 
-    <transition name="fade">
       <div class="flex lg:flex-row flex-col items-center justify-center w-full">
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:w-1/2 mb-8 lg:mr-2">
+        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:mr-2">
           <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Total views
           </h2>
-          <h4 class="text-indigo-600 text-3xl font-medium" v-if="analytics.totalProfileViews">
+          <h4 class="text-indigo-600 text-3xl font-bold" v-if="analytics.totalProfileViews">
             {{ analytics.totalProfileViews.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:w-1/2 mb-8 lg:ml-2">
+        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:ml-2">
           <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-            Click through rate
+            Total clicks
           </h2>
-          <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl font-medium">
-            {{ analytics.clickThroughRate.toFixed(2) }}%
+          <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl font-bold">
+            {{ visitSum }}
           </h4>
         </div>
       </div>
-    </transition>
+
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg w-full mb-8 lg:items-center items-start">
+      <h2 class="text-gray-800 font-semibold text-lg">
+        Click through rate
+      </h2>
+      <h4 v-if="analytics.clickThroughRate" class="mt-2 lg:mt-0 lg:ml-auto text-indigo-600 text-3xl lg:text-2xl font-bold">
+        {{ analytics.clickThroughRate.toFixed(2) }}%
+      </h4>
+    </div>
 
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-4">
+      <h2 class="text-gray-800 font-semibold text-lg mb-4">
         Link engagement
       </h2>
 
@@ -42,7 +49,7 @@
         <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
           <span class="text-sm uppercase text-gray-700 font-semibold mr-1 lg:mr-0 lg:mb-2">Total clicks</span>
           <span class="lg:hidden text-sm uppercase text-gray-700 font-semibold mr-2 lg:mr-0 lg:mb-2">:</span>
-          <h4 class="lg:ml-auto text-indigo-600 text-lg">
+          <h4 class="lg:ml-auto text-indigo-600 text-lg font-bold">
             {{ link.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
@@ -65,13 +72,17 @@ export default Vue.extend({
       analytics: {
         totalProfileViews: null,
         linkVisits: new Array<LinkVisit>(),
-        clickThroughRate: null
-      }
+        clickThroughRate: null,
+      },
+      visitSum: 0,
     };
   },
 
   async mounted() {
     await this.getProfileAnalytics();
+    for(let i=0; i<this.analytics.linkVisits.length;i++) {
+      this.visitSum+=this.analytics.linkVisits[i].views;
+    }
   },
 
   methods: {
