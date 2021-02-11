@@ -80,9 +80,12 @@
     </div>
 
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Custom HTML
-      </h2>
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Custom HTML
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
       <textarea
         v-model="customHtml"
         rows="5"
@@ -100,9 +103,12 @@
     </div>
 
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Custom CSS
-      </h2>
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Custom CSS
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
       <textarea
         v-model="customCss"
         rows="5"
