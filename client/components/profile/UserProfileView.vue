@@ -88,8 +88,8 @@
         <base target="_blank">
       </div>
 
-      <div v-html="profile.customHtml"/>
-      <div v-if="theme" v-html="theme.customHtml"/>
+      <div id="custom-html" v-html="profile.customHtml"/>
+      <div v-if="theme" id="theme-html" v-html="theme.customHtml"/>
     </section>
   </div>
 </template>
