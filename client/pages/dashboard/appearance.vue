@@ -78,6 +78,52 @@
       </div>
 
     </div>
+    
+    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+      <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Customization
+        </h2>
+        <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+      </div>
+      <div class="flex flex-col lg:flex-row space-y-2 lg:space-x-4 lg:space-y-0 items-center">
+        <div class="flex flex-col flex-grow">
+        <label class="font-medium text-sm text-gray-800" for="customization_background">Background Color</label>
+        <input
+          id="customization_background"
+          v-model="customization.background"
+          class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+          type="text"
+          placeholder="e.g. #5353EC"
+        >
+        <input
+          id="customization_background_picker"
+          v-model="customization.background"
+          class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+          type="color"
+          aria-label="Color picker"
+        >
+        </div>
+        <span class="text-gray-500 uppercase tracking-wide mx-4 text-xs font-medium">Or</span>
+        <div class="flex flex-col flex-grow ">
+          <label class="font-medium text-sm text-gray-800" for="customization_background">Background Image Url</label>
+          <input
+            id="customization_background"
+            v-model="customization.background"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+            type="text"
+            placeholder="e.g. #5353EC"
+          >
+          <input
+            id="customization_background_picker"
+            v-model="customization.background"
+            class="mt-2 text-sm border-solid border-gray-300 rounded-lg border opacity-0"
+            type="color"
+            aria-label="Color picker"
+          >
+        </div>
+      </div>
+    </div>-->
 
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
@@ -408,7 +454,31 @@ export default Vue.extend({
         customHtml: undefined,
       } as Theme,
       userId: '',
-
+      customization: {
+          background: null,
+          header: {
+            size: null,
+            color: null,
+            family: null,
+            weight: null,
+          },
+          subtitle: {
+            size: null,
+            color: null,
+            family: null,
+            weight: null
+          },
+          items: {
+            padding: null,
+            background: null,
+            font: {
+              size: null,
+              color: null,
+              family: null,
+              weight: null
+            },
+          }
+        },
       isAdmin: false
     };
   },
