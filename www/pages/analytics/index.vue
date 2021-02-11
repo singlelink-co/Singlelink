@@ -88,16 +88,11 @@ export default {
             themes: '...',
             enterprise_users: [
                 {
-                    url: false,
-                    users: 8,
-                    profiles: 10,
-                    profiles_published: 3,
-                    links: 4,
-                    themes: 3
-                },
-                {
-                    url: 'https://api.tinypage.app/analytics'
-                }
+                url: 'https://api.norseapps.com/analytics'
+            },
+            {
+                url: 'https://api.tinypage.app/analytics'
+            }
             ]
         };
     },  
