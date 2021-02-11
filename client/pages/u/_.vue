@@ -56,6 +56,9 @@ export default Vue.extend({
       });
 
       const profile = response.profile;
+      
+
+      const count_visit = await ctx.$axios.$get('/analytics/profile/' + profile.id);
 
       return {
         profileHandle: ctx.route.path.replace('/u/', ''),
