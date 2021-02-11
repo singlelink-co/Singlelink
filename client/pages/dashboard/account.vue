@@ -5,7 +5,7 @@
     </h1>
 
     <!-- Select billing tier -->
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
+    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full">
           Select billing tier
         </h2>
@@ -31,10 +31,10 @@
             </button>
           </div>
         </div>
-    </div>
+    </div>-->
 
     <!-- Billing information -->
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
+    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
       <h2 class="text-gray-800 font-semibold text-lg w-full">
           Billing information
         </h2>
@@ -380,7 +380,7 @@
           >
             Save changes
           </button>
-    </div>
+    </div>-->
     
 
     <!-- Reset Password -->
