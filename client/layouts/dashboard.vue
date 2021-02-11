@@ -173,13 +173,13 @@
         >
         <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
         Account</a>
-        <a
+        <!--<a
         style="margin-right:.5rem !important;"
         class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
         href="/dashboard/tours"
         >
         <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Tours</a>
+        Tours</a>-->
         <div
         style="margin-right:.5rem !important;"
         class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
