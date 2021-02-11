@@ -3,7 +3,7 @@
     <section class="mb-32">
       <h1>You don't need a website.<br>You need a <a href="/gallery" class="text-indigo-600 hover:text-indigo-500 underline">Singlelink.</a></h1>
       <p class="mb-8">
-        Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Stop wasting time on a website that doesn't work for you, and create your Singlelink for free, no credit card required, in just 30 seconds.
+        Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Stop wasting time on a website that doesn't work for you, and create your Singlelink for free, no credit card required, in just 30 seconds.
       </p>
       <div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
         <a class="text-center w-full lg:w-auto text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg bg-indigo-600 hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Claim your free Singlelink</a>
@@ -14,7 +14,7 @@
       <div class="flex flex-col lg:flex-row items-start justify-between space-y-8 lg:space-y-0 lg:space-x-8">
         <div class="flex flex-col justify-center items-start lg:w-1/2">
           <h3>Easy to use</h3>
-          <p class="text-sm">Singlelink is the easiest way to build a website online. Simply add your content, publish, and share - no code required. Focus on your content and enjoy white-glove managed SEO, SSL, servers, backups, analytics, and more.</p>
+          <p class="text-sm">Singlelink is the easiest way to build your profile online. Simply add your content, publish, and share - no code required. Focus on your content and enjoy white-glove managed SEO, SSL, servers, backups, analytics, and more.</p>
         </div>
         <div class="flex flex-col justify-center items-start lg:w-1/2">
           <h3>Customize without limits</h3>
@@ -90,7 +90,7 @@ import wallOfLove from '../components/wall-of-love.vue';
         {
           hid: 'og:description',
           name: 'og:description',
-          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'twitter:title',
@@ -100,12 +100,12 @@ import wallOfLove from '../components/wall-of-love.vue';
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'description',
           name: 'description',
-          content: 'Singlelink is the beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
       ],
     },
