@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-semibold text-2xl w-full mb-4">
-      Your account
+    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
+      Account settings
     </h1>
 
     <!-- Select billing tier -->
@@ -393,14 +393,14 @@
           for this account to confirm.
         </p>
         <div class="flex flex-col mt-4 mb-2 w-full">
-          <label class="font-medium mb-3">Confirm your password</label>
+          <label class="font-medium mb-3">Confirm your email address</label>
           <div class="flex flex-col lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4 w-full">
             <input
               id="passwordResetEmail"
               v-model="passwordEmail"
               class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow lg:max-w-md"
-              type="password"
-              placeholder="ex: your strong password"
+              type="text"
+              :placeholder="'Please confirm your email ' + email"
               aria-label="password reset email"
             >
             <button
@@ -484,6 +484,7 @@ export default Vue.extend({
       user: {
         name: '',
         emailHash: '',
+        email: '',
         activeProfile: {
           imageUrl: '',
           headline: '',
@@ -533,7 +534,7 @@ export default Vue.extend({
 
         this.user.name = userResponse.name;
         this.user.emailHash = userResponse.emailHash;
-
+        this.user.email = userResponse.email;
         this.user.activeProfile.imageUrl = profileResponse.imageUrl;
         this.user.activeProfile.headline = profileResponse.headline;
         this.user.activeProfile.subtitle = profileResponse.subtitle;
