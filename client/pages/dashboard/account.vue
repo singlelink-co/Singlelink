@@ -400,7 +400,7 @@
               v-model="passwordEmail"
               class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow lg:max-w-md"
               type="text"
-              :placeholder="'Please confirm your email ' + email"
+              placeholder="e.g. jane@gmail.com"
               aria-label="password reset email"
             >
             <button
@@ -534,7 +534,6 @@ export default Vue.extend({
 
         this.user.name = userResponse.name;
         this.user.emailHash = userResponse.emailHash;
-        this.user.email = userResponse.email;
         this.user.activeProfile.imageUrl = profileResponse.imageUrl;
         this.user.activeProfile.headline = profileResponse.headline;
         this.user.activeProfile.subtitle = profileResponse.subtitle;
