@@ -124,7 +124,7 @@
         </div>
 
         <!-- Privacy mode toggle -->
-        <div class="flex flex-row w-full mb-6 items-start">
+        <!--<div class="flex flex-row w-full mb-6 items-start">
           <input
             type="checkbox"
             style="margin-top:3px;"
@@ -134,7 +134,7 @@
           <label class="ml-4 block text-sm leading-5 text-gray-600">
             Privacy mode (Disables profile analytics & discovery)
           </label>
-        </div>
+        </div>-->
 
         <button
           type="button"
