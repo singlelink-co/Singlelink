@@ -87,6 +87,10 @@
             type="text"
             placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
           >
+          <div v-if="!profile_valid" class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm">
+            <span class="font-semibold">Warning!</span>
+            <span class="text-xs font-medium">Your profile picture is improperly formatted! Ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba" target="_blank" class="ml-2 font-semibold underline hover:text-red-700">Learn more</a></span>
+          </div>
         </div>
 
         <div class="flex flex-col w-full mb-6">
@@ -111,12 +115,12 @@
             class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
           >
 
-          <label for="themeGlobal" class="ml-4 block text-sm leading-5 text-gray-600">
+          <label for="themeGlobal" class="ml-4 flex font-medium text-sm leading-5 text-gray-600 w-full lg:w-auto flex-col" style="max-width:calc(100% - 32px)">
             Display Watermark ("Proudly built with {{ app_name }}!")
             <br>
             <span
               v-show="showWatermarkNotice"
-              class="mt-1 flex text-gray-800 font-medium"
+              class="mt-1 flex text-gray-800 font-semibold text-xs lg:text-sm"
             >
               This is completely optional, but it really helps us out! Mind spreading the word about {{ app_name }}?
             </span>
@@ -275,6 +279,15 @@ export default Vue.extend({
     await this.getUserData();
 
     this.loaded = true;
+  },
+  
+  computed: {
+    profile_valid() {
+      if(!this.user.activeProfile.imageUrl) return true;
+      if(!this.user.activeProfile.imageUrl.match(/.(jpg|jpeg|png|gif)$/i) ) return false;
+      if(this.user.activeProfile.imageUrl.indexOf('https://')<0) return false;
+      return true;
+    }
   },
 
   methods: {
