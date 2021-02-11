@@ -5,16 +5,16 @@
     </h1>
 
       <div class="flex lg:flex-row flex-col items-center justify-center w-full">
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:w-1/2 mb-8 lg:mr-2">
-          <h2 class="text-gray-900 font-extrabold tracking-tight text-2xl w-full mb-2">
+        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:mr-2">
+          <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Total views
           </h2>
           <h4 class="text-indigo-600 text-3xl font-bold" v-if="analytics.totalProfileViews">
             {{ analytics.totalProfileViews.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:w-1/2 mb-8 lg:ml-2">
-          <h2 class="text-gray-900 font-extrabold tracking-tight text-2xl w-full mb-2">
+        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:ml-2">
+          <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Total clicks
           </h2>
           <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl font-bold">
@@ -24,7 +24,7 @@
       </div>
 
     <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg w-full mb-8 lg:items-center items-start">
-      <h2 class="text-gray-900 font-extrabold tracking-tight text-2xl">
+      <h2 class="text-gray-800 font-semibold text-lg">
         Click through rate
       </h2>
       <h4 v-if="analytics.clickThroughRate" class="mt-2 lg:mt-0 lg:ml-auto text-indigo-600 text-3xl lg:text-2xl font-bold">
@@ -33,7 +33,7 @@
     </div>
 
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-900 font-extrabold tracking-tight text-2xl mb-4">
+      <h2 class="text-gray-800 font-semibold text-lg mb-4">
         Link engagement
       </h2>
 
