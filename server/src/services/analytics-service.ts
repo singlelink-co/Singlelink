@@ -44,26 +44,23 @@ export class AnalyticsService extends DatabaseService {
   }
 
   /**
-   * Returns a link and increments the links analytics counter.
+   * Increments the links analytics counter.
    * This counts as a user "visiting" a link.
    *
-   * The analytics will only be incremented if "updateAnalytics" is true.
-   *
-   * @param linkId The linkId of the link that is being visited
-   * @param updateAnalytics Should we update analytics?
+   * @param linkId The id of the link that is being visited
    */
-  async getLink(linkId: string, updateAnalytics: boolean): Promise<Link> {
-    let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
+  async createLinkVisit(linkId: string) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
+  }
 
-    if (queryResult.rowCount <= 0) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "The link could not be found.");
-    }
-
-    if (updateAnalytics) {
-      await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
-    }
-
-    return DbTypeConverter.toLink(queryResult.rows[0]);
+  /**
+   * Creates a profile visit analytics record in the database.
+   * This counts as a user "visiting" a page.
+   *
+   * @param pageId The id of the page that is being visited
+   */
+  async createProfileVisit(pageId: string) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['page', pageId]);
   }
 
   /**

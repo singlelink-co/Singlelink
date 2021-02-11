@@ -5,12 +5,18 @@ import {StatusCodes} from "http-status-codes";
 import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
-import {AuthenticatedRequest, Auth} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
-import {DatabaseService} from "../services/database-service";
-import {DbTypeConverter} from "../utils/db-type-converter";
+import {ProfileService} from "../services/profile-service";
+import {LinkService} from "../services/link-service";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
+  Params: {
+    id?: string
+  }
+}
+
+interface ProfileAnalyticsRequest extends RequestGenericInterface {
   Params: {
     id?: string
   }
@@ -23,22 +29,36 @@ interface GetProfileAnalyticsRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+const rateLimitAnalytics = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 second'
+    }
+  }
+};
+
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
 export class AnalyticsController extends Controller {
   private analyticsService: AnalyticsService;
+  private linkService: LinkService;
+  private profileService: ProfileService;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
 
     this.analyticsService = new AnalyticsService(databaseManager);
+    this.linkService = new LinkService(databaseManager);
+    this.profileService = new ProfileService(databaseManager);
   }
 
   registerRoutes(): void {
     // Unauthenticated
     this.fastify.get('/analytics', this.GetAnalytics.bind(this));
     this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
+    this.fastify.all('/analytics/profile/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
     this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', Auth.ValidateWithData, this.GetProfileAnalytics.bind(this));
@@ -85,7 +105,16 @@ export class AnalyticsController extends Controller {
         return ReplyUtils.error("The link was not found.");
       }
 
-      let link = await this.analyticsService.getLink(id, true);
+      let link = await this.linkService.getLink(id);
+      const profileId = link.profileId;
+
+      const profile = await this.profileService.getMetadata(profileId, true);
+      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
+        reply.status(StatusCodes.NOT_MODIFIED).send();
+        return;
+      }
+
+      await this.analyticsService.createLinkVisit(id);
 
       if (link.useDeepLink) {
         const userAgent = request.headers["user-agent"];
@@ -99,6 +128,45 @@ export class AnalyticsController extends Controller {
       }
 
       reply.redirect(link?.url);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /analytics/profile/:id
+   *
+   * Used to redirect a request to the appropriate link.
+   * Also records analytics on that specific link once called.
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ProfileAnalytics(request: FastifyRequest<ProfileAnalyticsRequest>, reply: FastifyReply) {
+    try {
+      let params = request.params;
+      let id = params.id;
+
+      if (!id) {
+        reply.code(StatusCodes.NOT_FOUND);
+        return ReplyUtils.error("The profile was not found.");
+      }
+
+      const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id, true);
+      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
+        reply.status(StatusCodes.NOT_MODIFIED).send();
+        return;
+      }
+
+      await this.analyticsService.createProfileVisit(id);
+
+      reply.code(StatusCodes.OK).send();
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

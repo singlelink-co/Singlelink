@@ -17,7 +17,7 @@ interface GetThemeRequest extends AuthenticatedRequest {
 interface CreateThemeRequest extends AuthenticatedRequest {
   Body: {
     label: string,
-    colors: ThemeColors,
+    colors: Theme["colors"],
     customCss: string,
     customHtml: string
   } & AuthenticatedRequest["Body"]
@@ -27,7 +27,7 @@ interface UpdateThemeRequest extends AuthenticatedRequest {
   Body: {
     id: string,
     label: string,
-    colors: ThemeColors,
+    colors: Theme["colors"],
     customCss: string,
     customHtml: string
   } & AuthenticatedRequest["Body"]

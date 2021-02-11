@@ -43,6 +43,33 @@ export class ProfileService extends DatabaseService {
   }
 
   /**
+   * Gets a profile's metadata.
+   *
+   * @param profileId
+   * @param checkVisibility Throw an HttpError if the profile is unpublished.
+   */
+  async getMetadata(profileId: string, checkVisibility: boolean): Promise<{ visibility: Visibility, metadata: Profile["metadata"] }> {
+    let profileResult = await this.pool.query<{ visibility: visibility_t, metadata: DbProfile["metadata"] }>("select visibility, metadata from app.profiles where id=$1", [profileId]);
+
+    if (profileResult.rowCount <= 0) {
+      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
+    }
+
+    let profileRow = profileResult.rows[0];
+
+    if (checkVisibility) {
+      if (profileRow.visibility === 'unpublished') {
+        throw new HttpError(StatusCodes.FORBIDDEN, "This profile is unpublished.");
+      }
+    }
+
+    return {
+      visibility: profileRow.visibility,
+      metadata: profileRow.metadata
+    };
+  }
+
+  /**
    * Gets a profile by handle.
    *
    * @param handle The handle of the profile.
@@ -262,5 +289,25 @@ export class ProfileService extends DatabaseService {
     await this.pool.query("update app.users set active_profile_id=$1 where id=$2", [nextProfile.id, userId]);
 
     return nextProfile;
+  }
+
+  /**
+   * Enables/Disables privacy mode for a profile. (Hide from analytics and visibility from certain areas.)
+   *
+   * @param profileId
+   * @param privacyModeEnabled
+   */
+  async setPrivacyMode(profileId: string, privacyModeEnabled: boolean): Promise<Profile> {
+    let profileQuery = await this.pool.query<DbProfile>(`update app.profiles
+                                                         set metadata = jsonb_set(metadata::jsonb, '{privacyMode}', $1, true)
+                                                         where id = $2
+                                                         returning *;`,
+      [privacyModeEnabled, profileId]);
+
+    if (profileQuery.rowCount <= 0) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
+    }
+
+    return DbTypeConverter.toProfile(profileQuery.rows[0]);
   }
 }

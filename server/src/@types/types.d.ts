@@ -35,7 +35,10 @@ interface User {
   activeProfileId: string | null,
   subscriptionTier: SubscriptionTier | null,
   inventory: unknown | null,
-  metadata: unknown | null,
+
+  // The metadata tag will grow over time as functionality is added.
+  metadata: unknown,
+
   createdOn: string
 }
 
@@ -56,22 +59,20 @@ interface SensitiveUserWithPassword extends SensitiveUser {
   paymentId: string | null,
 }
 
-interface ThemeColors {
-  fill: {
-    primary: string,
-    secondary: string
-  },
-  text: {
-    primary: string,
-    secondary: string
-  }
-}
-
 interface Theme {
   id: string,
   label: string,
   global: boolean,
-  colors: ThemeColors | null,
+  colors: {
+    fill: {
+      primary: string,
+      secondary: string
+    },
+    text: {
+      primary: string,
+      secondary: string
+    }
+  } | null,
   customCss: string | null,
   customHtml: string | null,
   userId: string,
@@ -96,7 +97,12 @@ interface Profile {
   customDomain: string,
   themeId: string,
   visibility: Visibility,
-  metadata: unknown,
+
+  // The metadata tag will grow over time as functionality is added.
+  metadata: {
+    privacyMode: boolean
+  },
+
   createdOn: string
 }
 
