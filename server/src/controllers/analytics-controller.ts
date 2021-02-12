@@ -107,14 +107,11 @@ export class AnalyticsController extends Controller {
 
       let link = await this.linkService.getLink(id);
       const profileId = link.profileId;
+      const profile = await this.profileService.getMetadata(profileId);
 
-      const profile = await this.profileService.getMetadata(profileId, true);
-      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
-        reply.status(StatusCodes.NOT_MODIFIED).send();
-        return;
+      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
+        await this.analyticsService.createLinkVisit(id);
       }
-
-      await this.analyticsService.createLinkVisit(id);
 
       if (link.useDeepLink) {
         const userAgent = request.headers["user-agent"];
@@ -141,8 +138,7 @@ export class AnalyticsController extends Controller {
   /**
    * Route for /analytics/profile/:id
    *
-   * Used to redirect a request to the appropriate link.
-   * Also records analytics on that specific link once called.
+   * Records analytics on that specific profile once called.
    *
    * @param request
    * @param reply
@@ -158,13 +154,11 @@ export class AnalyticsController extends Controller {
         return ReplyUtils.error("The profile was not found.");
       }
 
-      const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id, true);
-      if (profile.metadata.privacyMode || profile.visibility === "unpublished") {
-        reply.status(StatusCodes.NOT_MODIFIED).send();
-        return;
-      }
+      const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id);
 
-      await this.analyticsService.createProfileVisit(id);
+      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
+        await this.analyticsService.createProfileVisit(id);
+      }
 
       reply.code(StatusCodes.OK).send();
     } catch (e) {

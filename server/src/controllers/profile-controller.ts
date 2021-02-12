@@ -65,8 +65,8 @@ const createProfileRequestOpts = {
  * This controller maps and provides for all the controllers under /profile.
  */
 export class ProfileController extends Controller {
+  private readonly linkService: LinkService;
   private profileService: ProfileService;
-  private linkService: LinkService;
   private userService: UserService;
   private themeService: ThemeService;
 

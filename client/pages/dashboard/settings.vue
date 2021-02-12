@@ -87,9 +87,16 @@
             type="text"
             placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
           >
-          <div v-if="!profile_valid" class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm">
+          <div
+            v-if="!profile_valid"
+            class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
+          >
             <span class="font-semibold">Warning!</span>
-            <span class="text-xs font-medium">Your profile picture is improperly formatted! Ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba" target="_blank" class="ml-2 font-semibold underline hover:text-red-700">Learn more</a></span>
+            <span class="text-xs font-medium">Your profile picture is improperly formatted! Ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
+              href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba"
+              target="_blank"
+              class="ml-2 font-semibold underline hover:text-red-700"
+            >Learn more</a></span>
           </div>
         </div>
 
@@ -115,7 +122,11 @@
             class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
           >
 
-          <label for="themeGlobal" class="ml-4 flex font-medium text-sm leading-5 text-gray-600 w-full lg:w-auto flex-col" style="max-width:calc(100% - 32px)">
+          <label
+            for="themeGlobal"
+            class="ml-4 flex font-medium text-sm leading-5 text-gray-600 w-full lg:w-auto flex-col"
+            style="max-width:calc(100% - 32px)"
+          >
             Display Watermark ("Proudly built with {{ app_name }}!")
             <br>
             <span
@@ -128,17 +139,19 @@
         </div>
 
         <!-- Privacy mode toggle -->
-        <!--<div class="flex flex-row w-full mb-6 items-start">
+        <div class="flex flex-row w-full mb-6 items-start">
           <input
+            v-model="user.activeProfile.metadata.privacyMode"
             type="checkbox"
             style="margin-top:3px;"
             class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+            aria-label="privacy mode"
           >
 
           <label class="ml-4 block text-sm leading-5 text-gray-600">
             Privacy mode (Disables profile analytics & discovery)
           </label>
-        </div>-->
+        </div>
 
         <button
           type="button"
@@ -255,6 +268,9 @@ export default Vue.extend({
           customDomain: '',
           visibility: '',
           showWatermark: false,
+          metadata: {
+            privacyMode: false
+          },
         }
       },
       error: '',
@@ -265,6 +281,24 @@ export default Vue.extend({
       app_name: process.env.APP_NAME,
       icon_url: process.env.ICON_URL
     };
+  },
+
+  computed: {
+    profile_valid() {
+      if (!this.user.activeProfile.imageUrl) {
+        return true;
+      }
+
+      if (!this.user.activeProfile.imageUrl.match(/.(jpg|jpeg|png|gif)$/i)) {
+        return false;
+      }
+
+      if (!this.user.activeProfile.imageUrl.includes('https://')) {
+        return false;
+      }
+
+      return true;
+    }
   },
 
   watch: {
@@ -279,15 +313,6 @@ export default Vue.extend({
     await this.getUserData();
 
     this.loaded = true;
-  },
-  
-  computed: {
-    profile_valid() {
-      if(!this.user.activeProfile.imageUrl) return true;
-      if(!this.user.activeProfile.imageUrl.match(/.(jpg|jpeg|png|gif)$/i) ) return false;
-      if(this.user.activeProfile.imageUrl.indexOf('https://')<0) return false;
-      return true;
-    }
   },
 
   methods: {
@@ -314,6 +339,8 @@ export default Vue.extend({
         this.user.activeProfile.visibility = profileResponse.visibility;
         this.user.activeProfile.showWatermark = profileResponse.showWatermark;
 
+        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata.privacyMode;
+
         this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
 
         this.originalHandle = this.user.activeProfile.handle;
@@ -324,6 +351,7 @@ export default Vue.extend({
     },
 
     async saveChanges() {
+      // Update profile
       try {
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
@@ -352,6 +380,33 @@ export default Vue.extend({
 
             return;
           }
+        }
+
+        throw err;
+      }
+
+      // Update privacy mode
+      const privacyMode = this.user.activeProfile.metadata.privacyMode;
+
+      try {
+        const request = await this.$axios.post('/profile/set-privacy-mode', {
+          token: this.$store.getters['auth/getToken'],
+          privacyMode
+        });
+
+        if (request.status && request.status === 200) {
+          this.passwordError = '';
+        }
+      } catch (err) {
+        console.error(err);
+
+        if (err.response) {
+          if (err.response.status === StatusCodes.NOT_FOUND) {
+            // This should be impossible under normal circumstances
+            this.error = "The profile couldn't be found, please make sure it's correct.";
+          }
+
+          return;
         }
 
         throw err;
@@ -425,7 +480,7 @@ export default Vue.extend({
 
         throw err;
       }
-    }
+    },
   }
 });
 </script>
@@ -438,5 +493,8 @@ export default Vue.extend({
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-* { outline: none !important; }
+
+* {
+  outline: none !important;
+}
 </style>
