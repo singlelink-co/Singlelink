@@ -54,7 +54,14 @@
         {{ profile.subtitle }}
       </h3>
 
-      <a v-for="link in links" :key="link.id" :id="'sl-item-'+link.id" :href="api_url + '/analytics/link/' + link.id" class="w-full" target="_blank">
+      <a
+        v-for="link in links"
+        :id="'sl-item-'+link.id"
+        :key="link.id"
+        :href="createLink(link)"
+        class="w-full"
+        target="_blank"
+      >
         <div
           class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
           :style="link.customCss"
@@ -121,7 +128,10 @@ export default Vue.extend({
         imageUrl: null,
         headline: null,
         subtitle: null,
-        showWatermark: true
+        showWatermark: true,
+        metadata: {
+          privacyMode: false
+        }
       },
       user: {
         name: null,
@@ -139,10 +149,6 @@ export default Vue.extend({
   },
 
   async fetch() {
-    if (process.server) {
-      console.log("Updating profile data");
-    }
-
     if (this.authenticated) {
       await this.getAuthenticatedProfile();
     } else {
@@ -195,6 +201,14 @@ export default Vue.extend({
       }
 
       this.loaded = true;
+    },
+
+    createLink(link: Link) {
+      if (this.profile.metadata.privacyMode) {
+        return link.url;
+      } else {
+        return this.api_url + '/analytics/link/' + link.id;
+      }
     }
   }
 });
