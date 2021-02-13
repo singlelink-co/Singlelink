@@ -4,7 +4,14 @@
       Profile analytics <span class="hidden lg:flex ml-2">(30 days)</span>
     </h1>
 
-      <div class="flex lg:flex-row flex-col items-center justify-center w-full">
+      <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-white" v-if="user.activeProfile.metadata.privacyMode">
+        <div class="w-full p-6 bg-red-200 border-red-600 border rounded-lg text-red-500 flex flex-col xl:flex-row xl:items-center justify-start">
+          <span class="text-xl xl:text-base font-bold mb-1 xl:mb-0 xl:mr-2">Notice:</span>
+          <span class="text-sm">Privacy mode is currently enabled. Disable privacy mode to collect analytics data!</span>
+        </div>
+      </div>
+
+      <div class="flex lg:flex-row flex-col items-center justify-center w-full" v-if="!user.activeProfile.metadata.privacyMode">
         <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:mr-2">
           <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
             Total views
@@ -23,7 +30,7 @@
         </div>
       </div>
 
-    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg w-full mb-8 lg:items-center items-start">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg w-full mb-8 lg:items-center items-start"  v-if="!user.activeProfile.metadata.privacyMode">
       <h2 class="text-gray-800 font-semibold text-lg">
         Click through rate
       </h2>
@@ -32,7 +39,7 @@
       </h4>
     </div>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8"  v-if="!user.activeProfile.metadata.privacyMode">
       <h2 class="text-gray-800 font-semibold text-lg mb-4">
         Link engagement
       </h2>
@@ -75,10 +82,29 @@ export default Vue.extend({
         clickThroughRate: null,
       },
       visitSum: 0,
+      originalHandle: '',
+      user: {
+        name: '',
+        emailHash: '',
+        activeProfile: {
+          imageUrl: '',
+          headline: '',
+          subtitle: '',
+          handle: '',
+          customDomain: '',
+          visibility: '',
+          showWatermark: false,
+          metadata: {
+            privacyMode: false
+          },
+        }
+      },
     };
   },
 
   async mounted() {
+    await this.getUserData();
+    if(this.user.activeProfile.metadata.privacyMode) return;
     await this.getProfileAnalytics();
     for(let i=0; i<this.analytics.linkVisits.length;i++) {
       this.visitSum+=this.analytics.linkVisits[i].views;
@@ -91,6 +117,39 @@ export default Vue.extend({
         this.analytics = await this.$axios.$post('/analytics/profile', {
           token: this.$store.getters['auth/getToken']
         });
+      } catch (err) {
+        console.log('Error getting user data');
+        console.log(err);
+      }
+    },
+    async getUserData() {
+      try {
+        const token = this.$store.getters['auth/getToken'];
+
+        const userResponse = await this.$axios.$post('/user', {
+          token
+        });
+
+        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+          token
+        });
+
+        this.user.name = userResponse.name;
+        this.user.emailHash = userResponse.emailHash;
+
+        this.user.activeProfile.imageUrl = profileResponse.imageUrl;
+        this.user.activeProfile.headline = profileResponse.headline;
+        this.user.activeProfile.subtitle = profileResponse.subtitle;
+        this.user.activeProfile.handle = profileResponse.handle;
+        this.user.activeProfile.customDomain = profileResponse.customDomain;
+        this.user.activeProfile.visibility = profileResponse.visibility;
+        this.user.activeProfile.showWatermark = profileResponse.showWatermark;
+
+        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata.privacyMode;
+
+        this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
+
+        this.originalHandle = this.user.activeProfile.handle;
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
