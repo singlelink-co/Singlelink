@@ -212,12 +212,25 @@
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
-              <textarea
-                v-model="pendingTheme.customHtml"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-                aria-label="Custom HTML"
+              <AceEditor
+                class="rounded"
+                v-model="pendingTheme.customHtml" 
+                @init="editorInit" 
+                lang="html" 
+                theme="monokai" 
+                width="100%" 
+                height="200px"
+                :options="{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    fontSize: 14,
+                    highlightActiveLine: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 4,
+                    showPrintMargin: false,
+                    showGutter: true,
+                }"
               />
             </div>
 
@@ -225,12 +238,25 @@
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
-              <textarea
-                v-model="pendingTheme.customCss"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-                aria-label="Custom CSS"
+              <AceEditor
+                class="rounded"
+                v-model="pendingTheme.customCss" 
+                @init="editorInit" 
+                lang="css" 
+                theme="monokai" 
+                width="100%" 
+                height="200px"
+                :options="{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    fontSize: 14,
+                    highlightActiveLine: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 4,
+                    showPrintMargin: false,
+                    showGutter: true,
+                }"
               />
             </div>
           </form>

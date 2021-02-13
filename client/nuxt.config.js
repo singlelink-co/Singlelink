@@ -112,6 +112,10 @@ export default {
     {
       src: '~plugins/draggable.js',
       ssr: true
+    },
+    {
+      src: '~plugins/ace.js',
+      ssr: false
     }
   ],
   /*

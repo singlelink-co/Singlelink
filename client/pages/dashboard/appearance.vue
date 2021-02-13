@@ -132,12 +132,25 @@
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <textarea
-        v-model="customHtml"
-        rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-        placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-        aria-label="Custom HTML"
+      <AceEditor
+        class="rounded mb-4"
+        v-model="customHtml" 
+        @init="editorInit" 
+        lang="html" 
+        theme="monokai" 
+        width="100%" 
+        height="200px"
+        :options="{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            fontSize: 14,
+            highlightActiveLine: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 4,
+            showPrintMargin: false,
+            showGutter: true,
+        }"
       />
       <button
         type="button"
@@ -155,13 +168,26 @@
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <textarea
-        v-model="customCss"
-        rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-        placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-        aria-label="Custom CSS"
-      />
+      <AceEditor
+                class="rounded mb-4"
+                v-model="customCss" 
+                @init="editorInit" 
+                lang="css" 
+                theme="monokai" 
+                width="100%" 
+                height="200px"
+                :options="{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    fontSize: 14,
+                    highlightActiveLine: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 4,
+                    showPrintMargin: false,
+                    showGutter: true,
+                }"
+              />
       <button
         type="button"
         class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
@@ -334,13 +360,26 @@
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
-              <textarea
-                v-model="pendingTheme.customHtml"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-                aria-label="Custom HTML"
-                :disabled="modalIntent === 'view'"
+              <AceEditor
+                class="rounded"
+                v-model="pendingTheme.customHtml" 
+                @init="editorInit" 
+                lang="html" 
+                theme="monokai" 
+                width="100%" 
+                height="200px"
+                :options="{
+                    readOnly: (modalIntent === 'view'),
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    fontSize: 14,
+                    highlightActiveLine: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 4,
+                    showPrintMargin: false,
+                    showGutter: true,
+                }"
               />
             </div>
 
@@ -348,13 +387,26 @@
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
-              <textarea
-                v-model="pendingTheme.customCss"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-                aria-label="Custom CSS"
-                :disabled="modalIntent === 'view'"
+              <AceEditor
+                class="rounded"
+                v-model="pendingTheme.customCSS" 
+                @init="editorInit" 
+                lang="css" 
+                theme="monokai" 
+                width="100%" 
+                height="200px"
+                :options="{
+                    readOnly: (modalIntent === 'view'),
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    fontSize: 14,
+                    highlightActiveLine: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 4,
+                    showPrintMargin: false,
+                    showGutter: true,
+                }"
               />
             </div>
           </form>
@@ -709,6 +761,17 @@ export default Vue.extend({
         customCss: undefined,
         customHtml: undefined,
       };
+    },
+    dataSumit() {
+        //code here
+    },
+    editorInit: function () {
+        require('brace/ext/language_tools') //language extension prerequsite...
+        require('brace/mode/html')                
+        require('brace/mode/javascript')    //language
+        require('brace/mode/less')
+        require('brace/theme/monokai')
+        require('brace/snippets/javascript') //snippet
     }
   }
 });
