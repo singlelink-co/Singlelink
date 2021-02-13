@@ -114,6 +114,10 @@ export default {
       ssr: true
     },
     {
+      src: '~plugins/cssjson.js',
+      srr: true,
+    },
+    {
       src: '~plugins/ace.js',
       ssr: false
     }

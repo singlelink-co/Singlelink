@@ -86,41 +86,29 @@
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <div class="flex flex-col lg:flex-row space-y-2 lg:space-x-4 lg:space-y-0 items-center">
-        <div class="flex flex-col flex-grow">
-        <label class="font-medium text-sm text-gray-800" for="customization_background">Background Color</label>
-        <input
-          id="customization_background"
-          v-model="customization.background"
-          class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-          type="text"
-          placeholder="e.g. #5353EC"
-        >
-        <input
-          id="customization_background_picker"
-          v-model="customization.background"
-          class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-          type="color"
-          aria-label="Color picker"
-        >
-        </div>
-        <span class="text-gray-500 uppercase tracking-wide mx-4 text-xs font-medium">Or</span>
-        <div class="flex flex-col flex-grow ">
-          <label class="font-medium text-sm text-gray-800" for="customization_background">Background Image Url</label>
-          <input
-            id="customization_background"
-            v-model="customization.background"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-            type="text"
-            placeholder="e.g. #5353EC"
-          >
-          <input
-            id="customization_background_picker"
-            v-model="customization.background"
-            class="mt-2 text-sm border-solid border-gray-300 rounded-lg border opacity-0"
-            type="color"
-            aria-label="Color picker"
-          >
+      <div class="flex flex-col justify-start items-center">
+        <div class="flex flex-col flex-grow bg-gray-50 rounded-lg w-full">
+          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border border-t-0 border-l-0 border-r-0 border-gray-200">
+            <div class="flex flex-col">
+            <span class="text-gray-800 font-semibold">Page background</span>
+            <span class="text-sm text-gray-500 font-medium">Customize your profile background.</span>
+            </div>
+            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change background</div>
+          </div>
+          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border border-t-0 border-l-0 border-r-0 border-gray-200">
+            <div class="flex flex-col">
+            <span class="text-gray-800 font-semibold">Typography</span>
+            <span class="text-sm text-gray-500 font-medium">Customize your fonts, font size, font weight, and more.</span>
+            </div>
+            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change typography</div>
+          </div>
+          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border-t-0 border-l-0 border-r-0 border-gray-200">
+            <div class="flex flex-col">
+            <span class="text-gray-800 font-semibold">Item styles</span>
+            <span class="text-sm text-gray-500 font-medium">Customize the default styles for link items.</span>
+            </div>
+            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change item styles</div>
+          </div>
         </div>
       </div>
     </div>-->
