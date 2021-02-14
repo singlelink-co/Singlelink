@@ -175,6 +175,13 @@ export default Vue.extend({
         });
         this.user = response.user;
         this.theme = response.theme || null;
+
+        // fail-safe
+        if (!this.profile.metadata) {
+          this.profile.metadata = {
+            privacyMode: false
+          };
+        }
       } catch (err) {
         console.log('Error getting profile');
         console.log(err);
@@ -204,7 +211,7 @@ export default Vue.extend({
     },
 
     createLink(link: Link) {
-      if (this.profile.metadata.privacyMode) {
+      if (this.profile.metadata?.privacyMode) {
         return link.url;
       } else {
         return this.api_url + '/analytics/link/' + link.id;

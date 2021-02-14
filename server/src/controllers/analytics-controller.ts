@@ -109,7 +109,7 @@ export class AnalyticsController extends Controller {
       const profileId = link.profileId;
       const profile = await this.profileService.getMetadata(profileId);
 
-      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
+      if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
         await this.analyticsService.createLinkVisit(id);
       }
 
@@ -156,7 +156,7 @@ export class AnalyticsController extends Controller {
 
       const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id);
 
-      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
+      if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
         await this.analyticsService.createProfileVisit(id);
       }
 

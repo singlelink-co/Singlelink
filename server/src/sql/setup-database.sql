@@ -104,7 +104,7 @@ create table if not exists app.profiles
     custom_domain  text unique,
     theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility     visibility_t         default 'unpublished',
-    metadata       jsonb                default '{}',
+    metadata       jsonb       not null default '{}',
     created_on     timestamp   not null default current_timestamp
 );
 
@@ -212,3 +212,7 @@ $$
     end;
 $$ language plpgsql;
 
+-- PATCHES
+-- Update v2.1.9, fixes metadata being null sometimes
+update app.profiles set metadata=default where metadata is null;
+alter table app.profiles alter column metadata set not null;
