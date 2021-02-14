@@ -92,7 +92,7 @@
             class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
           >
             <span class="font-semibold">Warning!</span>
-            <span class="text-xs font-medium">Your profile picture is improperly formatted! Ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
+            <span class="text-xs font-medium">Your profile picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
               href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba"
               target="_blank"
               class="ml-2 font-semibold underline hover:text-red-700"
@@ -289,7 +289,7 @@ export default Vue.extend({
         return true;
       }
 
-      if (!this.user.activeProfile.imageUrl.match(/.(jpg|jpeg|png|gif)$/i)) {
+      if (!this.user.activeProfile.imageUrl.includes('.jpg') && !this.user.activeProfile.imageUrl.includes('.jpeg') && !this.user.activeProfile.imageUrl.includes('.png') && !this.user.activeProfile.imageUrl.includes('gif')) {
         return false;
       }
 
