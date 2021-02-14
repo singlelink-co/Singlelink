@@ -35,7 +35,7 @@
         Click through rate
       </h2>
       <h4 v-if="analytics.clickThroughRate" class="mt-2 lg:mt-0 lg:ml-auto text-indigo-600 text-3xl lg:text-2xl font-bold">
-        {{ analytics.clickThroughRate.toFixed(2) }}%
+        {{ ((visitSum / analytics.totalProfileViews)*100).toFixed(2) }}%
       </h4>
     </div>
 
@@ -51,7 +51,8 @@
       >
         <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
           <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
+          <span v-if="link.link.url && link.link.url.length > 31" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 32) }}...</span>
+          <span v-if="link.link.url && link.link.url.length < 32" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
         </div>
         <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
           <span class="text-sm uppercase text-gray-700 font-semibold mr-1 lg:mr-0 lg:mb-2">Total clicks</span>

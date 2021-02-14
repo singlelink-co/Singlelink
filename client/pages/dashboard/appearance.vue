@@ -78,8 +78,8 @@
       </div>
 
     </div>
-    
-    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+    <!--
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Customization
@@ -88,31 +88,37 @@
       </div>
       <div class="flex flex-col justify-start items-center">
         <div class="flex flex-col flex-grow bg-gray-50 rounded-lg w-full">
-          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border border-t-0 border-l-0 border-r-0 border-gray-200">
-            <div class="flex flex-col">
-            <span class="text-gray-800 font-semibold">Page background</span>
-            <span class="text-sm text-gray-500 font-medium">Customize your profile background.</span>
+          <div class="flex flex-col lg:flex-row justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+            <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
+              <div class="flex flex-col">
+              <span class="text-gray-800 font-semibold">Background</span>
+              <span class="text-sm text-gray-500 font-medium">Select & customize your profile background.</span>
+              </div>
+              <div class="py-2 px-4 text-sm rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Expand</div>
             </div>
-            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change background</div>
           </div>
-          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border border-t-0 border-l-0 border-r-0 border-gray-200">
-            <div class="flex flex-col">
-            <span class="text-gray-800 font-semibold">Typography</span>
-            <span class="text-sm text-gray-500 font-medium">Customize your fonts, font size, font weight, and more.</span>
+          <div class="flex flex-col lg:flex-row justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+            <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
+              <div class="flex flex-col">
+              <span class="text-gray-800 font-semibold">Typography</span>
+              <span class="text-sm text-gray-500 font-medium">Customize your fonts, font size, font weight, and more.</span>
+              </div>
+              <div class="py-2 px-4 text-sm rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Expand</div>
             </div>
-            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change typography</div>
           </div>
-          <div class="flex flex-col lg:flex-row justify-start w-full lg:justify-between p-6 border-t-0 border-l-0 border-r-0 border-gray-200">
-            <div class="flex flex-col">
-            <span class="text-gray-800 font-semibold">Item styles</span>
-            <span class="text-sm text-gray-500 font-medium">Customize the default styles for link items.</span>
+          <div class="flex flex-col lg:flex-row justify-center w-full p-6 border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+            <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
+              <div class="flex flex-col">
+              <span class="text-gray-800 font-semibold">Link styles</span>
+              <span class="text-sm text-gray-500 font-medium">Customize your default styles for link items.</span>
+              </div>
+              <div class="py-2 px-4 text-sm rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Expand</div>
             </div>
-            <div class="py-3 px-6 rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Change item styles</div>
           </div>
         </div>
       </div>
-    </div>-->
-
+    </div>
+    -->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
