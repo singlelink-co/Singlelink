@@ -191,6 +191,16 @@ create table if not exists analytics.visits
     created_on  timestamp not null default current_timestamp
 );
 
+/*
+ Creates a table for visiting anonymous analytics, when a user has privacy mode enabled.
+ type: The type of visit this was.
+ */
+create table if not exists analytics.anonymous_visits
+(
+    type       visit_t   not null,
+    created_on timestamp not null default current_timestamp
+);
+
 create index if not exists visits_referral_id_index on analytics.visits (referral_id);
 
 do
@@ -214,5 +224,8 @@ $$ language plpgsql;
 
 -- PATCHES
 -- Update v2.1.9, fixes metadata being null sometimes
-update app.profiles set metadata=default where metadata is null;
-alter table app.profiles alter column metadata set not null;
+update app.profiles
+set metadata=default
+where metadata is null;
+alter table app.profiles
+    alter column metadata set not null;

@@ -211,7 +211,7 @@ export default Vue.extend({
     },
 
     createLink(link: Link) {
-      if (this.profile.metadata?.privacyMode) {
+      if (this.authenticated) {
         return link.url;
       } else {
         return this.api_url + '/analytics/link/' + link.id;

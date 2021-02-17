@@ -110,7 +110,9 @@ export class AnalyticsController extends Controller {
       const profile = await this.profileService.getMetadata(profileId);
 
       if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createLinkVisit(id);
+        await this.analyticsService.createVisit(id, "link");
+      } else {
+        await this.analyticsService.createAnonymousVisit("link");
       }
 
       if (link.useDeepLink) {
@@ -157,7 +159,9 @@ export class AnalyticsController extends Controller {
       const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id);
 
       if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createProfileVisit(id);
+        await this.analyticsService.createVisit(id, "page");
+      } else {
+        await this.analyticsService.createAnonymousVisit("page");
       }
 
       reply.code(StatusCodes.OK).send();

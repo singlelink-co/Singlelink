@@ -44,23 +44,23 @@ export class AnalyticsService extends DatabaseService {
   }
 
   /**
-   * Increments the links analytics counter.
-   * This counts as a user "visiting" a link.
+   * Creates a visit analytics record in the database.
    *
-   * @param linkId The id of the link that is being visited
+   * @param referralId The id of the VisitType that is being visited
+   * @param visitType The type of the visit
    */
-  async createLinkVisit(linkId: string) {
-    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
+  async createVisit(referralId: string, visitType: VisitType) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", [visitType, referralId]);
   }
 
   /**
-   * Creates a profile visit analytics record in the database.
-   * This counts as a user "visiting" a page.
+   * Creates a visit anonymous analytics record in the database.
+   * This does not contain any referral data.
    *
-   * @param pageId The id of the page that is being visited
+   * @param visitType The type of the visit
    */
-  async createProfileVisit(pageId: string) {
-    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['page', pageId]);
+  async createAnonymousVisit(visitType: VisitType) {
+    await this.pool.query("insert into analytics.anonymous_visits(type) values ($1)", [visitType]);
   }
 
   /**
