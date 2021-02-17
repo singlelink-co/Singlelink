@@ -186,7 +186,7 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.people.set(user.id, {
           '$email': user.email,
-          'Sign up date': user.createdOn
+          '$created': user.createdOn
         });
 
       return {
