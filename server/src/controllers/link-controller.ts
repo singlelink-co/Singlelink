@@ -51,7 +51,7 @@ interface ReorderLinkRequest extends AuthenticatedRequest {
  */
 export class LinkController extends Controller {
   private readonly linkService: LinkService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -108,12 +108,13 @@ export class LinkController extends Controller {
         body.useDeepLink
       );
 
-      this.mixpanel.track('profile link created', {
-        distinct_id: profile.userId,
-        profile: profile.id,
-        link: link.id,
-        url: link.url
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile link created', {
+          distinct_id: profile.userId,
+          profile: profile.id,
+          link: link.id,
+          url: link.url
+        });
 
       return link;
     } catch (e) {
@@ -156,12 +157,13 @@ export class LinkController extends Controller {
         body.useDeepLink
       );
 
-      this.mixpanel.track('profile link updated', {
-        distinct_id: body.authUser.id,
-        profile: body.authProfile.id,
-        link: link.id,
-        url: link.url
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile link updated', {
+          distinct_id: body.authUser.id,
+          profile: body.authProfile.id,
+          link: link.id,
+          url: link.url
+        });
 
       return link;
     } catch (e) {
@@ -195,11 +197,12 @@ export class LinkController extends Controller {
 
       let link = await this.linkService.deleteLink(body.id);
 
-      this.mixpanel.track('profile link deleted', {
-        distinct_id: body.authUser.id,
-        profile: body.authProfile.id,
-        link: body.id
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile link deleted', {
+          distinct_id: body.authUser.id,
+          profile: body.authProfile.id,
+          link: body.id
+        });
 
       return link;
     } catch (e) {
@@ -241,10 +244,11 @@ export class LinkController extends Controller {
 
       let links = await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
 
-      this.mixpanel.track('profile links reordered', {
-        distinct_id: body.authUser.id,
-        profile: body.authProfile.id,
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile links reordered', {
+          distinct_id: body.authUser.id,
+          profile: body.authProfile.id,
+        });
 
       return links;
     } catch (e) {

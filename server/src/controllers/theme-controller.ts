@@ -61,7 +61,7 @@ interface SetUserIdRequest extends AdminRequest {
  */
 export class ThemeController extends Controller {
   private themeService: ThemeService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -123,12 +123,13 @@ export class ThemeController extends Controller {
 
       let theme = await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
 
-      this.mixpanel.track('new theme created', {
-        distinct_id: request.body.authUser.id,
-        theme: theme.id,
-        global: theme.global,
-        label: theme.label
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('new theme created', {
+          distinct_id: request.body.authUser.id,
+          theme: theme.id,
+          global: theme.global,
+          label: theme.label
+        });
 
       return theme;
     } catch (e) {
@@ -155,11 +156,12 @@ export class ThemeController extends Controller {
         return;
       }
 
-      this.mixpanel.track('theme updated', {
-        distinct_id: request.body.authUser.id,
-        theme: body.id,
-        label: body.label
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('theme updated', {
+          distinct_id: request.body.authUser.id,
+          theme: body.id,
+          label: body.label
+        });
 
       return await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
@@ -181,10 +183,11 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      this.mixpanel.track('theme deleted', {
-        distinct_id: request.body.authUser.id,
-        theme: body.id
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('theme deleted', {
+          distinct_id: request.body.authUser.id,
+          theme: body.id
+        });
 
       return await this.themeService.deleteUserTheme(body.id, body.authUser.id);
     } catch (e) {

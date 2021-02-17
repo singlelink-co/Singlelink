@@ -75,7 +75,7 @@ const userRequestResetPasswordOpts = {
 export class UserController extends Controller {
   private userService: UserService;
   private profileService: ProfileService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -119,10 +119,11 @@ export class UserController extends Controller {
 
       let loginResultData = await this.userService.loginUser(body.email, body.password);
 
-      this.mixpanel.track('user logged in', {
-        distinct_id: loginResultData.user.id,
-        profile: loginResultData.activeProfile?.id
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('user logged in', {
+          distinct_id: loginResultData.user.id,
+          profile: loginResultData.activeProfile?.id
+        });
 
       return loginResultData;
     } catch (e) {
@@ -176,15 +177,17 @@ export class UserController extends Controller {
 
       let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
 
-      this.mixpanel.track('user created', {
-        distinct_id: user.id,
-        profile: profile.id,
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('user created', {
+          distinct_id: user.id,
+          profile: profile.id,
+        });
 
-      this.mixpanel.people.set(user.id, {
-        '$email': user.email,
-        'Sign up date': user.createdOn
-      });
+      if (this.mixpanel)
+        this.mixpanel.people.set(user.id, {
+          '$email': user.email,
+          'Sign up date': user.createdOn
+        });
 
       return {
         user,
@@ -217,9 +220,10 @@ export class UserController extends Controller {
 
       let user = await this.userService.sendPasswordResetEmail(body.email);
 
-      this.mixpanel.track('user requested password reset', {
-        distinct_id: user.id,
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('user requested password reset', {
+          distinct_id: user.id,
+        });
 
       return ReplyUtils.success("Successfully sent password reset email.");
     } catch (e) {
@@ -347,10 +351,11 @@ export class UserController extends Controller {
         return;
       }
 
-      this.mixpanel.track('user set active profile', {
-        distinct_id: user.id,
-        profile: newProfileId
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('user set active profile', {
+          distinct_id: user.id,
+          profile: newProfileId
+        });
 
       return await this.userService.setActiveProfile(user.id, newProfileId);
     } catch (e) {

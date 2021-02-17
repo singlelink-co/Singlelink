@@ -71,7 +71,7 @@ export class ProfileController extends Controller {
   private profileService: ProfileService;
   private userService: UserService;
   private themeService: ThemeService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -299,14 +299,15 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      this.mixpanel.track('new profile created', {
-        distinct_id: body.authUser.id,
-        profile: body.authProfile.id,
-        handle: body.handle,
-        imageUrl: body.imageUrl,
-        headline: body.headline,
-        subtitle: body.subtitle
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('new profile created', {
+          distinct_id: body.authUser.id,
+          profile: body.authProfile.id,
+          handle: body.handle,
+          imageUrl: body.imageUrl,
+          headline: body.headline,
+          subtitle: body.subtitle
+        });
 
       return await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
     } catch (e) {
@@ -334,17 +335,18 @@ export class ProfileController extends Controller {
         return;
       }
 
-      this.mixpanel.track('profile updated', {
-        distinct_id: body.authUser.id,
-        profile: body.authProfile.id,
-        imageUrl: body.imageUrl,
-        handle: body.handle,
-        headline: body.headline,
-        subtitle: body.subtitle,
-        visibility: body.visibility,
-        showWatermark: body.showWatermark,
-        customDomain: body.customDomain
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile updated', {
+          distinct_id: body.authUser.id,
+          profile: body.authProfile.id,
+          imageUrl: body.imageUrl,
+          handle: body.handle,
+          headline: body.headline,
+          subtitle: body.subtitle,
+          visibility: body.visibility,
+          showWatermark: body.showWatermark,
+          customDomain: body.customDomain
+        });
 
       return await this.profileService.updateProfile(
         body.authProfile.id,
@@ -381,15 +383,16 @@ export class ProfileController extends Controller {
         return;
       }
 
-      this.mixpanel.track('profile deleted', {
-        distinct_id: request.body.authUser.id,
-        profile: request.body.authProfile.id,
-        handle: request.body.authProfile.handle,
-        headline: request.body.authProfile.headline,
-        subtitle: request.body.authProfile.subtitle,
-        visibility: request.body.authProfile.visibility,
-        showWatermark: request.body.authProfile.showWatermark,
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('profile deleted', {
+          distinct_id: request.body.authUser.id,
+          profile: request.body.authProfile.id,
+          handle: request.body.authProfile.handle,
+          headline: request.body.authProfile.headline,
+          subtitle: request.body.authProfile.subtitle,
+          visibility: request.body.authProfile.visibility,
+          showWatermark: request.body.authProfile.showWatermark,
+        });
 
       return await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
     } catch (e) {
@@ -445,11 +448,12 @@ export class ProfileController extends Controller {
         await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true);
       }
 
-      this.mixpanel.track('set profile active theme', {
-        distinct_id: request.body.authUser.id,
-        profile: request.body.authProfile.id,
-        theme: body.id
-      });
+      if (this.mixpanel)
+        this.mixpanel.track('set profile active theme', {
+          distinct_id: request.body.authUser.id,
+          profile: request.body.authProfile.id,
+          theme: body.id
+        });
 
       return await this.profileService.setActiveTheme(body.authProfile.id, body.id);
     } catch (e) {
@@ -478,11 +482,13 @@ export class ProfileController extends Controller {
       let previousPrivacyMode = request.body.authProfile.metadata?.privacyMode;
 
       if (previousPrivacyMode !== request.body.privacyMode) {
-        this.mixpanel.track('toggle privacy mode', {
-          distinct_id: request.body.authUser.id,
-          profile: request.body.authProfile.id,
-          privacyMode: request.body.privacyMode
-        });
+
+        if (this.mixpanel)
+          this.mixpanel.track('toggle privacy mode', {
+            distinct_id: request.body.authUser.id,
+            profile: request.body.authProfile.id,
+            privacyMode: request.body.privacyMode
+          });
 
         return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
       }

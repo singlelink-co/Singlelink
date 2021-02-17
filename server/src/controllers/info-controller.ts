@@ -10,7 +10,7 @@ import {config} from "../config/config";
  */
 export class InfoController extends Controller {
   private infoService: InfoService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);

@@ -48,7 +48,7 @@ export class AnalyticsController extends Controller {
   private analyticsService: AnalyticsService;
   private linkService: LinkService;
   private profileService: ProfileService;
-  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
+  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -116,21 +116,23 @@ export class AnalyticsController extends Controller {
       if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
         await this.analyticsService.createVisit(id, "link");
 
-        this.mixpanel.track('clicked profile link', {
-          distinct_id: profile.userId,
-          profile: profileId,
-          link: link.id,
-          url: link.url
-        });
+        if (this.mixpanel)
+          this.mixpanel.track('clicked profile link', {
+            distinct_id: profile.userId,
+            profile: profileId,
+            link: link.id,
+            url: link.url
+          });
       } else {
         await this.analyticsService.createAnonymousVisit("link");
 
-        this.mixpanel.track('clicked profile link', {
-          distinct_id: Constants.ANONYMOUS_USER_ID,
-          profile: profileId,
-          link: link.id,
-          url: link.url
-        });
+        if (this.mixpanel)
+          this.mixpanel.track('clicked profile link', {
+            distinct_id: Constants.ANONYMOUS_USER_ID,
+            profile: profileId,
+            link: link.id,
+            url: link.url
+          });
       }
 
       if (link.useDeepLink) {
@@ -179,17 +181,19 @@ export class AnalyticsController extends Controller {
       if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
         await this.analyticsService.createVisit(id, "page");
 
-        this.mixpanel.track('viewed profile', {
-          distinct_id: profile.userId,
-          profile: profile.id,
-        });
+        if (this.mixpanel)
+          this.mixpanel.track('viewed profile', {
+            distinct_id: profile.userId,
+            profile: profile.id,
+          });
       } else {
         await this.analyticsService.createAnonymousVisit("page");
 
-        this.mixpanel.track('viewed profile', {
-          distinct_id: Constants.ANONYMOUS_USER_ID,
-          profile: profile.id,
-        });
+        if (this.mixpanel)
+          this.mixpanel.track('viewed profile', {
+            distinct_id: Constants.ANONYMOUS_USER_ID,
+            profile: profile.id,
+          });
       }
 
       reply.code(StatusCodes.OK).send();
