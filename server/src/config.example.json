@@ -28,5 +28,8 @@
       "message": "Hello,\n\nSomebody requested a password request for your account on SingleLink.\n\nIf this was your doing, please visit the link below to reset your password.\n\n${url}\n\nThis link will be valid for 15 minutes.\nIf you cannot click the link above, copy & paste the link into your browser.\n\nIf this was not you, please ignore this email.\n\nThank you,\nSingleLink Team\n\nNote: Do not reply to this email, as there is no inbox for it.",
       "messageCharset": "UTF-8"
     }
+  },
+  "analytics": {
+    "mixpanelToken": ""
   }
 }

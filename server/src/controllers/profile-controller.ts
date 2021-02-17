@@ -9,6 +9,8 @@ import {UserService} from "../services/user-service";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
 
 interface ProfileHandleRequest extends RequestGenericInterface {
   Params: {
@@ -69,6 +71,7 @@ export class ProfileController extends Controller {
   private profileService: ProfileService;
   private userService: UserService;
   private themeService: ThemeService;
+  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -101,7 +104,7 @@ export class ProfileController extends Controller {
 
   /**
    * Route for /profile
-   * /profile//:handle
+   * /profile/:handle
    *
    * Fetches a user's profile.
    *
@@ -296,6 +299,15 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
+      this.mixpanel.track('new profile created', {
+        distinct_id: body.authUser.id,
+        profile: body.authProfile.id,
+        handle: body.handle,
+        imageUrl: body.imageUrl,
+        headline: body.headline,
+        subtitle: body.subtitle
+      });
+
       return await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
     } catch (e) {
       if (e instanceof HttpError) {
@@ -321,6 +333,18 @@ export class ProfileController extends Controller {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
+
+      this.mixpanel.track('profile updated', {
+        distinct_id: body.authUser.id,
+        profile: body.authProfile.id,
+        imageUrl: body.imageUrl,
+        handle: body.handle,
+        headline: body.headline,
+        subtitle: body.subtitle,
+        visibility: body.visibility,
+        showWatermark: body.showWatermark,
+        customDomain: body.customDomain
+      });
 
       return await this.profileService.updateProfile(
         body.authProfile.id,
@@ -356,6 +380,16 @@ export class ProfileController extends Controller {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
+
+      this.mixpanel.track('profile deleted', {
+        distinct_id: request.body.authUser.id,
+        profile: request.body.authProfile.id,
+        handle: request.body.authProfile.handle,
+        headline: request.body.authProfile.headline,
+        subtitle: request.body.authProfile.subtitle,
+        visibility: request.body.authProfile.visibility,
+        showWatermark: request.body.authProfile.showWatermark,
+      });
 
       return await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
     } catch (e) {
@@ -411,6 +445,12 @@ export class ProfileController extends Controller {
         await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true);
       }
 
+      this.mixpanel.track('set profile active theme', {
+        distinct_id: request.body.authUser.id,
+        profile: request.body.authProfile.id,
+        theme: body.id
+      });
+
       return await this.profileService.setActiveTheme(body.authProfile.id, body.id);
     } catch (e) {
       if (e instanceof HttpError) {
@@ -435,7 +475,19 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+      let previousPrivacyMode = request.body.authProfile.metadata?.privacyMode;
+
+      if (previousPrivacyMode !== request.body.privacyMode) {
+        this.mixpanel.track('toggle privacy mode', {
+          distinct_id: request.body.authUser.id,
+          profile: request.body.authProfile.id,
+          privacyMode: request.body.privacyMode
+        });
+
+        return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+      }
+
+      reply.status(StatusCodes.ACCEPTED).send();
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

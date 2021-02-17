@@ -153,7 +153,7 @@ export class UserService extends DatabaseService {
    * Sends a password reset email.
    * @param email
    */
-  async sendPasswordResetEmail(email: string) {
+  async sendPasswordResetEmail(email: string): Promise<User> {
     let user = await this.getUserByEmail(email);
 
     let token = jwt.sign(
@@ -192,6 +192,8 @@ export class UserService extends DatabaseService {
       };
 
       await new AWS.SES().sendEmail(emailParams).promise();
+
+      return user;
     } catch (e) {
       console.error(e);
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send email because of an internal server error: " + e.toString());

@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/Neutron-Creative/Singlelink#readme",
   "dependencies": {
+    "@types/mixpanel": "^2.14.2",
     "aws-sdk": "^2.796.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
@@ -51,6 +52,7 @@
     "fastify-rate-limit": "^4.0.3",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
+    "mixpanel": "^0.13.0",
     "nc-deeplink": "^1.0.6",
     "pg": "^8.5.1"
   },

@@ -6,6 +6,8 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
 
 interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
@@ -59,6 +61,7 @@ interface SetUserIdRequest extends AdminRequest {
  */
 export class ThemeController extends Controller {
   private themeService: ThemeService;
+  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -118,7 +121,16 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+      let theme = await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+
+      this.mixpanel.track('new theme created', {
+        distinct_id: request.body.authUser.id,
+        theme: theme.id,
+        global: theme.global,
+        label: theme.label
+      });
+
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -143,6 +155,12 @@ export class ThemeController extends Controller {
         return;
       }
 
+      this.mixpanel.track('theme updated', {
+        distinct_id: request.body.authUser.id,
+        theme: body.id,
+        label: body.label
+      });
+
       return await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
       if (e instanceof HttpError) {
@@ -162,6 +180,11 @@ export class ThemeController extends Controller {
   async DeleteTheme(request: FastifyRequest<DeleteThemeRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
+
+      this.mixpanel.track('theme deleted', {
+        distinct_id: request.body.authUser.id,
+        theme: body.id
+      });
 
       return await this.themeService.deleteUserTheme(body.id, body.authUser.id);
     } catch (e) {

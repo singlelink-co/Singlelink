@@ -9,6 +9,7 @@ import {ProfileService} from "../services/profile-service";
 import * as jwt from "jsonwebtoken";
 import {config} from "../config/config";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
+import Mixpanel from "mixpanel";
 
 interface LoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -41,7 +42,16 @@ interface ResetUserPasswordRequest extends RequestGenericInterface {
 
 // TODO Implement UpdateUserRequest
 interface UpdateUserRequest extends AuthenticatedRequest {
-  Body: {} & AuthenticatedRequest["Body"]
+  Body: {
+    id: string
+  } & AuthenticatedRequest["Body"]
+}
+
+// TODO Implement DeleteUserRequest
+interface DeleteUserRequest extends AuthenticatedRequest {
+  Body: {
+    id: string
+  } & AuthenticatedRequest["Body"]
 }
 
 interface SetActiveProfileRequest extends AuthenticatedRequest {
@@ -65,6 +75,7 @@ const userRequestResetPasswordOpts = {
 export class UserController extends Controller {
   private userService: UserService;
   private profileService: ProfileService;
+  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -83,7 +94,7 @@ export class UserController extends Controller {
     // Authenticated
     this.fastify.all<AuthenticatedRequest>('/user', Auth.ValidateWithData, this.GetUser.bind(this));
     this.fastify.all<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
+    this.fastify.all<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
     this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
   }
 
@@ -106,7 +117,14 @@ export class UserController extends Controller {
         return;
       }
 
-      return await this.userService.loginUser(body.email, body.password);
+      let loginResultData = await this.userService.loginUser(body.email, body.password);
+
+      this.mixpanel.track('user logged in', {
+        distinct_id: loginResultData.user.id,
+        profile: loginResultData.activeProfile?.id
+      });
+
+      return loginResultData;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -158,6 +176,16 @@ export class UserController extends Controller {
 
       let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
 
+      this.mixpanel.track('user created', {
+        distinct_id: user.id,
+        profile: profile.id,
+      });
+
+      this.mixpanel.people.set(user.id, {
+        '$email': user.email,
+        'Sign up date': user.createdOn
+      });
+
       return {
         user,
         activeProfile: profile,
@@ -187,7 +215,11 @@ export class UserController extends Controller {
         return;
       }
 
-      await this.userService.sendPasswordResetEmail(body.email);
+      let user = await this.userService.sendPasswordResetEmail(body.email);
+
+      this.mixpanel.track('user requested password reset', {
+        distinct_id: user.id,
+      });
 
       return ReplyUtils.success("Successfully sent password reset email.");
     } catch (e) {
@@ -251,6 +283,10 @@ export class UserController extends Controller {
     try {
       reply.code(StatusCodes.NOT_IMPLEMENTED);
 
+      // this.mixpanel.track('user updated', {
+      //   distinct_id: request.body.id,
+      // });
+
       return ReplyUtils.error("Sorry, this is not implemented yet.");
     } catch (e) {
       if (e instanceof HttpError) {
@@ -268,9 +304,13 @@ export class UserController extends Controller {
    * @param request
    * @param reply
    */
-  async DeleteUser(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+  async DeleteUser(request: FastifyRequest<DeleteUserRequest>, reply: FastifyReply) {
     try {
       reply.code(StatusCodes.NOT_IMPLEMENTED);
+
+      // this.mixpanel.track('user deleted', {
+      //   distinct_id: request.body.id,
+      // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
     } catch (e) {
@@ -300,12 +340,17 @@ export class UserController extends Controller {
         return;
       }
 
-      let newProfile = await this.profileService.getProfile(newProfileId, false);
+      let newProfile = await this.profileService.getProfile(newProfileId);
 
       if (user.id !== newProfile.userId) {
         reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("The user doesn't own the profile."));
         return;
       }
+
+      this.mixpanel.track('user set active profile', {
+        distinct_id: user.id,
+        profile: newProfileId
+      });
 
       return await this.userService.setActiveProfile(user.id, newProfileId);
     } catch (e) {

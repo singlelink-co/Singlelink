@@ -6,6 +6,8 @@ import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
 
 interface CreateLinkRequest extends AuthenticatedRequest {
   Body: {
@@ -48,7 +50,8 @@ interface ReorderLinkRequest extends AuthenticatedRequest {
  * This controller maps and provides for all the controllers under /link.
  */
 export class LinkController extends Controller {
-  private linkService: LinkService;
+  private readonly linkService: LinkService;
+  private mixpanel = Mixpanel.init(config.analytics.mixpanelToken);
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -94,7 +97,7 @@ export class LinkController extends Controller {
 
       let count = await this.linkService.getProfileLinkCount(profile.id);
 
-      return await this.linkService.createLink(
+      let link = await this.linkService.createLink(
         profile.id,
         body.url,
         count,
@@ -104,6 +107,15 @@ export class LinkController extends Controller {
         body.customCss,
         body.useDeepLink
       );
+
+      this.mixpanel.track('profile link created', {
+        distinct_id: profile.userId,
+        profile: profile.id,
+        link: link.id,
+        url: link.url
+      });
+
+      return link;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -133,7 +145,7 @@ export class LinkController extends Controller {
 
       await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
 
-      return await this.linkService.updateLink(
+      let link = await this.linkService.updateLink(
         body.id,
         body.url,
         body.sortOrder,
@@ -143,6 +155,15 @@ export class LinkController extends Controller {
         body.customCss,
         body.useDeepLink
       );
+
+      this.mixpanel.track('profile link updated', {
+        distinct_id: body.authUser.id,
+        profile: body.authProfile.id,
+        link: link.id,
+        url: link.url
+      });
+
+      return link;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -172,7 +193,15 @@ export class LinkController extends Controller {
 
       await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
 
-      return await this.linkService.deleteLink(body.id);
+      let link = await this.linkService.deleteLink(body.id);
+
+      this.mixpanel.track('profile link deleted', {
+        distinct_id: body.authUser.id,
+        profile: body.authProfile.id,
+        link: body.id
+      });
+
+      return link;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -210,7 +239,14 @@ export class LinkController extends Controller {
         return;
       }
 
-      return await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
+      let links = await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
+
+      this.mixpanel.track('profile links reordered', {
+        distinct_id: body.authUser.id,
+        profile: body.authProfile.id,
+      });
+
+      return links;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

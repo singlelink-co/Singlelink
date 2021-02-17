@@ -3,9 +3,6 @@ import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {AdminService} from "../services/admin-service";
-import {StatusCodes} from "http-status-codes";
-import {ReplyUtils} from "../utils/reply-utils";
-import {HttpError} from "../utils/http-error";
 
 interface GetGroupRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]

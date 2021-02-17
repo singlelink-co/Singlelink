@@ -22,9 +22,8 @@ export class ProfileService extends DatabaseService {
    * Gets a profile by id.
    *
    * @param profileId
-   * @param checkVisibility Throw an HttpError if the profile is unpublished.
    */
-  async getProfile(profileId: string, checkVisibility: boolean): Promise<Profile> {
+  async getProfile(profileId: string): Promise<Profile> {
     let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where id=$1", [profileId]);
 
     if (profileResult.rowCount <= 0) {
@@ -33,33 +32,7 @@ export class ProfileService extends DatabaseService {
 
     let profileRow = profileResult.rows[0];
 
-    if (checkVisibility) {
-      if (profileRow.visibility === 'unpublished') {
-        throw new HttpError(StatusCodes.FORBIDDEN, "This profile is unpublished.");
-      }
-    }
-
     return DbTypeConverter.toProfile(profileRow);
-  }
-
-  /**
-   * Gets a profile's metadata.
-   *
-   * @param profileId
-   */
-  async getMetadata(profileId: string): Promise<{ visibility: Visibility, metadata: Profile["metadata"] }> {
-    let profileResult = await this.pool.query<{ visibility: visibility_t, metadata: DbProfile["metadata"] }>("select visibility, metadata from app.profiles where id=$1", [profileId]);
-
-    if (profileResult.rowCount <= 0) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
-    }
-
-    let profileRow = profileResult.rows[0];
-
-    return {
-      visibility: profileRow.visibility,
-      metadata: profileRow.metadata
-    };
   }
 
   /**
