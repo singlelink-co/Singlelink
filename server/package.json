@@ -14,7 +14,8 @@
     "convert-database": "ts-node scripts/mongo-2-pg.ts",
     "add-admin": "ts-node scripts/sl-admin-manager.ts admin add",
     "remove-admin": "ts-node scripts/sl-admin-manager.ts admin remove",
-    "list-admins": "ts-node scripts/sl-admin-manager.ts admins"
+    "list-admins": "ts-node scripts/sl-admin-manager.ts admins",
+    "export-stats": "ts-node scripts/stats-exporter.ts"
   },
   "auto-changelog": {
     "output": "CHANGELOG.md",
