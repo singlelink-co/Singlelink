@@ -10,6 +10,7 @@
       <button
         type="button"
         class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
+        id="add-new-link-btn"
         @click="openModal('create')"
       >
         Add new link
@@ -148,6 +149,7 @@
           >
             <button
               type="button"
+              id="save-and-add-link-btn"
               class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveAndClose"
             >

@@ -173,13 +173,13 @@
         >
         <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
         Account</a>
-        <!--<a
+        <a
         style="margin-right:.5rem !important;"
         class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
         href="/dashboard/tours"
         >
         <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Tours</a>-->
+        Tours</a>
         <div
         style="margin-right:.5rem !important;"
         class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
@@ -339,6 +339,22 @@
     <!-- End profile selector -->
 
     <GDPRContentModal/>
+
+    <!-- Usetiful begin -->
+                
+    <script>
+      (function (w, d, s) {
+        var a = d.getElementsByTagName('head')[0];
+        var r = d.createElement('script');
+        r.async = 1;
+        r.src = s;
+        r.setAttribute('id', 'usetifulScript');
+        r.dataset.token = "28f17918d3a60fc2f638a53eeb3a23d9";
+                a.appendChild(r);
+      })(window, document, "https://www.usetiful.com/dist/usetiful.js");
+    </script>
+
+    <!-- Usetiful end -->
 
   </div>
 </template>
