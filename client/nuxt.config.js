@@ -99,6 +99,12 @@ export default {
         defer: true,
         'data-domain': 'singlelink.co',
         async: true
+      },
+      {
+        hid: 'useitful',
+        src: '/useitful.js',
+        defer: true,
+        async: true
       }
     ]
   },
