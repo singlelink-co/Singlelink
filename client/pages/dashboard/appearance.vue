@@ -119,72 +119,61 @@
       </div>
     </div>
     -->
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+    <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+              <span class="text-orange-500 text-sm text-center mx-auto w-full">
+                View on desktop to edit custom HTML & CSS
+              </span>
+            </div>
+    <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Custom HTML
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <AceEditor
-        class="rounded mb-4"
-        v-model="customHtml" 
-        @init="editorInit" 
-        lang="html" 
-        theme="monokai" 
-        width="100%" 
-        height="200px"
-        :options="{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            fontSize: 14,
-            highlightActiveLine: true,
-            enableSnippets: true,
-            showLineNumbers: true,
-            tabSize: 4,
-            showPrintMargin: false,
-            showGutter: true,
-        }"
-      />
+      <MonacoEditor
+                height="350"
+                language="html"
+                theme="vs-dark"
+                :options="{
+                  extraEditorClassName: 'rounded overflow-hidden mb-2',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
+                }"
+                v-model="customHtml"
+              ></MonacoEditor>
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
       </button>
     </div>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+    <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Custom CSS
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <AceEditor
-                class="rounded mb-4"
-                v-model="customCss" 
-                @init="editorInit" 
-                lang="css" 
-                theme="monokai" 
-                width="100%" 
-                height="200px"
+      <MonacoEditor
+                height="350"
+                language="css"
+                theme="vs-dark"
                 :options="{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    fontSize: 14,
-                    highlightActiveLine: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 4,
-                    showPrintMargin: false,
-                    showGutter: true,
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
                 }"
-              />
+                v-model="pendingTheme.customCss"
+              ></MonacoEditor>
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
@@ -350,58 +339,45 @@
 
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+            <div class="flex hidden:flex flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+              <span class="text-orange-500 text-sm text-center mx-auto w-full">
+                View on desktop to edit custom HTML & CSS
+              </span>
+            </div>
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
-              <AceEditor
-                class="rounded"
-                v-model="pendingTheme.customHtml" 
-                @init="editorInit" 
-                lang="html" 
-                theme="monokai" 
-                width="100%" 
-                height="200px"
+              <MonacoEditor
+                height="350"
+                language="html"
+                theme="vs-dark"
                 :options="{
-                    readOnly: (modalIntent === 'view'),
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    fontSize: 14,
-                    highlightActiveLine: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 4,
-                    showPrintMargin: false,
-                    showGutter: true,
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
                 }"
-              />
+                v-model="pendingTheme.customHtml"
+              ></MonacoEditor>
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
-              <AceEditor
-                class="rounded"
-                v-model="pendingTheme.customCSS" 
-                @init="editorInit" 
-                lang="css" 
-                theme="monokai" 
-                width="100%" 
-                height="200px"
+             <MonacoEditor
+                height="350"
+                language="css"
+                theme="vs-dark"
                 :options="{
-                    readOnly: (modalIntent === 'view'),
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    fontSize: 14,
-                    highlightActiveLine: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 4,
-                    showPrintMargin: false,
-                    showGutter: true,
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
                 }"
-              />
+                v-model="pendingTheme.customCss"
+              ></MonacoEditor>
             </div>
           </form>
           <div

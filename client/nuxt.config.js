@@ -1,3 +1,5 @@
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+
 export default {
   /*
   ** Nuxt rendering mode
@@ -88,7 +90,7 @@ export default {
       {
         rel: 'stylesheet',
         href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'
-      }
+      },
     ],
     script: [
       {
@@ -118,7 +120,7 @@ export default {
       srr: true,
     },
     {
-      src: '~plugins/ace.js',
+      src: '~plugins/monaco.js',
       ssr: false
     }
   ],
@@ -177,12 +179,21 @@ export default {
   sitemap: {
     hostname: 'https://' + process.env.HOSTNAME ?? 'app.singlelink.co'
   },
-
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    plugins: [
+      new MonacoWebpackPlugin({
+        features: [
+          '!goToDefinitionCommands',
+          '!goToDefinitionMouse',
+          '!referenceSearch'
+        ],
+        languages: ['css', 'html'],
+      })
+    ],
     extend(config, ctx) {
       // const vue = ctx.loaders.vue;
 

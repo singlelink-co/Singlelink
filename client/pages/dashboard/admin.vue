@@ -208,56 +208,46 @@
 
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+            <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+              <span class="text-orange-500 text-sm text-center mx-auto w-full">
+                View on desktop to edit custom HTML & CSS
+              </span>
+            </div>
+
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
-              <AceEditor
-                class="rounded"
-                v-model="pendingTheme.customHtml" 
-                @init="editorInit" 
-                lang="html" 
-                theme="monokai" 
-                width="100%" 
-                height="200px"
+              <MonacoEditor
+                height="350"
+                language="html"
+                theme="vs-dark"
                 :options="{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    fontSize: 14,
-                    highlightActiveLine: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 4,
-                    showPrintMargin: false,
-                    showGutter: true,
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
                 }"
-              />
+                v-model="pendingTheme.customHtml"
+              ></MonacoEditor>
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
-              <AceEditor
-                class="rounded"
-                v-model="pendingTheme.customCss" 
-                @init="editorInit" 
-                lang="css" 
-                theme="monokai" 
-                width="100%" 
-                height="200px"
+              <MonacoEditor
+                height="350"
+                language="css"
+                theme="vs-dark"
                 :options="{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    fontSize: 14,
-                    highlightActiveLine: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    tabSize: 4,
-                    showPrintMargin: false,
-                    showGutter: true,
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
                 }"
-              />
+                v-model="pendingTheme.customCss"
+              ></MonacoEditor>
             </div>
           </form>
           <div
