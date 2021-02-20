@@ -101,8 +101,12 @@ export default {
         async: true
       },
       {
-        hid: 'useitful',
-        src: '/useitful.js',
+        hid: 'usetifulScript',
+        src: 'https://www.usetiful.com/dist/usetiful.js',
+        id: 'usetifulScript',
+        dataset: {
+          token: '28f17918d3a60fc2f638a53eeb3a23d9'
+        },
         defer: true,
         async: true
       }

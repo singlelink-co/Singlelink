@@ -169,7 +169,7 @@
                   autoClosingQuotes: true,
                   readOnly: (modalIntent === 'view'),
                 }"
-                v-model="pendingTheme.customCss"
+                v-model="customCss"
               ></MonacoEditor>
       <button
         type="button"

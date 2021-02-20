@@ -1,4 +1,5 @@
-(function (w, d, s) {
+(async function (w, d, s) {
+    await new Promise(resolve => setTimeout(resolve, 1500));
     var a = d.getElementsByTagName('head')[0];
     var r = d.createElement('script');
     r.async = 1;
