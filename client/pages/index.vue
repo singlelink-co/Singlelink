@@ -63,6 +63,7 @@
         </button>
         <p v-if="free_signup" class="mt-6 text-center mx-auto text-gray-700">Or, <a class="text-indigo-600 hover:underline" href="/create-account">create
         your new account for free</a></p>
+        <a href="https://singlelink.co" class="mt-2 flex items-start justify-center text-xs mx-auto hover:underline text-center w-full text-gray-500">Learn more about Singlelink</a>
       </form>
     </section>
     <section class="flex text-center text-gray-600 text-sm mt-auto mb-4 p-8">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
