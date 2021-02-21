@@ -339,7 +339,7 @@
 
             </div>
 
-            <div class="flex hidden:flex flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+            <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
               <span class="text-orange-500 text-sm text-center mx-auto w-full">
                 View on desktop to edit custom HTML & CSS
               </span>
