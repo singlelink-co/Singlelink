@@ -152,7 +152,7 @@ export default Vue.extend({
         this.$store.commit('auth/login', response.data.token);
         this.$nuxt.$loading.finish();
 
-        await this.$router.push('/dashboard');
+        window.location.href='/dashboard?tour=sl-101-01';
       } catch (err) {
         if (err.response) {
           if (err.response.status === StatusCodes.CONFLICT) {
