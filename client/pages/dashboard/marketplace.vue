@@ -12,28 +12,18 @@
             <a href="#" class="bg-indigo-600 rounded-lg px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700" style="width:fit-content;">See details</a>
         </div>
     </div>
-    <h2 class="font-bold text-xl py-2 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full mb-2">🔥 Trending themes</h2>
-    <div class="flex flex-row flex-wrap mb-2 justify-start w-full">
-        <a v-for="theme in globalThemes" :href="'theme/'+theme.id" class="flex flex-col p-3 flex-1 hover:bg-gray-200 rounded-lg" style="min-width:215px;max-width:235px;">
-            <div class="w-full h-32 rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + theme.colors.fill.primary + ';'">
-                <div :style="'top:50%;height:50%;left:0;right:0;z-index:2;width:100%;position:absolute;background:' + theme.colors.fill.secondary + ';'"></div>
-                <div class="shadow-lg overflow-hidden flex flex-col items-center justify-center" :style="'width:60px;height:60px;position;relative;z-index:3;border-radius:40px;background:'+theme.colors.text.primary">
-                    <div class="mt-auto w-full" :style="'height:30px;background:' + theme.colors.text.secondary + ';'"></div>
-                </div>
-            </div>
-            <div class="font-bold text-black mb-1">{{ theme.label }}</div>
-		    <span class="text-sm text-gray-500">Author: {{ theme.userId }}</span>
-        </a>
-    </div>
+    <theme-list name="🔥 Trending themes" :themes="globalThemes" :extended="false"/>
   </section>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import themeList from "../../components/theme/theme-list.vue";
 
 type ThemeModalIntent = "create" | "edit" | "view";
 
 export default Vue.extend({
+  components: { themeList },
   name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',

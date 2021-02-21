@@ -6,11 +6,13 @@
 
     <!-- Your Themes-->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Your Themes
-      </h2>
+      <theme-list :active="activeThemeId" name="Your themes" :themes="themes" :extended="false" icon="edit"/>
 
-      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
+      <!--<h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        Your Themes
+      </h2>-->
+
+      <!--<div class="flex flex-row overflow-x-scroll hide-scrollbar">
 
         <div
           v-for="theme in themes"
@@ -36,17 +38,18 @@
             <span class="font-semibold text-gray-700 text-4xl">+</span>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
 
     <!-- Global Themes-->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+      <theme-list :active="activeThemeId" name="Global themes" :themes="globalThemes" :extended="false" icon="view"/>
+      <!--<h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
         Global Themes
-      </h2>
+      </h2>-->
 
-      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
+      <!--<div class="flex flex-row overflow-x-scroll hide-scrollbar">
         <div
           class="rounded-lg nc-theme bg-gray-200"
           style="min-width:78px;min-height:80px;"
@@ -75,7 +78,7 @@
             <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
     <!--
@@ -440,10 +443,12 @@
 
 <script lang="ts">
 import Vue from "vue";
+import themeList from "../../components/theme/theme-list.vue";
 
 type ThemeModalIntent = "create" | "edit" | "view";
 
 export default Vue.extend({
+  components: { themeList },
   name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',
