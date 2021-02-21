@@ -7,7 +7,7 @@
       </h1>
       <div
         v-if="error"
-        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
+        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-full max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
       >
         <img style="width: 12px;" src="/caution.svg">
         <div class="flex flex-col ml-2">
