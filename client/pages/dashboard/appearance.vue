@@ -732,17 +732,6 @@ export default Vue.extend({
         customHtml: undefined,
       };
     },
-    dataSumit() {
-        //code here
-    },
-    editorInit: function () {
-        require('brace/ext/language_tools') //language extension prerequsite...
-        require('brace/mode/html')                
-        require('brace/mode/javascript')    //language
-        require('brace/mode/less')
-        require('brace/theme/monokai')
-        require('brace/snippets/javascript') //snippet
-    }
   }
 });
 </script>

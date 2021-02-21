@@ -118,6 +118,11 @@
             Appearance
           </div>
         </n-link>
+        <n-link to="/dashboard/marketplace" class="w-full">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-marketplace')">
+            Marketplace
+          </div>
+        </n-link>
         <n-link to="/dashboard/settings" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-settings')">
             Profile Settings
@@ -148,6 +153,11 @@
         <n-link to="/dashboard/appearance">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-appearance')">
             Appearance
+          </div>
+        </n-link>
+        <n-link to="/dashboard/marketplace">
+          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-marketplace')">
+            Marketplace
           </div>
         </n-link>
         <n-link to="/dashboard/settings">
@@ -523,6 +533,9 @@ export default Vue.extend({
             break;
           case "dashboard-appearance":
             this.active = "dashboard-appearance";
+            break;
+          case "dashboard-marketplace":
+            this.active="dashboard-marketplace";
             break;
           case "dashboard-analytics":
             this.active = "dashboard-analytics";
