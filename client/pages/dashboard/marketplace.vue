@@ -77,18 +77,18 @@ export default Vue.extend({
           token
         });
 
-        this.activeThemeId = profileResponse.themeId ?? null;
-        this.customCss = profileResponse.customCss ?? '';
-        this.customHtml = profileResponse.customHtml ?? '';
+        //this.activeThemeId = profileResponse.themeId ?? null;
+        //this.customCss = profileResponse.customCss ?? '';
+        //this.customHtml = profileResponse.customHtml ?? '';
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
       }
     },
 
-    async saveChanges() {
+    /*async saveChanges() {
       try {
-        await this.$axios.$post('/profile/update', {
+        await this.$axios.$post<Profile>('/profile/update', {
           token: this.$store.getters['auth/getToken'],
           customCss: this.customCss,
           customHtml: this.customHtml
@@ -98,7 +98,7 @@ export default Vue.extend({
       } catch (err) {
         console.log(err);
       }
-    },
+    },*/
 
     getNewTheme(): Theme {
       return {
