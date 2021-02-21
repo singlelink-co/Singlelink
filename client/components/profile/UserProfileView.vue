@@ -235,4 +235,8 @@ export default Vue.extend({
 .nc-link:active {
   transform: scale(1);
 }
+
+body {
+  overflow-x: hidden;
+}
 </style>
