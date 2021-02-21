@@ -268,7 +268,7 @@
       <div class="user-profile-preview-parent">
         <div v-if="originalHandle" :class="checkPreviewMode()">
           <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
-            <iframe class="w-full" id="preview-frame" onload="this.style.height='10000px';" :src="`/u-preview/${user.activeProfile.handle}`" scrolling="no"/>
+            <iframe class="w-full" id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
           </div>
         </div>
       </div>
@@ -623,7 +623,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-
 @media(min-width: 1024px) {
   .middle {
     width: calc(66.66vw - 70px);
@@ -699,13 +698,14 @@ html {
 
 .phone-display {
   display: flex;
-  margin: 20px auto auto auto;
-  border-radius: 50px;
+  margin: -60px auto auto auto;
+  border-radius: 65px;
   overflow: hidden;
   background: #000;
   padding: 14px;
-  width: 280px;
-  height: 606px;
+  width: 375px;
+  height: 812px;
+  transform: scale(.8)
 }
 
 .phone-display > iframe {
@@ -715,7 +715,7 @@ html {
 }
 
 .phone-display > div {
-  border-radius: 35px;
+  border-radius: 50px;
 }
 
 .desktop-display > div {
