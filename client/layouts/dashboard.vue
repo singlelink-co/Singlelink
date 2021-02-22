@@ -155,7 +155,7 @@
             Appearance
           </div>
         </a>
-        <a href="/dashboard/marketplace">
+        <a href="/dashboard/marketplace" id="marketplace-link">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-marketplace')">
             Marketplace
           </div>
