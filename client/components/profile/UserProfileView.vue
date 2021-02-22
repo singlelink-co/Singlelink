@@ -118,6 +118,14 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    themePreview: {
+      type: Boolean,
+      default: false
+    },
+    themeData: {
+      type: Object,
+      default: null
+    }
   },
 
   data() {
@@ -153,7 +161,11 @@ export default Vue.extend({
     if (this.authenticated) {
       await this.getAuthenticatedProfile();
     } else {
-      await this.getProfile();
+      if(!this.themePreview) {
+        await this.getProfile();
+      } else {
+        await this.getTheme();
+      }
     }
   },
 
@@ -182,6 +194,13 @@ export default Vue.extend({
       }
 
       this.loaded = true;
+    },
+
+    async getTheme() {
+      if(!this.themeData) this.themeData = {}; // fetch theme
+      this.theme = this.themeData;
+      this.profile.customCss = this.theme.customCss;
+      this.profile.customHtml = this.theme.customHtml;
     },
 
     async getAuthenticatedProfile() {
