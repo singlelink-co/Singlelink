@@ -5,9 +5,9 @@
       class="hidden lg:flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
       style="width: 70px; max-width: 70px;"
     >
-      <n-link to="/dashboard">
+      <a href="/dashboard">
         <img :src="icon_url" style="width: 35px;" alt="icon">
-      </n-link>
+      </a>
 
       <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
         <img
@@ -96,43 +96,43 @@
 
     <!-- Mobile Navbar -->
     <section class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
-      <n-link to="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></n-link>
+      <a href="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></a>
       <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded-lg text-white font-semibold tracking-wide" style="outline: none !important;">
         <span v-if="!mobile_menu" class="mr-2">Open</span>
         <span v-if="mobile_menu" class="mr-2">Close</span>
         menu
       </button>
       <nav v-if="mobile_menu" class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full" style="top: 64px;">
-        <n-link to="/dashboard" class="w-full">
+        <a href="/dashboard" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard')">
             Links
           </div>
-        </n-link>
-        <n-link to="/dashboard/analytics" class="w-full">
+        </a>
+        <a href="/dashboard/analytics" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-analytics')">
             Analytics
           </div>
-        </n-link>
-        <n-link to="/dashboard/appearance" class="w-full">
+        </a>
+        <a href="/dashboard/appearance" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-appearance')">
             Appearance
           </div>
-        </n-link>
-        <n-link to="/dashboard/marketplace" class="w-full">
+        </a>
+        <a href="/dashboard/marketplace" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-marketplace')">
             Marketplace
           </div>
-        </n-link>
-        <n-link to="/dashboard/settings" class="w-full">
+        </a>
+        <a href="/dashboard/settings" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-settings')">
             Profile Settings
           </div>
-        </n-link>
-        <n-link v-if="isAdmin" to="/dashboard/admin" class="w-full">
+        </a>
+        <a v-if="isAdmin" to="/dashboard/admin" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-admin')">
             Admin
           </div>
-        </n-link>
+        </a>
         <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect();mobile_menu=false;">Profiles</div>
       </nav>
     </section>
@@ -140,36 +140,36 @@
 
     <section class="middle flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
       <div class="hidden lg:flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
-        <n-link to="/dashboard">
+        <a href="/dashboard">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard')">
             Links
           </div>
-        </n-link>
-        <n-link to="/dashboard/analytics">
+        </a>
+        <a href="/dashboard/analytics">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-analytics')">
             Analytics
           </div>
-        </n-link>
-        <n-link to="/dashboard/appearance">
+        </a>
+        <a href="/dashboard/appearance">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-appearance')">
             Appearance
           </div>
-        </n-link>
-        <n-link to="/dashboard/marketplace">
+        </a>
+        <a href="/dashboard/marketplace">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-marketplace')">
             Marketplace
           </div>
-        </n-link>
-        <n-link to="/dashboard/settings">
+        </a>
+        <a href="/dashboard/settings">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-settings')">
             Settings
           </div>
-        </n-link>
-        <n-link v-if="isAdmin" to="/dashboard/admin">
+        </a>
+        <a v-if="isAdmin" to="/dashboard/admin">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-admin')">
             Admin
           </div>
-        </n-link>
+        </a>
       </div>
 
       <!-- Render Nuxt-->
@@ -274,11 +274,11 @@
       </div>
 
       <!-- Visibility notification -->
-      <n-link to="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
+      <a href="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
         <span class="font-semibold pr-1">Warning:</span>
         <span>Your profile is currently hidden!</span>
         <div class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Go to settings</div>
-      </n-link>
+      </a>
 
     </section>
 
@@ -401,7 +401,13 @@ export default Vue.extend({
             r.src = s;
             r.setAttribute('id', 'usetifulScript');
             r.dataset.token = "28f17918d3a60fc2f638a53eeb3a23d9";
-                    a.appendChild(r);
+            a.appendChild(r);
+            if(window.location.href.split('?').length > 1) {
+              let links = document.getElementsByTagName('a');
+              for(let i=0;i<links.length;i++) {
+                links[i].href += '?'+window.location.href.split('?')[1];
+              }
+            }
           })(window, document, "https://www.usetiful.com/dist/usetiful.js");
         <\/script>`
     };
