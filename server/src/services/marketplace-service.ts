@@ -86,4 +86,12 @@ export class MarketplaceService extends DatabaseService {
 
   }
 
+  // TODO Implement user addon favoriting (using user metadata)
+  /**
+   * Toggles whether an addon is favorited or not for a particular user.
+   */
+  async userSetFavoriteAddon(userId: string, addonId: string) {
+
+  }
+
 }

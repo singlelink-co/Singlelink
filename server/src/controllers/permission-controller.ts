@@ -12,7 +12,7 @@ interface HasPermissionRequest extends AuthenticatedRequest {
 }
 
 /**
- * This controller maps and provides for all the controllers under /admin.
+ * This controller maps and provides for all the controllers under /permission.
  */
 export class PermissionController extends Controller {
   private permissionService: PermissionService;

@@ -8,6 +8,7 @@ import {MarketplaceService} from "../services/marketplace-service";
 import {config} from "../config/config";
 import Mixpanel from "mixpanel";
 import {StatusCodes} from "http-status-codes";
+import {UserService} from "../services/user-service";
 
 interface MarketplaceListingRequest extends AuthenticatedRequest {
   Body: {
@@ -40,17 +41,25 @@ interface DeleteAddonRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+interface UserFavoriteAddonRequest extends AuthenticatedRequest {
+  Body: {
+    id: string
+  } & AuthenticatedRequest["Body"]
+}
+
 /**
- * This controller maps and provides for all the controllers under /admin.
+ * This controller maps and provides for all the controllers under /marketplace.
  */
 export class MarketplaceController extends Controller {
   private marketplaceService: MarketplaceService;
+  private userService: UserService;
   private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
 
     this.marketplaceService = new MarketplaceService(databaseManager);
+    this.userService = new UserService(databaseManager);
   }
 
   registerRoutes(): void {
@@ -61,6 +70,8 @@ export class MarketplaceController extends Controller {
     this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', Auth.ValidateWithData, this.CreateAddon.bind(this));
     this.fastify.all<UpdateAddonRequest>('/marketplace/addon/update', Auth.ValidateWithData, this.UpdateAddon.bind(this));
     this.fastify.all<DeleteAddonRequest>('/marketplace/addon/delete', Auth.ValidateWithData, this.DeleteAddon.bind(this));
+
+    this.fastify.all<UserFavoriteAddonRequest>('/marketplace/user/favorite', Auth.ValidateWithData, this.UserFavoriteAddon.bind(this));
   }
 
   /**
@@ -179,6 +190,33 @@ export class MarketplaceController extends Controller {
    * @constructor
    */
   async DeleteAddon(request: FastifyRequest<DeleteAddonRequest>, reply: FastifyReply) {
+    try {
+      reply.code(StatusCodes.NOT_IMPLEMENTED);
+
+      // this.mixpanel.track('addon deleted', {
+      //   distinct_id: request.body.id,
+      // });
+
+      return ReplyUtils.error("Sorry, this is not implemented yet.");
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  // TODO Implement user addon favoriting (using user metadata)
+  /**
+   * Route for /marketplace/user/favorite
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async UserFavoriteAddon(request: FastifyRequest<UserFavoriteAddonRequest>, reply: FastifyReply) {
     try {
       reply.code(StatusCodes.NOT_IMPLEMENTED);
 
