@@ -10,22 +10,25 @@ export class MarketplaceService extends DatabaseService {
     super(databaseManager);
   }
 
+  // TODO Implement marketplace searching
+
   /**
-   * Lists all addons on the marketplace.
+   * Lists all addons on the marketplace. This function is paginated by default for performance reasons. Maximum per
+   * page is 500.
    *
    * @param userId
-   * @param page - The page of the addons
-   * @param limit - The number of addons to show
+   * @param lastItemId The last item of the previous page
+   * @param limit The number of addons to show
    */
-  async listAddons(userId: string, page: number = 1, limit: number = 100): Promise<Addon[]> {
-    if (page < 1) {
-      page = 1;
+  async listAddons(userId: string, lastItemId: number = 0, limit: number = 100): Promise<Addon[]> {
+    if (limit > 500) {
+      limit = 500;
     }
 
-    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where (user_id=$1 or global=true) and id < $2 order by id limit $3",
+    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where (user_id=$1 or global=true) and id > $2 order by id limit $3",
       [
         userId,
-        page * limit,
+        lastItemId,
         limit
       ]);
 

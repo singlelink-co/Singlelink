@@ -12,7 +12,7 @@ import {UserService} from "../services/user-service";
 
 interface MarketplaceListingRequest extends AuthenticatedRequest {
   Body: {
-    page?: number,
+    lastItemId?: number,
     limit?: number
   } & AuthenticatedRequest["Body"]
 }
@@ -83,7 +83,7 @@ export class MarketplaceController extends Controller {
    */
   async ListAddons(request: FastifyRequest<MarketplaceListingRequest>, reply: FastifyReply) {
     try {
-      let page = request.body.page;
+      let lastItemId = request.body.lastItemId;
       let limit = request.body.limit;
 
       if (this.mixpanel)
@@ -91,7 +91,7 @@ export class MarketplaceController extends Controller {
           distinct_id: request.body.authUser.id,
         });
 
-      return this.marketplaceService.listAddons(request.body.authUser.id, page, limit);
+      return this.marketplaceService.listAddons(request.body.authUser.id, lastItemId, limit);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
