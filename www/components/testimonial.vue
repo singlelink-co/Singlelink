@@ -4,7 +4,7 @@
             <div class="w-12 h-12 rounded-full bg-gray-100 mr-4" :style="'background-position:center;background-repeat:no-repeat;background-size:cover;background-image:url(' + avatar + ')'"></div>
             <div class="flex flex-col">
                 <span class="text-black font-semibold">{{ name }}</span>
-                <span class="text-sm text-gray-600 font-medium">@{{ handle }}</span>
+                <span class="text-sm text-gray-600 font-medium"><span v-if="at">@</span>{{ handle }}</span>
             </div>
             <img :src="'/' + platform + '.png'" class="mb-auto ml-auto w-4"/>
         </div>
@@ -21,7 +21,11 @@ export default {
         avatar: String,
         content: String,
         platform: String,
-        date: String
+        date: String,
+        at: {
+            type: Boolean,
+            default: true
+        }
     }
 };
 </script>

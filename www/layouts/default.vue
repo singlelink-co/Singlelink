@@ -17,8 +17,8 @@
     </header>
     <Nuxt class="interface" />
     <footer class="interface">
-      <div class="flex-grow pb-20 flex flex-col text-center items-center justify-center" style="border-bottom: solid 5px rgba(0,0,100,.07);">
-        <h2 class="max-w-2xl mb-3">You're less than ten minutes away from more conversions.</h2>
+      <div class="flex-grow pb-20 flex flex-col text-center items-center justify-center">
+        <h2 class="max-w-2xl mb-3">You're less than ten minutes from your new micro-site</h2>
         <p class="text-xl max-w-2xl mb-6">Our average user takes just under ten minutes from signup to site launch, and can expect a CTR of +50% instantly after publishing. It’s 100% free, no credit card required.</p>
         <a class="text-center mb-8 w-full shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
         <div class="flex flex-col items-center justify-center relative rounded-lg shadow-lg mb-8 overflow-hidden w-full max-w-2xl video" style="height: 344px;background-image: url('/application-screenshot.png');background-repeat:no-repeat;background-position:center;background-size:cover;">
@@ -33,7 +33,7 @@
           <a class="text-center w-full lg:w-auto text-sm font-medium text-gray-700 px-6 py-6 lg:py-5 rounded-lg bg-gray-400 hover:bg-gray-300" href="/gallery">View community examples</a>
         </div>-->
       </div>
-      <div class="flex-grow py-20 flex flex-col lg:flex-row items-start justify-center w-full space-y-8 lg:space-y-0 lg:space-x-8">
+      <div class="flex-grow py-20 flex flex-col lg:flex-row items-start justify-center w-full space-y-8 lg:space-y-0 lg:space-x-8" style="border-top: solid 5px rgba(0,0,100,.07);">
         <div class="flex flex-col items-center text-center lg:text-left justify-center lg:justify-start lg:w-1/2">
           <img class="lg:mr-auto mb-2" src="/singlelink-brandmark.svg"/>
           <p class="text-sm font-medium leading-loose mb-1 text-gray-600">Simpler websites, better results.</p>

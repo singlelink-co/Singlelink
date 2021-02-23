@@ -11,7 +11,12 @@
     </section>
 
     <section class="interface wide row mx-none">
-      <img style="max-width:468px;" class="w-full" src="/umberto-screenshot.png"/>
+      <div class="flex flex-col relative justify-start">
+        <div class="phone-display relative" style="right:50px; height:550px;">
+            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/umberto" scrolling="no"/>
+        </div>
+        <testimonial :at="false" style="top:300px;" class="shadow absolute right-0" date="Dec 18, 2020" avatar="/adrenaline-hunter.png" platform="discord" name="Umberto Gnocchi" handle="CGI & Motion Design Artist" content="Thank you! What I like is that in 5 minutes I’ve configured everything."/>
+      </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
         <h3>Getting online has never been easier</h3>
         <p class="text-xl mb-8">Building your Singlelink takes just minutes, and publishing to your link or custom domain is instant. There’s no-code needed, and we have hundreds of available themes for you to choose from.</p>
@@ -25,11 +30,21 @@
         <p class="text-xl mb-8">Building & customizing your Singlelink from top-to-bottom is easy with our optimized no-code builder. You can control every detail without code from your phone or desktop, and go further with available custom HTML & CSS if you choose.</p>
         <a style="width:fit-content;" class="text-center shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
       </div>
-      <img style="max-width:468px;" class="w-full" src="/vibez-screenshot.png"/>
+      <div class="flex flex-col relative justify-start">
+        <div class="phone-display relative" style="left:50px;">
+            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/Vibez" scrolling="no"/>
+        </div>
+        <testimonial :at="false" style="top:300px;" class="shadow absolute left-0" date="Jan 22, 2021" avatar="/vibez.png" platform="ph" name="VibeszCS" handle="Twitch Streamer" content="TL:DR: Doesn't get much better than this... Beginners can easily add links and colors & have a working landing page in less then five minutes.... Neutron Creative sure knows how to make a good program!"/>
+      </div>
     </section>
 
     <section class="interface wide row mx-none">
-      <img style="max-width:468px;" class="w-full" src="/remi-screenshot.png"/>
+      <div class="flex flex-col relative justify-start">
+        <div class="phone-display relative" style="right:50px;">
+            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/remi" scrolling="no"/>
+        </div>
+        <testimonial :at="false" style="top:300px;" class="shadow absolute right-0" date="Feb 23, 2021" avatar="https://pbs.twimg.com/profile_images/1361677841654497281/Mys20SoV_400x400.jpg" platform="twitter" name="Rémi Carreiro" handle="Architectural Photographer" content="If you’re looking to set up a little landing page for yourself, check out @SingleLink. I stumbled across it while looking for alternatives to Linktree and couldn’t be happier with it."/>
+      </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
         <h3>Scale to infinite heights instantly</h3>
         <p class="text-xl mb-8">Never worry about downtime again. Singlelink is built-to-scale and has no traffic caps so you can go from zero to zeroes in minutes without outages, slowing, or an unexpected bill.</p>
@@ -51,9 +66,10 @@
 </template>
 
 <script>
+import Testimonial from '../components/testimonial.vue';
 import wallOfLove from '../components/wall-of-love.vue';
   export default {
-  components: { wallOfLove },
+  components: { wallOfLove, Testimonial },
     head: {
       title: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥',
       meta: [
@@ -199,4 +215,31 @@ import wallOfLove from '../components/wall-of-love.vue';
   .video:hover {
     box-shadow: inset 0 -1000px 0 0 rgba(0,0,0,.3);
   }
+
+  .phone-display {
+    display: flex;
+    margin: 0 auto 0 0;
+    border-radius: 65px;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #FFF, #EEE);
+    padding: 14px;
+    width: 375px;
+    /*height: 812px;*/
+    height: 600px;
+    transform: scale(.8);
+    box-shadow: inset 0 0 5px rgba(0,0,0,.25);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 4%, transparent 100%);
+}
+
+.phone-display > iframe {
+  border: none;
+  width: 348px;
+  height: 784px;
+  border-radius: 50px;
+}
+
+.phone-display > div {
+  border-radius: 50px;
+}
 </style>
