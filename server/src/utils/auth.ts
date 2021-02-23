@@ -399,4 +399,20 @@ export class Auth {
       throw new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource");
     }
   }
+
+  /**
+   * Validates ownership of an addon.
+   * @param service
+   * @param resourceId
+   * @param user
+   */
+  static async checkAddonOwnership(service: DatabaseService, resourceId: string, user: User) {
+    const pool = service.pool;
+
+    let queryResult = await pool.query<{ count: number }>("select count(*) from marketplace.addons where id=$1 and (user_id=$2)", [resourceId, user.id]);
+
+    if (queryResult.rows[0].count <= 0) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource");
+    }
+  }
 }

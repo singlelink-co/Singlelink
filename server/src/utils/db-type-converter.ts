@@ -129,4 +129,22 @@ export class DbTypeConverter {
     };
   }
 
+  static toAddon(addon: DbAddon): Addon {
+    return {
+      id: addon.id,
+      userId: addon.user_id,
+      resourceId: addon.resource_id,
+      type: addon.type,
+      description: addon.description,
+      author: addon.author,
+      tags: addon.tags,
+      featuredSorting: addon.featured_sorting,
+      price: addon.price,
+      paymentFrequency: addon.payment_frequency,
+      global: addon.global,
+      metadata: addon.metadata,
+      created_on: addon.created_on
+    };
+  }
+
 }

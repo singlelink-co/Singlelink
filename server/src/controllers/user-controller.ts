@@ -40,14 +40,14 @@ interface ResetUserPasswordRequest extends RequestGenericInterface {
   }
 }
 
-// TODO Implement UpdateUserRequest
 interface UpdateUserRequest extends AuthenticatedRequest {
   Body: {
-    id: string
+    id: string,
+    email: string,
+    fullName?: string
   } & AuthenticatedRequest["Body"]
 }
 
-// TODO Implement DeleteUserRequest
 interface DeleteUserRequest extends AuthenticatedRequest {
   Body: {
     id: string
@@ -57,6 +57,12 @@ interface DeleteUserRequest extends AuthenticatedRequest {
 interface SetActiveProfileRequest extends AuthenticatedRequest {
   Body: {
     newProfileId?: string
+  } & AuthenticatedRequest["Body"]
+}
+
+interface GetUserDataPackageRequest extends AuthenticatedRequest {
+  Body: {
+    id: string
   } & AuthenticatedRequest["Body"]
 }
 
@@ -96,6 +102,8 @@ export class UserController extends Controller {
     this.fastify.all<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
     this.fastify.all<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
     this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
+
+    this.fastify.all<GetUserDataPackageRequest>('/user/data-package', Auth.ValidateWithData, this.GetUserDataPackage.bind(this));
   }
 
   /**
@@ -309,6 +317,29 @@ export class UserController extends Controller {
    * @param reply
    */
   async DeleteUser(request: FastifyRequest<DeleteUserRequest>, reply: FastifyReply) {
+    try {
+      reply.code(StatusCodes.NOT_IMPLEMENTED);
+
+      // this.mixpanel.track('user deleted', {
+      //   distinct_id: request.body.id,
+      // });
+
+      return ReplyUtils.error("Sorry, this is not implemented yet.");
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  //TODO Implement GDPR data package download
+  /**
+   * Route for /user/data-package
+   */
+  async GetUserDataPackage(request: FastifyRequest<GetUserDataPackageRequest>, reply: FastifyReply) {
     try {
       reply.code(StatusCodes.NOT_IMPLEMENTED);
 

@@ -22,9 +22,8 @@ export class ThemeService extends DatabaseService {
   async getTheme(themeId: string): Promise<Theme> {
     let queryResult = await this.pool.query<DbTheme>("select * from app.themes where id=$1", [themeId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The theme couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -44,11 +43,7 @@ export class ThemeService extends DatabaseService {
       queryResult = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1 and global=false", [userId]);
     }
 
-    if (queryResult.rowCount <= 0) {
-      return [];
-    }
-
-    return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
+    return queryResult.rowCount < 1 ? [] : queryResult.rows.map(x => DbTypeConverter.toTheme(x));
   }
 
   /**
@@ -57,11 +52,7 @@ export class ThemeService extends DatabaseService {
   async listGlobalThemes(): Promise<Theme[]> {
     let queryResult: QueryResult<DbTheme> = await this.pool.query<DbTheme>("select * from app.themes where global=true");
 
-    if (queryResult.rowCount <= 0) {
-      return [];
-    }
-
-    return queryResult.rows.map(x => DbTypeConverter.toTheme(x));
+    return queryResult.rowCount < 1 ? [] : queryResult.rows.map(x => DbTypeConverter.toTheme(x));
   }
 
   /**
@@ -89,9 +80,8 @@ export class ThemeService extends DatabaseService {
         userId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to add a new theme because of an internal server error.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -124,9 +114,8 @@ export class ThemeService extends DatabaseService {
         userId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to update the theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -147,9 +136,8 @@ export class ThemeService extends DatabaseService {
         userId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to delete the theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -166,9 +154,8 @@ export class ThemeService extends DatabaseService {
         themeId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to add a new theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -183,9 +170,8 @@ export class ThemeService extends DatabaseService {
         themeId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to add a new theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -215,9 +201,8 @@ export class ThemeService extends DatabaseService {
         themeId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to update the theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }
@@ -235,9 +220,8 @@ export class ThemeService extends DatabaseService {
         themeId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "Failed to delete the theme because the id couldn't be found.");
-    }
 
     return DbTypeConverter.toTheme(queryResult.rows[0]);
   }

@@ -46,6 +46,7 @@
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "casbin": "^5.4.0",
+    "casbin-basic-adapter": "^0.1.0",
     "fastify": "^3.8.0",
     "fastify-cors": "^4.1.0",
     "fastify-favicon": "^3.0.0",

@@ -30,7 +30,7 @@ export class AnalyticsService extends DatabaseService {
   async getAnalytics(): Promise<AnalyticsGlobalStats> {
     let queryResult = await this.pool.query<DbAnalyticsGlobalStats>("select * from analytics.global_stats");
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1) {
       return {
         totalUsers: -1,
         totalProfiles: -1,
@@ -70,11 +70,13 @@ export class AnalyticsService extends DatabaseService {
    * @param dayRange The number of days to limit the range by, default is 30
    */
   async getProfileAnalyticsData(profileId: string, dayRange: number = 30): Promise<AnalyticsProfileData> {
-    // TODO use subscription tier to check for date range, for now leave it at 30 days
-
-    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`,
+    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views
+                                                                             from analytics.visits
+                                                                             where referral_id = $1
+                                                                               and created_on > current_date - interval '1 day' * $2`,
       [
         profileId,
+        dayRange
       ]);
 
     if (profileViewQuery.rowCount <= 0) {
@@ -92,7 +94,14 @@ export class AnalyticsService extends DatabaseService {
 
     for (let i = 0; i < linksQuery.rowCount; i++) {
       let link = linksQuery.rows[i];
-      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select * from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`, [link.id]);
+      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select *
+                                                                    from analytics.visits
+                                                                    where referral_id = $1
+                                                                      and created_on > current_date - interval '1 day' * $2`,
+        [
+          link.id,
+          dayRange
+        ]);
 
       totalLinks++;
 

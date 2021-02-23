@@ -36,9 +36,8 @@ export class UserService extends DatabaseService {
   async getUser(userId: string): Promise<User> {
     let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toUser(queryResult.rows[0]);
   }
@@ -51,9 +50,8 @@ export class UserService extends DatabaseService {
   async getUserByEmail(email: string): Promise<User> {
     let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toUser(queryResult.rows[0]);
   }
@@ -66,9 +64,8 @@ export class UserService extends DatabaseService {
   async getSensitiveUser(userId: string): Promise<SensitiveUser> {
     let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
   }
@@ -81,9 +78,8 @@ export class UserService extends DatabaseService {
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
     let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
   }
@@ -96,9 +92,8 @@ export class UserService extends DatabaseService {
   async getSensitiveUserWithPassword(userId: string): Promise<SensitiveUserWithPassword> {
     let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where id=$1", [userId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
   }
@@ -111,9 +106,8 @@ export class UserService extends DatabaseService {
   async getSensitiveUserWithPasswordByEmail(email: string): Promise<SensitiveUserWithPassword> {
     let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where email=$1", [email]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
 
     return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
   }
@@ -144,9 +138,8 @@ export class UserService extends DatabaseService {
       [decoded.userId, hashedPassword]
     );
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
-    }
   }
 
   /**
@@ -261,6 +254,28 @@ export class UserService extends DatabaseService {
     let dbSensitiveUser = userInsertQuery.rows[0];
 
     return DbTypeConverter.toSensitiveUser(dbSensitiveUser);
+  }
+
+  //TODO Implement user update
+  /**
+   *
+   */
+  async updateUser(userId: string, user: User) {
+
+  }
+
+  //TODO Implement delete user
+  async deleteUser(userId: string) {
+
+  }
+
+  //TODO Implement data package download
+  /**
+   * Allows a user to download a data package containing all their collected personal information within SL's databases,
+   * excluding password hashes. This is intended to be GDPR compliant.
+   */
+  async downloadDataPackage(userId: string) {
+
   }
 
   /**

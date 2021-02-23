@@ -115,9 +115,8 @@ export class ProfileService extends DatabaseService {
         subtitle
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.CONFLICT, "The profile couldn't be added because it is already being used.");
-    }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
   }
@@ -130,9 +129,8 @@ export class ProfileService extends DatabaseService {
   async listProfiles(userId: string): Promise<Profile[]> {
     let queryResult = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [userId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The profiles couldn't be found.");
-    }
 
     return queryResult.rows.map(x => {
       return DbTypeConverter.toProfile(x);
@@ -148,9 +146,8 @@ export class ProfileService extends DatabaseService {
   async setActiveTheme(profileId: string, themeId: string): Promise<Profile> {
     let queryResult = await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2 returning *", [themeId, profileId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
-    }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
   }
@@ -216,9 +213,8 @@ export class ProfileService extends DatabaseService {
       throw err;
     }
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
-    }
 
     return DbTypeConverter.toProfile(queryResult.rows[0]);
   }

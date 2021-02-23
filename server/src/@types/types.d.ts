@@ -1,5 +1,6 @@
 /**
  * types.d.ts contains all the types that represent the data that will received from the database.
+ * db-types.d.ts types are converted to these types using the DbTypeConverter.
  */
 
 /**
@@ -28,6 +29,11 @@ type Visibility = 'unpublished' | 'published' | 'published-18+';
  */
 type VisitType = 'link' | 'page';
 
+/**
+ * Addon type for the marketplace
+ */
+type AddonType = 'theme' | 'preset' | 'plugin';
+
 interface User {
   id: string,
   emailHash: string, // Used for gravatar, it could be better but this is how the service works
@@ -37,7 +43,9 @@ interface User {
   inventory: unknown | null,
 
   // The metadata tag will grow over time as functionality is added.
-  metadata: unknown,
+  metadata: {
+    favorites: []
+  },
 
   createdOn: string
 }
@@ -119,6 +127,12 @@ interface Link {
   createdOn: string
 }
 
+interface PermissionGroup {
+  id: string,
+  userId: string,
+  groupName: string
+}
+
 interface Visit {
   type: VisitType,
   referralId: string,
@@ -133,8 +147,23 @@ interface AnalyticsGlobalStats {
   totalThemes: number;
 }
 
-interface PermissionGroup {
+interface Addon {
   id: string,
   userId: string,
-  groupName: string
+  resourceId: string,
+  type: AddonType,
+  description: string,
+  author: string,
+  tags: string[],
+  featuredSorting: number,
+  price: number,
+  paymentFrequency: string,
+  global: boolean,
+
+  metadata: {
+    version: string,
+    lastUpdated: string
+  },
+
+  created_on: string
 }

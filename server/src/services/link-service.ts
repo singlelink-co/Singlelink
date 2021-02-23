@@ -23,9 +23,8 @@ export class LinkService extends DatabaseService {
   async getLink(linkId: string): Promise<Link> {
     let queryResult = await this.pool.query<DbLink>("select * from app.links where id=$1", [linkId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The link could not be found.");
-    }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
   }
@@ -64,9 +63,8 @@ export class LinkService extends DatabaseService {
         useDeepLink
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
-    }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
   }
@@ -105,9 +103,8 @@ export class LinkService extends DatabaseService {
         linkId
       ]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
-    }
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
   }
@@ -122,9 +119,8 @@ export class LinkService extends DatabaseService {
       "delete from app.links where id=$1 returning profile_id",
       [linkId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
-    }
 
     return queryResult.rows[0].profile_id;
   }
@@ -137,9 +133,8 @@ export class LinkService extends DatabaseService {
   async listLinks(profileId: string): Promise<Link[]> {
     let queryResult = await this.pool.query<DbLink>("select * from app.links where profile_id=$1 order by sort_order desc", [profileId]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       return [];
-    }
 
     return queryResult.rows.map(x => {
       return DbTypeConverter.toLink(x);
@@ -169,9 +164,8 @@ export class LinkService extends DatabaseService {
 
       let queryResult = await db.query<DbLink>("select * from app.links where profile_id=$1 order by sort_order", [profileId]);
 
-      if (queryResult.rowCount <= 0) {
+      if (queryResult.rowCount < 1)
         return Promise.reject(new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found."));
-      }
 
       let linkRows: DbLink[] = queryResult.rows;
       let linkRow: DbLink | undefined;

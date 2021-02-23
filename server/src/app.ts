@@ -9,6 +9,8 @@ import {InfoController} from "./controllers/info-controller";
 import {Auth} from "./utils/auth";
 import {CustomDomainHandler} from "./utils/custom-domains";
 import {AdminController} from "./controllers/admin-controller";
+import {PermissionController} from "./controllers/permission-controller";
+import {MarketplaceController} from "./controllers/marketplace-controller";
 
 console.log("Initializing Singlelink");
 
@@ -31,6 +33,12 @@ async function start() {
   server.addController(new ProfileController(server.fastify, database));
   server.addController(new ThemeController(server.fastify, database));
   server.addController(new UserController(server.fastify, database));
+
+  // Management controllers
+  server.addController(new PermissionController(server.fastify, database));
+  server.addController(new MarketplaceController(server.fastify, database));
+
+  // Admin controllers
   server.addController(new AdminController(server.fastify, database));
 
   // Server utility controllers

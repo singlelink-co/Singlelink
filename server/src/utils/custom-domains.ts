@@ -39,9 +39,8 @@ export class CustomDomainHandler {
     let queryResult = await this.pool.query<DbProfile>("select * from app.profiles where custom_domain=$1",
       [customDomain]);
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1)
       return;
-    }
 
     let profile = queryResult.rows[0];
 

@@ -1,5 +1,6 @@
-create schema if not exists app;
-create schema if not exists analytics;
+------------
+-- Types
+------------
 
 do
 $$
@@ -48,6 +49,28 @@ $$
     end;
 $$ language plpgsql;
 
+do
+$$
+    begin
+        /*
+         Addon_t specifies what kind of addon this is.
+
+         theme: A theme.
+         preset: A preset.
+         plugin: A plugin.
+         */
+        create type addon_t as enum ('theme', 'preset', 'plugin');
+    exception
+        when duplicate_object then raise notice 'addon_t already added.';
+    end;
+$$ language plpgsql;
+
+------------
+-- Application
+------------
+
+create schema if not exists app;
+
 /*
  Creates an accounts table with a list of profiles associated with it.
  */
@@ -62,7 +85,7 @@ create table if not exists app.users
     payment_id        text,                                        -- The associated payment account id (external) for this user
     subscription_tier subscription_t               default 'free', -- The subscription tier of this user
     inventory         jsonb                        default '{}',   -- All the stuff this account owns
-    metadata          jsonb                        default '{}',
+    metadata          jsonb               not null default '{}',
     created_on        timestamp           not null default current_timestamp
 );
 
@@ -152,19 +175,21 @@ create table if not exists app.links
 (
     id            bigserial primary key unique,
     profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
-    url           text  default '#'   not null,
-    sort_order    int                 not null,
-    label         text                not null,
+    url           text               default '#' not null,
+    sort_order    int       not null,
+    label         text      not null,
     subtitle      text,
     style         text,
     custom_css    text,
-    use_deep_link bool  default false not null,
-    metadata      jsonb default '{}',
-    created_on    timestamp           not null default current_timestamp
+    use_deep_link bool               default false not null,
+    metadata      jsonb     not null default '{}',
+    created_on    timestamp not null default current_timestamp
 );
 
 create index if not exists links_profile_id on app.links (profile_id);
 create index if not exists links_url_index on app.links (url);
+
+-- Permissions/Admin
 
 /*
  Creates a table for permission groups.
@@ -178,6 +203,12 @@ create table if not exists app.perm_groups
 );
 
 create index if not exists perm_groups_group_name on app.perm_groups (group_name);
+
+------------
+-- Analytics
+------------
+
+create schema if not exists analytics;
 
 /*
  Creates a table for visiting analytics.
@@ -222,10 +253,67 @@ $$
     end;
 $$ language plpgsql;
 
--- PATCHES
+------------
+-- Marketplace
+------------
+
+create schema if not exists marketplace;
+
+/*
+    Creates an addon table that contains the addon marketplace.
+ */
+create table if not exists marketplace.addons
+(
+    id                bigserial primary key unique,
+    user_id           bigint references app.users (id) on update cascade on delete no action,
+    resource_id       bigint unique,      -- The id of the resource this addon is related to
+    type              addon_t   not null, -- The type of resource this is
+    description       text,
+    author            text,
+    tags              text[],
+    featured_sorting  smallint           default 0,
+    price             decimal,
+    payment_frequency text,
+    global            bool               default false not null,
+    metadata          jsonb     not null default '{
+      "downloads": 0
+    }',
+    created_on        timestamp not null default current_timestamp
+);
+
+create index if not exists addons_type on marketplace.addons (type);
+create index if not exists addons_description on marketplace.addons (description);
+create index if not exists addons_author on marketplace.addons (author);
+create index if not exists addons_tags on marketplace.addons (tags);
+create index if not exists addons_featured_sorting on marketplace.addons (featured_sorting);
+create index if not exists addons_price on marketplace.addons (price);
+create index if not exists addons_global on marketplace.addons (global);
+
+-- addon metadata indexes
+create index if not exists addons_metadata_downloads on marketplace.addons ((metadata -> 'downloads'));
+
+------------
+-- Patches
+-- Over time, things need to be updated and patched. This section is all about that.
+------------
+
+
 -- Update v2.1.9, fixes metadata being null sometimes
 update app.profiles
 set metadata=default
 where metadata is null;
 alter table app.profiles
+    alter column metadata set not null;
+
+-- Update v2.2, updates metadata tables for existing columns
+update app.users
+set metadata=default
+where metadata is null;
+alter table app.users
+    alter column metadata set not null;
+
+update app.links
+set metadata=default
+where metadata is null;
+alter table app.links
     alter column metadata set not null;
