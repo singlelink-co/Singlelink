@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
@@ -26,7 +26,7 @@ interface GetAddonRequest extends AuthenticatedRequest {
 
 interface CreateAddonRequest extends AuthenticatedRequest {
   Body: {
-    addon: Pick<Addon, 'userId' | 'type'> & Partial<Addon>
+    addon: Pick<Addon, 'type'> & Partial<Addon>
   } & AuthenticatedRequest["Body"]
 }
 
@@ -64,6 +64,17 @@ interface ListUserFavoriteAddonsRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
 
+const rateLimitMarketplaceCreation = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 min'
+    }
+  },
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
+};
+
+
 /**
  * This controller maps and provides for all the controllers under /marketplace.
  */
@@ -84,7 +95,7 @@ export class MarketplaceController extends Controller {
     this.fastify.all<MarketplaceListingRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
 
     this.fastify.all<GetAddonRequest>('/marketplace/addon/:id', Auth.ValidateWithData, this.GetAddon.bind(this));
-    this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', Auth.ValidateWithData, this.CreateAddon.bind(this));
+    this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', rateLimitMarketplaceCreation, this.CreateAddon.bind(this));
     this.fastify.all<UpdateAddonRequest>('/marketplace/addon/update', Auth.ValidateWithData, this.UpdateAddon.bind(this));
     this.fastify.all<DeleteAddonRequest>('/marketplace/addon/delete', Auth.ValidateWithData, this.DeleteAddon.bind(this));
 
@@ -174,6 +185,9 @@ export class MarketplaceController extends Controller {
     try {
       let addon = request.body.addon;
 
+      // ignore userId field if set and replace with our own
+      addon.userId = request.body.authUser.id;
+
       let newAddon = await this.marketplaceService.createAddon(addon);
 
       if (this.mixpanel)
@@ -203,6 +217,9 @@ export class MarketplaceController extends Controller {
   async UpdateAddon(request: FastifyRequest<UpdateAddonRequest>, reply: FastifyReply) {
     try {
       let addon = request.body.addon;
+
+      // ignore userId field if set and replace with our own
+      addon.userId = request.body.authUser.id;
 
       if (!(await Auth.checkAddonOwnership(this.marketplaceService, addon.id, request.body.authUser))) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
