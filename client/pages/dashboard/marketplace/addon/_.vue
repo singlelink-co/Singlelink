@@ -11,10 +11,10 @@
                 </div>
             </div>
             <div class="flex flex-col lg:w-2/3 px-8">
-                <!--<div class="flex flex-col mb-4 justify-start">
-                    <label class="font-semibold mb-2">Theme name</label>
-                    <input class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="addon.name" placeholder="e.g. My beautiful theme" type="text"/>
-                </div>-->
+                <div class="flex flex-col mb-4 justify-start">
+                    <label class="font-semibold mb-2">Display name</label>
+                    <input class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="addon.displayName" placeholder="e.g. My beautiful theme" type="text"/>
+                </div>
                 <div class="flex flex-col mb-4 justify-start w-full">
                     <label class="font-semibold mb-2">Item</label>
                     <select v-model="addon.resourceId" class="p-3 rounded-lg bg-white text-sm text-gray-700">
@@ -94,7 +94,7 @@
                 pendingTag: '',
                 addon: {
                     id: null,
-                    name: null,
+                    displayName: null,
                     description: null,
                     global: false,
                     tags: [],
@@ -125,8 +125,10 @@
                 this.intent = 'submit';
             } else {   
                 this.addon = await this.$axios.$post('/marketplace/addon/' + this.$route.path.replace('/dashboard/marketplace/addon/', ''), {
-                    token: this.$store.getters['auth/getToken']
+                    token: this.$store.getters['auth/getToken'],
+                    detailed: true
                 });
+                console.log(this.addon);
                 // If user is author
                 if(this.addon.userId == this.id) {
                     // Set intent to edit
@@ -153,8 +155,7 @@
                     const token = this.$store.getters['auth/getToken'];
 
                     const userResponse = await this.$axios.$post('/user', {
-                        token
-                    });
+                        token                    });
                     this.activeProfile = userResponse.activeProfileId;
                     this.id = userResponse.id;
                     console.log(userResponse);
@@ -169,8 +170,9 @@
                     // Grab themes from response
                     this.themes = (await this.$axios.$post('/themes', {
                         token: this.$store.getters['auth/getToken'],
-                        includeGlobal: false
+                        includeGlobal: false,
                     }));
+                    console.log(this.getUserData)
 
                     /*this.globalThemes = (await this.$axios.$post<Theme[]>('/themes', {
                         token: this.$store.getters['auth/getToken'],
@@ -188,6 +190,7 @@
                     token: this.$store.getters['auth/getToken'],
                     addon: {
                         //userId: this.id,
+                        displayName: this.addon.displayName,
                         type: 'theme', //temporary
                         description: this.addon.description,
                         resourceId: this.addon.resourceId,
@@ -204,6 +207,7 @@
                     token: this.$store.getters['auth/getToken'],
                     addon: {
                         id: this.$route.path.replace('/dashboard/marketplace/addon/', ''),
+                        displayName: this.addon.displayName,
                         type: 'theme', //temporary
                         description: this.addon.description,
                         resourceId: this.addon.resourceId,

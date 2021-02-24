@@ -18,8 +18,8 @@
     </div>
     <!-- End featured section -->
     <!--<theme-list name="🔥 Trending themes" :preview="false" :themes="themes" :extended="false"/>-->
-    <theme-list name="✨ Newest themes" :preview="false" :themes="themes" :extended="false"/>
-    <theme-list name="Your submissions" :preview="false" :themes="themes" :extended="false"/>
+    <theme-list name="✨ Newest themes" :preview="false" :themes="addons" :addon="true" :extended="false"/>
+    <theme-list name="Your submissions" :preview="false" :themes="addons" :addon="true" :extended="false"/>
   </section>
 </template>
 
@@ -38,8 +38,7 @@ export default Vue.extend({
   data() {
     return {
       error: '',
-      themes: new Array<Theme>(),
-      globalThemes: new Array<Theme>(),
+      addons: new Array<Addon>(),
       userId: '',
       isAdmin: false
     };
@@ -55,24 +54,25 @@ export default Vue.extend({
 
   async mounted() {
     await this.getUserData();
-    await this.loadThemes();
+    await this.loadAddons();
   },
 
   methods: {
-    async loadThemes() {
+    async loadAddons() {
       try {
-        // Grab themes from response
-        this.themes = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
-          token: this.$store.getters['auth/getToken']
+        // Grab addons from response
+        this.addons = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+          token: this.$store.getters['auth/getToken'],
+          detailed: true
         }));
-        console.log('themes!');
-        console.log(this.themes);
+        console.log('addons!');
+        console.log(this.addons);
 
         // Enrich theme data
         
 
       } catch (error) {
-        console.log('Failed to get themes');
+        console.log('Failed to get addons');
         console.log(error);
       }
     },
