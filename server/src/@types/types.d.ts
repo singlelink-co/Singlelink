@@ -152,6 +152,7 @@ interface Addon {
   userId: string,
   resourceId: string,
   type: AddonType,
+  displayName: string,
   description: string,
   author: string,
   tags: string[],

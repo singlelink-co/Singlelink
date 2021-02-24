@@ -251,6 +251,7 @@ interface DbAddon {
   user_id: string,
   resource_id: string,
   type: addon_t,
+  display_name: string,
   description: string,
   author: string,
   tags: string[],

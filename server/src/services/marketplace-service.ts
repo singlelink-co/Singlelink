@@ -89,9 +89,10 @@ export class MarketplaceService extends DatabaseService {
    */
   async createAddon(addon: Partial<Addon>): Promise<Addon> {
     //language=PostgreSQL
-    let queryStr = `insert into marketplace.addons(user_id, resource_id, type, description, author, tags, price,
+    let queryStr = `insert into marketplace.addons(user_id, resource_id, type, display_name, description, author, tags,
+                                                   price,
                                                    payment_frequency, global, version, last_updated)
-                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, current_timestamp)
+                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, current_timestamp)
                     returning *`;
 
     if (!addon.global) {
@@ -103,6 +104,7 @@ export class MarketplaceService extends DatabaseService {
         addon.userId,
         addon.resourceId,
         addon.type,
+        addon.displayName,
         addon.description,
         addon.author,
         addon.tags,
@@ -126,14 +128,15 @@ export class MarketplaceService extends DatabaseService {
     let queryStr = `update marketplace.addons
                     set resource_id=coalesce($2, resource_id),
                         type=coalesce($3, type),
-                        description=$4,
-                        author=$5,
-                        tags=$6,
-                        featured_sorting=coalesce($7, featured_sorting),
-                        price=$8,
-                        payment_frequency=$9,
-                        global=coalesce($10, global),
-                        version=$11,
+                        display_name=$4,
+                        description=$5,
+                        author=$6,
+                        tags=$7,
+                        featured_sorting=coalesce($8, featured_sorting),
+                        price=$9,
+                        payment_frequency=$10,
+                        global=coalesce($11, global),
+                        version=$12,
                         last_updated=current_timestamp
                     where id = $1
                     returning *`;
@@ -143,6 +146,7 @@ export class MarketplaceService extends DatabaseService {
         addon.id,
         addon.resourceId,
         addon.type,
+        addon.displayName,
         addon.description,
         addon.author,
         addon.tags,

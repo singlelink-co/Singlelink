@@ -135,6 +135,7 @@ export class DbTypeConverter {
       userId: addon.user_id,
       resourceId: addon.resource_id,
       type: addon.type,
+      displayName: addon.display_name,
       description: addon.description,
       author: addon.author,
       tags: addon.tags,

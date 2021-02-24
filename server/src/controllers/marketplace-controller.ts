@@ -199,6 +199,8 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon viewed', {
           distinct_id: request.body.authUser.id,
+          addon: addon.id,
+          name: addon.displayName ?? undefined
         });
 
       if (request.body.detailed)

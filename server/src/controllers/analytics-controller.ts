@@ -186,6 +186,7 @@ export class AnalyticsController extends Controller {
           this.mixpanel.track('viewed profile', {
             distinct_id: profile.userId,
             profile: profile.id,
+            handle: profile.handle
           });
       } else {
         await this.analyticsService.createAnonymousVisit("page");
@@ -194,6 +195,7 @@ export class AnalyticsController extends Controller {
           this.mixpanel.track('viewed profile', {
             distinct_id: Constants.ANONYMOUS_USER_ID,
             profile: profile.id,
+            handle: profile.handle
           });
       }
 

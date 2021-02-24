@@ -13,6 +13,7 @@ create table if not exists marketplace.addons
     user_id           bigint references app.users (id) on update cascade on delete no action,
     resource_id       bigint unique not null, -- The id of the resource this addon is related to
     type              addon_t       not null, -- The type of resource this is
+    display_name      text,                   -- The name of this resource
     description       text,
     author            text,
     tags              text[],
@@ -26,6 +27,7 @@ create table if not exists marketplace.addons
 );
 
 create index if not exists addons_type on marketplace.addons (type);
+create index if not exists addons_display_name on marketplace.addons (display_name);
 create index if not exists addons_description on marketplace.addons (description);
 create index if not exists addons_author on marketplace.addons (author);
 create index if not exists addons_tags on marketplace.addons (tags);
