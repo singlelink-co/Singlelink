@@ -334,6 +334,8 @@ export class ProfileController extends Controller {
         return;
       }
 
+      let prevWatermarkStatus = body.authProfile.showWatermark;
+
       let newProfile = await this.profileService.updateProfile(
         body.authProfile.id,
         body.imageUrl,
@@ -347,12 +349,22 @@ export class ProfileController extends Controller {
         body.customDomain
       );
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
         this.mixpanel.track('profile updated', {
           distinct_id: newProfile.userId,
           profile: newProfile.id,
           profileObject: newProfile
         });
+
+        if (prevWatermarkStatus !== newProfile.showWatermark) {
+          this.mixpanel.track('watermark status toggled', {
+            distinct_id: newProfile.userId,
+            profile: newProfile.id,
+            showWatermark: newProfile.showWatermark
+          });
+        }
+      }
+
 
       return newProfile;
     } catch (e) {
