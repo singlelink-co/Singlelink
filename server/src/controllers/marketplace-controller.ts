@@ -9,19 +9,27 @@ import {config} from "../config/config";
 import Mixpanel from "mixpanel";
 import {StatusCodes} from "http-status-codes";
 import {UserService} from "../services/user-service";
+import {ThemeService} from "../services/theme-service";
 
 interface MarketplaceListingRequest extends AuthenticatedRequest {
   Body: {
+    detailed?: boolean,
     ids?: string[],
     lastItemId?: number,
     limit?: number
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"],
+  Querystring: {
+    detailed?: boolean
+  }
 }
 
 interface GetAddonRequest extends AuthenticatedRequest {
   Params: {
     id: string
-  }
+  },
+  Body: {
+    detailed?: boolean,
+  } & AuthenticatedRequest["Body"],
 }
 
 interface CreateAddonRequest extends AuthenticatedRequest {
@@ -87,6 +95,7 @@ const rateLimitMarketplaceCreation = {
 export class MarketplaceController extends Controller {
   private readonly marketplaceService: MarketplaceService;
   private readonly userService: UserService;
+  private readonly themeService: ThemeService;
   private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
@@ -94,6 +103,7 @@ export class MarketplaceController extends Controller {
 
     this.marketplaceService = new MarketplaceService(databaseManager);
     this.userService = new UserService(databaseManager);
+    this.themeService = new ThemeService(databaseManager);
   }
 
   registerRoutes(): void {
@@ -140,9 +150,33 @@ export class MarketplaceController extends Controller {
       }
 
       if (ids) {
-        return this.marketplaceService.getAddons(request.body.authUser.id, ids);
+        let addons = await this.marketplaceService.getAddons(request.body.authUser.id, ids);
+
+        if (request.body.detailed) {
+          let promises = [];
+
+          for (let addon of addons) {
+            promises.push(this.hydrateResource(addon));
+          }
+
+          await Promise.all(promises);
+        }
+
+        return addons;
       } else {
-        return this.marketplaceService.listAddons(request.body.authUser.id, lastItemId, limit);
+        let addons = await this.marketplaceService.listAddons(request.body.authUser.id, lastItemId, limit);
+
+        if (request.body.detailed) {
+          let promises = [];
+
+          for (let addon of addons) {
+            promises.push(this.hydrateResource(addon));
+          }
+
+          await Promise.all(promises);
+        }
+
+        return addons;
       }
     } catch (e) {
       if (e instanceof HttpError) {
@@ -169,6 +203,9 @@ export class MarketplaceController extends Controller {
         this.mixpanel.track('addon viewed', {
           distinct_id: request.body.authUser.id,
         });
+
+      if (request.body.detailed)
+        addon = await this.hydrateResource(addon);
 
       return addon;
     } catch (e) {
@@ -312,7 +349,7 @@ export class MarketplaceController extends Controller {
       let profile = request.body.authProfile;
       let addonId = request.params.id;
 
-      if (!(await Auth.checkAddonOwnership(this.marketplaceService, addonId, user))) {
+      if (!(await Auth.checkAddonPermission(this.marketplaceService, addonId, user))) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
       }
 
@@ -344,13 +381,8 @@ export class MarketplaceController extends Controller {
    */
   async UninstallAddon(request: FastifyRequest<UninstallAddonRequest>, reply: FastifyReply) {
     try {
-      let user = request.body.authUser;
       let profile = request.body.authProfile;
       let addonId = request.params.id;
-
-      if (!(await Auth.checkAddonOwnership(this.marketplaceService, addonId, user))) {
-        return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
-      }
 
       await this.marketplaceService.uninstallAddon(profile, addonId);
 
@@ -445,5 +477,23 @@ export class MarketplaceController extends Controller {
 
       throw e;
     }
+  }
+
+  private async hydrateResource(addon: Addon): Promise<Addon> {
+    console.log("Hydrating addon: " + addon.id + " rs: " + addon.resourceId);
+
+    switch (addon.type) {
+      case "theme":
+        addon.resource = await this.themeService.getTheme(addon.resourceId);
+
+        break;
+      //TODO Add support for preset and plugin
+      case "preset":
+        break;
+      case "plugin":
+        break;
+    }
+
+    return addon;
   }
 }

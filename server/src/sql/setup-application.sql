@@ -2,14 +2,6 @@
 -- Application
 ------------
 
-do
-$$
-    begin
-        raise notice 'Hello world';
-    end;
-$$ language plpgsql;
-
-
 create schema if not exists app;
 
 /*

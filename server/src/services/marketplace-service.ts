@@ -90,9 +90,13 @@ export class MarketplaceService extends DatabaseService {
   async createAddon(addon: Partial<Addon>): Promise<Addon> {
     //language=PostgreSQL
     let queryStr = `insert into marketplace.addons(user_id, resource_id, type, description, author, tags, price,
-                                                   payment_frequency, version, last_updated)
-                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, current_timestamp)
+                                                   payment_frequency, global, version, last_updated)
+                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, current_timestamp)
                     returning *`;
+
+    if (!addon.global) {
+      addon.global = false;
+    }
 
     let queryResult = await this.pool.query<DbAddon>(queryStr,
       [
@@ -104,6 +108,7 @@ export class MarketplaceService extends DatabaseService {
         addon.tags,
         addon.price,
         addon.paymentFrequency,
+        addon.global,
         addon.version,
       ]);
 
@@ -199,7 +204,7 @@ export class MarketplaceService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount < 1)
-      throw new HttpError(StatusCodes.NOT_FOUND, "The addon or userid couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The addon or userid couldn't be found, or wasn't already installed.");
 
     // uninstall process
     let addon = await this.findAddon(addonId);
@@ -220,7 +225,7 @@ export class MarketplaceService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount < 1)
-      throw new HttpError(StatusCodes.NOT_FOUND, "The addon or userid couldn't be found.");
+      return [];
 
     return queryResult.rows.map(x => DbTypeConverter.toAddonInstall(x));
   }

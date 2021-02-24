@@ -64,3 +64,19 @@ $$
         when duplicate_object then raise notice 'addon_t already added.';
     end;
 $$ language plpgsql;
+
+do
+$$
+    begin
+        /*
+         Addon_t specifies what kind of addon this is.
+
+         theme: A theme.
+         preset: A preset.
+         plugin: A plugin.
+         */
+        create type addon_t as enum ('theme', 'preset', 'plugin');
+    exception
+        when duplicate_object then raise notice 'addon_t already added.';
+    end;
+$$ language plpgsql;

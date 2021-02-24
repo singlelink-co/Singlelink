@@ -407,4 +407,18 @@ export class Auth {
 
     return queryResult.rows[0].count > 0;
   }
+
+  /**
+   * Validates ownership of an addon.
+   * @param service
+   * @param addonId
+   * @param user
+   */
+  static async checkAddonPermission(service: DatabaseService, addonId: string, user: User): Promise<boolean> {
+    const pool = service.pool;
+
+    let queryResult = await pool.query<{ count: number }>("select count(*) from marketplace.addons where id=$1 and (user_id=$2 or global=true)", [addonId, user.id]);
+
+    return queryResult.rows[0].count > 0;
+  }
 }

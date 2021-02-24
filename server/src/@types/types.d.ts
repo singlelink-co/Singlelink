@@ -161,7 +161,10 @@ interface Addon {
   global: boolean,
   version: string,
   createdOn: string,
-  lastUpdated: string
+  lastUpdated: string,
+
+  // A hydrated resource object, if provided with the request
+  resource?: unknown
 }
 
 interface AddonInstall {
