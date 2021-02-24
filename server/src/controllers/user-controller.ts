@@ -130,6 +130,7 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user logged in', {
           distinct_id: loginResultData.user.id,
+          $ip: request.ip,
           profile: loginResultData.activeProfile?.id
         });
 
@@ -188,6 +189,7 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user created', {
           distinct_id: user.id,
+          $ip: request.ip,
           profile: profile.id,
         });
 
@@ -231,6 +233,7 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user requested password reset', {
           distinct_id: user.id,
+          $ip: request.ip
         });
 
       return ReplyUtils.success("Successfully sent password reset email.");
@@ -297,6 +300,7 @@ export class UserController extends Controller {
 
       // this.mixpanel.track('user updated', {
       //   distinct_id: request.body.id,
+      //   $ip: request.ip,
       // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
@@ -322,6 +326,7 @@ export class UserController extends Controller {
 
       // this.mixpanel.track('user deleted', {
       //   distinct_id: request.body.id,
+      //   $ip: request.ip,
       // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
@@ -345,6 +350,7 @@ export class UserController extends Controller {
 
       // this.mixpanel.track('user deleted', {
       //   distinct_id: request.body.id,
+      //   $ip: request.ip,
       // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
@@ -385,6 +391,7 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user set active profile', {
           distinct_id: user.id,
+          $ip: request.ip,
           profile: newProfileId
         });
 
