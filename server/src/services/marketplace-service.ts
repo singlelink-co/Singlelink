@@ -11,8 +11,6 @@ export class MarketplaceService extends DatabaseService {
     super(databaseManager);
   }
 
-  // TODO Implement marketplace searching
-
   /**
    * Lists all addons on the marketplace. This function is paginated by default for performance reasons. Maximum per
    * page is 500.
