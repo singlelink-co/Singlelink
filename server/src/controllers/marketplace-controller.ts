@@ -17,10 +17,7 @@ interface MarketplaceListingRequest extends AuthenticatedRequest {
     ids?: string[],
     lastItemId?: number,
     limit?: number
-  } & AuthenticatedRequest["Body"],
-  Querystring: {
-    detailed?: boolean
-  }
+  } & AuthenticatedRequest["Body"]
 }
 
 interface GetAddonRequest extends AuthenticatedRequest {
