@@ -1,8 +1,6 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {DbTypeConverter} from "../utils/db-type-converter";
-import {HttpError} from "../utils/http-error";
-import {StatusCodes} from "http-status-codes";
 
 /**
  * This service takes care of transactional tasks for Analytics.

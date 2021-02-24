@@ -339,7 +339,7 @@ export default Vue.extend({
         this.user.activeProfile.visibility = profileResponse.visibility;
         this.user.activeProfile.showWatermark = profileResponse.showWatermark;
 
-        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata.privacyMode;
+        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata?.privacyMode ?? false;
 
         this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
 

@@ -92,6 +92,7 @@ export class DbTypeConverter {
     return {
       id: link.id,
       profileId: link.profile_id,
+      type: link.type,
       url: link.url,
       sortOrder: link.sort_order,
       label: link.label,
@@ -126,6 +127,35 @@ export class DbTypeConverter {
       id: perms.id,
       userId: perms.user_id,
       groupName: perms.group_name
+    };
+  }
+
+  static toAddon(addon: DbAddon): Addon {
+    return {
+      id: addon.id,
+      userId: addon.user_id,
+      resourceId: addon.resource_id,
+      type: addon.type,
+      displayName: addon.display_name,
+      description: addon.description,
+      author: addon.author,
+      tags: addon.tags,
+      featuredSorting: addon.featured_sorting,
+      price: addon.price,
+      paymentFrequency: addon.payment_frequency,
+      global: addon.global,
+      version: addon.version,
+      createdOn: addon.created_on,
+      lastUpdated: addon.last_updated
+    };
+  }
+
+  static toAddonInstall(addonInstall: DbAddonInstall): AddonInstall {
+    return {
+      id: addonInstall.id,
+      profileId: addonInstall.profile_id,
+      addonId: addonInstall.addon_id,
+      createdOn: addonInstall.created_on
     };
   }
 

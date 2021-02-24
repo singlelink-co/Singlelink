@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {StatusCodes} from "http-status-codes";
@@ -9,6 +9,9 @@ import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {ReplyUtils} from "../utils/reply-utils";
 import {ProfileService} from "../services/profile-service";
 import {LinkService} from "../services/link-service";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
+import {Constants} from "../config/constants";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
   Params: {
@@ -32,19 +35,21 @@ interface GetProfileAnalyticsRequest extends AuthenticatedRequest {
 const rateLimitAnalytics = {
   config: {
     rateLimit: {
-      max: 10,
+      max: 4,
       timeWindow: '1 second'
     }
-  }
+  },
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
 export class AnalyticsController extends Controller {
-  private analyticsService: AnalyticsService;
-  private linkService: LinkService;
-  private profileService: ProfileService;
+  private readonly analyticsService: AnalyticsService;
+  private readonly linkService: LinkService;
+  private readonly profileService: ProfileService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -61,7 +66,7 @@ export class AnalyticsController extends Controller {
     this.fastify.all('/analytics/profile/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
-    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', Auth.ValidateWithData, this.GetProfileAnalytics.bind(this));
+    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', rateLimitAnalytics, this.GetProfileAnalytics.bind(this));
   }
 
   /**
@@ -107,10 +112,30 @@ export class AnalyticsController extends Controller {
 
       let link = await this.linkService.getLink(id);
       const profileId = link.profileId;
-      const profile = await this.profileService.getMetadata(profileId);
+      const profile = await this.profileService.getProfile(profileId);
 
-      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createLinkVisit(id);
+      if (profile.visibility !== "unpublished") {
+        if (!profile.metadata?.privacyMode) {
+          await this.analyticsService.createVisit(id, "link");
+
+          if (this.mixpanel)
+            this.mixpanel.track('clicked profile link', {
+              distinct_id: profile.userId,
+              profile: profileId,
+              link: link.id,
+              url: link.url
+            });
+        } else {
+          await this.analyticsService.createAnonymousVisit("link");
+
+          if (this.mixpanel)
+            this.mixpanel.track('clicked profile link', {
+              distinct_id: Constants.ANONYMOUS_USER_ID,
+              profile: profileId,
+              link: link.id,
+              url: link.url
+            });
+        }
       }
 
       if (link.useDeepLink) {
@@ -154,10 +179,28 @@ export class AnalyticsController extends Controller {
         return ReplyUtils.error("The profile was not found.");
       }
 
-      const profile: { visibility: DbProfile["visibility"]; metadata: DbProfile["metadata"] } = await this.profileService.getMetadata(id);
+      const profile = await this.profileService.getProfile(id);
 
-      if (!profile.metadata.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createProfileVisit(id);
+      if (profile.visibility !== "unpublished") {
+        if (!profile.metadata?.privacyMode) {
+          await this.analyticsService.createVisit(id, "page");
+
+          if (this.mixpanel)
+            this.mixpanel.track('viewed profile', {
+              distinct_id: profile.userId,
+              profile: profile.id,
+              handle: profile.handle
+            });
+        } else {
+          await this.analyticsService.createAnonymousVisit("page");
+
+          if (this.mixpanel)
+            this.mixpanel.track('viewed profile', {
+              distinct_id: Constants.ANONYMOUS_USER_ID,
+              profile: profile.id,
+              handle: profile.handle
+            });
+        }
       }
 
       reply.code(StatusCodes.OK).send();
@@ -185,7 +228,7 @@ export class AnalyticsController extends Controller {
 
       // TODO Grab dateRange/dayRange and pass it in for time specific analytics
 
-      return await this.analyticsService.getProfileAnalyticsData(request.body.authProfile.id);
+      return this.analyticsService.getProfileAnalyticsData(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

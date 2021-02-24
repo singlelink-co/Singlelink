@@ -6,6 +6,8 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
 
 interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
@@ -58,7 +60,8 @@ interface SetUserIdRequest extends AdminRequest {
  * This controller maps and provides for all the controllers under /theme.
  */
 export class ThemeController extends Controller {
-  private themeService: ThemeService;
+  private readonly themeService: ThemeService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -90,9 +93,9 @@ export class ThemeController extends Controller {
       let body = request.body;
 
       if (body.onlyGlobal) {
-        return await this.themeService.listGlobalThemes();
+        return this.themeService.listGlobalThemes();
       } else {
-        return await this.themeService.listUserThemes(body.authUser.id, body.includeGlobal);
+        return this.themeService.listUserThemes(body.authUser.id, body.includeGlobal);
       }
     } catch (e) {
       if (e instanceof HttpError) {
@@ -118,7 +121,16 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+      let theme = await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+
+      if (this.mixpanel)
+        this.mixpanel.track('new theme created', {
+          distinct_id: request.body.authUser.id,
+          theme: theme.id,
+          themeObject: theme
+        });
+
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -143,7 +155,16 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+      let theme = await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+
+      if (this.mixpanel)
+        this.mixpanel.track('theme updated', {
+          distinct_id: request.body.authUser.id,
+          theme: theme.id,
+          themeObject: theme
+        });
+
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -163,7 +184,16 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      return await this.themeService.deleteUserTheme(body.id, body.authUser.id);
+      let deletedTheme = await this.themeService.deleteUserTheme(body.id, body.authUser.id);
+
+      if (this.mixpanel)
+        this.mixpanel.track('theme deleted', {
+          distinct_id: request.body.authUser.id,
+          theme: deletedTheme.id,
+          themeObject: deletedTheme
+        });
+
+      return deletedTheme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -185,7 +215,7 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      return await this.themeService.setGlobal(body.id, body.global);
+      return this.themeService.setGlobal(body.id, body.global);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -205,7 +235,7 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      return await this.themeService.setUserId(body.id, body.userId);
+      return this.themeService.setUserId(body.id, body.userId);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -230,7 +260,7 @@ export class ThemeController extends Controller {
         return;
       }
 
-      return await this.themeService.updateTheme(body.id, body.label, body.colors, body.customCss, body.customHtml);
+      return this.themeService.updateTheme(body.id, body.label, body.colors, body.customCss, body.customHtml);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -250,7 +280,7 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
-      return await this.themeService.deleteTheme(body.id);
+      return this.themeService.deleteTheme(body.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

@@ -9,6 +9,8 @@ import {UserService} from "../services/user-service";
 import {ThemeService} from "../services/theme-service";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
+import Mixpanel from "mixpanel";
+import {config} from "../config/config";
 
 interface ProfileHandleRequest extends RequestGenericInterface {
   Params: {
@@ -66,9 +68,10 @@ const createProfileRequestOpts = {
  */
 export class ProfileController extends Controller {
   private readonly linkService: LinkService;
-  private profileService: ProfileService;
-  private userService: UserService;
-  private themeService: ThemeService;
+  private readonly profileService: ProfileService;
+  private readonly userService: UserService;
+  private readonly themeService: ThemeService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -101,7 +104,7 @@ export class ProfileController extends Controller {
 
   /**
    * Route for /profile
-   * /profile//:handle
+   * /profile/:handle
    *
    * Fetches a user's profile.
    *
@@ -251,7 +254,7 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.listProfiles(request.body.authUser.id);
+      return this.profileService.listProfiles(request.body.authUser.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -275,7 +278,7 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.linkService.listLinks(request.body.authProfile.id);
+      return this.linkService.listLinks(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -296,7 +299,16 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
-      return await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+      let newProfile = await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+
+      if (this.mixpanel)
+        this.mixpanel.track('new profile created', {
+          distinct_id: newProfile.userId,
+          profile: newProfile.id,
+          profileObject: newProfile
+        });
+
+      return newProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -322,7 +334,9 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.updateProfile(
+      let prevWatermarkStatus = body.authProfile.showWatermark;
+
+      let newProfile = await this.profileService.updateProfile(
         body.authProfile.id,
         body.imageUrl,
         body.headline,
@@ -334,6 +348,25 @@ export class ProfileController extends Controller {
         body.customHtml,
         body.customDomain
       );
+
+      if (this.mixpanel) {
+        this.mixpanel.track('profile updated', {
+          distinct_id: newProfile.userId,
+          profile: newProfile.id,
+          profileObject: newProfile
+        });
+
+        if (prevWatermarkStatus !== newProfile.showWatermark) {
+          this.mixpanel.track('watermark status toggled', {
+            distinct_id: newProfile.userId,
+            profile: newProfile.id,
+            showWatermark: newProfile.showWatermark
+          });
+        }
+      }
+
+
+      return newProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -357,7 +390,16 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
+      let deletedProfile = await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
+
+      if (this.mixpanel)
+        this.mixpanel.track('profile deleted', {
+          distinct_id: deletedProfile.userId,
+          profile: deletedProfile.id,
+          profileObject: deletedProfile
+        });
+
+      return deletedProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -408,10 +450,21 @@ export class ProfileController extends Controller {
       }
 
       if (body.id) {
-        await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true);
+        if (!await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true)) {
+          return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
+        }
       }
 
-      return await this.profileService.setActiveTheme(body.authProfile.id, body.id);
+      let theme = await this.profileService.setActiveTheme(body.authProfile.id, body.id);
+
+      if (this.mixpanel)
+        this.mixpanel.track('set profile active theme', {
+          distinct_id: request.body.authUser.id,
+          profile: request.body.authProfile.id,
+          theme: theme
+        });
+
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -435,7 +488,23 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+      let previousPrivacyMode = request.body.authProfile.metadata?.privacyMode;
+
+      if (previousPrivacyMode !== request.body.privacyMode) {
+
+        let profile = await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+
+        if (this.mixpanel)
+          this.mixpanel.track('toggle privacy mode', {
+            distinct_id: profile.userId,
+            profile: profile.id,
+            privacyMode: request.body.privacyMode
+          });
+
+        return profile;
+      }
+
+      reply.status(StatusCodes.ACCEPTED).send();
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

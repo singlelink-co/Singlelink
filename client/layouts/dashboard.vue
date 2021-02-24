@@ -317,7 +317,7 @@
               :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
               alt="avatar"
             >
-
+c
             <div
               v-if="!profile.handle"
               class="mr-2 rounded-full"

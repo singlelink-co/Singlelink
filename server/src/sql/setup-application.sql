@@ -1,52 +1,8 @@
+------------
+-- Application
+------------
+
 create schema if not exists app;
-create schema if not exists analytics;
-
-do
-$$
-    begin
-        /*
-         The subscription type of this user.
-
-         free: Free tier account.
-         whale: Whale tier account.
-         enterprise: Enterprise tier account.
-         */
-        create type subscription_t as enum ('free', 'whale', 'enterprise');
-    exception
-        when duplicate_object then raise notice 'subscription_t already added.';
-    end;
-$$ language plpgsql;
-
-do
-$$
-    begin
-        /*
-         Visibility_t specifies the visibility level of a profile.
-
-         unpublished: The profile is not visible to anyone.
-         published: The profile is visible to everyone.
-         published-18+: The profile is visible, but with content warnings.
-         */
-        create type visibility_t as enum ('unpublished', 'published', 'published-18+');
-    exception
-        when duplicate_object then raise notice 'visibility_t already added.';
-    end;
-$$ language plpgsql;
-
-do
-$$
-    begin
-        /*
-         Visit_t specifies what kind of visit an entry is.
-
-         link: The visit was to a link.
-         page: The visit was to a page.
-         */
-        create type visit_t as enum ('link', 'page');
-    exception
-        when duplicate_object then raise notice 'visit_t already added.';
-    end;
-$$ language plpgsql;
 
 /*
  Creates an accounts table with a list of profiles associated with it.
@@ -62,11 +18,12 @@ create table if not exists app.users
     payment_id        text,                                        -- The associated payment account id (external) for this user
     subscription_tier subscription_t               default 'free', -- The subscription tier of this user
     inventory         jsonb                        default '{}',   -- All the stuff this account owns
-    metadata          jsonb                        default '{}',
+    metadata          jsonb               not null default '{}',
     created_on        timestamp           not null default current_timestamp
 );
 
 create index if not exists accounts_email_index on app.users (email);
+create index if not exists accounts_metadata_favorites on app.users ((metadata -> 'favorites'));
 
 /*
  Creates a theme table that contains all user themes.
@@ -104,7 +61,9 @@ create table if not exists app.profiles
     custom_domain  text unique,
     theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility     visibility_t         default 'unpublished',
-    metadata       jsonb                default '{}',
+    metadata       jsonb       not null default '{
+      "privacyMode": false
+    }',
     created_on     timestamp   not null default current_timestamp
 );
 
@@ -152,19 +111,24 @@ create table if not exists app.links
 (
     id            bigserial primary key unique,
     profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
-    url           text  default '#'   not null,
-    sort_order    int                 not null,
-    label         text                not null,
+    type          linktype_t default 'link' not null,
+    url           text       default '#'    not null,
+    sort_order    int                       not null,
+    label         text                      not null,
     subtitle      text,
     style         text,
     custom_css    text,
-    use_deep_link bool  default false not null,
-    metadata      jsonb default '{}',
-    created_on    timestamp           not null default current_timestamp
+    use_deep_link bool       default false  not null,
+    metadata      jsonb                     not null default '{}',
+    created_on    timestamp                 not null default current_timestamp
 );
 
 create index if not exists links_profile_id on app.links (profile_id);
 create index if not exists links_url_index on app.links (url);
+
+
+
+-- Permissions/Admin
 
 /*
  Creates a table for permission groups.
@@ -179,36 +143,30 @@ create table if not exists app.perm_groups
 
 create index if not exists perm_groups_group_name on app.perm_groups (group_name);
 
-/*
- Creates a table for visiting analytics.
- type: The type of visit this was.
- referral_id: The link or page this visit points to.
- */
-create table if not exists analytics.visits
-(
-    type        visit_t   not null,
-    referral_id bigint    not null,
-    created_on  timestamp not null default current_timestamp
-);
+------------
+-- Patches
+-- Over time, things need to be updated and patched. This section is all about that.
+------------
 
-create index if not exists visits_referral_id_index on analytics.visits (referral_id);
+-- Update v2.1.9, fixes metadata being null sometimes
+update app.profiles
+set metadata=default
+where metadata is null;
+alter table app.profiles
+    alter column metadata set not null;
 
-do
-$$
-    begin
-        /*
-         Creates an analytics view for use with the server analytics.
-         */
-        create materialized view analytics.global_stats as
-            select count(app.users.*)                                                                         as total_users,
-                   (select count(app.profiles.*) from app.profiles)                                           as total_profiles,
-                   (select count(app.profiles.*) filter ( where visibility = 'published' )
-                    from app.profiles)                                                                        as profiles_published,
-                   (select count(app.links.*) from app.links)                                                 as total_links,
-                   (select count(app.themes.*) from app.themes)                                               as total_themes
-            from app.users;
-    exception
-        when duplicate_table then raise notice 'analytics.analytics_view already added.';
-    end;
-$$ language plpgsql;
+-- Update v2.2, updates metadata tables for existing columns
+update app.users
+set metadata=default
+where metadata is null;
+alter table app.users
+    alter column metadata set not null;
 
+update app.links
+set metadata=default
+where metadata is null;
+alter table app.links
+    alter column metadata set not null;
+
+alter table app.links
+    add column if not exists type linktype_t default 'link' not null;

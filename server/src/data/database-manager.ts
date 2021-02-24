@@ -27,12 +27,13 @@ export class DatabaseManager {
   }
 
   /**
-   * Creates the database from a provided sql file in the relative /sql/setup-database.sql file.
+   * Creates the database from the provided sql scripts in /sql.
    */
   async createDatabase() {
-    let sql = fs.readFileSync(`${__dirname}/../sql/setup-database.sql`).toString();
-
-    await this.pool.query(sql);
+    await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-types.sql`).toString());
+    await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-application.sql`).toString());
+    await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-analytics.sql`).toString());
+    await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-marketplace.sql`).toString());
   }
 
   /**
