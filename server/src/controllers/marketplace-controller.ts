@@ -10,8 +10,9 @@ import Mixpanel from "mixpanel";
 import {StatusCodes} from "http-status-codes";
 import {UserService} from "../services/user-service";
 import {ThemeService} from "../services/theme-service";
+import {Constants} from "../config/constants";
 
-interface MarketplaceListingRequest extends AuthenticatedRequest {
+interface ListAddonsRequest extends AuthenticatedRequest {
   Body: {
     sorting?: AddonSorting,
     ascending?: boolean,
@@ -20,6 +21,15 @@ interface MarketplaceListingRequest extends AuthenticatedRequest {
     lastItemId?: number,
     limit?: number
   } & AuthenticatedRequest["Body"]
+}
+
+interface SearchAddonsRequest {
+  Querystring: {
+    query: string,
+    detailed?: boolean,
+    lastItemId?: number,
+    limit?: number
+  }
 }
 
 interface GetAddonRequest extends AuthenticatedRequest {
@@ -62,10 +72,10 @@ interface UninstallAddonRequest extends AuthenticatedRequest {
 }
 
 
-interface GetAddonStats extends AuthenticatedRequest {
+interface GetAddonStats extends FastifyRequest {
   Params: {
     id: string
-  } & AuthenticatedRequest["Body"]
+  }
 }
 
 interface ListInstalledAddonsRequest extends AuthenticatedRequest {
@@ -83,6 +93,16 @@ interface ToggleUserFavoriteAddonRequest extends AuthenticatedRequest {
 interface ListUserFavoriteAddonsRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
+
+const rateLimitSearchRequest = {
+  config: {
+    rateLimit: {
+      max: 20,
+      timeWindow: '1 min'
+    }
+  }
+};
+
 
 const rateLimitStatsRequest = {
   config: {
@@ -125,9 +145,11 @@ export class MarketplaceController extends Controller {
   registerRoutes(): void {
     // Unauthenticated
     this.fastify.all<GetAddonStats>('/marketplace/addon/stats/:id', rateLimitStatsRequest, this.GetAddonStats.bind(this));
+    this.fastify.all<SearchAddonsRequest>('/marketplace/addons/search', rateLimitSearchRequest, this.SearchAddons.bind(this));
 
     // Authenticated
-    this.fastify.all<MarketplaceListingRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
+    this.fastify.all<ListAddonsRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
+    this.fastify.all<ListInstalledAddonsRequest>('/marketplace/addons/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
     this.fastify.all<GetAddonRequest>('/marketplace/addon/:id', Auth.ValidateWithData, this.GetAddon.bind(this));
     this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', rateLimitMarketplaceCreation, this.CreateAddon.bind(this));
@@ -136,8 +158,6 @@ export class MarketplaceController extends Controller {
 
     this.fastify.all<InstallAddonRequest>('/marketplace/addon/install/:id', Auth.ValidateWithData, this.InstallAddon.bind(this));
     this.fastify.all<UninstallAddonRequest>('/marketplace/addon/uninstall/:id', Auth.ValidateWithData, this.UninstallAddon.bind(this));
-
-    this.fastify.all<ListInstalledAddonsRequest>('/marketplace/addon/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
     this.fastify.all<ToggleUserFavoriteAddonRequest>('/marketplace/user/favorite/:id', Auth.ValidateWithData, this.ToggleUserFavoriteAddon.bind(this));
     this.fastify.all<ListUserFavoriteAddonsRequest>('/marketplace/user/favorites', Auth.ValidateWithData, this.ListUserFavoriteAddons.bind(this));
@@ -150,7 +170,7 @@ export class MarketplaceController extends Controller {
    * @param reply
    * @constructor
    */
-  async ListAddons(request: FastifyRequest<MarketplaceListingRequest>, reply: FastifyReply) {
+  async ListAddons(request: FastifyRequest<ListAddonsRequest>, reply: FastifyReply) {
     try {
       let ids = request.body.ids;
       let lastItemId = request.body.lastItemId;
@@ -160,11 +180,15 @@ export class MarketplaceController extends Controller {
         if (ids) {
           this.mixpanel.track('user requested specific addons', {
             distinct_id: request.body.authUser.id,
+            $ip: request.ip,
             addons: ids
           });
         } else {
           this.mixpanel.track('user listed addons', {
             distinct_id: request.body.authUser.id,
+            $ip: request.ip,
+            sorting: request.body.sorting,
+            ascending: request.body.ascending
           });
         }
       }
@@ -209,6 +233,73 @@ export class MarketplaceController extends Controller {
   }
 
   /**
+   * Route for /marketplace/addons/search
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async SearchAddons(request: FastifyRequest<SearchAddonsRequest>, reply: FastifyReply) {
+    try {
+      let query = request.query.query;
+      let detailed = request.query.detailed;
+      let lastItemId = request.query.lastItemId;
+      let limit = request.query.limit;
+
+      if (this.mixpanel) {
+        this.mixpanel.track('search query', {
+          distinct_id: Constants.ANONYMOUS_USER_ID,
+          $ip: request.ip,
+          query: query
+        });
+      }
+
+      let addons = await this.marketplaceService.searchAddons(query, lastItemId, limit);
+
+      if (detailed) {
+        let promises = [];
+
+        for (let addon of addons) {
+          promises.push(this.hydrateAddon(addon));
+        }
+
+        await Promise.all(promises);
+      }
+
+      return addons;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /marketplace/addon/installed
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ListInstalledAddons(request: FastifyRequest<ListInstalledAddonsRequest>, reply: FastifyReply) {
+    try {
+      let profile = request.body.authProfile;
+
+      return await this.marketplaceService.getInstalledAddons(profile.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
    * Route for /marketplace/addon/:id
    *
    * @param request
@@ -222,6 +313,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon viewed', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: addon.id,
           name: addon.displayName ?? undefined
         });
@@ -270,6 +362,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon created', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: newAddon.id,
           addonObject: newAddon
         });
@@ -308,6 +401,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon updated', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: newAddon.id,
           addonObject: newAddon
         });
@@ -344,6 +438,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon deleted', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: addonId
         });
 
@@ -380,6 +475,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon installed', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: addonId
         });
 
@@ -411,32 +507,11 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon uninstalled', {
           distinct_id: request.body.authUser.id,
+          $ip: request.ip,
           addon: addonId
         });
 
       return {"message": "addon has been uninstalled"};
-    } catch (e) {
-      if (e instanceof HttpError) {
-        reply.code(e.statusCode);
-        return ReplyUtils.error(e.message, e);
-      }
-
-      throw e;
-    }
-  }
-
-  /**
-   * Route for /marketplace/addon/installed
-   *
-   * @param request
-   * @param reply
-   * @constructor
-   */
-  async ListInstalledAddons(request: FastifyRequest<ListInstalledAddonsRequest>, reply: FastifyReply) {
-    try {
-      let profile = request.body.authProfile;
-
-      return await this.marketplaceService.getInstalledAddons(profile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -484,6 +559,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user favorited addon', {
           distinct_id: user.id,
+          $ip: request.ip,
           addon: addonId,
           favorited: favorited
         });
