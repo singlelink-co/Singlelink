@@ -282,6 +282,26 @@ export class MarketplaceService extends DatabaseService {
 
     // install process
     let addon = await this.findAddon(addonId);
+
+    // uninstall existing installed theme(s) if already installed
+    switch (addon.type) {
+      case "theme":
+        let installedAddons = await this.getInstalledAddons(profile.id);
+
+        let themeAddons: string[] = (await Promise.all(installedAddons.map(async (x): Promise<Addon> => {
+          return await this.findAddon(x.addonId);
+        })))
+          .filter(x => x.type == "theme")
+          .map(x => x.id);
+
+        await this.pool.query<DbAddonInstall>("delete from marketplace.installs where profile_id=$1 and (addon_id != $2 and addon_id=any($3))",
+          [
+            profile.id,
+            addonId,
+            themeAddons
+          ]);
+    }
+
     await this.installAddonToProfile(profile, addon);
     await this.incrementInstallCount(profile.userId, addonId);
 
