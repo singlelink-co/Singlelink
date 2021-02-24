@@ -96,6 +96,45 @@ export class MarketplaceService extends DatabaseService {
   }
 
   /**
+   * Searches all addons on the marketplace. This function is paginated by default for performance reasons. Maximum per
+   * page is 500.
+   *
+   * @param query The search query
+   * @param lastItemId The last item of the previous page
+   * @param limit The number of addons to show
+   */
+  async searchAddons(query: string, lastItemId: number = 0, limit: number = 100): Promise<Addon[]> {
+    if (limit > 500) {
+      limit = 500;
+    }
+
+    let queryResult: QueryResult<DbAddon>, queryStr: string;
+
+    queryStr = `select *
+                from marketplace.addons
+                where global = true
+                  and ($1 % addons.display_name or $1 % addons.description or $1 % addons.author or
+                       $1 % array_to_string(addons.tags, ' '))
+                  and id > $2
+                order by id
+                limit $3`;
+
+    queryResult = await this.pool.query<DbAddon>(queryStr,
+      [
+        query,
+        lastItemId,
+        limit
+      ]);
+
+    if (queryResult.rowCount < 1)
+      return [];
+
+    return queryResult.rows.map(x => {
+      return DbTypeConverter.toAddon(x);
+    });
+  }
+
+  /**
    * Gets an addon.
    *
    * @param userId
@@ -243,6 +282,26 @@ export class MarketplaceService extends DatabaseService {
 
     // install process
     let addon = await this.findAddon(addonId);
+
+    // uninstall existing installed theme(s) if already installed
+    switch (addon.type) {
+      case "theme":
+        let installedAddons = await this.getInstalledAddons(profile.id);
+
+        let themeAddons: string[] = (await Promise.all(installedAddons.map(async (x): Promise<Addon> => {
+          return await this.findAddon(x.addonId);
+        })))
+          .filter(x => x.type == "theme")
+          .map(x => x.id);
+
+        await this.pool.query<DbAddonInstall>("delete from marketplace.installs where profile_id=$1 and (addon_id != $2 and addon_id=any($3))",
+          [
+            profile.id,
+            addonId,
+            themeAddons
+          ]);
+    }
+
     await this.installAddonToProfile(profile, addon);
     await this.incrementInstallCount(profile.userId, addonId);
 

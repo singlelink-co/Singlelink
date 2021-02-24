@@ -121,6 +121,7 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('clicked profile link', {
               distinct_id: profile.userId,
+              $ip: request.ip,
               profile: profileId,
               link: link.id,
               url: link.url
@@ -131,6 +132,7 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('clicked profile link', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
+              $ip: request.ip,
               profile: profileId,
               link: link.id,
               url: link.url
@@ -188,6 +190,7 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('viewed profile', {
               distinct_id: profile.userId,
+              $ip: request.ip,
               profile: profile.id,
               handle: profile.handle
             });
@@ -197,6 +200,7 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('viewed profile', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
+              $ip: request.ip,
               profile: profile.id,
               handle: profile.handle
             });
