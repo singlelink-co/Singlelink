@@ -1,8 +1,8 @@
 <template>
     <div :class="'w-full flex flex-col' + active_styles">
-        <div class="shadow w-full h-32 rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + colors.fill.primary + ';'">
+        <div v-if="preview" class="shadow w-full h-32 rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + colors.fill.primary + ';'">
             <a
-                :href="'/dashboard/theme/' + id"
+                :href="'/dashboard/marketplace/addon/' + id"
                 style="position:absolute;top:10px;right:10px;z-index:5;width:10px;height:10px;"
                 v-if="icon"
                 @click.stop
@@ -36,7 +36,11 @@ export default {
         colors: Object,
         label: String,
         icon: String,
-        active: Boolean
+        active: Boolean,
+        preview: {
+            type: Boolean,
+            default: true
+        }
     },
     computed: {
         active_styles() {
