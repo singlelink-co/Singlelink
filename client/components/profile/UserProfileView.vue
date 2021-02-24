@@ -144,11 +144,11 @@ export default Vue.extend({
       },
       user: {
         name: null,
-        emailHash: null,
+        emailHash: null as any,
         avatarUrl: null
       },
-      theme: null,
-      links: null,
+      theme: null as any,
+      links: null as any,
       hostname: process.env.HOSTNAME,
       api_url: process.env.API_URL,
       app_name: process.env.APP_NAME,
@@ -165,12 +165,15 @@ export default Vue.extend({
         await this.getProfile();
       } else {
         // do nothing
+        this.profileData.headline = 'Jane Doe';
+        this.profileData.subtitle = 'A few details about yourself.'
+        this.profileData.showWatermark = false;
         this.profile = this.profileData;
         this.theme = this.profileData;
-        this.profile.headline = 'Jane Doe';
-        this.profile.subtitle = 'A few details about yourself.'
         this.user = {
-          emailHash: 'something'
+          name: null,
+          emailHash: 'something',
+          avatarUrl: null,
         };
         this.links = [
           {
@@ -178,10 +181,9 @@ export default Vue.extend({
             label: 'Example link',
             subtitle: null,
             url: '#',
-            customCss: null
+            customCss: ''
           }
         ];
-        this.showWatermark=false;
         this.loaded = true;
       }
     }
@@ -222,10 +224,10 @@ export default Vue.extend({
     },
 
     async getTheme() {
-      if(!this.themeData) this.themeData = {}; // fetch theme
-      this.theme = this.themeData;
-      this.profile.customCss = this.theme.customCss;
-      this.profile.customHtml = this.theme.customHtml;
+      //if(!this.themeData) this.themeData = {}; // fetch theme
+      //this.theme = this.themeData;
+      this.profile.customCss = this.theme?.customCss;
+      this.profile.customHtml = this.theme?.customHtml;
     },
 
     async getAuthenticatedProfile() {
