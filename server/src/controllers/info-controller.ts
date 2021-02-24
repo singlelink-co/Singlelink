@@ -9,8 +9,8 @@ import {config} from "../config/config";
  * This controller maps and provides for all the controllers under /info.
  */
 export class InfoController extends Controller {
-  private infoService: InfoService;
-  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
+  private readonly infoService: InfoService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);

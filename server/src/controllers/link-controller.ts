@@ -51,7 +51,7 @@ interface ReorderLinkRequest extends AuthenticatedRequest {
  */
 export class LinkController extends Controller {
   private readonly linkService: LinkService;
-  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -144,7 +144,9 @@ export class LinkController extends Controller {
         return;
       }
 
-      await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
+      if (!await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile)) {
+        return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
+      }
 
       let link = await this.linkService.updateLink(
         body.id,
@@ -193,7 +195,9 @@ export class LinkController extends Controller {
         return;
       }
 
-      await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile);
+      if (!await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile)) {
+        return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
+      }
 
       let link = await this.linkService.deleteLink(body.id);
 

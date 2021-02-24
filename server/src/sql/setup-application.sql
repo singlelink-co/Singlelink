@@ -1,73 +1,14 @@
 ------------
--- Types
-------------
-
-do
-$$
-    begin
-        /*
-         The subscription type of this user.
-
-         free: Free tier account.
-         whale: Whale tier account.
-         enterprise: Enterprise tier account.
-         */
-        create type subscription_t as enum ('free', 'whale', 'enterprise');
-    exception
-        when duplicate_object then raise notice 'subscription_t already added.';
-    end;
-$$ language plpgsql;
-
-do
-$$
-    begin
-        /*
-         Visibility_t specifies the visibility level of a profile.
-
-         unpublished: The profile is not visible to anyone.
-         published: The profile is visible to everyone.
-         published-18+: The profile is visible, but with content warnings.
-         */
-        create type visibility_t as enum ('unpublished', 'published', 'published-18+');
-    exception
-        when duplicate_object then raise notice 'visibility_t already added.';
-    end;
-$$ language plpgsql;
-
-do
-$$
-    begin
-        /*
-         Visit_t specifies what kind of visit an entry is.
-
-         link: The visit was to a link.
-         page: The visit was to a page.
-         */
-        create type visit_t as enum ('link', 'page');
-    exception
-        when duplicate_object then raise notice 'visit_t already added.';
-    end;
-$$ language plpgsql;
-
-do
-$$
-    begin
-        /*
-         Addon_t specifies what kind of addon this is.
-
-         theme: A theme.
-         preset: A preset.
-         plugin: A plugin.
-         */
-        create type addon_t as enum ('theme', 'preset', 'plugin');
-    exception
-        when duplicate_object then raise notice 'addon_t already added.';
-    end;
-$$ language plpgsql;
-
-------------
 -- Application
 ------------
+
+do
+$$
+    begin
+        raise notice 'Hello world';
+    end;
+$$ language plpgsql;
+
 
 create schema if not exists app;
 
@@ -90,6 +31,7 @@ create table if not exists app.users
 );
 
 create index if not exists accounts_email_index on app.users (email);
+create index if not exists accounts_metadata_favorites on app.users ((metadata -> 'favorites'));
 
 /*
  Creates a theme table that contains all user themes.
@@ -127,7 +69,9 @@ create table if not exists app.profiles
     custom_domain  text unique,
     theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility     visibility_t         default 'unpublished',
-    metadata       jsonb       not null default '{}',
+    metadata       jsonb       not null default '{
+      "privacyMode": false
+    }',
     created_on     timestamp   not null default current_timestamp
 );
 
@@ -205,98 +149,9 @@ create table if not exists app.perm_groups
 create index if not exists perm_groups_group_name on app.perm_groups (group_name);
 
 ------------
--- Analytics
-------------
-
-create schema if not exists analytics;
-
-/*
- Creates a table for visiting analytics.
- type: The type of visit this was.
- referral_id: The link or page this visit points to.
- */
-create table if not exists analytics.visits
-(
-    type        visit_t   not null,
-    referral_id bigint    not null,
-    created_on  timestamp not null default current_timestamp
-);
-
-/*
- Creates a table for visiting anonymous analytics, when a user has privacy mode enabled.
- type: The type of visit this was.
- */
-create table if not exists analytics.anonymous_visits
-(
-    type       visit_t   not null,
-    created_on timestamp not null default current_timestamp
-);
-
-create index if not exists visits_referral_id_index on analytics.visits (referral_id);
-
-do
-$$
-    begin
-        /*
-         Creates an analytics view for use with the server analytics.
-         */
-        create materialized view analytics.global_stats as
-            select count(app.users.*)                                                                         as total_users,
-                   (select count(app.profiles.*) from app.profiles)                                           as total_profiles,
-                   (select count(app.profiles.*) filter ( where visibility = 'published' )
-                    from app.profiles)                                                                        as profiles_published,
-                   (select count(app.links.*) from app.links)                                                 as total_links,
-                   (select count(app.themes.*) from app.themes)                                               as total_themes
-            from app.users;
-    exception
-        when duplicate_table then raise notice 'analytics.analytics_view already added.';
-    end;
-$$ language plpgsql;
-
-------------
--- Marketplace
-------------
-
-create schema if not exists marketplace;
-
-/*
-    Creates an addon table that contains the addon marketplace.
- */
-create table if not exists marketplace.addons
-(
-    id                bigserial primary key unique,
-    user_id           bigint references app.users (id) on update cascade on delete no action,
-    resource_id       bigint unique,      -- The id of the resource this addon is related to
-    type              addon_t   not null, -- The type of resource this is
-    description       text,
-    author            text,
-    tags              text[],
-    featured_sorting  smallint           default 0,
-    price             decimal,
-    payment_frequency text,
-    global            bool               default false not null,
-    metadata          jsonb     not null default '{
-      "downloads": 0
-    }',
-    created_on        timestamp not null default current_timestamp
-);
-
-create index if not exists addons_type on marketplace.addons (type);
-create index if not exists addons_description on marketplace.addons (description);
-create index if not exists addons_author on marketplace.addons (author);
-create index if not exists addons_tags on marketplace.addons (tags);
-create index if not exists addons_featured_sorting on marketplace.addons (featured_sorting);
-create index if not exists addons_price on marketplace.addons (price);
-create index if not exists addons_global on marketplace.addons (global);
-
--- addon metadata indexes
-create index if not exists addons_metadata_downloads on marketplace.addons ((metadata -> 'downloads'));
-
-------------
 -- Patches
 -- Over time, things need to be updated and patched. This section is all about that.
 ------------
-
 
 -- Update v2.1.9, fixes metadata being null sometimes
 update app.profiles

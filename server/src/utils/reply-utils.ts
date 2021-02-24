@@ -1,10 +1,17 @@
 export class ReplyUtils {
 
   /**
-   * Cheaply create a JSON error response.
+   * Create a JSON error response.
    */
   static error(msg: string, error?: Error): string {
     return `{"error": "${msg}"${error ? `,"errorObject": ${JSON.stringify(error)}` : ``}}`;
+  }
+
+  /**
+   * Create a JSON error response.
+   */
+  static errorOnly(error: Error): string {
+    return `{"error": "${error.message}"${error ? `,"errorObject": ${JSON.stringify(error)}` : ``}}`;
   }
 
   static success(msg: string) {

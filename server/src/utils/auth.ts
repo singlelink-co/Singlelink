@@ -12,7 +12,6 @@ import {ReplyUtils} from "./reply-utils";
 import {StatusCodes} from "http-status-codes";
 import {DbTypeConverter} from "./db-type-converter";
 import {DatabaseService} from "../services/database-service";
-import {HttpError} from "./http-error";
 
 /**
  * A Fastify request that has been properly authenticated via a JWT token.
@@ -369,21 +368,19 @@ export class Auth {
   /**
    * Validates ownership of the requested resource.
    */
-  static async checkLinkOwnership(service: DatabaseService, linkId: string, profile: Profile) {
+  static async checkLinkOwnership(service: DatabaseService, linkId: string, profile: Profile): Promise<boolean> {
     const pool = service.pool;
 
     let queryResult = await pool.query<{ count: number }>("select count(*) from app.links where id=$1 and profile_id=$2",
       [linkId, profile.id]);
 
-    if (queryResult.rows[0].count <= 0) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource");
-    }
+    return queryResult.rows[0].count > 0;
   }
 
   /**
    * Validates ownership of the requested resource.
    */
-  static async checkThemeOwnership(service: DatabaseService, themeId: string, user: User, includeGlobal: boolean) {
+  static async checkThemeOwnership(service: DatabaseService, themeId: string, user: User, includeGlobal: boolean): Promise<boolean> {
     const pool = service.pool;
 
     let queryResult;
@@ -394,25 +391,20 @@ export class Auth {
       queryResult = await pool.query<{ count: number }>("select count(*) from app.themes where id=$1 and (user_id=$2)", [themeId, user.id]);
     }
 
-
-    if (queryResult.rows[0].count <= 0) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource");
-    }
+    return queryResult.rows[0].count > 0;
   }
 
   /**
    * Validates ownership of an addon.
    * @param service
-   * @param resourceId
+   * @param addonId
    * @param user
    */
-  static async checkAddonOwnership(service: DatabaseService, resourceId: string, user: User) {
+  static async checkAddonOwnership(service: DatabaseService, addonId: string, user: User): Promise<boolean> {
     const pool = service.pool;
 
-    let queryResult = await pool.query<{ count: number }>("select count(*) from marketplace.addons where id=$1 and (user_id=$2)", [resourceId, user.id]);
+    let queryResult = await pool.query<{ count: number }>("select count(*) from marketplace.addons where id=$1 and (user_id=$2)", [addonId, user.id]);
 
-    if (queryResult.rows[0].count <= 0) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource");
-    }
+    return queryResult.rows[0].count > 0;
   }
 }

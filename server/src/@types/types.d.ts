@@ -159,11 +159,11 @@ interface Addon {
   price: number,
   paymentFrequency: string,
   global: boolean,
+  version: string,
+  createdOn: string,
+  lastUpdated: string
+}
 
-  metadata: {
-    version: string,
-    lastUpdated: string
-  },
+interface AddonInstallation {
 
-  created_on: string
 }

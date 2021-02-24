@@ -142,8 +142,9 @@ export class DbTypeConverter {
       price: addon.price,
       paymentFrequency: addon.payment_frequency,
       global: addon.global,
-      metadata: addon.metadata,
-      created_on: addon.created_on
+      version: addon.version,
+      createdOn: addon.created_on,
+      lastUpdated: addon.last_updated
     };
   }
 

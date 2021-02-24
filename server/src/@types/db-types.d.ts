@@ -258,11 +258,11 @@ interface DbAddon {
   price: number,
   payment_frequency: string,
   global: boolean,
-
-  metadata: {
-    version: string,
-    lastUpdated: string
-  },
-
+  version: string,
   created_on: string
+  last_updated: string,
+}
+
+interface DbAddonInstallation {
+
 }

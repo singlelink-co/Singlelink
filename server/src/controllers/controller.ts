@@ -9,9 +9,9 @@ import {Pool} from "pg";
  * registerRoutes() is called when the Controller is expected to register Fastify routes.
  */
 export abstract class Controller {
-  protected fastify: FastifyInstance;
-  protected databaseManager: DatabaseManager;
-  protected pool: Pool;
+  protected readonly fastify: FastifyInstance;
+  protected readonly databaseManager: DatabaseManager;
+  protected readonly pool: Pool;
 
   protected constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     this.fastify = fastify;

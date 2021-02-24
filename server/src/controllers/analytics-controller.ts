@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {StatusCodes} from "http-status-codes";
@@ -35,20 +35,21 @@ interface GetProfileAnalyticsRequest extends AuthenticatedRequest {
 const rateLimitAnalytics = {
   config: {
     rateLimit: {
-      max: 10,
+      max: 4,
       timeWindow: '1 second'
     }
-  }
+  },
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
 /**
  * This controller maps and provides for all the controllers under /analytics.
  */
 export class AnalyticsController extends Controller {
-  private analyticsService: AnalyticsService;
-  private linkService: LinkService;
-  private profileService: ProfileService;
-  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
+  private readonly analyticsService: AnalyticsService;
+  private readonly linkService: LinkService;
+  private readonly profileService: ProfileService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -65,7 +66,7 @@ export class AnalyticsController extends Controller {
     this.fastify.all('/analytics/profile/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
-    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', Auth.ValidateWithData, this.GetProfileAnalytics.bind(this));
+    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', rateLimitAnalytics, this.GetProfileAnalytics.bind(this));
   }
 
   /**
@@ -221,7 +222,7 @@ export class AnalyticsController extends Controller {
 
       // TODO Grab dateRange/dayRange and pass it in for time specific analytics
 
-      return await this.analyticsService.getProfileAnalyticsData(request.body.authProfile.id);
+      return this.analyticsService.getProfileAnalyticsData(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

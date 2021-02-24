@@ -79,9 +79,9 @@ const userRequestResetPasswordOpts = {
  * This controller maps and provides for all the controllers under /user.
  */
 export class UserController extends Controller {
-  private userService: UserService;
-  private profileService: ProfileService;
-  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
+  private readonly userService: UserService;
+  private readonly profileService: ProfileService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -388,7 +388,7 @@ export class UserController extends Controller {
           profile: newProfileId
         });
 
-      return await this.userService.setActiveProfile(user.id, newProfileId);
+      return this.userService.setActiveProfile(user.id, newProfileId);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

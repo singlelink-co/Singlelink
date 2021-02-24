@@ -68,10 +68,10 @@ const createProfileRequestOpts = {
  */
 export class ProfileController extends Controller {
   private readonly linkService: LinkService;
-  private profileService: ProfileService;
-  private userService: UserService;
-  private themeService: ThemeService;
-  private mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
+  private readonly profileService: ProfileService;
+  private readonly userService: UserService;
+  private readonly themeService: ThemeService;
+  private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
@@ -254,7 +254,7 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.profileService.listProfiles(request.body.authUser.id);
+      return this.profileService.listProfiles(request.body.authUser.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -278,7 +278,7 @@ export class ProfileController extends Controller {
         return;
       }
 
-      return await this.linkService.listLinks(request.body.authProfile.id);
+      return this.linkService.listLinks(request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -309,7 +309,7 @@ export class ProfileController extends Controller {
           subtitle: body.subtitle
         });
 
-      return await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+      return this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -348,7 +348,7 @@ export class ProfileController extends Controller {
           customDomain: body.customDomain
         });
 
-      return await this.profileService.updateProfile(
+      return this.profileService.updateProfile(
         body.authProfile.id,
         body.imageUrl,
         body.headline,
@@ -394,7 +394,7 @@ export class ProfileController extends Controller {
           showWatermark: request.body.authProfile.showWatermark,
         });
 
-      return await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
+      return this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -445,7 +445,9 @@ export class ProfileController extends Controller {
       }
 
       if (body.id) {
-        await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true);
+        if (!await Auth.checkThemeOwnership(this.linkService, body.id, body.authUser, true)) {
+          return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
+        }
       }
 
       if (this.mixpanel)
@@ -455,7 +457,7 @@ export class ProfileController extends Controller {
           theme: body.id
         });
 
-      return await this.profileService.setActiveTheme(body.authProfile.id, body.id);
+      return this.profileService.setActiveTheme(body.authProfile.id, body.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -490,7 +492,7 @@ export class ProfileController extends Controller {
             privacyMode: request.body.privacyMode
           });
 
-        return await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+        return this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
       }
 
       reply.status(StatusCodes.ACCEPTED).send();
