@@ -299,17 +299,16 @@ export class ProfileController extends Controller {
     try {
       let body = request.body;
 
+      let newProfile = await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+
       if (this.mixpanel)
         this.mixpanel.track('new profile created', {
-          distinct_id: body.authUser.id,
-          profile: body.authProfile.id,
-          handle: body.handle,
-          imageUrl: body.imageUrl,
-          headline: body.headline,
-          subtitle: body.subtitle
+          distinct_id: newProfile.userId,
+          profile: newProfile.id,
+          profileObject: newProfile
         });
 
-      return this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
+      return newProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -335,20 +334,7 @@ export class ProfileController extends Controller {
         return;
       }
 
-      if (this.mixpanel)
-        this.mixpanel.track('profile updated', {
-          distinct_id: body.authUser.id,
-          profile: body.authProfile.id,
-          imageUrl: body.imageUrl,
-          handle: body.handle,
-          headline: body.headline,
-          subtitle: body.subtitle,
-          visibility: body.visibility,
-          showWatermark: body.showWatermark,
-          customDomain: body.customDomain
-        });
-
-      return this.profileService.updateProfile(
+      let newProfile = await this.profileService.updateProfile(
         body.authProfile.id,
         body.imageUrl,
         body.headline,
@@ -360,6 +346,15 @@ export class ProfileController extends Controller {
         body.customHtml,
         body.customDomain
       );
+
+      if (this.mixpanel)
+        this.mixpanel.track('profile updated', {
+          distinct_id: newProfile.userId,
+          profile: newProfile.id,
+          profileObject: newProfile
+        });
+
+      return newProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -383,18 +378,16 @@ export class ProfileController extends Controller {
         return;
       }
 
+      let deletedProfile = await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
+
       if (this.mixpanel)
         this.mixpanel.track('profile deleted', {
-          distinct_id: request.body.authUser.id,
-          profile: request.body.authProfile.id,
-          handle: request.body.authProfile.handle,
-          headline: request.body.authProfile.headline,
-          subtitle: request.body.authProfile.subtitle,
-          visibility: request.body.authProfile.visibility,
-          showWatermark: request.body.authProfile.showWatermark,
+          distinct_id: deletedProfile.userId,
+          profile: deletedProfile.id,
+          profileObject: deletedProfile
         });
 
-      return this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
+      return deletedProfile;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -450,14 +443,16 @@ export class ProfileController extends Controller {
         }
       }
 
+      let theme = await this.profileService.setActiveTheme(body.authProfile.id, body.id);
+
       if (this.mixpanel)
         this.mixpanel.track('set profile active theme', {
           distinct_id: request.body.authUser.id,
           profile: request.body.authProfile.id,
-          theme: body.id
+          theme: theme
         });
 
-      return this.profileService.setActiveTheme(body.authProfile.id, body.id);
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -485,14 +480,16 @@ export class ProfileController extends Controller {
 
       if (previousPrivacyMode !== request.body.privacyMode) {
 
+        let profile = await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+
         if (this.mixpanel)
           this.mixpanel.track('toggle privacy mode', {
-            distinct_id: request.body.authUser.id,
-            profile: request.body.authProfile.id,
+            distinct_id: profile.userId,
+            profile: profile.id,
             privacyMode: request.body.privacyMode
           });
 
-        return this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
+        return profile;
       }
 
       reply.status(StatusCodes.ACCEPTED).send();

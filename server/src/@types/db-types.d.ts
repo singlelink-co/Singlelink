@@ -263,6 +263,9 @@ interface DbAddon {
   last_updated: string,
 }
 
-interface DbAddonInstallation {
-
+interface DbAddonInstall {
+  id: string,
+  profile_id: string,
+  addon_id: string,
+  created_on: string
 }

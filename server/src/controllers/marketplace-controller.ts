@@ -26,13 +26,13 @@ interface GetAddonRequest extends AuthenticatedRequest {
 
 interface CreateAddonRequest extends AuthenticatedRequest {
   Body: {
-    addon: Pick<Addon, 'type'> & Partial<Addon>
+    addon: Pick<Addon, 'type' | 'resourceId'> & Partial<Addon>
   } & AuthenticatedRequest["Body"]
 }
 
 interface UpdateAddonRequest extends AuthenticatedRequest {
   Body: {
-    addon: Pick<Addon, 'id' | 'userId' | 'type'> & Partial<Addon>
+    addon: Pick<Addon, 'id'> & Partial<Addon>
   } & AuthenticatedRequest["Body"]
 }
 
@@ -50,6 +50,12 @@ interface InstallAddonRequest extends AuthenticatedRequest {
 
 interface UninstallAddonRequest extends AuthenticatedRequest {
   Params: {
+    id: string
+  } & AuthenticatedRequest["Body"]
+}
+
+interface ListInstalledAddonsRequest extends AuthenticatedRequest {
+  Body: {
     id: string
   } & AuthenticatedRequest["Body"]
 }
@@ -101,6 +107,7 @@ export class MarketplaceController extends Controller {
 
     this.fastify.all<InstallAddonRequest>('/marketplace/addon/install/:id', Auth.ValidateWithData, this.InstallAddon.bind(this));
     this.fastify.all<UninstallAddonRequest>('/marketplace/addon/uninstall/:id', Auth.ValidateWithData, this.UninstallAddon.bind(this));
+    this.fastify.all<ListInstalledAddonsRequest>('/marketplace/addon/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
     this.fastify.all<ToggleUserFavoriteAddonRequest>('/marketplace/user/favorite/:id', Auth.ValidateWithData, this.ToggleUserFavoriteAddon.bind(this));
     this.fastify.all<ListUserFavoriteAddonsRequest>('/marketplace/user/favorites', Auth.ValidateWithData, this.ListUserFavoriteAddons.bind(this));
@@ -188,12 +195,24 @@ export class MarketplaceController extends Controller {
       // ignore userId field if set and replace with our own
       addon.userId = request.body.authUser.id;
 
+      switch (addon.type) {
+        case "theme":
+          if (!(await Auth.checkThemeOwnership(this.marketplaceService, addon.resourceId, request.body.authUser, false))) {
+            return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
+          }
+          break;
+        case "preset":
+        case "plugin":
+        //TODO Implement these later
+      }
+
       let newAddon = await this.marketplaceService.createAddon(addon);
 
       if (this.mixpanel)
         this.mixpanel.track('addon created', {
           distinct_id: request.body.authUser.id,
-          addon: newAddon
+          addon: newAddon.id,
+          addonObject: newAddon
         });
 
       return newAddon;
@@ -230,7 +249,8 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon updated', {
           distinct_id: request.body.authUser.id,
-          addon: newAddon
+          addon: newAddon.id,
+          addonObject: newAddon
         });
 
       return newAddon;
@@ -265,7 +285,7 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('addon deleted', {
           distinct_id: request.body.authUser.id,
-          addonId: addonId
+          addon: addonId
         });
 
       return {deletedAddon: deletedAddonId};
@@ -289,21 +309,22 @@ export class MarketplaceController extends Controller {
   async InstallAddon(request: FastifyRequest<InstallAddonRequest>, reply: FastifyReply) {
     try {
       let user = request.body.authUser;
+      let profile = request.body.authProfile;
       let addonId = request.params.id;
 
       if (!(await Auth.checkAddonOwnership(this.marketplaceService, addonId, user))) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
       }
 
-      await this.marketplaceService.installAddon(addonId);
+      await this.marketplaceService.installAddon(profile, addonId);
 
       if (this.mixpanel)
         this.mixpanel.track('addon installed', {
           distinct_id: request.body.authUser.id,
-          addonId: addonId
+          addon: addonId
         });
 
-      return;
+      return {"message": "addon has been installed"};
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -324,21 +345,44 @@ export class MarketplaceController extends Controller {
   async UninstallAddon(request: FastifyRequest<UninstallAddonRequest>, reply: FastifyReply) {
     try {
       let user = request.body.authUser;
+      let profile = request.body.authProfile;
       let addonId = request.params.id;
 
       if (!(await Auth.checkAddonOwnership(this.marketplaceService, addonId, user))) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
       }
 
-      await this.marketplaceService.uninstallAddon(addonId);
+      await this.marketplaceService.uninstallAddon(profile, addonId);
 
       if (this.mixpanel)
         this.mixpanel.track('addon uninstalled', {
           distinct_id: request.body.authUser.id,
-          addonId: addonId
+          addon: addonId
         });
 
-      return;
+      return {"message": "addon has been uninstalled"};
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /marketplace/addon/installed
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ListInstalledAddons(request: FastifyRequest<ListInstalledAddonsRequest>, reply: FastifyReply) {
+    try {
+      let profile = request.body.authProfile;
+
+      return await this.marketplaceService.getInstalledAddons(profile.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -366,11 +410,11 @@ export class MarketplaceController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user favorited addon', {
           distinct_id: user.id,
-          addonId: addonId,
+          addon: addonId,
           favorited: favorited
         });
 
-      return;
+      return {"message": favorited ? `Favorited addon: ${addonId}` : `Unfavorited addon: ${addonId}`};
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -392,14 +436,7 @@ export class MarketplaceController extends Controller {
     try {
       let user = request.body.authUser;
 
-      let favorites = await this.marketplaceService.userListFavoriteAddons(user.id);
-
-      if (this.mixpanel)
-        this.mixpanel.track('listed favorite addons', {
-          distinct_id: user.id
-        });
-
-      return favorites;
+      return await this.marketplaceService.userListFavoriteAddons(user.id);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

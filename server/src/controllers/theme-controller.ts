@@ -127,8 +127,7 @@ export class ThemeController extends Controller {
         this.mixpanel.track('new theme created', {
           distinct_id: request.body.authUser.id,
           theme: theme.id,
-          global: theme.global,
-          label: theme.label
+          themeObject: theme
         });
 
       return theme;
@@ -156,14 +155,16 @@ export class ThemeController extends Controller {
         return;
       }
 
+      let theme = await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+
       if (this.mixpanel)
         this.mixpanel.track('theme updated', {
           distinct_id: request.body.authUser.id,
-          theme: body.id,
-          label: body.label
+          theme: theme.id,
+          themeObject: theme
         });
 
-      return this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
+      return theme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -183,13 +184,16 @@ export class ThemeController extends Controller {
     try {
       let body = request.body;
 
+      let deletedTheme = await this.themeService.deleteUserTheme(body.id, body.authUser.id);
+
       if (this.mixpanel)
         this.mixpanel.track('theme deleted', {
           distinct_id: request.body.authUser.id,
-          theme: body.id
+          theme: deletedTheme.id,
+          themeObject: deletedTheme
         });
 
-      return this.themeService.deleteUserTheme(body.id, body.authUser.id);
+      return deletedTheme;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

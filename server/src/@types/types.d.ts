@@ -164,6 +164,9 @@ interface Addon {
   lastUpdated: string
 }
 
-interface AddonInstallation {
-
+interface AddonInstall {
+  id: string,
+  profileId: string,
+  addonId: string,
+  createdOn: string
 }

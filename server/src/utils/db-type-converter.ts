@@ -148,4 +148,13 @@ export class DbTypeConverter {
     };
   }
 
+  static toAddonInstall(addonInstall: DbAddonInstall): AddonInstall {
+    return {
+      id: addonInstall.id,
+      profileId: addonInstall.profile_id,
+      addonId: addonInstall.addon_id,
+      createdOn: addonInstall.created_on
+    };
+  }
+
 }
