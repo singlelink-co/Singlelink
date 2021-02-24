@@ -42,45 +42,6 @@
 
     </div>
 
-    <!-- Global Themes-->
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <theme-list :active="activeThemeId" name="Global themes" :themes="globalThemes" :extended="false" icon="view"/>
-      <!--<h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Global Themes
-      </h2>-->
-
-      <!--<div class="flex flex-row overflow-x-scroll hide-scrollbar">
-        <div
-          class="rounded-lg nc-theme bg-gray-200"
-          style="min-width:78px;min-height:80px;"
-          :class="{'active': !activeThemeId}"
-          @click="selectTheme(null)"
-        >
-          <div class="nc-inner bg-white">
-            <div class="nc-bottom-inner bg-gray-600"/>
-          </div>
-        </div>
-
-        <div
-          v-for="theme in globalThemes"
-          v-if="globalThemes"
-          :key="theme.id"
-          class="rounded-lg nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;height:80px;`"
-          :class="{'active': activeThemeId === theme.id}"
-          @click="selectTheme(theme.id)"
-        >
-          <i
-            class="fas fa-eye edit-icon"
-            @click.stop="openModal('view'); pendingTheme=theme;"
-          />
-          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
-            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
-          </div>
-        </div>
-      </div>-->
-
-    </div>
     <!--
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
@@ -443,7 +404,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import themeList from "../../components/theme/theme-list.vue";
+import themeList from "~/components/theme/theme-list.vue";
 
 type ThemeModalIntent = "create" | "edit" | "view";
 
@@ -547,10 +508,6 @@ export default Vue.extend({
           includeGlobal: false
         }));
 
-        this.globalThemes = (await this.$axios.$post<Theme[]>('/themes', {
-          token: this.$store.getters['auth/getToken'],
-          onlyGlobal: true
-        }));
       } catch (error) {
         console.log('Failed to get themes');
         console.log(error);

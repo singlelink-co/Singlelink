@@ -1,6 +1,10 @@
 <template>
     <div :class="'w-full flex flex-col' + active_styles">
-        <div v-if="preview" class="shadow w-full h-32 rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + colors.fill.primary + ';'">
+        <div class="relative rounded" style="width: 201px;height:217px;overflow:hidden;">
+            <iframe scrolling="no" v-if="!theme" style="pointer-events: none;width: 375px;height: 406px;transform: scale(.536) translate(-163px, -175px);top:0;left:0;position:absolute;" :src="'/dashboard/marketplace/preview/' + id"/>
+            <iframe scrolling="no" v-if="theme" style="pointer-events: none;width: 375px;height: 406px;transform: scale(.536) translate(-163px, -175px);top:0;left:0;position:absolute;" :src="'/dashboard/appearance/preview/' + id"/>
+        </div>
+        <!--<div class="shadow w-full h-32 rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + colors.fill.primary + ';'">
             <a
                 :href="'/dashboard/marketplace/addon/' + id"
                 style="position:absolute;top:10px;right:10px;z-index:5;width:10px;height:10px;"
@@ -22,14 +26,16 @@
             <div class="shadow-lg overflow-hidden flex flex-col items-center justify-center" :style="'width:60px;height:60px;position;relative;z-index:3;border-radius:40px;background:'+colors.text.primary">
                 <div class="mt-auto w-full" :style="'height:30px;background:' + colors.text.secondary + ';'"></div>
             </div>
-        </div>
-        <div class="font-bold text-black mb-1">{{ label }}</div>
+        </div>-->
+        <div class="font-bold text-black mb-1 mt-2">{{ label }}</div>
         <!--<span class="text-sm text-gray-500">Author: {{ userId }}</span>-->
     </div>
 </template>
 
 <script>
+import UserProfileView from '../profile/UserProfileView.vue';
 export default {
+  components: { UserProfileView },
     name: 'Theme',
     props: {
         id: String,
@@ -37,10 +43,19 @@ export default {
         label: String,
         icon: String,
         active: Boolean,
-        preview: {
+        theme: {
             type: Boolean,
-            default: true
+            default: false
+        },
+        profileData: {
+            type: Object,
+            default: null
         }
+    },
+    mounted() {
+        if(this.profileData) {
+            this.pri
+        };
     },
     computed: {
         active_styles() {
@@ -48,6 +63,19 @@ export default {
             console.log(this.active);
             if(!this.active) return '';
             return ' bg-indigo-200 border-indigo-600 border hover:bg-indigo-300';
+        },
+        profile() {
+            return {
+                customHtml: this.profileData.customCss,
+                customCss: this.profileData.customCss,
+                imageUrl: null,
+                headline: 'Lorem ipsum',
+                subtitle: 'Example subtitle',
+                showWatermark: true,
+                metadata: {
+                    privacyMode: false
+                }
+            };
         }
     }
 }

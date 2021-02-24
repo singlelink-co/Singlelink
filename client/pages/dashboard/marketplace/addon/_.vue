@@ -4,11 +4,9 @@
             <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl">Submission details</h1>
         </div>
         <div class="flex flex-col lg:flex-row w-full items-start mb-4">
-            <div class="shadow flex-grow rounded-xl mb-2 relative overflow-hidden flex items-center justify-center" :style="'background:' + colors.fill.primary + ';height:450px;'">
-                <div :style="'top:50%;height:50%;left:0;right:0;z-index:2;width:100%;position:absolute;background:' + colors.fill.secondary + ';'"></div>
-                <div class="shadow-lg overflow-hidden flex flex-col items-center justify-center" :style="'width:85px;height:85px;position;relative;z-index:3;border-radius:50px;background:'+ colors.text.primary">
-                    <div class="mt-auto w-full" :style="'height:42.5px;background:' + colors.text.secondary + ';'"></div>
-                </div>
+            <div class="relative text-center rounded flex items-center justify-ceneter p-6 bg-indigo-200" style="width: 201px;height:298px;overflow:hidden;">
+                <span class="text-sm text-indigo-500 font-medium">Save addon for preview</span>
+                <iframe v-if="addon.id" style="z-index:2;pointer-events: none;width: 376px;height: 557px;transform: scale(.536) translate(-164px, -241px);top:0;left:0;position:absolute;" :src="'/dashboard/marketplace/preview/' + addon.id"/>
             </div>
             <div class="flex flex-col lg:w-2/3 px-8">
                 <div class="flex flex-col mb-4 justify-start">
@@ -48,7 +46,7 @@
                     <div v-if="intent=='view' && installed.indexOf(Number(addon.id)) >= 0" @click="uninstallAddon" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Uninstall addon</div>
                     <div v-if="intent=='view' && favorites.indexOf(Number(addon.id)) < 0" @click="toggleFavoriteAddon" class="px-6 py-3 font-semibold text-gray-700 border border-gray-700 rounded-lg hover:bg-gray-50 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Add to favorites</div>
                     <div v-if="intent=='view' && favorites.indexOf(Number(addon.id)) >= 0" @click="toggleFavoriteAddon" class="px-6 py-3 font-semibold text-gray-700 border border-gray-700 rounded-lg hover:bg-gray-50 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Remove from favorites</div>
-                    <div v-if="intent=='submit'" @click="attemptSubmit" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Publish addon</div>
+                    <div v-if="intent=='submit'" @click="attemptSubmit" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Create addon</div>
                     <div v-if="intent=='edit'" @click="updateAddon" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
                     <div v-if="intent=='edit'" @click="deleteAddon" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-red-500 bg-red-600 cursor-pointer">Delete addon</div>
                 </div>

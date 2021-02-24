@@ -118,11 +118,11 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
-    themePreview: {
+    preview: {
       type: Boolean,
       default: false
     },
-    themeData: {
+    profileData: {
       type: Object,
       default: null
     }
@@ -161,10 +161,28 @@ export default Vue.extend({
     if (this.authenticated) {
       await this.getAuthenticatedProfile();
     } else {
-      if(!this.themePreview) {
+      if(!this.preview) {
         await this.getProfile();
       } else {
-        await this.getTheme();
+        // do nothing
+        this.profile = this.profileData;
+        this.theme = this.profileData;
+        this.profile.headline = 'Jane Doe';
+        this.profile.subtitle = 'A few details about yourself.'
+        this.user = {
+          emailHash: 'something'
+        };
+        this.links = [
+          {
+            id: 0,
+            label: 'Example link',
+            subtitle: null,
+            url: '#',
+            customCss: null
+          }
+        ];
+        this.showWatermark=false;
+        this.loaded = true;
       }
     }
   },
