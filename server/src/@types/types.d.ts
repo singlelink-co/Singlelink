@@ -163,9 +163,6 @@ interface Addon {
   version: string,
   createdOn: string,
   lastUpdated: string,
-
-  // A hydrated resource object, if provided with the request
-  resource?: unknown
 }
 
 interface AddonInstall {
@@ -173,4 +170,10 @@ interface AddonInstall {
   profileId: string,
   addonId: string,
   createdOn: string
+}
+
+interface HydratedAddon extends Addon {
+  // Hydrated fields to be returned in a request
+  resource: unknown,
+  stats: unknown
 }

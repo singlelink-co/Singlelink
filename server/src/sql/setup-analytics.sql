@@ -28,6 +28,23 @@ create table if not exists analytics.anonymous_visits
 
 create index if not exists visits_referral_id_index on analytics.visits (referral_id);
 
+/*
+ Creates a table for visiting analytics.
+ type: The type of visit this was.
+ referral_id: The link or page this visit points to.
+ */
+create table if not exists analytics.marketplace_installs
+(
+    addon_id   bigint    not null,
+    user_id    bigint references app.users (id) on update cascade on delete no action,
+    created_on timestamp not null default current_timestamp,
+
+    unique (addon_id, user_id)
+);
+
+create index if not exists marketplace_installs_addon on analytics.marketplace_installs (addon_id);
+create index if not exists marketplace_installs_user_id on analytics.marketplace_installs (user_id);
+
 do
 $$
     begin

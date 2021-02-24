@@ -3,6 +3,7 @@ import {DatabaseManager} from "../data/database-manager";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
 import {StatusCodes} from "http-status-codes";
+import {QueryResult} from "pg";
 
 export class MarketplaceService extends DatabaseService {
 
@@ -17,15 +18,69 @@ export class MarketplaceService extends DatabaseService {
    * page is 500.
    *
    * @param userId
+   * @param sorting The sort mode. Defaults to "new". Featured sorting ignores ascending parameter.
+   * @param ascending Should the results be ascending (or descending?)
    * @param lastItemId The last item of the previous page
    * @param limit The number of addons to show
    */
-  async listAddons(userId: string, lastItemId: number = 0, limit: number = 100): Promise<Addon[]> {
+  async listAddons(userId: string, sorting: AddonSorting = "new", ascending: boolean | undefined, lastItemId: number = 0, limit: number = 100): Promise<Addon[]> {
     if (limit > 500) {
       limit = 500;
     }
 
-    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where (user_id=$1 or global=true) and id > $2 order by id limit $3",
+    let queryResult: QueryResult<DbAddon>;
+    let queryStr: string;
+
+    switch (sorting) {
+      case "featured":
+        queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by featured_sorting desc limit $3";
+        break;
+
+      case "allTimeInstalls":
+        if (ascending === undefined)
+          ascending = false;
+
+        if (ascending)
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) limit $3";
+        else
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) desc limit $3";
+        break;
+
+      case "currentInstalls":
+        if (ascending === undefined)
+          ascending = false;
+
+        if (ascending)
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) limit $3";
+        else
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) desc limit $3";
+        break;
+
+      case "lastUpdated":
+        if (ascending === undefined)
+          ascending = false;
+
+        if (ascending)
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by last_updated limit $3";
+        else
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by last_updated desc limit $3";
+        break;
+
+
+      // Default cases
+      case "new":
+      default:
+        if (ascending === undefined)
+          ascending = false;
+
+        if (ascending)
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by id limit $3";
+        else
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by id desc limit $3";
+        break;
+    }
+
+    queryResult = await this.pool.query<DbAddon>(queryStr,
       [
         userId,
         lastItemId,
@@ -193,6 +248,7 @@ export class MarketplaceService extends DatabaseService {
     // install process
     let addon = await this.findAddon(addonId);
     await this.installAddonToProfile(profile, addon);
+    await this.incrementInstallCount(profile.userId, addonId);
 
     return addonId;
   }
@@ -234,26 +290,58 @@ export class MarketplaceService extends DatabaseService {
     return queryResult.rows.map(x => DbTypeConverter.toAddonInstall(x));
   }
 
-  private async installAddonToProfile(profile: Profile, addon: Addon) {
-    switch (addon.type) {
-      case "theme":
-        await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2", [addon.resourceId, profile.id]);
-        break;
-      case "preset":
-      case "plugin":
-      //TODO add support for presets and plugins
-    }
+  /**
+   * Increments the install count for a user on a specific addon. Only does this once per addon/user pair.
+   * @param userId
+   * @param addonId
+   */
+  async incrementInstallCount(userId: string, addonId: string) {
+    await this.pool.query("insert into analytics.marketplace_installs(addon_id, user_id) values ($1, $2) on conflict do nothing",
+      [
+        addonId,
+        userId
+      ]);
   }
 
-  private async removeAddonFromProfile(profile: Profile, addon: Addon) {
-    switch (addon.type) {
-      case "theme":
-        await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2", [null, profile.id]);
-        break;
-      case "preset":
-      case "plugin":
-      //TODO add support for presets and plugins
-    }
+  /**
+   * Gets the install count of an addon from analytics. Returns the number of installs over the lifetime of an addon.
+   *
+   * @param id The addon id
+   */
+  async getAllTimeInstallCount(id: string): Promise<number> {
+    let queryResult = await this.pool.query("select count(*) from analytics.marketplace_installs where addon_id=$1",
+      [
+        id
+      ]);
+
+    return queryResult.rows[0].count ?? 0;
+  }
+
+  /**
+   * Gets the current install count for an addon.
+   *
+   * @param id The addon id
+   */
+  async getCurrentInstallCount(id: string): Promise<number> {
+    let queryResult = await this.pool.query("select count(*) from marketplace.installs where addon_id=$1",
+      [
+        id
+      ]);
+
+    return queryResult.rows[0].count ?? 0;
+  }
+
+  /**
+   * Gets an addon's stats.
+   */
+  async getAddonStats(id: string) {
+    let lifeTimeInstalls = await this.getAllTimeInstallCount(id);
+    let currentInstalls = await this.getCurrentInstallCount(id);
+
+    return {
+      lifetimeInstalls: lifeTimeInstalls,
+      currentInstalls: currentInstalls
+    };
   }
 
   /**
@@ -296,5 +384,27 @@ export class MarketplaceService extends DatabaseService {
       return [];
 
     return queryResult.rows[0].favorites;
+  }
+
+  private async installAddonToProfile(profile: Profile, addon: Addon) {
+    switch (addon.type) {
+      case "theme":
+        await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2", [addon.resourceId, profile.id]);
+        break;
+      case "preset":
+      case "plugin":
+      //TODO add support for presets and plugins
+    }
+  }
+
+  private async removeAddonFromProfile(profile: Profile, addon: Addon) {
+    switch (addon.type) {
+      case "theme":
+        await this.pool.query<DbProfile>("update app.profiles set theme_id=$1 where id=$2", [null, profile.id]);
+        break;
+      case "preset":
+      case "plugin":
+      //TODO add support for presets and plugins
+    }
   }
 }

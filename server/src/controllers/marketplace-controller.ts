@@ -13,6 +13,8 @@ import {ThemeService} from "../services/theme-service";
 
 interface MarketplaceListingRequest extends AuthenticatedRequest {
   Body: {
+    sorting?: AddonSorting,
+    ascending?: boolean,
     detailed?: boolean,
     ids?: string[],
     lastItemId?: number,
@@ -59,6 +61,13 @@ interface UninstallAddonRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+
+interface GetAddonStats extends AuthenticatedRequest {
+  Params: {
+    id: string
+  } & AuthenticatedRequest["Body"]
+}
+
 interface ListInstalledAddonsRequest extends AuthenticatedRequest {
   Body: {
     id: string
@@ -74,6 +83,16 @@ interface ToggleUserFavoriteAddonRequest extends AuthenticatedRequest {
 interface ListUserFavoriteAddonsRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
+
+const rateLimitStatsRequest = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 min'
+    }
+  }
+};
+
 
 const rateLimitMarketplaceCreation = {
   config: {
@@ -104,6 +123,9 @@ export class MarketplaceController extends Controller {
   }
 
   registerRoutes(): void {
+    // Unauthenticated
+    this.fastify.all<GetAddonStats>('/marketplace/addon/stats/:id', rateLimitStatsRequest, this.GetAddonStats.bind(this));
+
     // Authenticated
     this.fastify.all<MarketplaceListingRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
 
@@ -114,6 +136,7 @@ export class MarketplaceController extends Controller {
 
     this.fastify.all<InstallAddonRequest>('/marketplace/addon/install/:id', Auth.ValidateWithData, this.InstallAddon.bind(this));
     this.fastify.all<UninstallAddonRequest>('/marketplace/addon/uninstall/:id', Auth.ValidateWithData, this.UninstallAddon.bind(this));
+
     this.fastify.all<ListInstalledAddonsRequest>('/marketplace/addon/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
     this.fastify.all<ToggleUserFavoriteAddonRequest>('/marketplace/user/favorite/:id', Auth.ValidateWithData, this.ToggleUserFavoriteAddon.bind(this));
@@ -153,7 +176,7 @@ export class MarketplaceController extends Controller {
           let promises = [];
 
           for (let addon of addons) {
-            promises.push(this.hydrateResource(addon));
+            promises.push(this.hydrateAddon(addon));
           }
 
           await Promise.all(promises);
@@ -161,13 +184,13 @@ export class MarketplaceController extends Controller {
 
         return addons;
       } else {
-        let addons = await this.marketplaceService.listAddons(request.body.authUser.id, lastItemId, limit);
+        let addons = await this.marketplaceService.listAddons(request.body.authUser.id, request.body.sorting, request.body.ascending, lastItemId, limit);
 
         if (request.body.detailed) {
           let promises = [];
 
           for (let addon of addons) {
-            promises.push(this.hydrateResource(addon));
+            promises.push(this.hydrateAddon(addon));
           }
 
           await Promise.all(promises);
@@ -204,7 +227,7 @@ export class MarketplaceController extends Controller {
         });
 
       if (request.body.detailed)
-        addon = await this.hydrateResource(addon);
+        addon = await this.hydrateAddon(addon);
 
       return addon;
     } catch (e) {
@@ -425,6 +448,26 @@ export class MarketplaceController extends Controller {
   }
 
   /**
+   * Route for /marketplace/addon/stats
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async GetAddonStats(request: FastifyRequest<GetAddonStats>, reply: FastifyReply) {
+    try {
+      return this.marketplaceService.getAddonStats(request.params.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
    * Route for /marketplace/user/favorite/:id
    *
    * @param request
@@ -478,12 +521,13 @@ export class MarketplaceController extends Controller {
     }
   }
 
-  private async hydrateResource(addon: Addon): Promise<Addon> {
-    console.log("Hydrating addon: " + addon.id + " rs: " + addon.resourceId);
+  private async hydrateAddon(addon: Addon): Promise<HydratedAddon> {
+    let newAddon: HydratedAddon = <HydratedAddon>addon;
 
+    // Populate resource field
     switch (addon.type) {
       case "theme":
-        addon.resource = await this.themeService.getTheme(addon.resourceId);
+        newAddon.resource = await this.themeService.getTheme(addon.resourceId);
 
         break;
       //TODO Add support for preset and plugin
@@ -493,6 +537,9 @@ export class MarketplaceController extends Controller {
         break;
     }
 
-    return addon;
+    // Populate stats field
+    newAddon.stats = await this.marketplaceService.getAddonStats(addon.id);
+
+    return newAddon;
   }
 }
