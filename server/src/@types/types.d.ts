@@ -1,5 +1,6 @@
 /**
  * types.d.ts contains all the types that represent the data that will received from the database.
+ * db-types.d.ts types are converted to these types using the DbTypeConverter.
  */
 
 /**
@@ -28,6 +29,16 @@ type Visibility = 'unpublished' | 'published' | 'published-18+';
  */
 type VisitType = 'link' | 'page';
 
+/**
+ * Addon type for the marketplace
+ */
+type AddonType = 'theme' | 'preset' | 'plugin';
+
+/**
+ * Link type
+ */
+type LinkType = 'link' | 'social' | 'image' | 'video'
+
 interface User {
   id: string,
   emailHash: string, // Used for gravatar, it could be better but this is how the service works
@@ -37,7 +48,9 @@ interface User {
   inventory: unknown | null,
 
   // The metadata tag will grow over time as functionality is added.
-  metadata: unknown,
+  metadata: {
+    favorites: []
+  },
 
   createdOn: string
 }
@@ -109,6 +122,7 @@ interface Profile {
 interface Link {
   id: string,
   profileId: string,
+  type: LinkType,
   url: string,
   sortOrder: number,
   label: string,
@@ -117,6 +131,12 @@ interface Link {
   customCss: string | null,
   useDeepLink: boolean,
   createdOn: string
+}
+
+interface PermissionGroup {
+  id: string,
+  userId: string,
+  groupName: string
 }
 
 interface Visit {
@@ -133,8 +153,33 @@ interface AnalyticsGlobalStats {
   totalThemes: number;
 }
 
-interface PermissionGroup {
+interface Addon {
   id: string,
   userId: string,
-  groupName: string
+  resourceId: string,
+  type: AddonType,
+  displayName: string,
+  description: string,
+  author: string,
+  tags: string[],
+  featuredSorting: number,
+  price: number,
+  paymentFrequency: string,
+  global: boolean,
+  version: string,
+  createdOn: string,
+  lastUpdated: string,
+}
+
+interface AddonInstall {
+  id: string,
+  profileId: string,
+  addonId: string,
+  createdOn: string
+}
+
+interface HydratedAddon extends Addon {
+  // Hydrated fields to be returned in a request
+  resource: unknown,
+  stats: unknown
 }

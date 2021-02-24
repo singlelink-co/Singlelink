@@ -30,7 +30,7 @@ export class AnalyticsService extends DatabaseService {
   async getAnalytics(): Promise<AnalyticsGlobalStats> {
     let queryResult = await this.pool.query<DbAnalyticsGlobalStats>("select * from analytics.global_stats");
 
-    if (queryResult.rowCount <= 0) {
+    if (queryResult.rowCount < 1) {
       return {
         totalUsers: -1,
         totalProfiles: -1,
@@ -44,23 +44,23 @@ export class AnalyticsService extends DatabaseService {
   }
 
   /**
-   * Increments the links analytics counter.
-   * This counts as a user "visiting" a link.
+   * Creates a visit analytics record in the database.
    *
-   * @param linkId The id of the link that is being visited
+   * @param referralId The id of the VisitType that is being visited
+   * @param visitType The type of the visit
    */
-  async createLinkVisit(linkId: string) {
-    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['link', linkId]);
+  async createVisit(referralId: string, visitType: VisitType) {
+    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", [visitType, referralId]);
   }
 
   /**
-   * Creates a profile visit analytics record in the database.
-   * This counts as a user "visiting" a page.
+   * Creates a visit anonymous analytics record in the database.
+   * This does not contain any referral data.
    *
-   * @param pageId The id of the page that is being visited
+   * @param visitType The type of the visit
    */
-  async createProfileVisit(pageId: string) {
-    await this.pool.query("insert into analytics.visits(type, referral_id) values ($1, $2)", ['page', pageId]);
+  async createAnonymousVisit(visitType: VisitType) {
+    await this.pool.query("insert into analytics.anonymous_visits(type) values ($1)", [visitType]);
   }
 
   /**
@@ -70,11 +70,13 @@ export class AnalyticsService extends DatabaseService {
    * @param dayRange The number of days to limit the range by, default is 30
    */
   async getProfileAnalyticsData(profileId: string, dayRange: number = 30): Promise<AnalyticsProfileData> {
-    // TODO use subscription tier to check for date range, for now leave it at 30 days
-
-    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`,
+    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views
+                                                                             from analytics.visits
+                                                                             where referral_id = $1
+                                                                               and created_on > current_date - interval '1 day' * $2`,
       [
         profileId,
+        dayRange
       ]);
 
     if (profileViewQuery.rowCount <= 0) {
@@ -92,7 +94,14 @@ export class AnalyticsService extends DatabaseService {
 
     for (let i = 0; i < linksQuery.rowCount; i++) {
       let link = linksQuery.rows[i];
-      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select * from analytics.visits where referral_id = $1 and created_on > current_date - interval '${dayRange}' day`, [link.id]);
+      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select *
+                                                                    from analytics.visits
+                                                                    where referral_id = $1
+                                                                      and created_on > current_date - interval '1 day' * $2`,
+        [
+          link.id,
+          dayRange
+        ]);
 
       totalLinks++;
 

@@ -127,6 +127,13 @@ if (process.env.S3_SECRET_KEY) {
   config.s3Bucket.secretKey = process.env.S3_SECRET_KEY;
 }
 
+/**
+ * Mixpanel analytics token
+ */
+if (process.env.MIXPANEL_TOKEN) {
+  config.analytics.mixpanelToken = process.env.MIXPANEL_TOKEN;
+}
+
 
 // Extra logic for debug messages
 

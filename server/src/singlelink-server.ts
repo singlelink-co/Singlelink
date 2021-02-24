@@ -86,7 +86,7 @@ export class SingleLinkServer {
     }));
 
     this.fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
-      return await this.Index(request, reply);
+      return this.Index(request, reply);
     });
   }
 
