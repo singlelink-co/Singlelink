@@ -69,14 +69,14 @@ do
 $$
     begin
         /*
-         Addon_t specifies what kind of addon this is.
+         Linktype_t specifies what kind of addon this is.
 
          theme: A theme.
          preset: A preset.
          plugin: A plugin.
          */
-        create type addon_t as enum ('theme', 'preset', 'plugin');
+        create type linktype_t as enum ('link', 'social', 'image', 'video');
     exception
         when duplicate_object then raise notice 'addon_t already added.';
-    end;
+    end ;
 $$ language plpgsql;

@@ -150,10 +150,6 @@ export class MarketplaceService extends DatabaseService {
                     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, current_timestamp)
                     returning *`;
 
-    if (!addon.global) {
-      addon.global = false;
-    }
-
     let queryResult = await this.pool.query<DbAddon>(queryStr,
       [
         addon.userId,
@@ -165,7 +161,7 @@ export class MarketplaceService extends DatabaseService {
         addon.tags,
         addon.price,
         addon.paymentFrequency,
-        addon.global,
+        addon.global ?? false,
         addon.version,
       ]);
 

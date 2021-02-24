@@ -34,6 +34,11 @@ type VisitType = 'link' | 'page';
  */
 type AddonType = 'theme' | 'preset' | 'plugin';
 
+/**
+ * Link type
+ */
+type LinkType = 'link' | 'social' | 'image' | 'video'
+
 interface User {
   id: string,
   emailHash: string, // Used for gravatar, it could be better but this is how the service works
@@ -117,6 +122,7 @@ interface Profile {
 interface Link {
   id: string,
   profileId: string,
+  type: LinkType,
   url: string,
   sortOrder: number,
   label: string,

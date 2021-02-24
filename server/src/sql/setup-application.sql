@@ -111,19 +111,22 @@ create table if not exists app.links
 (
     id            bigserial primary key unique,
     profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
-    url           text               default '#' not null,
-    sort_order    int       not null,
-    label         text      not null,
+    type          linktype_t default 'link' not null,
+    url           text       default '#'    not null,
+    sort_order    int                       not null,
+    label         text                      not null,
     subtitle      text,
     style         text,
     custom_css    text,
-    use_deep_link bool               default false not null,
-    metadata      jsonb     not null default '{}',
-    created_on    timestamp not null default current_timestamp
+    use_deep_link bool       default false  not null,
+    metadata      jsonb                     not null default '{}',
+    created_on    timestamp                 not null default current_timestamp
 );
 
 create index if not exists links_profile_id on app.links (profile_id);
 create index if not exists links_url_index on app.links (url);
+
+
 
 -- Permissions/Admin
 
@@ -164,3 +167,6 @@ set metadata=default
 where metadata is null;
 alter table app.links
     alter column metadata set not null;
+
+alter table app.links
+    add column if not exists type linktype_t default 'link' not null;

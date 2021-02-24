@@ -92,6 +92,7 @@ export class DbTypeConverter {
     return {
       id: link.id,
       profileId: link.profile_id,
+      type: link.type,
       url: link.url,
       sortOrder: link.sort_order,
       label: link.label,

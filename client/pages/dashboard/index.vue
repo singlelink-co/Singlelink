@@ -225,15 +225,7 @@ export default Vue.extend({
     await this.getUserData();
     await this.getLinks();
 
-    try {
-      this.sortedLinks = this.links.sort(function (a: Link, b: Link) {
-        return a.sortOrder - b.sortOrder;
-      });
-
-      this.pendingLink.sortOrder = this.links.length;
-    } catch (err) {
-      console.log(err);
-    }
+    this.resortLinks();
   },
 
   methods: {
@@ -296,6 +288,8 @@ export default Vue.extend({
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
         this.links.splice(index, 1);
 
+        this.resortLinks();
+
         this.closeModal();
 
         this.$root.$emit('refreshUserProfileView');
@@ -309,12 +303,14 @@ export default Vue.extend({
       try {
         await this.$axios.$post('/link/update', {
           token: this.$store.getters['auth/getToken'],
-          id: this.pendingLink.id,
-          label: this.pendingLink.label,
-          subtitle: this.pendingLink.subtitle,
-          url: this.pendingLink.url,
-          customCss: this.pendingLink.customCss,
-          useDeepLink: this.pendingLink.useDeepLink
+          link: {
+            id: this.pendingLink.id,
+            label: this.pendingLink.label,
+            subtitle: this.pendingLink.subtitle,
+            url: this.pendingLink.url,
+            customCss: this.pendingLink.customCss,
+            useDeepLink: this.pendingLink.useDeepLink
+          }
         });
 
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
@@ -346,15 +342,19 @@ export default Vue.extend({
       try {
         const response = await this.$axios.post('/link/create', {
           token: this.$store.getters['auth/getToken'],
-          label: this.pendingLink.label,
-          subtitle: this.pendingLink.subtitle,
-          url: this.pendingLink.url,
-          customCss: this.pendingLink.customCss || '',
-          useDeepLink: this.pendingLink.useDeepLink
+          link: {
+            label: this.pendingLink.label,
+            subtitle: this.pendingLink.subtitle,
+            url: this.pendingLink.url,
+            customCss: this.pendingLink.customCss || '',
+            useDeepLink: this.pendingLink.useDeepLink
+          }
         });
 
         this.links.push(response.data);
         this.clearPending();
+
+        this.resortLinks();
 
         this.$root.$emit('refreshUserProfileView');
         return true;
@@ -407,18 +407,36 @@ export default Vue.extend({
         console.log('Successfully reordered links');
         this.links = response;
 
+        this.resortLinks();
+
         this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log('Error reordering links');
         console.log(err);
       }
     },
+
+    resortLinks() {
+      try {
+        this.sortedLinks = this.links.sort(function (a: Link, b: Link) {
+          return a.sortOrder - b.sortOrder;
+        });
+
+        this.pendingLink.sortOrder = this.links.length;
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 });
 </script>
 
 <style>
-* { flex-shrink: 0; flex-basis: auto !important;}
+* {
+  flex-shrink: 0;
+  flex-basis: auto !important;
+}
+
 /**
   Animations
  */

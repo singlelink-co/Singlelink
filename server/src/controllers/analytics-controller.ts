@@ -114,26 +114,28 @@ export class AnalyticsController extends Controller {
       const profileId = link.profileId;
       const profile = await this.profileService.getProfile(profileId);
 
-      if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createVisit(id, "link");
+      if (profile.visibility !== "unpublished") {
+        if (!profile.metadata?.privacyMode) {
+          await this.analyticsService.createVisit(id, "link");
 
-        if (this.mixpanel)
-          this.mixpanel.track('clicked profile link', {
-            distinct_id: profile.userId,
-            profile: profileId,
-            link: link.id,
-            url: link.url
-          });
-      } else {
-        await this.analyticsService.createAnonymousVisit("link");
+          if (this.mixpanel)
+            this.mixpanel.track('clicked profile link', {
+              distinct_id: profile.userId,
+              profile: profileId,
+              link: link.id,
+              url: link.url
+            });
+        } else {
+          await this.analyticsService.createAnonymousVisit("link");
 
-        if (this.mixpanel)
-          this.mixpanel.track('clicked profile link', {
-            distinct_id: Constants.ANONYMOUS_USER_ID,
-            profile: profileId,
-            link: link.id,
-            url: link.url
-          });
+          if (this.mixpanel)
+            this.mixpanel.track('clicked profile link', {
+              distinct_id: Constants.ANONYMOUS_USER_ID,
+              profile: profileId,
+              link: link.id,
+              url: link.url
+            });
+        }
       }
 
       if (link.useDeepLink) {
@@ -179,24 +181,26 @@ export class AnalyticsController extends Controller {
 
       const profile = await this.profileService.getProfile(id);
 
-      if (!profile.metadata?.privacyMode && profile.visibility !== "unpublished") {
-        await this.analyticsService.createVisit(id, "page");
+      if (profile.visibility !== "unpublished") {
+        if (!profile.metadata?.privacyMode) {
+          await this.analyticsService.createVisit(id, "page");
 
-        if (this.mixpanel)
-          this.mixpanel.track('viewed profile', {
-            distinct_id: profile.userId,
-            profile: profile.id,
-            handle: profile.handle
-          });
-      } else {
-        await this.analyticsService.createAnonymousVisit("page");
+          if (this.mixpanel)
+            this.mixpanel.track('viewed profile', {
+              distinct_id: profile.userId,
+              profile: profile.id,
+              handle: profile.handle
+            });
+        } else {
+          await this.analyticsService.createAnonymousVisit("page");
 
-        if (this.mixpanel)
-          this.mixpanel.track('viewed profile', {
-            distinct_id: Constants.ANONYMOUS_USER_ID,
-            profile: profile.id,
-            handle: profile.handle
-          });
+          if (this.mixpanel)
+            this.mixpanel.track('viewed profile', {
+              distinct_id: Constants.ANONYMOUS_USER_ID,
+              profile: profile.id,
+              handle: profile.handle
+            });
+        }
       }
 
       reply.code(StatusCodes.OK).send();

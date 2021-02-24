@@ -11,38 +11,26 @@ import {config} from "../config/config";
 
 interface CreateLinkRequest extends AuthenticatedRequest {
   Body: {
-    label?: string,
-    url?: string,
-    subtitle: string,
-    style: string,
-    customCss: string,
-    useDeepLink: boolean
+    link: Pick<Link, 'label' | 'url'> & Partial<Link>
   } & AuthenticatedRequest["Body"]
 }
 
 interface UpdateLinkRequest extends RequestGenericInterface {
   Body: {
-    id?: string,
-    url: string,
-    sortOrder: number,
-    label: string,
-    subtitle: string,
-    style: string,
-    customCss: string,
-    useDeepLink: boolean
+    link: Pick<Link, 'id'> & Partial<Link>
   } & AuthenticatedRequest["Body"]
 }
 
 interface DeleteLinkRequest extends RequestGenericInterface {
   Body: {
-    id?: string
+    id: string
   } & AuthenticatedRequest["Body"]
 }
 
 interface ReorderLinkRequest extends AuthenticatedRequest {
   Body: {
-    oldIndex?: number,
-    newIndex?: number
+    oldIndex: number,
+    newIndex: number
   } & AuthenticatedRequest["Body"]
 }
 
@@ -77,46 +65,32 @@ export class LinkController extends Controller {
    */
   async CreateLink(request: FastifyRequest<CreateLinkRequest>, reply: FastifyReply) {
     try {
-      let body = request.body;
       let profile = request.body.authProfile;
+      let link = request.body.link;
 
       if (!profile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
         return;
       }
 
-      if (!body.label) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No label was provided."));
-        return;
+      // ignore profileId field if set and replace with our own
+      link.profileId = request.body.authProfile.id;
+
+      if (!link.sortOrder) {
+        link.sortOrder = await this.linkService.getProfileLinkCount(profile.id);
       }
 
-      if (!body.url) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No url was provided."));
-        return;
-      }
-
-      let count = await this.linkService.getProfileLinkCount(profile.id);
-
-      let link = await this.linkService.createLink(
-        profile.id,
-        body.url,
-        count,
-        body.label,
-        body.subtitle,
-        body.style,
-        body.customCss,
-        body.useDeepLink
-      );
+      let newLink = await this.linkService.createLink(link);
 
       if (this.mixpanel)
         this.mixpanel.track('profile link created', {
           distinct_id: profile.userId,
           profile: profile.id,
-          link: link.id,
-          url: link.url
+          link: newLink.id,
+          url: newLink.url
         });
 
-      return link;
+      return newLink;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -137,37 +111,27 @@ export class LinkController extends Controller {
    */
   async UpdateLink(request: FastifyRequest<UpdateLinkRequest>, reply: FastifyReply) {
     try {
-      let body = request.body;
+      let profile = request.body.authProfile;
+      let link = request.body.link;
 
-      if (!body.id) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
-        return;
-      }
+      // ignore profileId field if set and replace with our own
+      link.profileId = request.body.authProfile.id;
 
-      if (!await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile)) {
+      if (!await Auth.checkLinkOwnership(this.linkService, link.id, profile)) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
       }
 
-      let link = await this.linkService.updateLink(
-        body.id,
-        body.url,
-        body.sortOrder,
-        body.label,
-        body.subtitle,
-        body.style,
-        body.customCss,
-        body.useDeepLink
-      );
+      let newLink = await this.linkService.updateLink(link);
 
       if (this.mixpanel)
         this.mixpanel.track('profile link updated', {
-          distinct_id: body.authUser.id,
-          profile: body.authProfile.id,
-          link: link.id,
-          url: link.url
+          distinct_id: request.body.authUser.id,
+          profile: profile.id,
+          link: newLink.id,
+          url: newLink.url
         });
 
-      return link;
+      return newLink;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
@@ -189,11 +153,6 @@ export class LinkController extends Controller {
   async DeleteLink(request: FastifyRequest<DeleteLinkRequest>, reply: FastifyReply) {
     try {
       let body = request.body;
-
-      if (!body.id) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No id was provided."));
-        return;
-      }
 
       if (!await Auth.checkLinkOwnership(this.linkService, body.id, body.authProfile)) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The profile isn't authorized to access the requested resource"));
@@ -233,16 +192,6 @@ export class LinkController extends Controller {
 
       if (!body.authProfile) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
-        return;
-      }
-
-      if (body.oldIndex !== 0 && !body.oldIndex) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No oldIndex was provided."));
-        return;
-      }
-
-      if (body.newIndex !== 0 && !body.newIndex) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No newIndex was provided."));
         return;
       }
 
