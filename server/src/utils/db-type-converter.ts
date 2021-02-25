@@ -146,6 +146,7 @@ export class DbTypeConverter {
       paymentFrequency: addon.payment_frequency,
       global: addon.global,
       version: addon.version,
+      metadata: addon.metadata,
       createdOn: addon.created_on,
       lastUpdated: addon.last_updated
     };

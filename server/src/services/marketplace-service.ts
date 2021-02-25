@@ -31,7 +31,7 @@ export class MarketplaceService extends DatabaseService {
 
     switch (sorting) {
       case "featured":
-        queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by featured_sorting desc limit $3";
+        queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by featured_sorting desc limit $3";
         break;
 
       case "allTimeInstalls":
@@ -39,9 +39,9 @@ export class MarketplaceService extends DatabaseService {
           ascending = false;
 
         if (ascending)
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) limit $3";
         else
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) desc limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by (select count(*) from analytics.marketplace_installs where addon_id=marketplace.addons.id) desc limit $3";
         break;
 
       case "currentInstalls":
@@ -49,9 +49,9 @@ export class MarketplaceService extends DatabaseService {
           ascending = false;
 
         if (ascending)
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) limit $3";
         else
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) desc limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by (select count(*) from marketplace.installs where addon_id=marketplace.addons.id) desc limit $3";
         break;
 
       case "lastUpdated":
@@ -59,9 +59,9 @@ export class MarketplaceService extends DatabaseService {
           ascending = false;
 
         if (ascending)
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by last_updated limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by last_updated limit $3";
         else
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by last_updated desc limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by last_updated desc limit $3";
         break;
 
 
@@ -72,9 +72,9 @@ export class MarketplaceService extends DatabaseService {
           ascending = false;
 
         if (ascending)
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by id limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by id limit $3";
         else
-          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and id > $2 order by id desc limit $3";
+          queryStr = "select * from marketplace.addons where (user_id = $1 or global = true) and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false) and id > $2 order by id desc limit $3";
         break;
     }
 
@@ -111,6 +111,7 @@ export class MarketplaceService extends DatabaseService {
     queryStr = `select *
                 from marketplace.addons
                 where global = true
+                  and ((metadata ? 'deprecated') = false or (metadata -> 'deprecated')::bool = false)
                   and ($1 % addons.display_name or $1 % addons.description or $1 % addons.author or
                        $1 % array_to_string(addons.tags, ' '))
                   and id > $2
@@ -197,7 +198,7 @@ export class MarketplaceService extends DatabaseService {
     //language=PostgreSQL
     let queryStr = `insert into marketplace.addons(user_id, resource_id, type, display_name, description, author, tags,
                                                    price,
-                                                   payment_frequency, global, version, last_updated)
+                                                   payment_frequency, global, version, last_updated, metadata)
                     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, current_timestamp)
                     returning *`;
 
@@ -214,6 +215,7 @@ export class MarketplaceService extends DatabaseService {
         addon.paymentFrequency,
         addon.global ?? false,
         addon.version,
+        addon.metadata
       ]);
 
     if (queryResult.rowCount < 1)
@@ -239,7 +241,8 @@ export class MarketplaceService extends DatabaseService {
                         payment_frequency=$10,
                         global=coalesce($11, global),
                         version=$12,
-                        last_updated=current_timestamp
+                        last_updated=current_timestamp,
+                        metadata=coalesce($13, metadata)
                     where id = $1
                     returning *`;
 
@@ -257,6 +260,7 @@ export class MarketplaceService extends DatabaseService {
         addon.paymentFrequency,
         addon.global,
         addon.version,
+        addon.metadata
       ]);
 
     if (queryResult.rowCount < 1)

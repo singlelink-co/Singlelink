@@ -22,6 +22,7 @@ create table if not exists marketplace.addons
     payment_frequency text,
     global            bool                   default false not null,
     version           text                   default '0.0.1',
+    metadata          jsonb                  default '{}' not null,
     created_on        timestamp     not null default current_timestamp,
     last_updated      timestamp     not null default current_timestamp
 );
@@ -34,6 +35,7 @@ create index if not exists addons_tags on marketplace.addons (tags);
 create index if not exists addons_featured_sorting on marketplace.addons (featured_sorting);
 create index if not exists addons_price on marketplace.addons (price);
 create index if not exists addons_global on marketplace.addons (global);
+create index if not exists addons_metadata on marketplace.addons (metadata);
 create index if not exists addons_last_updated on marketplace.addons (last_updated);
 
 create table if not exists marketplace.installs

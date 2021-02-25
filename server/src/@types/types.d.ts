@@ -168,6 +168,9 @@ interface Addon {
   paymentFrequency: string,
   global: boolean,
   version: string,
+  metadata: {
+    deprecated?: boolean
+  },
   createdOn: string,
   lastUpdated: string,
 }

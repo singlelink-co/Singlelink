@@ -263,6 +263,9 @@ interface DbAddon {
   payment_frequency: string,
   global: boolean,
   version: string,
+  metadata: {
+    deprecated?: boolean
+  },
   created_on: string
   last_updated: string,
 }
