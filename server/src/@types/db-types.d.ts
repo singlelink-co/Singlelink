@@ -180,6 +180,7 @@ interface DbLink {
   style: string | null,
   custom_css: string | null,
   use_deep_link: boolean,
+  metadata: unknown,
   created_on: string
 }
 
