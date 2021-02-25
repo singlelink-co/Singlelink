@@ -44,9 +44,9 @@
                       <label class="font-semibold text-gray-700 mb-2">Box shadow</label>
                       <select v-model="meta.page_styles.avatar_shadow" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
                         <option value="none">None</option>
-                        <option value="0 1px 3px 0 rbga(0,0,0,.15)">Small</option>
-                        <option value="0 2px 5px 0 rbga(0,0,0,.2)">Medium</option>
-                        <option value="0 2px 15px 0 rbga(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.25)">Large</option>
+                        <option value="0 1px 3px 0 rgba(0,0,0,.15)">Small</option>
+                        <option value="0 2px 5px 0 rgba(0,0,0,.2)">Medium</option>
+                        <option value="0 2px 15px 0 rgba(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.25)">Large</option>
                       </select>
                 </div>
               </div>
