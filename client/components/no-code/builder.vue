@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col justify-start items-center">
+    <div class="flex flex-col justify-start items-start">
         <div class="flex flex-col flex-grow bg-gray-50 rounded-lg w-full">
           <div class="flex flex-col justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
             <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
@@ -50,7 +50,7 @@
                       </select>
                 </div>
               </div>
-              <span class="text-gray-800 font-semibold py-3 my-3 border border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Background</span>
+              <!--<span class="text-gray-800 font-semibold py-3 my-3 border border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Background</span>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Background type</label>
@@ -88,7 +88,7 @@
                         <option value="to left">To left</option>
                       </select>
                 </div>
-              </div>
+              </div>-->
             </div>
             <!-- End Drawer -->
           </div>
@@ -98,7 +98,7 @@
               <span class="text-gray-800 font-semibold">Typography</span>
               <span class="text-sm text-gray-500 font-medium">Customize your fonts, font size, font weight, and more.</span>
               </div>
-              <div class="py-2 px-4 text-sm rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Expand</div>
+              <div @click="drawer.typography = !drawer.typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.typography">Expand</span><span v-if="drawer.typography">Collapse</span></div>
             </div>
           </div>
           <div class="flex flex-col lg:flex-row justify-center w-full p-6 border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
@@ -107,7 +107,7 @@
               <span class="text-gray-800 font-semibold">Link styles</span>
               <span class="text-sm text-gray-500 font-medium">Customize your default styles for link items.</span>
               </div>
-              <div class="py-2 px-4 text-sm rounded-lg bg-indigo-600 font-medium text-center hover:bg-indigo-500 text-white cursor-pointer">Expand</div>
+              <div @click="drawer.link_styles = !drawer.link_styles" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_styles">Expand</span><span v-if="drawer.link_styles">Collapse</span></div>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@
 <script>
 export default {
     props: {
-        css: String,
+        value: String,
         scope: {
             type: String,
             default: 'Profile'
@@ -124,6 +124,7 @@ export default {
     },
     data() {
         return {
+          imported_css: this.value,
           JSON_pkg: {
             children: {
               "img.nc-avatar": {
@@ -156,7 +157,7 @@ export default {
         }
     },
     computed: {
-      exported_css() {
+      /*exported_css() {
         if(this.meta.page_styles.avatar_size) {
           this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
           this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
@@ -167,12 +168,55 @@ export default {
           this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = this.meta.page_styles.avatar_border_type + ' ' + this.meta.page_styles.avatar_border_width + ' ' + this.meta.page_styles.avatar_border_color;
         }
         return this.$transform.toCSS(this.JSON_pkg);
-      }
+      }*/
     },
     mounted() {
-      setInterval(()=>{
+      /*setInterval(()=>{
         console.log(this.exported_css);
-      }, 3500);
+      }, 3500);*/
+      console.log('Input');
+      console.log(this.imported_css);
+      console.log('to JSON');
+      console.log(this.$transform.toJSON(this.imported_css));
+      if(this.imported_css) {
+        this.JSON_pkg = this.$transform.toJSON(this.imported_css);
+        // Avatar height
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes.width) this.meta.page_styles.avatar_size = this.JSON_pkg.children["img.nc-avatar"].attributes.width.split('px')[0];
+        // Avatar border radius
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius']) this.meta.page_styles.avatar_radius = this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'].split('px')[0];
+        // Avatar border
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes.border) {
+          let border = this.JSON_pkg.children["img.nc-avatar"].attributes.border.split(' ');
+          // Avatar border style
+          this.meta.page_styles.avatar_border_type = border[0];
+          // Avatar border width
+          this.meta.page_styles.avatar_border_width = border[1].split('px')[0];
+          // Avatar border color
+          this.meta.page_styles.avatar_border_color = border[2];
+        }
+        // Avatar box-shadow
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow']) this.meta.page_styles.avatar_shadow = this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'];
+        
+      }
+    },
+    watch: {
+      meta: {
+        handler() {
+          console.log('Changes');
+          console.log
+          if(this.meta.page_styles.avatar_size) {
+            this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
+            this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
+          }
+          if(this.meta.page_styles.avatar_radius) this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'] = this.meta.page_styles.avatar_radius + 'px';
+          if(this.meta.page_styles.avatar_shadow) this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'] = this.meta.page_styles.avatar_shadow;
+          if(this.meta.page_styles.avatar_border_type != 'none' && this.meta.page_styles.avatar_border_color && this.meta.page_styles.avatar_border_width) {
+            this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = this.meta.page_styles.avatar_border_type + ' ' + this.meta.page_styles.avatar_border_width + 'px ' + this.meta.page_styles.avatar_border_color;
+          }
+          return this.$emit('input', this.$transform.toCSS(this.JSON_pkg));
+        },
+        deep: true
+      }
     }
 
 }

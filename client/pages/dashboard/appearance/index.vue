@@ -50,7 +50,14 @@
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <builder/>
+      <builder v-if="builderCssLoaded" v-model="builderCss"/>
+      <button
+        type="button"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        @click="saveChanges"
+      >
+        Save changes
+      </button>
     </div>
     
     <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
@@ -103,7 +110,7 @@
                   autoClosingQuotes: true,
                   readOnly: (modalIntent === 'view'),
                 }"
-                v-model="customCss"
+                v-model="editorCss"
               ></MonacoEditor>
       <button
         type="button"
@@ -390,6 +397,8 @@ export default Vue.extend({
       themes: new Array<Theme>(),
       globalThemes: new Array<Theme>(),
       activeThemeId: '',
+      editorCss: '',
+      builderCss: '',
       customCss: '',
       customHtml: '',
       modalActive: false,
@@ -437,7 +446,8 @@ export default Vue.extend({
             },
           }
         },
-      isAdmin: false
+      isAdmin: false,
+      builderCssLoaded: false
     };
   },
 
@@ -484,118 +494,6 @@ export default Vue.extend({
       }
     },
 
-    async saveCreateTheme(close: boolean) {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/create', {
-          token: this.$store.getters['auth/getToken'],
-          label: this.pendingTheme.label,
-          colors: {
-            fill: {
-              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
-              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
-            },
-            text: {
-              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
-              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
-            }
-          },
-          customCss: this.pendingTheme.customCss,
-          customHtml: this.pendingTheme.customHtml,
-        });
-
-        this.themes.push(response);
-
-        if (this.pendingTheme.global) {
-          const token = this.$store.getters['auth/getToken'];
-
-          await this.$axios.$post('theme/admin/set-global', {
-            token,
-            id: response.id,
-            global: this.pendingTheme.global
-          });
-        }
-
-        if (close) {
-          this.closeModal();
-          return;
-        }
-
-        this.setPending(null);
-        this.$root.$emit('refreshUserProfileView');
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
-      }
-    },
-
-    async saveEditTheme() {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/update', {
-          token: this.$store.getters['auth/getToken'],
-          id: this.pendingTheme.id,
-          label: this.pendingTheme.label,
-          colors: {
-            fill: {
-              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
-              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
-            },
-            text: {
-              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
-              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
-            }
-          },
-          customCss: this.pendingTheme.customCss,
-          customHtml: this.pendingTheme.customHtml,
-        });
-
-        const themeId = response.id;
-        const index = this.themes.findIndex(x => x.id === themeId);
-
-        this.themes[index] = this.pendingTheme;
-
-        if (this.pendingTheme.global) {
-          const token = this.$store.getters['auth/getToken'];
-
-          await this.$axios.$post('theme/admin/set-global', {
-            token,
-            id: response.id,
-            global: this.pendingTheme.global
-          });
-        }
-
-        this.closeModal();
-        this.$root.$emit('refreshUserProfileView');
-
-        return;
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
-      }
-    },
-
-    async deleteTheme() {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/delete', {
-          token: this.$store.getters['auth/getToken'],
-          id: this.pendingTheme.id,
-        });
-
-        const themeId = response.id;
-        const index = this.themes.findIndex(x => x.id === themeId);
-
-        this.themes.splice(index, 1);
-
-        this.closeModal();
-        this.setPending(null);
-        this.$root.$emit('refreshUserProfileView');
-
-        return;
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
-      }
-    },
-
     setPending(theme: Theme | null) {
       if (!theme) {
         this.pendingTheme = this.getNewTheme();
@@ -624,6 +522,11 @@ export default Vue.extend({
 
         this.activeThemeId = profileResponse.themeId ?? null;
         this.customCss = profileResponse.customCss ?? '';
+        this.editorCss = this.customCss.split('/* SL-NO-CODE */')[0];
+        if(this.customCss.split('/* SL-NO-CODE */').length > 1) {
+          this.builderCss = this.customCss.split('/* SL-NO-CODE */')[1];
+        }
+        this.builderCssLoaded = true;
         this.customHtml = profileResponse.customHtml ?? '';
       } catch (err) {
         console.log('Error getting user data');
@@ -633,9 +536,12 @@ export default Vue.extend({
 
     async saveChanges() {
       try {
+        console.log('Builder CSS');
+        console.log(this.builderCss);
+
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
-          customCss: this.customCss,
+          customCss: this.editorCss + '/* SL-NO-CODE */' + this.builderCss,
           customHtml: this.customHtml
         });
 
