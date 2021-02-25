@@ -329,14 +329,17 @@ export class UserController extends Controller {
    */
   async DeleteUser(request: FastifyRequest<DeleteUserRequest>, reply: FastifyReply) {
     try {
-      reply.code(StatusCodes.NOT_IMPLEMENTED);
+      let user = request.body.authUser;
 
-      // this.mixpanel.track('user deleted', {
-      //   distinct_id: request.body.id,
-      //   $ip: request.ip,
-      // });
+      let deletedUser = await this.userService.deleteUser(user.id);
 
-      return ReplyUtils.error("Sorry, this is not implemented yet.");
+      if (this.mixpanel)
+        this.mixpanel.track('user deleted', {
+          distinct_id: user.id,
+          $ip: request.ip,
+        });
+
+      return deletedUser;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

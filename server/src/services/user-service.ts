@@ -247,7 +247,7 @@ export class UserService extends DatabaseService {
         name
       ]);
 
-    if (userInsertQuery.rowCount <= 0) {
+    if (userInsertQuery.rowCount < 1) {
       throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
 
@@ -264,9 +264,15 @@ export class UserService extends DatabaseService {
 
   }
 
-  //TODO Implement delete user
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string): Promise<User> {
+    let queryResult = await this.pool.query<DbUser>("delete from app.users where id=$1 returning id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on",
+      [userId]);
 
+    if (queryResult.rowCount < 1) {
+      throw new HttpError(StatusCodes.CONFLICT, "The user doesn't exist.");
+    }
+
+    return DbTypeConverter.toUser(queryResult.rows[0]);
   }
 
   //TODO Implement data package download
@@ -311,7 +317,7 @@ export class UserService extends DatabaseService {
   async setActiveProfile(userId: string, profileId: string): Promise<Profile> {
     let profileResult = await this.pool.query<DbProfile>("update app.users set active_profile_id=$1 where id=$2 returning *", [profileId, userId]);
 
-    if (profileResult.rowCount <= 0) {
+    if (profileResult.rowCount < 1) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The user or profile could not be found.");
     }
 

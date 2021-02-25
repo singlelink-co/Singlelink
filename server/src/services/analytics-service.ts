@@ -79,13 +79,13 @@ export class AnalyticsService extends DatabaseService {
         dayRange
       ]);
 
-    if (profileViewQuery.rowCount <= 0) {
+    if (profileViewQuery.rowCount < 1) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile views could not be found.");
     }
 
     let linksQuery = await this.pool.query<DbLink>("select * from app.links where profile_id=$1", [profileId]);
 
-    if (linksQuery.rowCount <= 0) {
+    if (linksQuery.rowCount < 1) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The links could not be found.");
     }
 

@@ -175,7 +175,7 @@ export class Auth {
             ]
           );
 
-          if (accountQuery.rowCount <= 0) {
+          if (accountQuery.rowCount < 1) {
             reply.status(StatusCodes.NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
             return;
           }
@@ -285,7 +285,7 @@ export class Auth {
             ]
           );
 
-          if (accountQuery.rowCount <= 0) {
+          if (accountQuery.rowCount < 1) {
             reply.status(StatusCodes.NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
             return;
           }

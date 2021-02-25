@@ -26,7 +26,7 @@ export class ProfileService extends DatabaseService {
   async getProfile(profileId: string): Promise<Profile> {
     let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where id=$1", [profileId]);
 
-    if (profileResult.rowCount <= 0) {
+    if (profileResult.rowCount < 1) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
@@ -44,7 +44,7 @@ export class ProfileService extends DatabaseService {
   async getProfileByHandle(handle: string, checkVisibility: boolean): Promise<Profile> {
     let profileResult = await this.pool.query<DbProfile>("select * from app.profiles where handle=$1", [handle]);
 
-    if (profileResult.rowCount <= 0) {
+    if (profileResult.rowCount < 1) {
       throw new HttpError(StatusCodes.NOT_FOUND, "The profile couldn't be found.");
     }
 
@@ -242,7 +242,7 @@ export class ProfileService extends DatabaseService {
 
     let deletedProfile = await this.pool.query<DbProfile>("delete from app.profiles where id=$1", [profileId]);
 
-    if (deletedProfile.rowCount <= 0) {
+    if (deletedProfile.rowCount < 1) {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to delete the profile because of an internal error.");
     }
 
@@ -266,7 +266,7 @@ export class ProfileService extends DatabaseService {
                                                          returning *;`,
       [privacyModeEnabled, profileId]);
 
-    if (profileQuery.rowCount <= 0) {
+    if (profileQuery.rowCount < 1) {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
     }
 
