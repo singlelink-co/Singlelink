@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {UserService} from "../services/user-service";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
@@ -10,6 +10,7 @@ import * as jwt from "jsonwebtoken";
 import {config} from "../config/config";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import Mixpanel from "mixpanel";
+import {Readable} from "stream";
 
 interface LoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -49,9 +50,7 @@ interface UpdateUserRequest extends AuthenticatedRequest {
 }
 
 interface DeleteUserRequest extends AuthenticatedRequest {
-  Body: {
-    id: string
-  } & AuthenticatedRequest["Body"]
+  Body: {} & AuthenticatedRequest["Body"]
 }
 
 interface SetActiveProfileRequest extends AuthenticatedRequest {
@@ -61,9 +60,7 @@ interface SetActiveProfileRequest extends AuthenticatedRequest {
 }
 
 interface GetUserDataPackageRequest extends AuthenticatedRequest {
-  Body: {
-    id: string
-  } & AuthenticatedRequest["Body"]
+  Body: {} & AuthenticatedRequest["Body"]
 }
 
 const userRequestResetPasswordOpts = {
@@ -73,6 +70,16 @@ const userRequestResetPasswordOpts = {
       timeWindow: '4 hours'
     }
   }
+};
+
+const userDataPackageRateLimit = {
+  config: {
+    rateLimit: {
+      max: 5,
+      timeWindow: '30 min'
+    }
+  },
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
 /**
@@ -103,7 +110,7 @@ export class UserController extends Controller {
     this.fastify.all<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
     this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
 
-    this.fastify.all<GetUserDataPackageRequest>('/user/data-package', Auth.ValidateWithData, this.GetUserDataPackage.bind(this));
+    this.fastify.all<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
   }
 
   /**
@@ -340,20 +347,33 @@ export class UserController extends Controller {
     }
   }
 
-  //TODO Implement GDPR data package download
   /**
    * Route for /user/data-package
+   *
+   * Compiles and sends the user a package of their data.
    */
   async GetUserDataPackage(request: FastifyRequest<GetUserDataPackageRequest>, reply: FastifyReply) {
     try {
-      reply.code(StatusCodes.NOT_IMPLEMENTED);
+      let user = request.body.authUser;
 
-      // this.mixpanel.track('user deleted', {
-      //   distinct_id: request.body.id,
-      //   $ip: request.ip,
-      // });
+      let data = await this.userService.generateDataPackage(user);
 
-      return ReplyUtils.error("Sorry, this is not implemented yet.");
+      if (this.mixpanel)
+        this.mixpanel.track('user requested GDPR data', {
+          distinct_id: request.body.authUser.id,
+          $ip: request.ip,
+        });
+
+
+      let filename = user.id + '-data-package.json';
+
+      reply.type('application/octet-stream').code(StatusCodes.OK);
+      reply.header('Content-Disposition', `inline; filename=${filename}`);
+
+      const stream = Readable.from(data);
+      reply.send(stream);
+
+      return;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

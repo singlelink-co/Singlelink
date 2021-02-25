@@ -100,6 +100,7 @@ export class DbTypeConverter {
       style: link.style,
       customCss: link.custom_css,
       useDeepLink: link.use_deep_link,
+      metadata: link.metadata,
       createdOn: link.created_on
     };
   }

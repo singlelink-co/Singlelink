@@ -274,8 +274,32 @@ export class UserService extends DatabaseService {
    * Allows a user to download a data package containing all their collected personal information within SL's databases,
    * excluding password hashes. This is intended to be GDPR compliant.
    */
-  async downloadDataPackage(userId: string) {
+  async generateDataPackage(user: User): Promise<string> {
+    let json: any = {};
 
+    json.user = await this.getSensitiveUser(user.id);
+
+    let profilesQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
+    let themesQuery = await this.pool.query<DbTheme>("select * from app.themes where user_id=$1", [user.id]);
+
+    json.profiles = profilesQuery.rows.map(x => DbTypeConverter.toProfile(x));
+    json.themes = themesQuery.rows.map(x => DbTypeConverter.toTheme(x));
+
+    let profileIds = (<DbProfile[]>json.profiles).map(x => x.id);
+
+    let linkQuery = await this.pool.query<DbLink>("select * from app.links where profile_id=any($1)", [profileIds]);
+
+    json.links = linkQuery.rows.map(x => DbTypeConverter.toLink(x));
+
+    let addonQuery = await this.pool.query<DbAddon>("select * from marketplace.addons where user_id=$1", [user.id]);
+
+    json.addons = addonQuery.rows.map(x => DbTypeConverter.toAddon(x));
+
+    let installsQuery = await this.pool.query<DbAddonInstall>("select * from marketplace.installs where profile_id=any($1)", [profileIds]);
+
+    json.addonInstalls = installsQuery.rows.map(x => DbTypeConverter.toAddonInstall(x));
+
+    return JSON.stringify(json, undefined, 2);
   }
 
   /**
