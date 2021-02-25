@@ -10,7 +10,7 @@ create schema if not exists marketplace;
 create table if not exists marketplace.addons
 (
     id                bigserial primary key unique,
-    user_id           bigint references app.users (id) on update cascade on delete no action,
+    user_id           bigint references app.users (id) on update cascade,
     resource_id       bigint unique not null, -- The id of the resource this addon is related to
     type              addon_t       not null, -- The type of resource this is
     display_name      text,                   -- The name of this resource
@@ -39,8 +39,8 @@ create index if not exists addons_last_updated on marketplace.addons (last_updat
 create table if not exists marketplace.installs
 (
     id         bigserial primary key unique,
-    profile_id bigint references app.profiles (id) on update cascade on delete no action,
-    addon_id   bigint references marketplace.addons (id) on update cascade on delete no action,
+    profile_id bigint references app.profiles (id) on update cascade,
+    addon_id   bigint references marketplace.addons (id) on update cascade,
     created_on timestamp not null default current_timestamp,
 
     unique (profile_id, addon_id) -- make sure user can't install the same thing twice

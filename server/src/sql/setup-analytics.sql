@@ -36,7 +36,7 @@ create index if not exists visits_referral_id_index on analytics.visits (referra
 create table if not exists analytics.marketplace_installs
 (
     addon_id   bigint    not null,
-    user_id    bigint references app.users (id) on update cascade on delete no action,
+    user_id    bigint references app.users (id) on update cascade,
     created_on timestamp not null default current_timestamp,
 
     unique (addon_id, user_id)

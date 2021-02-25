@@ -236,7 +236,7 @@ interface DbAnalyticsGlobalStats {
 
 /**
  id                bigserial primary key unique,
- user_id           bigint references app.users (id) on update cascade on delete no action,
+ user_id           bigint references app.users (id) on update cascade,
  resource_id       bigint unique,      -- The id of the resource this addon is related to
  type              addon_t   not null, -- The type of resource this is
  description       text,

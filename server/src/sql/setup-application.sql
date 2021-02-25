@@ -36,12 +36,16 @@ create table if not exists app.themes
     colors      jsonb              default '{}',
     custom_css  text,
     custom_html text,
-    user_id     bigint references app.users (id) on update cascade on delete cascade,
+    user_id     bigint references app.users (id) on update cascade,
     created_on  timestamp not null default current_timestamp
 );
 
 create index if not exists themes_global_index on app.themes (global);
 create index if not exists themes_user_id_index on app.themes (user_id);
+
+alter table app.themes
+    drop constraint themes_user_id_fkey,
+    add constraint themes_user_id_fkey foreign key (user_id) references app.users (id) on update cascade;
 
 /*
  Creates a profile table with a constraint pointing to a parent account.

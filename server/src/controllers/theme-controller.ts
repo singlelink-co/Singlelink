@@ -8,6 +8,7 @@ import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
 import Mixpanel from "mixpanel";
 import {config} from "../config/config";
+import {MarketplaceService} from "../services/marketplace-service";
 
 interface GetThemeRequest extends AuthenticatedRequest {
   Body: {
@@ -61,12 +62,15 @@ interface SetUserIdRequest extends AdminRequest {
  */
 export class ThemeController extends Controller {
   private readonly themeService: ThemeService;
+  private readonly marketplaceService: MarketplaceService;
   private readonly mixpanel = config.analytics.mixpanelToken ? Mixpanel.init(config.analytics.mixpanelToken) : null;
 
   constructor(fastify: FastifyInstance, databaseManager: DatabaseManager) {
     super(fastify, databaseManager);
 
     this.themeService = new ThemeService(databaseManager);
+    this.marketplaceService = new MarketplaceService(databaseManager);
+
   }
 
   registerRoutes(): void {
@@ -184,9 +188,19 @@ export class ThemeController extends Controller {
    */
   async DeleteTheme(request: FastifyRequest<DeleteThemeRequest>, reply: FastifyReply) {
     try {
-      let body = request.body;
+      let user = request.body.authUser;
+      let id = request.body.id;
 
-      let deletedTheme = await this.themeService.deleteUserTheme(body.id, body.authUser.id);
+      let addons = await this.marketplaceService.getAuthoredAddons(request.body.authUser.id);
+
+      for (let addon of addons) {
+        if (addon.type == "theme" && addon.id == id) {
+          reply.code(StatusCodes.FORBIDDEN);
+          return ReplyUtils.error("Sorry, but you cannot delete a theme that is on the marketplace!");
+        }
+      }
+
+      let deletedTheme = await this.themeService.deleteUserTheme(id, user.id);
 
       if (this.mixpanel)
         this.mixpanel.track('theme deleted', {

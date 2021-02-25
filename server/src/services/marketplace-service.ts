@@ -163,6 +163,20 @@ export class MarketplaceService extends DatabaseService {
   }
 
   /**
+   * Gets a user's authored addons. (Addons created by the author.)
+   *
+   * @param userId The user id requesting the addons.
+   */
+  async getAuthoredAddons(userId: string): Promise<Addon[]> {
+    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where user_id=$2", [userId]);
+
+    if (queryResult.rowCount < 1)
+      return [];
+
+    return queryResult.rows.map(x => DbTypeConverter.toAddon(x));
+  }
+
+  /**
    * Finds an addon. Doesn't require a userId and doesn't check for global or ownership.
    *
    * @param id The addon id.

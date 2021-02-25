@@ -134,6 +134,10 @@ if (process.env.MIXPANEL_TOKEN) {
   config.analytics.mixpanelToken = process.env.MIXPANEL_TOKEN;
 }
 
+if (process.env.DELETE_ADDON_INSTALLS_THRESHOLD) {
+  config.settings.marketplaceDeleteAddonThreshold = process.env.DELETE_ADDON_INSTALLS_THRESHOLD;
+}
+
 
 // Extra logic for debug messages
 

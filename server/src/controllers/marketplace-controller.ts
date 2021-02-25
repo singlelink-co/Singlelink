@@ -78,12 +78,6 @@ interface GetAddonStats extends FastifyRequest {
   }
 }
 
-interface ListInstalledAddonsRequest extends AuthenticatedRequest {
-  Body: {
-    id: string
-  } & AuthenticatedRequest["Body"]
-}
-
 interface ToggleUserFavoriteAddonRequest extends AuthenticatedRequest {
   Params: {
     id: string
@@ -124,7 +118,6 @@ const rateLimitMarketplaceCreation = {
   preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
-
 /**
  * This controller maps and provides for all the controllers under /marketplace.
  */
@@ -149,7 +142,8 @@ export class MarketplaceController extends Controller {
 
     // Authenticated
     this.fastify.all<ListAddonsRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
-    this.fastify.all<ListInstalledAddonsRequest>('/marketplace/addons/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/marketplace/addons/authored', Auth.ValidateWithData, this.ListAuthoredAddons.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/marketplace/addons/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
     this.fastify.all<GetAddonRequest>('/marketplace/addon/:id', Auth.ValidateWithData, this.GetAddon.bind(this));
     this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', rateLimitMarketplaceCreation, this.CreateAddon.bind(this));
@@ -278,13 +272,35 @@ export class MarketplaceController extends Controller {
   }
 
   /**
+   * Route for /marketplace/addon/authored
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ListAuthoredAddons(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+    try {
+      let user = request.body.authUser;
+
+      return await this.marketplaceService.getAuthoredAddons(user.id);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
    * Route for /marketplace/addon/installed
    *
    * @param request
    * @param reply
    * @constructor
    */
-  async ListInstalledAddons(request: FastifyRequest<ListInstalledAddonsRequest>, reply: FastifyReply) {
+  async ListInstalledAddons(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
     try {
       let profile = request.body.authProfile;
 
@@ -431,6 +447,19 @@ export class MarketplaceController extends Controller {
 
       if (!(await Auth.checkAddonOwnership(this.marketplaceService, addonId, user))) {
         return ReplyUtils.errorOnly(new HttpError(StatusCodes.UNAUTHORIZED, "The user isn't authorized to access the requested resource"));
+      }
+
+      let addons = await this.marketplaceService.getAuthoredAddons(request.body.authUser.id);
+
+      for (let addon of addons) {
+        if (addon.type == "theme") {
+          let number = await this.marketplaceService.getCurrentInstallCount(addon.id);
+
+          if (number > config.settings.marketplaceDeleteAddonThreshold) {
+            reply.code(StatusCodes.FORBIDDEN);
+            return ReplyUtils.error(`Sorry, but you cannot delete a Theme addon that has more than ${config.settings.marketplaceDeleteAddonThreshold} active installations!`);
+          }
+        }
       }
 
       let deletedAddonId = await this.marketplaceService.deleteAddon(addonId);
