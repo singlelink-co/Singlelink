@@ -7,7 +7,7 @@
         <div class="flex flex-col lg:flex-row w-full items-start mb-4">
             <div class="p-3 bg-white" style="border-radius: 50px; overflow:hidden;box-shadow:0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%), inset 0 0 5px 0 rgba(0,0,0,.1);">
                 <div class="relative text-center rounded flex items-center justify-ceneter p-6 bg-indigo-200" style="border-radius: 40px;width: 262px;height:568px;overflow:hidden;">
-                    <span class="text-sm text-indigo-500 font-medium">Save addon for preview</span>
+                    <span class="text-sm text-indigo-500 font-medium mx-auto">Save addon for preview</span>
                     <iframe v-if="addon.id" style="z-index:2;pointer-events: none;width: 376px;height: 813px;transform: scale(0.7) translate(-82px, -175px);top:0;left:0;position:absolute;" :src="'/dashboard/marketplace/preview/' + addon.id"/>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div class="flex flex-col mb-4 justify-start w-full">
                     <label class="font-semibold mb-2">Tags/keywords</label>
                     <input v-if="intent != 'view'" class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="pendingTag" placeholder="e.g. colorful" type="text"/>
-                    <ul v-if="addon.tags.length>=1" class="mt-3 flex flew-rox flex-wrap justify-start items-start">
+                    <ul v-if="addon && addon.tags && addon.tags.length>=1" class="mt-3 flex flew-rox flex-wrap justify-start items-start">
                         <li class="hover:bg-indigo-300 flex flex-row items-center justify-center p-1 text-sm px-3 text-indigo-500 mr-2 rounded bg-indigo-200 bg-indigo-200 font-medium" v-for="tag in addon.tags">
                             {{ tag }}
                             <div class="ml-2 cursor-pointer leading-none" @click="pluck(tag)">x</div>

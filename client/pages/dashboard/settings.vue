@@ -32,12 +32,12 @@
             >
           </div>
           <div class="flex flex-col w-full lg:w-1/2">
-            <label class="font-medium text-sm text-gray-800" for="email">Subtitle</label>
+            <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle</label>
             <input
-              id="email"
+              id="subtitle"
               v-model="user.activeProfile.subtitle"
               class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-              type="email"
+              type="text"
               placeholder="e.g. Developer at Neutron from Raleigh NC"
             >
           </div>
