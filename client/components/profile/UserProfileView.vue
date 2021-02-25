@@ -165,12 +165,11 @@ export default Vue.extend({
         await this.getProfile();
       } else {
         // do nothing
-        this.profileData.headline = 'Jane Doe';
-        this.profileData.subtitle = 'A few details about yourself.'
-        this.profileData.showWatermark = false;
-        this.profile = this.profileData;
+        await this.getAuthenticatedProfile();
+        this.profile.customCss = this.profileData.customCss;
+        this.profile.customHtml = this.profileData.customHtml;
         this.theme = this.profileData;
-        this.user = {
+        /*this.user = {
           name: null,
           emailHash: 'something',
           avatarUrl: null,
@@ -183,7 +182,7 @@ export default Vue.extend({
             url: '#',
             customCss: ''
           }
-        ];
+        ];*/
         this.loaded = true;
       }
     }
