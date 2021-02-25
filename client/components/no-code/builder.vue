@@ -15,11 +15,17 @@
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full mb-2">
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Size (px)</label>
-                      <input v-model="meta.page_styles.avatar_size" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.page_styles.avatar_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
                 </div>
                 <div class="flex flex-col mb-4 justify-start w-full" >
                       <label class="font-semibold text-gray-700 mb-2">Border radius (px)</label>
-                      <input v-model="meta.page_styles.avatar_radius" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="35px" type="number"/>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.page_styles.avatar_radius" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="35px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
                 </div>
               </div>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
@@ -32,11 +38,17 @@
                 </div>
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Border width (px)</label>
-                      <input v-model="meta.page_styles.avatar_border_width" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="4px" type="number"/>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.page_styles.avatar_border_width" class="p-3 bg-white text-sm text-gray-700" placeholder="4px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
                 </div>
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Border color</label>
-                      <input v-model="meta.page_styles.avatar_border_color" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text"/>
+                      <div class="relative">
+                        <input v-model="meta.page_styles.avatar_border_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.page_styles.avatar_border_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
                 </div>
               </div>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
@@ -185,7 +197,7 @@ export default {
         // Avatar border radius
         if(this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius']) this.meta.page_styles.avatar_radius = this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'].split('px')[0];
         // Avatar border
-        if(this.JSON_pkg.children["img.nc-avatar"].attributes.border) {
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes.border && this.JSON_pkg.children["img.nc-avatar"].attributes.border != 'none') {
           let border = this.JSON_pkg.children["img.nc-avatar"].attributes.border.split(' ');
           // Avatar border style
           this.meta.page_styles.avatar_border_type = border[0];
@@ -193,6 +205,8 @@ export default {
           this.meta.page_styles.avatar_border_width = border[1].split('px')[0];
           // Avatar border color
           this.meta.page_styles.avatar_border_color = border[2];
+        } else if(this.JSON_pkg.children["img.nc-avatar"].attributes.border == 'none') {
+          this.meta.page_styles.avatar_border_type = 'none';
         }
         // Avatar box-shadow
         if(this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow']) this.meta.page_styles.avatar_shadow = this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'];
@@ -207,11 +221,20 @@ export default {
           if(this.meta.page_styles.avatar_size) {
             this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
             this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
+          } else {
+            delete this.JSON_pkg.children["img.nc-avatar"].attributes.width;
+            delete this.JSON_pkg.children["img.nc-avatar"].attributes.height;
           }
-          if(this.meta.page_styles.avatar_radius) this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'] = this.meta.page_styles.avatar_radius + 'px';
+          if(this.meta.page_styles.avatar_radius) {
+            this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'] = this.meta.page_styles.avatar_radius + 'px';
+          } else {
+            delete this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'];
+          }
           if(this.meta.page_styles.avatar_shadow) this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'] = this.meta.page_styles.avatar_shadow;
           if(this.meta.page_styles.avatar_border_type != 'none' && this.meta.page_styles.avatar_border_color && this.meta.page_styles.avatar_border_width) {
             this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = this.meta.page_styles.avatar_border_type + ' ' + this.meta.page_styles.avatar_border_width + 'px ' + this.meta.page_styles.avatar_border_color;
+          } else if(this.meta.page_styles.avatar_border_type == 'none') {
+            this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = 'none'
           }
           return this.$emit('input', this.$transform.toCSS(this.JSON_pkg));
         },
