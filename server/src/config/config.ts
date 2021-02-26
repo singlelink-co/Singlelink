@@ -136,6 +136,8 @@ if (process.env.MIXPANEL_TOKEN) {
 
 if (process.env.DELETE_ADDON_INSTALLS_THRESHOLD) {
   config.settings.marketplaceDeleteAddonThreshold = process.env.DELETE_ADDON_INSTALLS_THRESHOLD;
+} else if (config.settings.marketplaceDeleteAddonThreshold) {
+  config.settings.marketplaceDeleteAddonThreshold = 10;
 }
 
 
