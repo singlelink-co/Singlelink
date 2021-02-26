@@ -305,8 +305,15 @@ export default {
               case 'gradient':
                 if(this.meta.page_styles.background_gradient_start && this.meta.page_styles.background_gradient_end && this.meta.page_styles.background_gradient_direction) this.JSON_pkg.children['body'].attributes['background'] = 'linear-gradient(' + this.meta.page_styles.background_gradient_direction + ',' + this.meta.page_styles.background_gradient_start + ',' + this.meta.page_styles.background_gradient_end + ')';
                 break;
+              case 'none':
+                delete this.JSON_pkg.children['body'].attributes['background'];
+                break;
             }
-            this.JSON_pkg.children["div.sl-bg"].attributes.background='transparent !important';
+            if(this.meta.page_styles.background_type != 'none') {
+              this.JSON_pkg.children["div.sl-bg"].attributes.background='transparent !important';
+            } else {
+              delete this.JSON_pkg.children["div.sl-bg"].attributes.background;
+            }
           } else {
             delete this.JSON_pkg.children["body"]?.attributes?.background;
           }
