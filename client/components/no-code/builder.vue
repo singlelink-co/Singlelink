@@ -62,7 +62,7 @@
                       </select>
                 </div>
               </div>
-              <!--<span class="text-gray-800 font-semibold py-3 my-3 border border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Background</span>
+              <span class="text-gray-800 font-semibold py-3 my-3 border border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Background</span>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Background type</label>
@@ -75,32 +75,41 @@
                 </div>
                 <div v-if="meta.page_styles.background_type=='solid'" class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Background color</label>
-                      <input type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FCFCFC"/>
+                      <div class="relative w-full">
+                        <input v-model="meta.page_styles.background_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.page_styles.background_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
                 </div>
                 <div v-if="meta.page_styles.background_type=='image'" class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Background image URL</label>
-                      <input type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. https://singlelink.co/og-image.png"/>
+                      <input v-model="meta.page_styles.background_image" type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. https://singlelink.co/og-image.png"/>
                 </div>
               </div>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full" v-if="meta.page_styles.background_type=='gradient'">
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Start color</label>
-                      <input type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FCFCFC"/>
+                      <div class="relative w-full">
+                        <input v-model="meta.page_styles.background_gradient_start" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.page_styles.background_gradient_start" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
                 </div>
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">End color</label>
-                      <input type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FCFCFC"/>
+                      <div class="relative w-full">
+                        <input v-model="meta.page_styles.background_gradient_end" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.page_styles.background_gradient_end" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
                 </div>
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Direction</label>
-                      <select class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                      <select v-model="meta.page_styles.background_gradient_direction" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
                         <option value="to top">To top</option>
                         <option value="to right">To right</option>
                         <option value="to bottom">To bottom</option>
                         <option value="to left">To left</option>
                       </select>
                 </div>
-              </div>-->
+              </div>
             </div>
             <!-- End Drawer -->
           </div>
@@ -148,6 +157,16 @@ export default {
                   'border-radius': null
                 }
               },
+              "div.sl-bg": {
+                attributes: {
+                  background: null
+                }
+              },
+              "body": {
+                attributes: {
+                  background: null
+                }
+              }
             }
           },
           drawer: {
@@ -163,41 +182,55 @@ export default {
               avatar_border_type: null,
               avatar_border_color: null,
               avatar_border_width: null,
-              background_type: 'none'
+              background_type: null,
+              background_image: null,
+              background_color: null,
+              background_gradient_start: null,
+              background_gradient_end: null,
+              background_gradient_direction: null
             }
           }
         }
     },
-    computed: {
-      /*exported_css() {
-        if(this.meta.page_styles.avatar_size) {
-          this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
-          this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
-        }
-        if(this.meta.page_styles.avatar_radius) this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'] = this.meta.page_styles.avatar_radius + 'px';
-        if(this.meta.page_styles.avatar_shadow) this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'] = this.meta.page_styles.avatar_shadow;
-        if(this.meta.page_styles.avatar_border_type != 'none' && this.meta.page_styles.avatar_border_color && this.meta.page_styles.avatar_border_width) {
-          this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = this.meta.page_styles.avatar_border_type + ' ' + this.meta.page_styles.avatar_border_width + ' ' + this.meta.page_styles.avatar_border_color;
-        }
-        return this.$transform.toCSS(this.JSON_pkg);
-      }*/
-    },
     mounted() {
-      /*setInterval(()=>{
-        console.log(this.exported_css);
-      }, 3500);*/
       console.log('Input');
       console.log(this.imported_css);
       console.log('to JSON');
       console.log(this.$transform.toJSON(this.imported_css));
       if(this.imported_css) {
         this.JSON_pkg = this.$transform.toJSON(this.imported_css);
+
+        // Safety
+        if(!this.JSON_pkg.children['img.nc-avatar']) this.JSON_pkg.children['img.nc-avatar'] = {
+          attributes: {
+                  width: null,
+                  height: null,
+                  border: null,
+                  'box-shadow': null,
+                  'border-radius': null
+          }
+        };
+
+        if(!this.JSON_pkg.children['div.sl-bg']) this.JSON_pkg.children['div.sl-bg'] = {
+          attributes: {
+            background: null
+          }
+        };
+
+        if(!this.JSON_pkg.children['body']) this.JSON_pkg.children['body'] = {
+          attributes: {
+            background: null
+          }
+        };
+
+
+
         // Avatar height
         if(this.JSON_pkg.children["img.nc-avatar"].attributes.width) this.meta.page_styles.avatar_size = this.JSON_pkg.children["img.nc-avatar"].attributes.width.split('px')[0];
         // Avatar border radius
         if(this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius']) this.meta.page_styles.avatar_radius = this.JSON_pkg.children["img.nc-avatar"].attributes['border-radius'].split('px')[0];
         // Avatar border
-        if(this.JSON_pkg.children["img.nc-avatar"].attributes.border && this.JSON_pkg.children["img.nc-avatar"].attributes.border != 'none') {
+        if(this.JSON_pkg.children["img.nc-avatar"].attributes.border && this.JSON_pkg.children["img.nc-avatar"].attributes.border != 'none' && this.JSON_pkg.children["img.nc-avatar"].attributes.border.split(' ').length > 2) {
           let border = this.JSON_pkg.children["img.nc-avatar"].attributes.border.split(' ');
           // Avatar border style
           this.meta.page_styles.avatar_border_type = border[0];
@@ -211,13 +244,37 @@ export default {
         // Avatar box-shadow
         if(this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow']) this.meta.page_styles.avatar_shadow = this.JSON_pkg.children["img.nc-avatar"].attributes['box-shadow'];
         
+        // Page background
+        if(this.JSON_pkg.children['body'].attributes['background']) {
+          if(this.JSON_pkg.children['body'].attributes['background'].indexOf('linear-gradient') > -1) {
+            // Is linear gradient
+            this.meta.page_styles.background_type = 'gradient';
+            let gradient = this.JSON_pkg.children['body'].attributes['background'].replace('linear-gradient(','').replace(')','').split(',');
+            if(gradient.length == 3) {
+              this.meta.page_styles.background_gradient_direction = gradient[0];
+              this.meta.page_styles.background_gradient_start = gradient[1];
+              this.meta.page_styles.background_gradient_end = gradient[2];
+            } else {
+              delete this.JSON_pkg.children['body'].attributes['background'];
+            }
+          } else if(this.JSON_pkg.children['body'].attributes['background'].indexOf('url') > -1) {
+            // Is image
+            this.meta.page_styles.background_type = 'image';
+            this.meta.page_styles.background_image = this.JSON_pkg.children['body'].attributes['background'].replace('url(','').replace(')','');
+          } else {
+            // Is solid color
+            this.meta.page_styles.background_type = 'solid';
+            this.meta.page_styles.background_color = this.JSON_pkg.children['body'].attributes['background'];
+          }
+        }
+        
+
       }
     },
     watch: {
       meta: {
         handler() {
           console.log('Changes');
-          console.log
           if(this.meta.page_styles.avatar_size) {
             this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
             this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
@@ -236,6 +293,24 @@ export default {
           } else if(this.meta.page_styles.avatar_border_type == 'none') {
             this.JSON_pkg.children["img.nc-avatar"].attributes['border'] = 'none'
           }
+          // Background type
+          if(this.meta.page_styles.background_type) {
+            switch(this.meta.page_styles.background_type) {
+              case 'solid':
+                if(this.meta.page_styles.background_color) this.JSON_pkg.children['body'].attributes['background'] = this.meta.page_styles.background_color;
+                break;
+              case 'image':
+                if(this.meta.page_styles.background_image) this.JSON_pkg.children['body'].attributes['background'] = 'url(' + this.meta.page_styles.background_image + ')';
+                break;
+              case 'gradient':
+                if(this.meta.page_styles.background_gradient_start && this.meta.page_styles.background_gradient_end && this.meta.page_styles.background_gradient_direction) this.JSON_pkg.children['body'].attributes['background'] = 'linear-gradient(' + this.meta.page_styles.background_gradient_direction + ',' + this.meta.page_styles.background_gradient_start + ',' + this.meta.page_styles.background_gradient_end + ')';
+                break;
+            }
+            this.JSON_pkg.children["div.sl-bg"].attributes.background='transparent !important';
+          } else {
+            delete this.JSON_pkg.children["body"]?.attributes?.background;
+          }
+
           return this.$emit('input', this.$transform.toCSS(this.JSON_pkg));
         },
         deep: true
