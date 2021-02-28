@@ -3,7 +3,7 @@
     <section class="mb-12">
       <h1 class="my-10">Pricing & plans</h1>
       <p class="mb-8 text-2xl">
-        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we plans for individuals starting at $8/Month, plans for businesses starting at $30/Month.
+        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
       </p>
     </section>
     <section class="mb-20 w-full">
@@ -16,7 +16,7 @@
       </div>
       <div class="p-12 rounded-lg shadow bg-white flex flex-col mb-8" v-if="intent=='personal'">
                 <div class="flex flex-col lg:flex-row mb-2 items-center">
-                  <h3 class="text-3xl font-heading font-semibold mb-0">Forever free</h3>
+                  <h3 class="text-3xl font-extrabold mb-0">Forever free</h3>
                   <h4 class="text-xl font-medium text-indigo-600 mx-auto mr-auto ml-0 lg:mt-0 mt-2">$0/Month</h4>
                 </div>
                 <p class="mb-4 text-gray-600 font-medium leading-relaxed">The perfect option for users looking to build their first micro-site.</p>
@@ -72,7 +72,7 @@
       <div class="flex lg:flex-row flex-col space-y-8 lg:space-x-8 lg:space-y-0" v-if="intent=='personal'">
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
-          <h3 class="text-3xl font-heading font-semibold mt-4 mb-0 lg:mt-0">Whale 🐳</h3>
+          <h3 class="text-3xl font-extrabold mt-4 mb-0 lg:mt-0">Whale 🐳</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 lg:ml-auto lg:mr-0 mx-auto lg:mt-0 mt-2">$8/Month</h4>
         </div>
         <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
@@ -111,10 +111,10 @@
         </div>
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
-          <h3 class="text-3xl font-semibold mb-0">Enterprise</h3>
+          <h3 class="text-3xl font-extrabold mb-0">Enterprise</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 w-full text-right">Contact us</h4>
         </div>
-        <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
+        <p class="mb-8 text-gray-600 font-medium leading-relaxed">For those looking to work alongside the Singlelink team and rely on us for your online needs.</p>
         <h4 class="mb-3 font-heading font-semibold text-lg">Includes the following</h4>
         <ul class="mb-8 list-inside text-gray-600">
                   <li class="mb-2">
@@ -151,7 +151,7 @@
       </div>
       <div class="p-12 rounded-lg shadow bg-white flex flex-col mb-8" v-if="intent=='business'">
                 <div class="flex flex-col lg:flex-row mb-2 items-center">
-                  <h3 class="text-3xl font-heading font-semibold mb-0">Team</h3>
+                  <h3 class="text-3xl font-extrabold mb-0">Team</h3>
                   <h4 class="text-xl font-medium text-indigo-600 mx-auto mr-auto ml-0 lg:mt-0 mt-2 w-full text-right">From $25/Month</h4>
                 </div>
                 <p class="mb-4 text-gray-600 font-medium leading-relaxed">The perfect option for users looking to build their first micro-site.</p>
@@ -207,7 +207,7 @@
       <div class="flex lg:flex-row flex-col space-y-8 lg:space-x-8 lg:space-y-0" v-if="intent=='business'">
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
-          <h3 class="text-3xl font-heading font-semibold mt-4 mb-0 lg:mt-0">Platform</h3>
+          <h3 class="text-3xl font-extrabold mt-4 mb-0 lg:mt-0">Platform</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 lg:ml-auto lg:mr-0 mx-auto lg:mt-0 mt-2 w-full text-right">From $50/Month</h4>
         </div>
         <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
@@ -246,7 +246,7 @@
         </div>
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
-          <h3 class="text-3xl font-semibold mb-0">Enterprise</h3>
+          <h3 class="text-3xl font-extrabold mb-0">Enterprise</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 w-full text-right">Contact us</h4>
         </div>
         <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>

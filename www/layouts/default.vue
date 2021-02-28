@@ -15,7 +15,7 @@
     -->
     <header class="mt-12 mb-10 lg:mt-16 flex flex-row w-full justify-start items-center">
       <a href="/" class=""><img style="height:40px;width:auto;" src="/singlelink-brandmark-shadow.png"/></a>
-      <a class="ml-auto px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="/pricing">Community</a>
+      <a class="ml-auto px-6 py-2 rounded-lg text-sm font-medium hover:underline" target="_blank" href="https://discord.gg/3pBM4Px">Community</a>
       <a class="px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="/pricing">Pricing</a>
       <a class="mx-0 px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="https://app.singlelink.co">Sign in</a>
       <a href="https://app.singlelink.co/create-account" class="sign-in">Get started free<img class="w-3 ml-4" src="/arrow.svg"/></a>
