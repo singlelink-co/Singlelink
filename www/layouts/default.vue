@@ -1,6 +1,6 @@
 <template>
   <div class="interface wide">
-    <div class="w-screen position absolute top-0 left-0 right-0 bg-black flex flex-row py-2 px-2 text-center text-white items-center justify-center">
+    <div style="background:rgba(0,0,0,.85);" class="w-screen position absolute top-0 left-0 right-0 flex flex-row py-2 px-2 text-center text-white items-center justify-center">
       <div class="interface row wide">
         <img style="width:18px;height:18px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Y_Combinator_logo.svg/1200px-Y_Combinator_logo.svg.png"/>
         <span class="max-w-xl text-white text-xs font-medium ml-4">
@@ -10,10 +10,15 @@
       </div>
     </div>
     <!-- Overlay gradients -->
-    <div class="overlays"><div style="background: linear-gradient(to top, rgb(83, 83, 236), transparent); opacity: 0.05; z-index: 5;"></div> <div style="background: linear-gradient(185deg, rgb(255, 0, 229), transparent); opacity: 0.08; z-index: 4;"></div> <div style="background: linear-gradient(135deg, rgb(0, 255, 255), transparent); opacity: 0.08; z-index: 3;"></div> <div style="background: radial-gradient(circle at center top, rgb(83, 83, 236), transparent); opacity: 0.15; z-index: 2;"></div> <div style="background: linear-gradient(rgb(255, 255, 255), transparent); opacity: 0.05; z-index: 1;"></div></div>
-    <header class="mt-12 mb-10 lg:mt-16 flex flex-row w-full justify-between items-center">
+    <!--
+      <div class="overlays"><div style="background: linear-gradient(to top, rgb(83, 83, 236), transparent); opacity: 0.05; z-index: 5;"></div> <div style="background: linear-gradient(185deg, rgb(255, 0, 229), transparent); opacity: 0.08; z-index: 4;"></div> <div style="background: linear-gradient(135deg, rgb(0, 255, 255), transparent); opacity: 0.08; z-index: 3;"></div> <div style="background: radial-gradient(circle at center top, rgb(83, 83, 236), transparent); opacity: 0.15; z-index: 2;"></div> <div style="background: linear-gradient(rgb(255, 255, 255), transparent); opacity: 0.05; z-index: 1;"></div></div>
+    -->
+    <header class="mt-12 mb-10 lg:mt-16 flex flex-row w-full justify-start items-center">
       <a href="/" class=""><img style="height:40px;width:auto;" src="/singlelink-brandmark-shadow.png"/></a>
-      <a href="https://app.singlelink.co" class="sign-in">Sign in<img class="w-3 ml-2" src="/arrow.svg"/></a>
+      <a class="ml-auto px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="/pricing">Community</a>
+      <a class="px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="/pricing">Pricing</a>
+      <a class="mx-0 px-6 py-2 rounded-lg text-sm font-medium hover:underline" href="https://app.singlelink.co">Sign in</a>
+      <a href="https://app.singlelink.co/create-account" class="sign-in">Get started free<img class="w-3 ml-4" src="/arrow.svg"/></a>
     </header>
     <Nuxt class="interface" />
     <footer class="interface">
@@ -116,8 +121,8 @@
     margin: 0;
     padding: 0;
     overflow-x:hidden;
-    background-image: url('/bg.svg');
-    background-size: cover;
+    background-image: url('/bg.png');
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
   }

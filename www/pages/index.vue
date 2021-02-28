@@ -1,7 +1,29 @@
 <template>
   <div>
     <section class="mb-20 text-center interface">
-      <img src="/hero-image.png"/>
+      <!--<img src="/hero-image.png"/>-->
+      <!---->
+      <div class="flex flex-row items-center justify-center lg:space-x-10 relative">
+        <img style="width:180px;height:auto;position:absolute;z-index:11;left:102px;top:178px;" src="/Pink-arrow.svg"/>
+        <img style="width:120px;height:auto;position:absolute;z-index:11;right:190px;top:130px;" src="/Purple-arrow.svg"/>
+        <div class="phone-container">
+          <div class="mini phone-display relative">
+              <div class="w-full h-full" style="background-image:url('/Instagram-Screen.svg');background-position:top left;background-size: 100% auto;"></div>
+          </div>
+        </div>
+        <div class="phone-container">
+          <div style="transform: scale(1.1);top:145px;" class="bg-white z-10 absolute w-full flex flex-row items-center justify-center rounded-lg tracking-tighter shadow px-8 py-4 font-extrabold">Buy on Amazon!</div>
+          <div class="mini phone-display relative">
+              <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/influencer" scrolling="no"/>
+          </div>
+        </div>
+        <div class="phone-container">
+          <div class="mini phone-display relative">
+              <div class="w-full h-full" style="background-image:url('/Amazon-Screen.svg');background-position:top left;background-size: 100% auto;"></div>
+          </div>
+        </div>
+      </div>
+      <!---->
       <h1 style="margin-top: -115px; margin-bottom: 12px;">Increase engagement by 50% or more with<a href="/gallery" style="text-shadow: 0 0 15px rgba(83,83,238,.5);" class="text-indigo-600 ml-4">Singlelink.</a></h1>
       <p class="mb-6 text-2xl max-w-2xl mx-auto">
         The powerful, easy-to-use, and customizable micro-site that gets your content to your consumers in fewer clicks.
@@ -216,6 +238,11 @@ import wallOfLove from '../components/wall-of-love.vue';
     box-shadow: inset 0 -1000px 0 0 rgba(0,0,0,.3);
   }
 
+  .phone-container {
+    position: relative;
+    width: 
+  }
+
   .phone-display {
     display: flex;
     margin: 0 auto 0 0;
@@ -228,8 +255,22 @@ import wallOfLove from '../components/wall-of-love.vue';
     height: 600px;
     transform: scale(.8);
     box-shadow: inset 0 0 5px rgba(0,0,0,.25);
-    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 4%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 35%, transparent 75%);
+}
+
+.phone-display.mini {
+  transform: scale(.58);
+  position: absolute;
+  top:-126px;
+  left: -80px;
+  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%) imp !important;
+  mask-image: linear-gradient(to bottom, black 90%, transparent 100%) imp !important;
+}
+
+.phone-container {
+  width: 218px;
+  height: 350px;
+  position: relative;
 }
 
 .phone-display > iframe {
