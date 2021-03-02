@@ -70,8 +70,8 @@ export default {
         return {
             id: null,
             themes: [],
-            builderCss: null,
-            editorCss: null,
+            builderCss: '',
+            editorCss: '',
             theme: {
                 label: null,
                 colors: {
