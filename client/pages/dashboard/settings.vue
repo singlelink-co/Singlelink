@@ -78,9 +78,9 @@
             </select>
           </div>
         </div>
-        <div class="flex flex-row items-center justify-center">
+        <div class="flex flex-row items-center justify-center space-x-4 mb-4">
           <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload" v-model="user.activeProfile.imageUrl">
-          <div class="flex flex-col w-full mb-4">
+          <div class="flex flex-col w-full">
           <label class="font-medium text-sm text-gray-800" for="image_url">Avatar Image URL</label>
           <input
             id="image_url"
@@ -356,9 +356,16 @@ export default Vue.extend({
     async saveChanges() {
       // Update profile
       try {
+
+        let avatar_upload = document.getElementById('avatar_url');
+        let avatar_string = null;
+        if(avatar_upload && avatar_upload.value) {
+          avatar_string = avatar_upload.value;
+        }
+
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
-          imageUrl: this.user.activeProfile.imageUrl ?? null,
+          imageUrl: avatar_string ?? this.user.activeProfile.imageUrl ?? null,
           headline: this.user.activeProfile.headline ?? null,
           subtitle: this.user.activeProfile.subtitle ?? null,
           handle: this.user.activeProfile.handle ?? null,
