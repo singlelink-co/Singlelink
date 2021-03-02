@@ -1,11 +1,20 @@
 <template>
     <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 flex-grow overflow-x-hidden overflow-y-scroll">
         <div class="flex flex-col lg:flex-row justify-start lg:justify-between items-center mb-4 w-full">
-            <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl">Edit theme</h1>
+            <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl"><span v-if="intent=='create'">Create</span><span v-if="intent=='edit'">Edit</span> theme</h1>
         </div>
         <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
             <label class="font-semibold mb-2">Display name</label>
             <input class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="theme.label" placeholder="e.g. My beautiful theme" type="text"/>
+        </div>
+        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-6">
+            <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+                <h2 class="text-gray-800 font-semibold text-lg">
+                Customization
+                </h2>
+                <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+            </div>
+            <builder v-if="builderLoaded" v-model="builderCss"/>
         </div>
         <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-6">
             <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
@@ -42,12 +51,12 @@
                   autoIndent: 'full',
                   autoClosingQuotes: true,
                 }"
-                v-model="theme.customCss"
+                v-model="theme.editorCss"
         ></MonacoEditor>
         </div>
         
         <div class="flex flex-col lg:flex-row items-center justify-start w-full mt-4">
-            <div v-if="intent=='submit'" @click="saveCreateTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Create theme</div>
+            <div v-if="intent=='create'" @click="saveCreateTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Create theme</div>
             <div v-if="intent=='edit'" @click="saveEditTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
             <div v-if="intent=='edit'" @click="deleteTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-red-500 bg-red-600 cursor-pointer">Delete theme</div>
         </div>
@@ -61,6 +70,8 @@ export default {
         return {
             id: null,
             themes: [],
+            builderCss: null,
+            editorCss: null,
             theme: {
                 label: null,
                 colors: {
@@ -76,7 +87,8 @@ export default {
                 customHtml: null,
                 customCss: null
             },
-            intent: 'edit'
+            intent: 'edit',
+            builderLoaded: false,
         }
     },
     mounted() {
@@ -85,6 +97,7 @@ export default {
             this.loadThemes();
         } else {
             this.intent = 'create';
+            this.builderLoaded = true;
         }
     },
     methods: {
@@ -111,6 +124,11 @@ export default {
                                 }
                             };
                         }
+                        this.editorCss = this.theme.customCss.split('/* SL-NO-CODE */')[0];
+                        if(this.theme.customCss.split('/* SL-NO-CODE */').length > 1) {
+                            this.builderCss = this.theme.customCss.split('/* SL-NO-CODE */')[1];
+                            this.builderLoaded = true;
+                        } else {this.builderLoaded = true;}
                     }
                 }
                 console.log(this.themes);
@@ -135,7 +153,7 @@ export default {
                         secondary: this.theme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
                         }
                     },
-                    customCss: this.theme.customCss,
+                    customCss: this.editorCss + '/* SL-NO-CODE */' + this.builderCss,
                     customHtml: this.theme.customHtml,
                 });
 
@@ -170,7 +188,7 @@ export default {
                 secondary: this.theme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
                 }
             },
-            customCss: this.theme.customCss,
+            customCss: this.editorCss + '/* SL-NO-CODE */' + this.builderCss,
             customHtml: this.theme.customHtml,
             });
 

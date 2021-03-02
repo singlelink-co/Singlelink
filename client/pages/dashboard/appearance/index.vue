@@ -7,38 +7,12 @@
     <!-- Your Themes-->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <theme-list :active="activeThemeId" name="Your themes" :themes="themes" :extended="false" icon="edit"/>
-
-      <!--<h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Your Themes
-      </h2>-->
-
-      <!--<div class="flex flex-row overflow-x-scroll hide-scrollbar">
-
-        <div
-          v-for="theme in themes"
-          v-if="themes"
-          :key="theme.id"
-          class="rounded-lg nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;min-height:80px;`"
-          :class="{'active': activeThemeId === theme.id}"
-          @click="selectTheme(theme.id)"
-        >
-          <i
-            v-if="!theme.global"
-            class="fas fa-pencil-alt edit-icon"
-            @click.stop="openModal('edit'); pendingTheme=theme;"
-          />
-          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
-            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
-          </div>
-        </div>
-
-        <div class="rounded-lg nc-theme nc-add bg-gray-200" style="min-width:78px;min-height:80pxpx;" @click="openModal('create')">
-          <div class="nc-inner flex items-center justify-center">
-            <span class="font-semibold text-gray-700 text-4xl">+</span>
-          </div>
-        </div>
-      </div>-->
+      <a
+        type="button"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        href="/dashboard/appearance/theme/create">
+        Create new theme
+      </a>
 
     </div>
 
