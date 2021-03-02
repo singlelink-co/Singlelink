@@ -357,7 +357,7 @@ export default Vue.extend({
       // Update profile
       try {
 
-        let avatar_upload = document.getElementById('avatar_url');
+        let avatar_upload = (<HTMLInputElement>document.getElementById('avatar_url')).value;
         let avatar_string = null;
         if(avatar_upload && avatar_upload.value) {
           avatar_string = avatar_upload.value;
