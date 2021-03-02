@@ -1097,7 +1097,7 @@ export default {
           // Link border
           if(this.meta.link_styles.border_type != 'none' && this.meta.link_styles.border_color && this.meta.link_styles.border_width) {
             this.JSON_pkg.children["a div.sl-item.nc-link"].attributes['border'] = this.meta.link_styles.border_type + ' ' + this.meta.link_styles.border_width + 'px ' + this.meta.link_styles.border_color;
-          } else if(this.meta.link_styles.avatar_border_type == 'none') {
+          } else if(this.meta.link_styles.border_type == 'none') {
             this.JSON_pkg.children["a div.sl-item.nc-link"].attributes['border'] = 'none'
           }
           // Link box-shadow
