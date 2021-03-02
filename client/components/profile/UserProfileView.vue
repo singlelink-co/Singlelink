@@ -81,7 +81,7 @@
         </h3>
       </div>
 
-      <div v-if="loaded && profile.showWatermark">
+      <div v-if="loaded && profile.showWatermark" id="sl-watermark">
         <p v-if="theme" :style="`color:${theme.colors.text.primary}`" class="mt-4 text-sm">
           Proudly built with {{ app_name }} 🔗
         </p>
