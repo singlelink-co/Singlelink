@@ -32,12 +32,12 @@
         }
       </component>
 
-      <component :is="'style'" v-if="profile.customCss">
-        {{ profile.customCss || null }}
-      </component>
-
       <component :is="'style'" v-if="(theme ? theme.customCss : false)">
         {{ theme.customCss || null }}
+      </component>
+
+      <component :is="'style'" v-if="profile.customCss">
+        {{ profile.customCss || null }}
       </component>
 
       <img
