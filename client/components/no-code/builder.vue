@@ -11,6 +11,23 @@
             </div>
             <!-- Drawer -->
             <div v-if="drawer.page_styles" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Page</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full" >
+                      <label class="font-semibold text-gray-700 mb-2">Max width</label>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.page_styles.max_width" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full" >
+                      <label class="font-semibold text-gray-700 mb-2">Padding</label>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.page_styles.padding" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
+                </div>
+              </div>
               <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Avatar</span>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full mb-2">
                 <div class="flex flex-col mb-4 justify-start w-full">
@@ -345,6 +362,8 @@ export default {
           },
           meta: {
             page_styles: {
+              max_width: null,
+              padding: null,
               avatar_size: null,
               avatar_radius: null,
               avatar_shadow: null,
@@ -373,6 +392,34 @@ export default {
               subtitle_height: null,
               subtitle_spacing: null,
               subtitle_color: null,
+              subtitle_family: null,     
+            },
+            link_styles: {
+              avatar_border_type: null,
+              avatar_border_color: null,
+              avatar_border_width: null,
+              box_shadow: null,
+              border_radius: null,
+              background_type: null,
+              background_image: null,
+              background_size: null,
+              background_repeat: null,
+              background_position: null,
+              background_color: null,
+              background_gradient_start: null,
+              background_gradient_end: null,
+              background_gradient_direction: null,
+              headline_size: null,
+              headline_weight: null,
+              headline_height: null,
+              headline_spacing: null,
+              headline_color: null,
+              headline_family: null,
+              subtitle_size: null,
+              subtitle_weight: null,
+              subtitle_height: null,
+              subtitle_spacing: null,
+              subtitle_color: null,
               subtitle_family: null,
             }
           }
@@ -387,6 +434,13 @@ export default {
         this.JSON_pkg = this.$transform.toJSON(this.imported_css);
 
         // Safety
+        if(!this.JSON_pkg.children['div#user-profile-view section']) this.JSON_pkg.children['div#user-profile-view section'] = {
+          attributes: {
+            'max-width': null,
+            padding: null
+          }
+        };
+
         if(!this.JSON_pkg.children['img.nc-avatar']) this.JSON_pkg.children['img.nc-avatar'] = {
           attributes: {
                   width: null,
@@ -431,6 +485,14 @@ export default {
             'font-weight': null,
             'font-family': null,
             'color': null,
+          }
+        };
+
+        if(!this.JSON_pkg.children['a.sl-item.nc-link']) this.JSON_pkg.children['a.sl-item.nc-link'] = {
+          attributes: {
+            'border-radius': null,
+            'border': null,
+            'background': null
           }
         };
 
@@ -497,6 +559,17 @@ export default {
         if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height']) this.meta.typography.subtitle_height = this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height'].replace('%','');        
         if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing']) this.meta.typography.subtitle_spacing = this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing'].replace('px','');
         if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['color']) this.meta.typography.subtitle_color = this.JSON_pkg.children['h3.sl-subtitle'].attributes['color'];
+      
+        // Link styles
+        if(this.JSON_pkg.children['a.sl-item.nc-link']) {}
+
+        // Page styles, section
+        if(this.JSON_pkg.children['div#user-profile-view section']) {
+            if(this.JSON_pkg.children['div#user-profile-view section'].attributes['max-width']) this.meta.page_styles.max_width = this.JSON_pkg.children['div#user-profile-view section'].attributes['max-width'].replace('px','');
+            if(this.JSON_pkg.children['div#user-profile-view section'].attributes['padding']) this.meta.page_styles.padding = this.JSON_pkg.children['div#user-profile-view section'].attributes['padding'].replace('px','');
+        }
+
+      // End imported CSS
       }
     },
     watch: {
@@ -551,6 +624,18 @@ export default {
             }
           } else {
             delete this.JSON_pkg.children["body"]?.attributes?.background;
+          }
+
+          if(this.meta.page_styles.max_width) {
+            this.JSON_pkg.children['div#user-profile-view section'].attributes['max-width'] = this.meta.page_styles.max_width + 'px';
+          } else {
+            delete this.JSON_pkg.children['div#user-profile-view section'].attributes['max-width'];
+          }
+
+          if(this.meta.page_styles.padding) {
+            this.JSON_pkg.children['div#user-profile-view section'].attributes['padding'] = this.meta.page_styles.padding + 'px';
+          } else {
+            delete this.JSON_pkg.children['div#user-profile-view section'].attributes['padding'];
           }
 
           // Typography
