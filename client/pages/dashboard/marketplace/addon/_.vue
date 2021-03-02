@@ -37,7 +37,7 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="intent != 'view'" class="flex flex-col mb-4 justify-start w-full">
+                <div v-if="intent == 'edit'" class="flex flex-col mb-4 justify-start w-full">
                     <label class="font-semibold mb-2">Published?</label>
                     <select class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="addon.global">
                         <option value="false">No, this theme is private.</option>
@@ -186,7 +186,7 @@
             },
             async attemptSubmit() {
                 // validation
-                if(!this.addon.resourceId) return;
+                if(!this.addon.resourceId || !this.addon.displayName) return;
                 let submission = await this.$axios.$post('/marketplace/addon/create', {
                     token: this.$store.getters['auth/getToken'],
                     addon: {
@@ -196,7 +196,7 @@
                         description: this.addon.description,
                         resourceId: this.addon.resourceId,
                         tags: this.addon.tags,
-                        global: this.addon.global
+                        //global: this.addon.global
                     }
                 });
                 console.log('Done!');

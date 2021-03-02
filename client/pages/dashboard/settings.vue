@@ -78,9 +78,10 @@
             </select>
           </div>
         </div>
-        <div class="flex flex-col w-full mb-4">
+        <div class="flex flex-row items-center justify-center">
+          <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload" v-model="user.activeProfile.imageUrl">
+          <div class="flex flex-col w-full mb-4">
           <label class="font-medium text-sm text-gray-800" for="image_url">Avatar Image URL</label>
-          <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload">
           <input
             id="image_url"
             v-model="user.activeProfile.imageUrl"
@@ -99,6 +100,7 @@
               class="ml-2 font-semibold underline hover:text-red-700"
             >Learn more</a></span>
           </div>
+        </div>
         </div>
 
         <div class="flex flex-col w-full mb-6">
