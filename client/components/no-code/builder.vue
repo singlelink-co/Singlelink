@@ -172,7 +172,7 @@
               </div>
               <div @click="drawer.typography = !drawer.typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.typography">Expand</span><span v-if="drawer.typography">Collapse</span></div>
             </div>       
-                        <!-- Drawer -->
+            <!-- Drawer -->
             <div v-if="drawer.typography" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
               <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Headline</span>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
@@ -288,13 +288,238 @@
               </div>
             </div>
           </div>
-          <div class="flex flex-col lg:flex-row justify-center w-full p-6 border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+          <div class="flex flex-col justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
             <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
               <div class="flex flex-col">
               <span class="text-gray-800 font-semibold">Link styles</span>
               <span class="text-sm text-gray-500 font-medium">Customize your default styles for link items.</span>
               </div>
               <div @click="drawer.link_styles = !drawer.link_styles" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_styles">Expand</span><span v-if="drawer.link_styles">Collapse</span></div>
+            </div>
+            <!-- Drawer -->
+            <div v-if="drawer.link_styles" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Link block styles</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full" >
+                      <label class="font-semibold text-gray-700 mb-2">Padding</label>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.padding" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full" >
+                      <label class="font-semibold text-gray-700 mb-2">Border radius</label>
+                      <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.border_radius" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                      </div>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full" >
+                      <label class="font-semibold text-gray-700 mb-2">Background type</label>
+                      <select v-model="meta.link_styles.background_type" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="none">No background</option>
+                        <option value="solid">Solid color</option>
+                        <option value="image">Image</option>
+                        <option value="gradient">Gradient</option>
+                      </select>
+                </div>
+                <div v-if="meta.link_styles.background_type=='solid'" class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background color</label>
+                      <div class="relative w-full">
+                        <input v-model="meta.page_styles.background_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.page_styles.background_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
+                </div>
+                <div v-if="meta.link_styles.background_type=='image'" class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background image URL</label>
+                      <input v-model="meta.page_styles.background_image" type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. https://singlelink.co/og-image.png"/>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full" v-if="meta.link_styles.background_type=='image'">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background size</label>
+                      <select v-model="meta.link_styles.background_size" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="cover">Cover</option>
+                        <option value="contain">Contain</option>
+                        <option value="100% 100%">Stretch</option>
+                        <option value="auto">Auto</option>
+                      </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background position</label>
+                      <select v-model="meta.link_styles.background_position" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="top left">Top left</option>
+                        <option value="top center">Top center</option>
+                        <option value="top right">Top right</option>
+                        <option value="center left">Center left</option>
+                        <option value="center center">Center</option>
+                        <option value="center right">Center right</option>
+                        <option value="bottom left">Bottom left</option>
+                        <option value="bottom center">Bottom center</option>
+                        <option value="bottom right">Bottom right</option>
+                      </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background repeat</label>
+                      <select v-model="meta.link_styles.background_repeat" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="no-repeat">No repeat</option>
+                        <option value="repeat-x">Repeat X</option>
+                        <option value="repeat-y">Repeat Y</option>
+                        <option value="repeat">Repeat X & Y</option>
+                      </select>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full" v-if="meta.link_styles.background_type=='gradient'">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Start color</label>
+                      <div class="relative w-full">
+                        <input v-model="meta.link_styles.background_gradient_start" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.link_styles.background_gradient_start" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">End color</label>
+                      <div class="relative w-full">
+                        <input v-model="meta.link_styles.background_gradient_end" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                        <input v-model="meta.link_styles.background_gradient_end" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                      </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Direction</label>
+                      <select v-model="meta.link_styles.background_gradient_direction" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="to top">To top</option>
+                        <option value="to right">To right</option>
+                        <option value="to bottom">To bottom</option>
+                        <option value="to left">To left</option>
+                      </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center w-full p-6 border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+            <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
+              <div class="flex flex-col">
+              <span class="text-gray-800 font-semibold">Link typography</span>
+              <span class="text-sm text-gray-500 font-medium">Customize the default typography for link items.</span>
+              </div>
+              <div @click="drawer.link_typography = !drawer.link_typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_styles">Expand</span><span v-if="drawer.link_styles">Collapse</span></div>
+            </div>
+            <!-- Drawer -->
+            <div v-if="drawer.link_typography" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Link headline</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font size</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.headline_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font weight</label>
+                    <select v-model="meta.link_styles.headline_weight" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="bolder">Bolder</option>
+                        <option value="lighter">lighter</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                        <option value="700">700</option>
+                        <option value="800">800</option>
+                        <option value="900">900</option>
+                    </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font family</label>
+                    <select disabled placeholder="Coming soon..." v-model="meta.link_styles.headline_family" class="p-3 rounded-lg bg-white text-sm text-gray-700">
+                    </select>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Line height</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.headline_height" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="135%" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">%</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Letter spacing</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.headline_spacing" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="3px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Color</label>
+                    <div class="relative">
+                  <input v-model="meta.link_styles.headline_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                  <input v-model="meta.link_styles.headline_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                </div>
+                </div>
+              </div>
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Link subtitle</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font size</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.subtitle_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font weight</label>
+                    <select v-model="meta.link_styles.subtitle_weight" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="bolder">Bolder</option>
+                        <option value="lighter">lighter</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                        <option value="700">700</option>
+                        <option value="800">800</option>
+                        <option value="900">900</option>
+                    </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font family</label>
+                    <select disabled placeholder="Coming soon..." v-model="meta.link_styles.subtitle_family" class="p-3 rounded-lg bg-white text-sm text-gray-700">
+                    </select>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Line height</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.subtitle_height" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="135%" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">%</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Letter spacing</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.link_styles.subtitle_spacing" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="3px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Color</label>
+                    <div class="relative">
+                  <input v-model="meta.link_styles.subtitle_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                  <input v-model="meta.link_styles.subtitle_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -358,7 +583,8 @@ export default {
           drawer: {
             page_styles: false,
             typography: false,
-            link_styles: false
+            link_styles: false,
+            link_typography: false
           },
           meta: {
             page_styles: {
@@ -421,6 +647,7 @@ export default {
               subtitle_spacing: null,
               subtitle_color: null,
               subtitle_family: null,
+              padding: null
             }
           }
         }
@@ -488,11 +715,12 @@ export default {
           }
         };
 
-        if(!this.JSON_pkg.children['a.sl-item.nc-link']) this.JSON_pkg.children['a.sl-item.nc-link'] = {
+        if(!this.JSON_pkg.children['a div.sl-item.nc-link']) this.JSON_pkg.children['a.sl-item.nc-link'] = {
           attributes: {
             'border-radius': null,
             'border': null,
-            'background': null
+            'background': null,
+            'padding': null
           }
         };
 
@@ -561,7 +789,7 @@ export default {
         if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['color']) this.meta.typography.subtitle_color = this.JSON_pkg.children['h3.sl-subtitle'].attributes['color'];
       
         // Link styles
-        if(this.JSON_pkg.children['a.sl-item.nc-link']) {}
+        if(this.JSON_pkg.children['a div.sl-item.nc-link']) {}
 
         // Page styles, section
         if(this.JSON_pkg.children['div#user-profile-view section']) {
