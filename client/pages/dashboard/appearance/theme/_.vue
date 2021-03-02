@@ -51,7 +51,7 @@
                   autoIndent: 'full',
                   autoClosingQuotes: true,
                 }"
-                v-model="theme.editorCss"
+                v-model="editorCss"
         ></MonacoEditor>
         </div>
         
