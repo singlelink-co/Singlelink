@@ -85,6 +85,40 @@
                       <input v-model="meta.page_styles.background_image" type="text" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. https://singlelink.co/og-image.png"/>
                 </div>
               </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full" v-if="meta.page_styles.background_type=='image'">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background size</label>
+                      <select v-model="meta.page_styles.background_size" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="cover">Cover</option>
+                        <option value="contain">Contain</option>
+                        <option value="100% 100%">Stretch</option>
+                        <option value="auto">Auto</option>
+                      </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background position</label>
+                      <select v-model="meta.page_styles.background_position" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="top left">Top left</option>
+                        <option value="top center">Top center</option>
+                        <option value="top right">Top right</option>
+                        <option value="center left">Center left</option>
+                        <option value="center center">Center</option>
+                        <option value="center right">Center right</option>
+                        <option value="bottom left">Bottom left</option>
+                        <option value="bottom center">Bottom center</option>
+                        <option value="bottom right">Bottom right</option>
+                      </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                      <label class="font-semibold text-gray-700 mb-2">Background repeat</label>
+                      <select v-model="meta.page_styles.background_repeat" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="no-repeat">No repeat</option>
+                        <option value="repeat-x">Repeat X</option>
+                        <option value="repeat-y">Repeat Y</option>
+                        <option value="repeat">Repeat X & Y</option>
+                      </select>
+                </div>
+              </div>
               <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full" v-if="meta.page_styles.background_type=='gradient'">
                 <div class="flex flex-col mb-4 justify-start w-full">
                       <label class="font-semibold text-gray-700 mb-2">Start color</label>
@@ -120,6 +154,19 @@
               <span class="text-sm text-gray-500 font-medium">Customize your fonts, font size, font weight, and more.</span>
               </div>
               <div @click="drawer.typography = !drawer.typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.typography">Expand</span><span v-if="drawer.typography">Collapse</span></div>
+            </div>       
+                        <!-- Drawer -->
+            <div v-if="drawer.typography" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Avatar</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full mb-2">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                  <label class="font-semibold text-gray-700 mb-2">Size (px)</label>
+                  <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                    <input min="0" v-model="meta.page_styles.avatar_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                    <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="flex flex-col lg:flex-row justify-center w-full p-6 border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
@@ -184,6 +231,9 @@ export default {
               avatar_border_width: null,
               background_type: null,
               background_image: null,
+              background_size: null,
+              background_repeat: null,
+              background_position: null,
               background_color: null,
               background_gradient_start: null,
               background_gradient_end: null,
@@ -219,7 +269,10 @@ export default {
 
         if(!this.JSON_pkg.children['body']) this.JSON_pkg.children['body'] = {
           attributes: {
-            background: null
+            background: null,
+            'background-position': null,
+            'background-repeat': null,
+            'background-size': null
           }
         };
 
@@ -261,6 +314,12 @@ export default {
             // Is image
             this.meta.page_styles.background_type = 'image';
             this.meta.page_styles.background_image = this.JSON_pkg.children['body'].attributes['background'].replace('url(','').replace(')','');
+            // Image size
+            if(this.JSON_pkg.children['body'].attributes['background-size']) this.meta.page_styles.background_size = this.JSON_pkg.children['body'].attributes['background-size'];
+            // Image position
+            if(this.JSON_pkg.children['body'].attributes['background-position']) this.meta.page_styles.background_position = this.JSON_pkg.children['body'].attributes['background-position'];
+            // Image repeat
+            if(this.JSON_pkg.children['body'].attributes['background-repeat']) this.meta.page_styles.background_repeat = this.JSON_pkg.children['body'].attributes['background-repeat'];
           } else {
             // Is solid color
             this.meta.page_styles.background_type = 'solid';
@@ -301,6 +360,12 @@ export default {
                 break;
               case 'image':
                 if(this.meta.page_styles.background_image) this.JSON_pkg.children['body'].attributes['background'] = 'url(' + this.meta.page_styles.background_image + ')';
+                // Background size
+                if(this.meta.page_styles.background_size) this.JSON_pkg.children['body'].attributes['background-size'] = this.meta.page_styles.background_size;
+                // Background position
+                if(this.meta.page_styles.background_position) this.JSON_pkg.children['body'].attributes['background-position'] = this.meta.page_styles.background_position;
+                // Background repeat
+                if(this.meta.page_styles.background_repeat) this.JSON_pkg.children['body'].attributes['background-repeat'] = this.meta.page_styles.background_repeat;
                 break;
               case 'gradient':
                 if(this.meta.page_styles.background_gradient_start && this.meta.page_styles.background_gradient_end && this.meta.page_styles.background_gradient_direction) this.JSON_pkg.children['body'].attributes['background'] = 'linear-gradient(' + this.meta.page_styles.background_gradient_direction + ',' + this.meta.page_styles.background_gradient_start + ',' + this.meta.page_styles.background_gradient_end + ')';
