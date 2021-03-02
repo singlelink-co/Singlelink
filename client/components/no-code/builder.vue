@@ -147,7 +147,7 @@
             </div>
             <!-- End Drawer -->
           </div>
-          <div class="flex flex-col lg:flex-row justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
+          <div class="flex flex-col justify-center w-full p-6 border border-t-0 border-l-0 border-r-0 border-gray-200 items-center">
             <div class="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-start space-y-2 lg:space-y-0 lg:items-center">
               <div class="flex flex-col">
               <span class="text-gray-800 font-semibold">Typography</span>
@@ -157,14 +157,116 @@
             </div>       
                         <!-- Drawer -->
             <div v-if="drawer.typography" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
-              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Avatar</span>
-              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full mb-2">
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Headline</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
                 <div class="flex flex-col mb-4 justify-start w-full">
-                  <label class="font-semibold text-gray-700 mb-2">Size (px)</label>
-                  <div class="flex flex-row overflow-hidden rounded-lg items-center">
-                    <input min="0" v-model="meta.page_styles.avatar_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
-                    <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
-                  </div>
+                    <label class="font-semibold text-gray-700 mb-2">Font size</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.headline_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font weight</label>
+                    <select v-model="meta.typography.headline_weight" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="bolder">Bolder</option>
+                        <option value="lighter">lighter</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                        <option value="700">700</option>
+                        <option value="800">800</option>
+                        <option value="900">900</option>
+                    </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font family</label>
+                    <select disabled placeholder="Coming soon..." v-model="meta.typography.headline_family" class="p-3 rounded-lg bg-white text-sm text-gray-700">
+                    </select>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Line height</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.headline_height" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="135%" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">%</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Letter spacing</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.headline_spacing" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="3px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Color</label>
+                    <div class="relative">
+                  <input v-model="meta.typography.headline_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                  <input v-model="meta.typography.headline_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                </div>
+                </div>
+              </div>
+              <span class="text-gray-800 font-semibold pb-3 mb-3 border border-t-0 border-r-0 border-l-0 border-gray-200 w-full text-left justify-start flex flex-row">Subtitle</span>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font size</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.subtitle_size" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="70px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font weight</label>
+                    <select v-model="meta.typography.subtitle_weight" class="p-3 rounded-lg bg-white text-sm text-gray-700" placeholder="Select one...">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="bolder">Bolder</option>
+                        <option value="lighter">lighter</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                        <option value="700">700</option>
+                        <option value="800">800</option>
+                        <option value="900">900</option>
+                    </select>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Font family</label>
+                    <select disabled placeholder="Coming soon..." v-model="meta.typography.subtitle_family" class="p-3 rounded-lg bg-white text-sm text-gray-700">
+                    </select>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Line height</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.subtitle_height" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="135%" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">%</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Letter spacing</label>
+                    <div class="flex flex-row overflow-hidden rounded-lg items-center">
+                        <input min="0" v-model="meta.typography.subtitle_spacing" class="flex-grow p-3 bg-white text-sm text-gray-700" placeholder="3px" type="number"/>
+                        <span style="height:46px;" class="text-sm text-gray-600 font-medium bg-gray-200 shadow-inner p-3 leading-none flex items-center justify-center">px</span>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-4 justify-start w-full">
+                    <label class="font-semibold text-gray-700 mb-2">Color</label>
+                    <div class="relative">
+                  <input v-model="meta.typography.subtitle_color" class="p-3 w-full rounded-lg bg-white text-sm text-gray-700" placeholder="e.g. #FFF" type="text">
+                  <input v-model="meta.typography.subtitle_color" placeholder="e.g. #FFF" style="position:absolute;right: 6px;z-index:3;top:11.5px;" type="color"/>
+                </div>
                 </div>
               </div>
             </div>
@@ -213,6 +315,26 @@ export default {
                 attributes: {
                   background: null
                 }
+              },
+              "h1.sl-headline": {
+                attributes: {
+                  'font-size': null,
+                  'font-weight': null,
+                  'font-family': null,
+                  'color': null,
+                  'line-height': null,
+                  'letter-spacing': null
+                }
+              },
+              "h3.sl-subtitle": {
+                attributes: {
+                  'font-size': null,
+                  'font-weight': null,
+                  'font-family': null,
+                  'color': null,
+                  'line-height': null,
+                  'letter-spacing': null
+                }
               }
             }
           },
@@ -238,6 +360,20 @@ export default {
               background_gradient_start: null,
               background_gradient_end: null,
               background_gradient_direction: null
+            },
+            typography: {
+              headline_size: null,
+              headline_weight: null,
+              headline_height: null,
+              headline_spacing: null,
+              headline_color: null,
+              headline_family: null,
+              subtitle_size: null,
+              subtitle_weight: null,
+              subtitle_height: null,
+              subtitle_spacing: null,
+              subtitle_color: null,
+              subtitle_family: null,
             }
           }
         }
@@ -276,6 +412,27 @@ export default {
           }
         };
 
+        if(!this.JSON_pkg.children['h1.sl-headline']) this.JSON_pkg.children['h1.sl-headline'] = {
+          attributes: {
+            'line-height': null,
+            'letter-spacing': null,
+            'font-size': null,
+            'font-weight': null,
+            'font-family': null,
+            'color': null,
+          }
+        };
+
+        if(!this.JSON_pkg.children['h3.sl-subtitle']) this.JSON_pkg.children['h3.sl-subtitle'] = {
+          attributes: {
+            'line-height': null,
+            'letter-spacing': null,
+            'font-size': null,
+            'font-weight': null,
+            'font-family': null,
+            'color': null,
+          }
+        };
 
 
         // Avatar height
@@ -326,14 +483,27 @@ export default {
             this.meta.page_styles.background_color = this.JSON_pkg.children['body'].attributes['background'];
           }
         }
-        
+        // Typography
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['font-size']) this.meta.typography.headline_size = this.JSON_pkg.children['h1.sl-headline'].attributes['font-size'].replace('px','');
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['font-weight']) this.meta.typography.headline_weight = this.JSON_pkg.children['h1.sl-headline'].attributes['font-weight'];
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['font-family']) this.meta.typography.headline_family = this.JSON_pkg.children['h1.sl-headline'].attributes['font-family'];
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['line-height']) this.meta.typography.headline_height = this.JSON_pkg.children['h1.sl-headline'].attributes['line-height'].replace('%','');        
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['letter-spacing']) this.meta.typography.headline_spacing = this.JSON_pkg.children['h1.sl-headline'].attributes['letter-spacing'].replace('px','');
+        if(this.JSON_pkg.children['h1.sl-headline'].attributes['color']) this.meta.typography.headline_color = this.JSON_pkg.children['h1.sl-headline'].attributes['color'];
 
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-size']) this.meta.typography.subtitle_size = this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-size'].replace('px','');
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-weight']) this.meta.typography.subtitle_weight = this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-weight'];
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-family']) this.meta.typography.subtitle_family = this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-family'];
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height']) this.meta.typography.subtitle_height = this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height'].replace('%','');        
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing']) this.meta.typography.subtitle_spacing = this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing'].replace('px','');
+        if(this.JSON_pkg.children['h3.sl-subtitle'].attributes['color']) this.meta.typography.subtitle_color = this.JSON_pkg.children['h3.sl-subtitle'].attributes['color'];
       }
     },
     watch: {
       meta: {
         handler() {
           console.log('Changes');
+          // Page Styles
           if(this.meta.page_styles.avatar_size) {
             this.JSON_pkg.children["img.nc-avatar"].attributes.width = this.meta.page_styles.avatar_size + 'px';
             this.JSON_pkg.children["img.nc-avatar"].attributes.height = this.meta.page_styles.avatar_size + 'px';
@@ -381,6 +551,72 @@ export default {
             }
           } else {
             delete this.JSON_pkg.children["body"]?.attributes?.background;
+          }
+
+          // Typography
+          if(this.meta.typography.headline_size) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['font-size'] = this.meta.typography.headline_size + 'px';
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['font-size']
+          }
+          if(this.meta.typography.headline_weight) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['font-weight'] = this.meta.typography.headline_weight;
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['font-weight'];
+          }
+          if(this.meta.typography.headline_family) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['font-family'] = this.meta.typography.headline_family;
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['font-family'];
+          }
+          if(this.meta.typography.headline_spacing) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['letter-spacing'] = this.meta.typography.headline_spacing + 'px';
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['letter-spacing'];
+          }
+          if(this.meta.typography.headline_height) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['line-height'] = this.meta.typography.headline_height + '%';
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['line-height']
+          }
+          if(this.meta.typography.headline_color) {
+            this.JSON_pkg.children['h1.sl-headline'].attributes['color'] = this.meta.typography.headline_color;
+          } else {
+            delete this.JSON_pkg.children['h1.sl-headline'].attributes['color'];
+          }
+          
+          // Subtitle
+          if(this.meta.typography.subtitle_size) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-size'] = this.meta.typography.subtitle_size + 'px';
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-size']
+          }
+          if(this.meta.typography.subtitle_weight) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-weight'] = this.meta.typography.subtitle_weight;
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-weight'];
+          }
+          if(this.meta.typography.subtitle_family) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-family'] = this.meta.typography.subtitle_family;
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['font-family'];
+          }
+          if(this.meta.typography.subtitle_spacing) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing'] = this.meta.typography.subtitle_spacing + 'px';
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['letter-spacing'];
+          }
+          if(this.meta.typography.subtitle_height) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height'] = this.meta.typography.subtitle_height + '%';
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['line-height']
+          }
+          if(this.meta.typography.subtitle_color) {
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['color'] = this.meta.typography.subtitle_color;
+            this.JSON_pkg.children['h3.sl-subtitle'].attributes['opacity'] = 1;
+          } else {
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['color'];
+            delete this.JSON_pkg.children['h3.sl-subtitle'].attributes['opacity'];
           }
 
           return this.$emit('input', this.$transform.toCSS(this.JSON_pkg));
