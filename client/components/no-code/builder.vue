@@ -294,7 +294,7 @@
               <span class="text-gray-800 font-semibold">Link styles</span>
               <span class="text-sm text-gray-500 font-medium">Customize your default styles for link items.</span>
               </div>
-              <div @click="drawer.link_styles = !drawer.link_styles" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_typography">Expand</span><span v-if="drawer.link_typography">Collapse</span></div>
+              <div @click="drawer.link_styles = !drawer.link_styles" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_styles">Expand</span><span v-if="drawer.link_styles">Collapse</span></div>
             </div>
             <!-- Drawer -->
             <div v-if="drawer.link_styles" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
@@ -436,7 +436,7 @@
               <span class="text-gray-800 font-semibold">Link typography</span>
               <span class="text-sm text-gray-500 font-medium">Customize the default typography for link items.</span>
               </div>
-              <div @click="drawer.link_typography = !drawer.link_typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_styles">Expand</span><span v-if="drawer.link_styles">Collapse</span></div>
+              <div @click="drawer.link_typography = !drawer.link_typography" class="py-2 px-4 text-sm rounded-lg border border-indigo-600 text-indigo-500 bg-indigo-200 font-medium text-center hover:bg-indigo-300 cursor-pointer"><span v-if="!drawer.link_typography">Expand</span><span v-if="drawer.link_typography">Collapse</span></div>
             </div>
             <!-- Drawer -->
             <div v-if="drawer.link_typography" class="w-full flex flex-col items-start justify-start mt-6 p-6 border border-l-0 border-r-0 border-b-0 border-gray-200">
