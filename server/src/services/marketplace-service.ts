@@ -198,8 +198,9 @@ export class MarketplaceService extends DatabaseService {
     //language=PostgreSQL
     let queryStr = `insert into marketplace.addons(user_id, resource_id, type, display_name, description, author, tags,
                                                    price,
-                                                   payment_frequency, global, version, last_updated, metadata)
-                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, current_timestamp)
+                                                   payment_frequency, global, version, metadata, last_updated)
+                    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, coalesce($10, false), $11, coalesce($12, '{}'::jsonb),
+                            current_timestamp)
                     returning *`;
 
     let queryResult = await this.pool.query<DbAddon>(queryStr,
@@ -213,7 +214,7 @@ export class MarketplaceService extends DatabaseService {
         addon.tags,
         addon.price,
         addon.paymentFrequency,
-        addon.global ?? false,
+        addon.global,
         addon.version,
         addon.metadata
       ]);
