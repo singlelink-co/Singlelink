@@ -113,9 +113,9 @@ export default Vue.extend({
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
         this.links.splice(index, 1);
 
-        this.resortLinks();
+        //this.resortLinks();
 
-        this.closeModal();
+        //this.closeModal();
 
         this.$root.$emit('refreshUserProfileView');
       } catch (err) {
@@ -140,7 +140,7 @@ export default Vue.extend({
         const index = this.links.findIndex(x => x.id === this.pendingLink.id);
         this.links[index] = this.pendingLink;
 
-        this.closeModal();
+        //this.closeModal();
         this.$root.$emit('refreshUserProfileView');
       } catch (err) {
         console.log('Link changes unsuccessful');
@@ -174,9 +174,9 @@ export default Vue.extend({
         });
 
         this.links.push(response.data);
-        this.clearPending();
+        //this.clearPending();
 
-        this.resortLinks();
+        //this.resortLinks();
 
         this.$root.$emit('refreshUserProfileView');
         return true;
@@ -187,7 +187,7 @@ export default Vue.extend({
       }
     },
     editLink(link: Link) {
-      this.clearPending();
+      //this.clearPending();
 
       this.pendingLink = {
         id: link.id,
@@ -199,7 +199,7 @@ export default Vue.extend({
         useDeepLink: link.useDeepLink
       };
 
-      this.openModal('edit');
+      //this.openModal('edit');
     },
   }
 });
