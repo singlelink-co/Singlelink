@@ -39,7 +39,13 @@ interface DbUser {
 
   // The metadata tag will grow over time as functionality is added.
   metadata: {
-    favorites: []
+    favorites: [],
+    "emailNotifications": {
+      "major": true,
+      "minor": true,
+      "marketing": true,
+      "leaderboard": true
+    }
   },
 
   created_on: string

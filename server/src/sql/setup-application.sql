@@ -19,6 +19,15 @@ create table if not exists app.users
     subscription_tier subscription_t               default 'free', -- The subscription tier of this user
     inventory         jsonb                        default '{}',   -- All the stuff this account owns
     metadata          jsonb               not null default '{}',
+    private_metadata  jsonb               not null default '{
+      "favorites": [],
+      "emailNotifications": {
+        "major": true,
+        "minor": true,
+        "marketing": true,
+        "leaderboard": true
+      }
+    }',
     created_on        timestamp           not null default current_timestamp
 );
 
@@ -52,24 +61,25 @@ alter table app.themes
  */
 create table if not exists app.profiles
 (
-    id             bigserial primary key unique,
-    handle         text unique not null,                                                        -- The name of the profile in the url
-    user_id        bigint,
-    image_url      text,
-    headline       text,                                                                        -- The name that shows up on the page
-    subtitle       text,                                                                        -- The name underneath a profile's avatar
-    social         jsonb                default '{}',
-    show_watermark bool                 default true,                                           -- The "Proudly built with Singlelink" underneath people's profiles
-    custom_css     text,
-    custom_html    text,
-    custom_domain  text unique,
-    theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
-    visibility     visibility_t         default 'unpublished',
-    metadata       jsonb       not null default '{
+    id               bigserial primary key unique,
+    handle           text unique not null,                                                        -- The name of the profile in the url
+    user_id          bigint,
+    image_url        text,
+    headline         text,                                                                        -- The name that shows up on the page
+    subtitle         text,                                                                        -- The name underneath a profile's avatar
+    social           jsonb                default '{}',
+    show_watermark   bool                 default true,                                           -- The "Proudly built with Singlelink" underneath people's profiles
+    custom_css       text,
+    custom_html      text,
+    custom_domain    text unique,
+    theme_id         bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
+    visibility       visibility_t         default 'unpublished',
+    metadata         jsonb       not null default '{
       "privacyMode": false,
-      "unlisted": "false"
+      "unlisted": false
     }',
-    created_on     timestamp   not null default current_timestamp
+    private_metadata jsonb       not null default '{}',
+    created_on       timestamp   not null default current_timestamp
 );
 
 create index if not exists profiles_user_id_index on app.profiles (user_id);
@@ -114,18 +124,19 @@ create index if not exists profile_members_member_index on app.profile_members (
  */
 create table if not exists app.links
 (
-    id            bigserial primary key unique,
-    profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
-    type          linktype_t default 'link' not null,
-    url           text       default '#'    not null,
-    sort_order    int                       not null,
-    label         text                      not null,
-    subtitle      text,
-    style         text,
-    custom_css    text,
-    use_deep_link bool       default false  not null,
-    metadata      jsonb                     not null default '{}',
-    created_on    timestamp                 not null default current_timestamp
+    id               bigserial primary key unique,
+    profile_id       bigint references app.profiles (id) on update cascade on delete cascade,
+    type             linktype_t         default 'link' not null,
+    url              text               default '#' not null,
+    sort_order       int       not null,
+    label            text      not null,
+    subtitle         text,
+    style            text,
+    custom_css       text,
+    use_deep_link    bool               default false not null,
+    metadata         jsonb     not null default '{}',
+    private_metadata jsonb     not null default '{}',
+    created_on       timestamp not null default current_timestamp
 );
 
 create index if not exists links_profile_id on app.links (profile_id);
@@ -175,3 +186,20 @@ alter table app.links
 
 alter table app.links
     add column if not exists type linktype_t default 'link' not null;
+
+alter table app.users
+    add column if not exists private_metadata jsonb not null default '{
+      "favorites": [],
+      "emailNotifications": {
+        "major": true,
+        "minor": true,
+        "marketing": true,
+        "leaderboard": true
+      }
+    }';
+
+alter table app.profiles
+    add column if not exists private_metadata jsonb not null default '{}';
+
+alter table app.links
+    add column if not exists private_metadata jsonb not null default '{}';

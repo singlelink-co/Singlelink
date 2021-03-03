@@ -111,6 +111,8 @@ export class UserController extends Controller {
     this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
 
     this.fastify.all<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
+
+    this.fastify.post<SetUnlistedRequest>('/user/set-email-notifications', Auth.ValidateWithData, this.SetUnlisted.bind(this));
   }
 
   /**

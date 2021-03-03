@@ -52,6 +52,15 @@ interface User {
     favorites: []
   },
 
+  privateMetadata: {
+    "emailNotifications": {
+      "major": true,
+      "minor": true,
+      "marketing": true,
+      "leaderboard": true
+    }
+  }
+
   createdOn: string
 }
 

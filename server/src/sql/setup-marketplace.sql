@@ -23,6 +23,7 @@ create table if not exists marketplace.addons
     global            bool                   default false not null,
     version           text                   default '0.0.1',
     metadata          jsonb                  default '{}' not null,
+    private_metadata  jsonb         not null default '{}',
     created_on        timestamp     not null default current_timestamp,
     last_updated      timestamp     not null default current_timestamp
 );
@@ -50,3 +51,11 @@ create table if not exists marketplace.installs
 
 create index if not exists installs_profile_id on marketplace.installs (profile_id);
 create index if not exists installs_addon_id on marketplace.installs (addon_id);
+
+------------
+-- Patches
+-- Over time, things need to be updated and patched. This section is all about that.
+------------
+
+alter table marketplace.addons
+    add column if not exists private_metadata jsonb not null default '{}';
