@@ -26,6 +26,18 @@ export interface AuthenticatedRequest extends RequestGenericInterface {
 }
 
 /**
+ * A Fastify request that has been properly authenticated via a JWT token.
+ * It contains user and profile data provided by the token itself and is parsed in the routes' preHandler.
+ */
+export interface SensitiveAuthenticatedRequest extends RequestGenericInterface {
+  Body: {
+    token: string,
+    authUser: SensitiveUser,
+    authProfile: SensitiveProfile
+  }
+}
+
+/**
  * A Fastify request that has been properly authenticated via a JWT token to contain valid admin data.
  */
 export interface AdminRequest extends RequestGenericInterface {
@@ -57,6 +69,15 @@ export class Auth {
   static ValidateWithData: RouteShorthandOptions = {
     preHandler: <preHandlerHookHandler>Auth.validateAuthWithData,
   };
+
+  /**
+   * Authenticate and pass in an AuthenticatedRequest instead of just validating. Useful when
+   * you need user and profile data.
+   */
+  static ValidateSensitiveWithData: RouteShorthandOptions = {
+    preHandler: <preHandlerHookHandler>Auth.validateSensitiveAuthWithData,
+  };
+
 
   /**
    * Authenticate Admin privileges and pass in an Admin request.
@@ -211,6 +232,116 @@ export class Auth {
               if (searchProfileQuery.rowCount > 0) {
                 let profile = searchProfileQuery.rows[0];
                 authRequest.body.authProfile = DbTypeConverter.toProfile(profile);
+              }
+            }
+          }
+
+          // Finally, after we've found all the data we need, we've attached it to the request and return it.
+          done();
+          return;
+
+        } catch (err) {
+          if (err) {
+            reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReplyUtils.error("Error while authenticating request.", err));
+            return;
+          }
+        }
+
+        reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReplyUtils.error("An unexpected error occurred."));
+        return;
+      });
+  }
+
+  /**
+   * Checks for authentication before allowing a request to pass through.
+   * Also adds user and profile data to the FastifyRequest to be passed to the handlers.
+   *
+   * @param request
+   * @param reply
+   * @param done
+   */
+  static validateSensitiveAuthWithData(request: FastifyRequest<SensitiveAuthenticatedRequest>, reply: FastifyReply, done: Function) {
+    let body = request.body;
+    let token: string | null | undefined = body?.token;
+
+    if (!token) {
+      reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Token was missing."));
+      return;
+    }
+
+    // Throw away passed in data (important!)
+    // Otherwise someone could fake a valid token.
+    body.authUser = <any>undefined;
+    body.authProfile = <any>undefined;
+
+    jwt.verify(
+      token,
+      config.secret,
+      async function (err: VerifyErrors | null, decoded: object | undefined) {
+        if (err) {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
+          return;
+        }
+
+        if (!decoded) {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        let dAuthToken: { email: string } = <{ email: string }>decoded;
+
+        if (!dAuthToken?.email) {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        try {
+
+          // First, we need to grab the user account from the token.
+
+          let accountQuery = await Auth.pool.query<DbSensitiveUser>(
+            "select * from app.users where email=$1",
+            [
+              dAuthToken.email
+            ]
+          );
+
+          if (accountQuery.rowCount < 1) {
+            reply.status(StatusCodes.NOT_FOUND).send(ReplyUtils.error("Unable to find account with this token."));
+            return;
+          }
+
+          let user = accountQuery.rows[0];
+
+          let authRequest = request;
+          authRequest.body.authUser = DbTypeConverter.toSensitiveUser(user);
+
+          // Next, we grab the active profile
+          {
+            let profileQuery = await Auth.pool.query<DbSensitiveProfile>(
+              "select * from app.profiles where id=$1",
+              [
+                user.active_profile_id
+              ]
+            );
+
+            if (profileQuery.rowCount > 0) {
+              let profile = profileQuery.rows[0];
+              authRequest.body.authProfile = DbTypeConverter.toSensitiveProfile(profile);
+            } else {
+
+              // No active profile? Fine, let's try to find if the user owns any profiles at all.
+              let searchProfileQuery = await Auth.pool.query<DbSensitiveProfile>(
+                "select * from app.profiles where user_id=$1",
+                [
+                  user.id
+                ]
+              );
+
+              // Set the active profile to the first one we see
+              if (searchProfileQuery.rowCount > 0) {
+                let profile = searchProfileQuery.rows[0];
+                authRequest.body.authProfile = DbTypeConverter.toSensitiveProfile(profile);
               }
             }
           }

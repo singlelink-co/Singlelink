@@ -260,17 +260,17 @@ export class ProfileService extends DatabaseService {
    * @param privacyModeEnabled
    */
   async setPrivacyMode(profileId: string, privacyModeEnabled: boolean): Promise<Profile> {
-    let profileQuery = await this.pool.query<DbProfile>(`update app.profiles
-                                                         set metadata = jsonb_set(metadata::jsonb, '{privacyMode}', $1, true)
-                                                         where id = $2
-                                                         returning *;`,
+    let queryResult = await this.pool.query<DbProfile>(`update app.profiles
+                                                        set metadata = jsonb_set(metadata::jsonb, '{privacyMode}', $1, true)
+                                                        where id = $2
+                                                        returning *;`,
       [privacyModeEnabled, profileId]);
 
-    if (profileQuery.rowCount < 1) {
+    if (queryResult.rowCount < 1) {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
     }
 
-    return DbTypeConverter.toProfile(profileQuery.rows[0]);
+    return DbTypeConverter.toProfile(queryResult.rows[0]);
   }
 
   /**
@@ -280,16 +280,69 @@ export class ProfileService extends DatabaseService {
    * @param unlisted
    */
   async setUnlisted(profileId: string, unlisted: boolean): Promise<Profile> {
-    let profileQuery = await this.pool.query<DbProfile>(`update app.profiles
-                                                         set metadata = jsonb_set(metadata::jsonb, '{unlisted}', $1, true)
-                                                         where id = $2
-                                                         returning *;`,
+    let queryResult = await this.pool.query<DbProfile>(`update app.profiles
+                                                        set metadata = jsonb_set(metadata::jsonb, '{unlisted}', $1, true)
+                                                        where id = $2
+                                                        returning *;`,
       [unlisted, profileId]);
 
-    if (profileQuery.rowCount < 1) {
+    if (queryResult.rowCount < 1) {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
     }
 
-    return DbTypeConverter.toProfile(profileQuery.rows[0]);
+    return DbTypeConverter.toProfile(queryResult.rows[0]);
+  }
+
+  /**
+   * Gets the top profiles by views. Also returns total link clicks.
+   *
+   * You can only get a max of 500 results.
+   * @param limit
+   */
+  async getTopProfiles(limit?: number): Promise<(Profile & { totalViews: number, totalClicks: number })[]> {
+    if (!limit) {
+      limit = 25;
+    }
+
+    if (limit > 500) {
+      limit = 500;
+    }
+
+    let profileQueryResult = await this.pool.query<DbProfile & { total_views: string }>(`select *,
+                                                                                                (select count(*)
+                                                                                                 from analytics.visits
+                                                                                                 where referral_id = app.profiles.id
+                                                                                                   and type = 'page') as total_views
+                                                                                         from app.profiles
+                                                                                         where ((metadata -> 'unlisted')::bool = true or metadata -> 'unlisted' is null)
+                                                                                           and visibility = 'published'
+                                                                                         order by total_views desc
+                                                                                         limit $1;`,
+      [limit]);
+
+    let profiles: (Profile & { totalViews: number, totalClicks: number })[] = [];
+
+    for (let dbProfile of profileQueryResult.rows) {
+      let profile = <Profile & { totalViews: number, totalClicks: number }>DbTypeConverter.toProfile(dbProfile);
+      profile.totalViews = Number.parseInt(dbProfile.total_views);
+      profile.totalClicks = 0;
+
+      let linkQueryResult = await this.pool.query<DbLink>("select id from app.links where profile_id=$1",
+        [profile.id]);
+
+      if (linkQueryResult.rowCount > 0) {
+        let linkIds = linkQueryResult.rows.map(x => x.id);
+
+        let queryResult = await this.pool.query<{ count: string }>("select count(*) from analytics.visits where referral_id=any($1) and type='link'",
+          [linkIds]);
+
+        let count: number = Number.parseInt(queryResult.rows[0].count);
+        profile.totalClicks += count;
+      }
+
+      profiles.push(profile);
+    }
+
+    return profiles;
   }
 }

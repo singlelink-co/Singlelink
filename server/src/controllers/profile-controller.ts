@@ -18,6 +18,12 @@ interface ProfileHandleRequest extends RequestGenericInterface {
   }
 }
 
+interface GetTopProfilesRequest extends RequestGenericInterface {
+  Params: {
+    limit?: number
+  }
+}
+
 interface CreateProfileRequest extends AuthenticatedRequest {
   Body: {
     handle: string,
@@ -59,6 +65,15 @@ interface SetUnlistedRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+const getTopProfilesRequestRateLimit = {
+  config: {
+    rateLimit: {
+      max: 30,
+      timeWindow: '1 minute'
+    }
+  }
+};
+
 const createProfileRequestOpts = {
   config: {
     rateLimit: {
@@ -92,6 +107,9 @@ export class ProfileController extends Controller {
     // Unauthenticated controllers
     this.fastify.all<ProfileHandleRequest>('/profile/:handle', this.GetProfile.bind(this));
     this.fastify.all<ProfileHandleRequest>('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
+
+    this.fastify.all<GetTopProfilesRequest>('/profile/leaderboards/top/', getTopProfilesRequestRateLimit, this.GetTopProfiles.bind(this));
+    this.fastify.all<GetTopProfilesRequest>('/profile/leaderboards/top/:limit', getTopProfilesRequestRateLimit, this.GetTopProfiles.bind(this));
 
     // Authenticated
     this.fastify.all<AuthenticatedRequest>('/profile/preview', Auth.ValidateWithData, this.GetProfilePreview.bind(this));
@@ -190,6 +208,28 @@ export class ProfileController extends Controller {
 
       reply.send(thumbnail.data);
       return;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /profile/leaderboards/top/ &
+   * /profile/leaderboards/top/:limit
+   *
+   * @param request
+   * @param reply
+   */
+  async GetTopProfiles(request: FastifyRequest<GetTopProfilesRequest>, reply: FastifyReply) {
+    try {
+      let params = request.params;
+
+      return await this.profileService.getTopProfiles(params.limit);
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

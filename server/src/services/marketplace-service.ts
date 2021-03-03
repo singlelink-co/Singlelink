@@ -434,7 +434,7 @@ export class MarketplaceService extends DatabaseService {
       favorited = true;
     }
 
-    await this.pool.query("update app.users set metadata=jsonb_set(metadata, '{favorites}', $2, true) where id=$1 returning metadata->'favorites' as favorites", [
+    await this.pool.query("update app.users set private_metadata=jsonb_set(private_metadata, '{favorites}', $2, true) where id=$1 returning private_metadata->'favorites' as favorites", [
       userId,
       JSON.stringify(favorites)
     ]);
@@ -450,7 +450,7 @@ export class MarketplaceService extends DatabaseService {
    * @return A list of ids of the user's favorite addons
    */
   async userListFavoriteAddons(userId: string): Promise<number[]> {
-    let queryResult = await this.pool.query<{ favorites: number[] }>("select metadata->'favorites' as favorites from app.users where id=$1 and metadata->'favorites' is not null", [userId]);
+    let queryResult = await this.pool.query<{ favorites: number[] }>("select private_metadata->'favorites' as favorites from app.users where id=$1 and private_metadata->'favorites' is not null", [userId]);
 
     if (queryResult.rowCount < 1)
       return [];
