@@ -53,6 +53,12 @@ interface SetPrivacyModeRequest extends AuthenticatedRequest {
   } & AuthenticatedRequest["Body"]
 }
 
+interface SetUnlistedRequest extends AuthenticatedRequest {
+  Body: {
+    unlisted: boolean
+  } & AuthenticatedRequest["Body"]
+}
+
 const createProfileRequestOpts = {
   config: {
     rateLimit: {
@@ -100,6 +106,7 @@ export class ProfileController extends Controller {
     this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', Auth.ValidateWithData, this.ActivateProfileTheme.bind(this));
 
     this.fastify.post<SetPrivacyModeRequest>('/profile/set-privacy-mode', Auth.ValidateWithData, this.SetPrivacyMode.bind(this));
+    this.fastify.post<SetUnlistedRequest>('/profile/set-unlisted', Auth.ValidateWithData, this.SetUnlisted.bind(this));
   }
 
   /**
@@ -496,7 +503,6 @@ export class ProfileController extends Controller {
       let previousPrivacyMode = request.body.authProfile.metadata?.privacyMode;
 
       if (previousPrivacyMode !== request.body.privacyMode) {
-
         let profile = await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
 
         if (this.mixpanel)
@@ -505,6 +511,46 @@ export class ProfileController extends Controller {
             $ip: request.ip,
             profile: profile.id,
             privacyMode: request.body.privacyMode
+          });
+
+        return profile;
+      }
+
+      reply.status(StatusCodes.ACCEPTED).send();
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /profile/set-unlisted
+   *
+   * @param request
+   * @param reply
+   */
+  async SetUnlisted(request: FastifyRequest<SetUnlistedRequest>, reply: FastifyReply) {
+    try {
+      if (!request.body.authProfile) {
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("This account doesn't have an active profile."));
+        return;
+      }
+
+      let previousUnlisted = request.body.authProfile.metadata?.unlisted;
+
+      if (previousUnlisted !== request.body.unlisted) {
+        let profile = await this.profileService.setUnlisted(request.body.authProfile.id, request.body.unlisted);
+
+        if (this.mixpanel)
+          this.mixpanel.track('toggle unlisted mode', {
+            distinct_id: profile.userId,
+            $ip: request.ip,
+            profile: profile.id,
+            unlisted: request.body.unlisted
           });
 
         return profile;

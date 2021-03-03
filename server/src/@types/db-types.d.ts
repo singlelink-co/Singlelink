@@ -134,7 +134,8 @@ interface DbProfile {
 
   // The metadata tag will grow over time as functionality is added.
   metadata: {
-    privacyMode: boolean
+    privacyMode: boolean,
+    unlisted: boolean
   },
 
   created_on: string

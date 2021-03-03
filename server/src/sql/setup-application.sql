@@ -66,7 +66,8 @@ create table if not exists app.profiles
     theme_id       bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility     visibility_t         default 'unpublished',
     metadata       jsonb       not null default '{
-      "privacyMode": false
+      "privacyMode": false,
+      "unlisted": "false"
     }',
     created_on     timestamp   not null default current_timestamp
 );

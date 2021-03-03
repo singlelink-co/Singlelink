@@ -272,4 +272,24 @@ export class ProfileService extends DatabaseService {
 
     return DbTypeConverter.toProfile(profileQuery.rows[0]);
   }
+
+  /**
+   * Enables/Disables unlisted mode for a profile. (Hide from promotional featuring.)
+   *
+   * @param profileId
+   * @param unlisted
+   */
+  async setUnlisted(profileId: string, unlisted: boolean): Promise<Profile> {
+    let profileQuery = await this.pool.query<DbProfile>(`update app.profiles
+                                                         set metadata = jsonb_set(metadata::jsonb, '{unlisted}', $1, true)
+                                                         where id = $2
+                                                         returning *;`,
+      [unlisted, profileId]);
+
+    if (profileQuery.rowCount < 1) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
+    }
+
+    return DbTypeConverter.toProfile(profileQuery.rows[0]);
+  }
 }
