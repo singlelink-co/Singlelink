@@ -63,6 +63,17 @@ interface GetUserDataPackageRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
 
+interface SetEmailNotifications extends AuthenticatedRequest {
+  Body: {
+    emailNotifications: {
+      major: true,
+      minor: true,
+      marketing: true,
+      leaderboard: true
+    }
+  } & AuthenticatedRequest["Body"]
+}
+
 const userRequestResetPasswordOpts = {
   config: {
     rateLimit: {
@@ -106,13 +117,15 @@ export class UserController extends Controller {
 
     // Authenticated
     this.fastify.all<AuthenticatedRequest>('/user', Auth.ValidateWithData, this.GetUser.bind(this));
+    this.fastify.all<AuthenticatedRequest>('/user/private-metadata', Auth.ValidateWithData, this.GetPrivateMetadata.bind(this));
+
     this.fastify.all<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
     this.fastify.all<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
     this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
 
     this.fastify.all<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
 
-    this.fastify.post<SetUnlistedRequest>('/user/set-email-notifications', Auth.ValidateWithData, this.SetUnlisted.bind(this));
+    this.fastify.post<SetEmailNotifications>('/user/set-email-notifications', Auth.ValidateWithData, this.SetEmailNotifications.bind(this));
   }
 
   /**
@@ -297,6 +310,26 @@ export class UserController extends Controller {
     return request.body.authUser;
   }
 
+  /**
+   * Route for /user/private-metadata
+   * @param request
+   * @param reply
+   */
+  async GetPrivateMetadata(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+    try {
+      let sensitiveUser = await this.userService.getSensitiveUser(request.body.authUser.id);
+
+      return sensitiveUser.privateMetadata;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
   //TODO Implement UpdateUser
   /**
    * Route for /user/update
@@ -421,6 +454,34 @@ export class UserController extends Controller {
         });
 
       return this.userService.setActiveProfile(user.id, newProfileId);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  /**
+   * Route for /profile/set-email-notifications
+   *
+   * @param request
+   * @param reply
+   */
+  async SetEmailNotifications(request: FastifyRequest<SetEmailNotifications>, reply: FastifyReply) {
+    try {
+      let user = await this.userService.setEmailNotifications(request.body.authUser.id, request.body.emailNotifications);
+
+      if (this.mixpanel)
+        this.mixpanel.track('toggle email notifications', {
+          distinct_id: user.id,
+          $ip: request.ip,
+          emailNotifications: request.body.emailNotifications
+        });
+
+      return user;
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);

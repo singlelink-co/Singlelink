@@ -48,18 +48,7 @@ interface User {
   inventory: unknown | null,
 
   // The metadata tag will grow over time as functionality is added.
-  metadata: {
-    favorites: []
-  },
-
-  privateMetadata: {
-    "emailNotifications": {
-      "major": true,
-      "minor": true,
-      "marketing": true,
-      "leaderboard": true
-    }
-  }
+  metadata: {},
 
   createdOn: string
 }
@@ -70,15 +59,23 @@ interface User {
 interface SensitiveUser extends User {
   email: string,
   paymentId: string | null,
+
+  privateMetadata: {
+    favorites: [],
+    emailNotifications: {
+      major: true,
+      minor: true,
+      marketing: true,
+      leaderboard: true
+    }
+  }
 }
 
 /**
- * User with sensitive information included with password.
+ * User with sensitive information with password included..
  */
 interface SensitiveUserWithPassword extends SensitiveUser {
-  email: string,
   passHash: string,
-  paymentId: string | null,
 }
 
 interface Theme {
@@ -129,6 +126,10 @@ interface Profile {
   createdOn: string
 }
 
+interface SensitiveProfile extends Profile {
+  privateMetadata: unknown
+}
+
 interface Link {
   id: string,
   profileId: string,
@@ -142,6 +143,10 @@ interface Link {
   useDeepLink: boolean,
   metadata: unknown,
   createdOn: string
+}
+
+interface SensitiveLink extends Link {
+  privateMetadata: unknown
 }
 
 interface PermissionGroup {
@@ -183,6 +188,10 @@ interface Addon {
   },
   createdOn: string,
   lastUpdated: string,
+}
+
+interface SensitiveAddon extends Addon {
+  privateMetadata: unknown
 }
 
 interface AddonInstall {

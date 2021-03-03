@@ -38,15 +38,7 @@ interface DbUser {
   inventory: unknown | null,
 
   // The metadata tag will grow over time as functionality is added.
-  metadata: {
-    favorites: [],
-    "emailNotifications": {
-      "major": true,
-      "minor": true,
-      "marketing": true,
-      "leaderboard": true
-    }
-  },
+  metadata: {},
 
   created_on: string
 }
@@ -54,12 +46,20 @@ interface DbUser {
 interface DbSensitiveUser extends DbUser {
   email: string,
   payment_id: string | null,
+
+  private_metadata: {
+    favorites: [],
+    emailNotifications: {
+      major: true,
+      minor: true,
+      marketing: true,
+      leaderboard: true
+    }
+  }
 }
 
-interface DbSensitiveUserWithPassword extends DbUser {
-  email: string,
+interface DbSensitiveUserWithPassword extends DbSensitiveUser {
   pass_hash: string,
-  payment_id: string | null,
 }
 
 /**
@@ -147,6 +147,10 @@ interface DbProfile {
   created_on: string
 }
 
+interface DbSensitiveProfile extends DbProfile {
+  private_metadata: unknown
+}
+
 /**
  handle text not null,
  member text not null,
@@ -189,6 +193,10 @@ interface DbLink {
   use_deep_link: boolean,
   metadata: unknown,
   created_on: string
+}
+
+interface DbSensitiveLink extends DbLink {
+  private_metadata: unknown
 }
 
 /**
@@ -276,6 +284,11 @@ interface DbAddon {
   created_on: string
   last_updated: string,
 }
+
+interface DbSensitiveAddon extends DbAddon {
+  private_metadata: unknown
+}
+
 
 interface DbAddonInstall {
   id: string,

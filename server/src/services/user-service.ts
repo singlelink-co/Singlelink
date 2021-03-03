@@ -323,4 +323,24 @@ export class UserService extends DatabaseService {
 
     return DbTypeConverter.toProfile(profileResult.rows[0]);
   }
+
+  /**
+   * Edits email notification settings for users.
+   *
+   * @param userId
+   * @param emailNotifications
+   */
+  async setEmailNotifications(userId: string, emailNotifications: DbSensitiveUser["private_metadata"]["emailNotifications"]): Promise<SensitiveUser> {
+    let profileQuery = await this.pool.query<DbSensitiveUser>(`update app.users
+                                                               set private_metadata = jsonb_set(private_metadata::jsonb, '{emailNotifications}', $1, true)
+                                                               where id = $2
+                                                               returning *;`,
+      [emailNotifications, userId]);
+
+    if (profileQuery.rowCount < 1) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to update the profile because of an internal error.");
+    }
+
+    return DbTypeConverter.toSensitiveUser(profileQuery.rows[0]);
+  }
 }

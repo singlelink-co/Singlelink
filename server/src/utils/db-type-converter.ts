@@ -28,6 +28,7 @@ export class DbTypeConverter {
       paymentId: user.payment_id,
       inventory: user.inventory,
       metadata: user.metadata,
+      privateMetadata: user.private_metadata,
       createdOn: user.created_on
     };
   }
@@ -44,6 +45,7 @@ export class DbTypeConverter {
       paymentId: user.payment_id,
       inventory: user.inventory,
       metadata: user.metadata,
+      privateMetadata: user.private_metadata,
       createdOn: user.created_on
     };
   }
@@ -81,6 +83,27 @@ export class DbTypeConverter {
     };
   }
 
+  static toSensitiveProfile(profile: DbSensitiveProfile): SensitiveProfile {
+    return {
+      id: profile.id,
+      handle: profile.handle,
+      userId: profile.user_id,
+      imageUrl: profile.image_url,
+      headline: profile.headline,
+      subtitle: profile.subtitle,
+      social: profile.social,
+      showWatermark: profile.show_watermark,
+      customCss: profile.custom_css,
+      customHtml: profile.custom_html,
+      customDomain: profile.custom_domain,
+      themeId: profile.theme_id,
+      visibility: profile.visibility,
+      metadata: profile.metadata,
+      privateMetadata: profile.private_metadata,
+      createdOn: profile.created_on
+    };
+  }
+
   static toProfileMember(member: DbProfileMember): DbProfileMember {
     return {
       handle: member.handle,
@@ -101,6 +124,24 @@ export class DbTypeConverter {
       customCss: link.custom_css,
       useDeepLink: link.use_deep_link,
       metadata: link.metadata,
+      createdOn: link.created_on
+    };
+  }
+
+  static toSensitiveLink(link: DbSensitiveLink): SensitiveLink {
+    return {
+      id: link.id,
+      profileId: link.profile_id,
+      type: link.type,
+      url: link.url,
+      sortOrder: link.sort_order,
+      label: link.label,
+      subtitle: link.subtitle,
+      style: link.style,
+      customCss: link.custom_css,
+      useDeepLink: link.use_deep_link,
+      metadata: link.metadata,
+      privateMetadata: link.private_metadata,
       createdOn: link.created_on
     };
   }
@@ -147,6 +188,28 @@ export class DbTypeConverter {
       global: addon.global,
       version: addon.version,
       metadata: addon.metadata,
+      createdOn: addon.created_on,
+      lastUpdated: addon.last_updated
+    };
+  }
+
+  static toSensitiveAddon(addon: DbSensitiveAddon): SensitiveAddon {
+    return {
+      id: addon.id,
+      userId: addon.user_id,
+      resourceId: addon.resource_id,
+      type: addon.type,
+      displayName: addon.display_name,
+      description: addon.description,
+      author: addon.author,
+      tags: addon.tags,
+      featuredSorting: addon.featured_sorting,
+      price: addon.price,
+      paymentFrequency: addon.payment_frequency,
+      global: addon.global,
+      version: addon.version,
+      metadata: addon.metadata,
+      privateMetadata: addon.private_metadata,
       createdOn: addon.created_on,
       lastUpdated: addon.last_updated
     };
