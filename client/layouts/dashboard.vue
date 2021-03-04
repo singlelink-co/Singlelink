@@ -231,55 +231,56 @@
 
     <!-- Preview Section-->
     <section
-      class="relative overflow-y-hidden hidden lg:flex flex-col w-4/12 items-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
+      class="relative overflow-hidden height-screen hidden lg:flex flex-col w-4/12 items-center justify-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
     >
 
       <!-- Preview Navbar-->
       <div
         class="absolute top-0 flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white"
-        style="height: 58px;"
+        style="height: 57.5px;"
       >
-        <p class="font-medium mr-2 text-gray-800">
+        <p class="font-medium mr-2 text-gray-800 flex" style="margin-left:auto;">
           Your {{ app_name }}:&nbsp;
         </p>
-        <a class="text-indigo-600 hover:text-indigo-700 hover:underline" :href="profileUrl">{{ profileUrl }}</a>
+        <a class="text-indigo-600 hover:text-indigo-700 hover:underline flex" :href="profileUrl">{{ profileUrl }}</a>
+        <img src="/export.svg" class="w-5 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
       </div>
-
-      <!-- Preview Mode selector -->
-      <div class="absolute flex flex-col items-center justify-center space-y-2" style="top: 70px">
-        <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview Mode:&nbsp;</label>
-        <div class="flex flex-row items-center justify-center space-x-2 w-full">
-        <select
-          id="user-profile-view-type"
-          v-model="previewMode"
-          class="text-sm text-gray-600 p-2 rounded-lg font-medium flex-grow flex"
-        >
-          <option selected value="mobile">
-            Mobile
-          </option>
-          <option value="desktop">
-            Desktop
-          </option>
-        </select>
-        <i :class="getPreviewModeIcon()"/>
-        </div>
-      </div>
-
-      <div class="user-profile-preview-parent">
-        <div v-if="originalHandle" :class="checkPreviewMode()">
-          <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
-            <iframe class="w-full" id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
+      <div class="flex flex-col items-center justify-start overflow-y-scroll absolute p-4" style="height: calc(100vh - 57.5px);bottom:0;width:100%;left:0; right:0;">
+        <!-- Preview Mode selector -->
+        <div class="flex flex-col items-center justify-start space-y-2 w-full relative z-10">
+          <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview Mode:&nbsp;</label>
+          <div class="flex flex-row items-center justify-center space-x-2 w-full">
+          <select
+            id="user-profile-view-type"
+            v-model="previewMode"
+            class="text-sm text-gray-600 p-3 rounded-lg font-medium flex border border-gray-200 w-40"
+          >
+            <option selected value="mobile">
+              Mobile
+            </option>
+            <option value="desktop">
+              Desktop
+            </option>
+          </select>
+          <i :class="getPreviewModeIcon()"/>
           </div>
         </div>
+
+        <div class="user-profile-preview-parent" style="transform:translateY(-130px);">
+          <div v-if="originalHandle" :class="checkPreviewMode()">
+            <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
+              <iframe class="w-full" id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
+            </div>
+          </div>
+        </div>
+
+          <!-- Visibility notification -->
+          <a href="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
+            <span class="font-semibold pr-1">Warning:</span>
+            <span>Your profile is currently hidden!</span>
+            <div class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Go to settings</div>
+          </a>
       </div>
-
-      <!-- Visibility notification -->
-      <a href="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
-        <span class="font-semibold pr-1">Warning:</span>
-        <span>Your profile is currently hidden!</span>
-        <div class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Go to settings</div>
-      </a>
-
     </section>
 
     <!-- Mobile profile selector -->
