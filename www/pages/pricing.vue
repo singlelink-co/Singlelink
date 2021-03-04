@@ -330,7 +330,7 @@
 </script>
 
 
-<style scoped>
+<style>
   .toggle {
     @apply .px-6 .py-3 .text-sm .rounded-lg .text-gray-700 .font-medium .shadow; 
     transition: .2s ease-in;
