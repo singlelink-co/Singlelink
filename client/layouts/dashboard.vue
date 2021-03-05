@@ -243,8 +243,16 @@
           Your {{ app_name }}:&nbsp;
         </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline flex" :href="profileUrl">{{ profileUrl }}</a>
-        <img src="/export.svg" class="w-5 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
+        <img @click="share_modal=!share_modal" src="/export.svg" class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
       </div>
+      <!-- Share modal -->
+      <div v-if="share_modal" class="absolute bg-white p-4 text-center rounded-lg shadow z-20 w-full flex flex-col items-center justify-start" style="top: 63px; max-width: 265px;">
+          <p class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200">QR code:</p>
+          <img v-if="qr_src" style="margin-bottom:.5rem;" :src="'https://qr.io/qr-svg/' + qr_src + '.svg'"/>
+          <p class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200">Share on social media</p>
+          <p class="text-gray-500 font-medium text-sm py-2 tracking-wide">Coming soon!</p>
+      </div>
+      <!-- End modal -->
       <div class="flex flex-col items-center justify-start overflow-y-scroll absolute p-4" style="height: calc(100vh - 57.5px);bottom:0;width:100%;left:0; right:0;">
         <!-- Preview Mode selector -->
         <div class="flex flex-col items-center justify-start space-y-2 w-full relative z-10">
@@ -377,6 +385,8 @@ export default Vue.extend({
           visibility: ''
         },
       },
+      share_modal: false,
+      qr_src: null,
       profiles: [] as Profile[],
       filteredProfiles: [] as Profile[],
       selectingProfile: false,
@@ -446,6 +456,26 @@ export default Vue.extend({
       this.version = "Version v" + response.data.version;
     } catch (err) {
       console.warn("Failed to retrieve version from server.");
+    }
+
+    if(process.env.QR_API) {
+      try {
+        let qr_request = await this.$axios.post('https://api.qr.io/v1/create', {
+          apikey: process.env.QR_API,
+          data:"https://qr.io",
+          transparent:"on",
+          frontcolor:"#5353EC",
+          marker_out_color:"#09FDFD",
+          marker_in_color:"#1127EF",
+          pattern:"special-circle",
+          marker:"rounded",
+          marker_in:"rounded",
+        });
+        this.qr_src = qr_request.data.qrid;
+      } catch(err) {
+        console.log('error');
+        console.log(err);
+      }
     }
 
     this.$root.$on('refreshUserProfileView', () => {

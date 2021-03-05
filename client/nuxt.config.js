@@ -179,6 +179,7 @@ export default {
     ICON_WIDTH: process.env.ICON_WIDTH ?? '46px',
     ORGANIZATION: process.env.ORGANIZATION ?? 'Neutron Creative Inc.',
     FREE_SIGNUP: process.env.FREE_SIGNUP || true,
+    QR_API: process.env.QR_API || null,
   },
 
   sitemap: {
