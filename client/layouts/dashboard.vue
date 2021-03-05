@@ -462,7 +462,7 @@ export default Vue.extend({
       try {
         let qr_request = await this.$axios.post('https://api.qr.io/v1/create', {
           apikey: process.env.QR_API,
-          data:"https://qr.io",
+          data:"https://singlel.ink/u/" + this.user.activeProfile.handle,
           transparent:"on",
           frontcolor:"#5353EC",
           marker_out_color:"#09FDFD",
