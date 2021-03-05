@@ -104,8 +104,10 @@
         </div>
 
         <div class="flex flex-col w-full mb-6">
-          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom Domain (hostname only) (🐳 Whales
-            only!)</label>
+          <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full">
+          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom domain</label>
+            <a href="https://www.notion.so/neutroncreative/Setting-up-your-custom-domain-907421b1ac3841dbbd8d9a7d41d17f9a" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+          </div>
           <input
             id="custom_domain"
             v-model="user.activeProfile.customDomain"
