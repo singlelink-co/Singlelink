@@ -14,7 +14,7 @@
         <div class="phone-container">
           <div data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" style="transform: scale(1.1);top:145px;" class="bg-white z-10 absolute w-full flex flex-row items-center justify-center rounded-lg tracking-tighter shadow px-8 py-4 font-extrabold">Buy on Amazon!</div>
           <div class="mini phone-display relative">
-              <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/influencer" scrolling="no"/>
+              <iframe style="border-radius: 50px;" class="w-full" id="preview-frame" src="https://singlel.ink/u/influencer" scrolling="no"/>
           </div>
         </div>
         <div class="phone-container opacity-0 md:opacity-100">
@@ -37,7 +37,7 @@
     <section class="interface wide row mx-none">
       <div class="flex flex-col relative justify-start">
         <div class="phone-display relative" style="right:50px; height:550px;">
-            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/umberto" scrolling="no"/>
+            <iframe style="border-radius: 50px;" class="w-full" id="preview-frame" src="https://singlel.ink/u/umberto" scrolling="no"/>
         </div>
         <testimonial  data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Dec 18, 2020" avatar="/adrenaline-hunter.png" platform="discord" name="Umberto Gnocchi" handle="CGI & Motion Design Artist" content="Thank you! What I like is that in 5 minutes I’ve configured everything."/>
       </div>
@@ -56,7 +56,7 @@
       </div>
       <div class="order-first lg:order-2 flex flex-col relative justify-start">
         <div class="phone-display relative" style="left:50px;">
-            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/Vibez" scrolling="no"/>
+            <iframe style="border-radius: 50px;" class="w-full" id="preview-frame" src="https://singlel.ink/u/Vibez" scrolling="no"/>
         </div>
         <testimonial  data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute left-0" date="Jan 22, 2021" avatar="/vibez.png" platform="ph" name="VibeszCS" handle="Twitch Streamer" content="TL:DR: Doesn't get much better than this... Beginners can easily add links and colors & have a working landing page in less then five minutes.... Neutron Creative sure knows how to make a good program!"/>
       </div>
@@ -65,7 +65,7 @@
     <section class="interface wide row mx-none">
       <div class="flex flex-col relative justify-start">
         <div class="phone-display relative" style="right:50px;">
-            <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/remi" scrolling="no"/>
+            <iframe style="border-radius: 50px;" class="w-full" id="preview-frame" src="https://singlel.ink/u/remi" scrolling="no"/>
         </div>
         <testimonial  data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Feb 23, 2021" avatar="https://pbs.twimg.com/profile_images/1361677841654497281/Mys20SoV_400x400.jpg" platform="twitter" name="Rémi Carreiro" handle="Architectural Photographer" content="If you’re looking to set up a little landing page for yourself, check out @SingleLink. I stumbled across it while looking for alternatives to Linktree and couldn’t be happier with it."/>
       </div>
