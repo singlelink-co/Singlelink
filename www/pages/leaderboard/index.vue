@@ -20,7 +20,8 @@
             <div v-if="sites && sites.length > 0"  class="w-full flex flex-row flex-wrap rounded-lg overflow-hidden shadow bg-white p-6">
                 <a class="flex items-center justify-start flex-col p-4 rounded-lg hover:bg-gray-100 overflow-hidden" style="max-width:33%;" v-for="(site, index) in sites" :key="index" v-if="site.headline && site.headline.length > 1" :href="'https://singlel.ink/u/' + site.handle" target="_blank">
                     <div class="flex flex-col relative rounded-lg overflow-hidden mb-4" style="padding-bottom:52.5%;height:0;width:100%;">
-                        <iframe :src="'https://beta-app.singlelink.co/u/' + site.handle" scrolling="no" style="pointer-events: none;"/>
+                        <!--<iframe :src="'https://beta-app.singlelink.co/u/' + site.handle" scrolling="no" style="pointer-events: none;"/>-->
+                        <img :src="'https://api.singlelink.co/profile/thumbnail/' + site.handle" class="rounded"/>
                         <div v-if="site.visibility=='published-18+'" class="z-10 absolute top-0 left-0 right-0 bottom-0 width-full h-full flex items-center justify-center p-4" style="background: rgba(0,0,0,.45);backdrop-filter:blur(5px);">
                             <span class="text-sm text-white">18+ only, click to view more</span>
                         </div>
