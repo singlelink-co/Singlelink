@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
     <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
-      Profile settings
+      Site settings
     </h1>
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <transition name="fade">
@@ -94,7 +94,7 @@
             class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
           >
             <span class="font-semibold">Warning!</span>
-            <span class="text-xs font-medium">Your profile picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
+            <span class="text-xs font-medium">Your site picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
               href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba"
               target="_blank"
               class="ml-2 font-semibold underline hover:text-red-700"
@@ -154,7 +154,7 @@
           >
 
           <label class="ml-4 block text-sm leading-5 text-gray-600">
-            Privacy mode (Disables profile analytics & discovery)
+            Privacy mode (Disables site analytics & discovery)
           </label>
         </div>
 
@@ -168,26 +168,26 @@
       </form>
     </div>
 
-    <!-- Delete profile -->
+    <!-- Delete site -->
     <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-gray-800 font-semibold text-lg w-full">
-          Delete this profile
+          Delete this site
         </h2>
-        <p class="text-gray-600 font-medium">Done with this profile? Click the button on your right to delete this
-          profile and all related content.</p>
+        <p class="text-gray-600 font-medium">Done with this site? Click the button on your right to delete this
+          site and all related content.</p>
       </div>
       <button
         type="button"
         class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded-lg font-semibold w-1/3 justify-center align-center"
         @click="setDeleteProfileModalActive(true)"
       >
-        Delete this profile
+        Delete this site
       </button>
     </div>
 
     <transition name="fade">
-      <!-- Confirm profile deletion modal -->
+      <!-- Confirm site deletion modal -->
       <div
         v-if="deleteProfileModalActive"
         class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center"
@@ -199,14 +199,14 @@
             Are you sure?
           </h2>
           <p class="text-gray-600 text-sm">
-            Deleting this profile is irreversible, please confirm to continue.
+            Deleting this site is irreversible, please confirm to continue.
           </p>
           <button
             type="button"
             class="mt-4 w-full p-4 text-center text-md text-white bg-red-600 hover:bg-red-700 rounded-lg font-semibold"
             @click="deleteProfile"
           >
-            Yes, delete this profile
+            Yes, delete this site
           </button>
         </div>
       </div>

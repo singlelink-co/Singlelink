@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
     <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
-      Profile analytics <span class="hidden lg:flex ml-2">(30 days)</span>
+      Site analytics <span class="hidden lg:flex ml-2">(30 days)</span>
     </h1>
 
       <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-white" v-if="user.activeProfile.metadata.privacyMode">
@@ -75,32 +75,32 @@ export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
   head: {
-    title: 'Profile Analytics - ' + process.env.APP_NAME,
+    title: 'Site Analytics - ' + process.env.APP_NAME,
     meta: [
       {
         hid: 'description',
         name: 'description',
-        content: 'View your profile analytics from your analytics dashboard.'
+        content: 'View your site analytics from your analytics dashboard.'
       },
       {
         hid: 'twitter:description',
         name: 'twitter:description',
-        content: 'View your profile analytics from your analytics dashboard.'
+        content: 'View your site analytics from your analytics dashboard.'
       },
       {
         hid: 'og:title',
         name: 'og:title',
-        content: 'Profile Analytics - ' + process.env.APP_NAME
+        content: 'Site Analytics - ' + process.env.APP_NAME
       },
       {
         hid: 'twitter:title',
         name: 'twitter:title',
-        content: 'Profile Analytics - ' + process.env.APP_NAME
+        content: 'Site Analytics - ' + process.env.APP_NAME
       },
       {
         hid: 'og:description',
         name: 'og:description',
-        content: 'View your profile analytics from your analytics dashboard.'
+        content: 'View your site analytics from your analytics dashboard.'
       },
     ],
   },
@@ -147,6 +147,8 @@ export default Vue.extend({
         this.analytics = await this.$axios.$post('/analytics/profile', {
           token: this.$store.getters['auth/getToken']
         });
+        console.log('analytics');
+        console.log(this.analytics);
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
@@ -160,24 +162,24 @@ export default Vue.extend({
           token
         });
 
-        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+        const siteResponse = await this.$axios.$post('/profile/active-profile', {
           token
         });
 
         this.user.name = userResponse.name;
         this.user.emailHash = userResponse.emailHash;
 
-        this.user.activeProfile.imageUrl = profileResponse.imageUrl;
-        this.user.activeProfile.headline = profileResponse.headline;
-        this.user.activeProfile.subtitle = profileResponse.subtitle;
-        this.user.activeProfile.handle = profileResponse.handle;
-        this.user.activeProfile.customDomain = profileResponse.customDomain;
-        this.user.activeProfile.visibility = profileResponse.visibility;
-        this.user.activeProfile.showWatermark = profileResponse.showWatermark;
+        this.user.activeProfile.imageUrl = siteResponse.imageUrl;
+        this.user.activeProfile.headline = siteResponse.headline;
+        this.user.activeProfile.subtitle = siteResponse.subtitle;
+        this.user.activeProfile.handle = siteResponse.handle;
+        this.user.activeProfile.customDomain = siteResponse.customDomain;
+        this.user.activeProfile.visibility = siteResponse.visibility;
+        this.user.activeProfile.showWatermark = siteResponse.showWatermark;
 
-        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata.privacyMode;
+        this.user.activeProfile.metadata.privacyMode = siteResponse.metadata.privacyMode;
 
-        this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
+        this.$set(this.user.activeProfile, 'user.activeProfile', siteResponse);
 
         this.originalHandle = this.user.activeProfile.handle;
       } catch (err) {
