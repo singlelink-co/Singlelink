@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="mb-16 w-full">
+        <section class="mb-16 w-full mt-6">
             <h1>Singlelink Analytics</h1>
             <p class="mb-8">
                 Learn more about Singlelink's current traction, and our future growth projections.
