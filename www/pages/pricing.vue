@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="mb-12">
+    <section class="mb-12 mt-6">
       <h1 class="my-10">Pricing & plans</h1>
       <p class="mb-8 text-2xl">
         Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
@@ -154,7 +154,7 @@
                   <h3 class="text-3xl font-extrabold mb-0">Team</h3>
                   <h4 class="text-xl font-medium text-indigo-600 mx-auto mr-auto ml-0 lg:mt-0 mt-2 w-full text-right">From $25/Month</h4>
                 </div>
-                <p class="mb-4 text-gray-600 font-medium leading-relaxed">The perfect option for users looking to build their first micro-site.</p>
+                <p class="mb-4 text-gray-600 font-medium leading-relaxed">The perfect option for small businesses to start building with their team on Singlelink.</p>
                 <h4 class="mb-4 font-heading font-semibold text-lg">Includes the following</h4>
                 <ul class="mb-6 list-inside text-gray-600 flex flex-col lg:flex-row lg:space-x-4">
                   <div class="flex flex-col flex-grow">
@@ -210,7 +210,7 @@
           <h3 class="text-3xl font-extrabold mt-4 mb-0 lg:mt-0">Platform</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 lg:ml-auto lg:mr-0 mx-auto lg:mt-0 mt-2 w-full text-right">From $50/Month</h4>
         </div>
-        <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
+        <p class="mb-8 text-gray-600 font-medium leading-relaxed">The ideal choice for medium-large businesses looking to build their business on Singlelink.</p>
         <h4 class="mb-3 font-heading font-semibold text-lg">Includes the following</h4>
         <ul class="mb-8 list-inside text-gray-600">
                   <li class="mb-2">
@@ -249,7 +249,7 @@
           <h3 class="text-3xl font-extrabold mb-0">Enterprise</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 w-full text-right">Contact us</h4>
         </div>
-        <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
+        <p class="mb-8 text-gray-600 font-medium leading-relaxed">For small-large enterprises that need to rely on us to be readliy available for bugs, questions, and feedback.</p>
         <h4 class="mb-3 font-heading font-semibold text-lg">Get access to the following</h4>
         <ul class="mb-8 list-inside text-gray-600">
                   <li class="mb-2">
