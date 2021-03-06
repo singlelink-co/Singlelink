@@ -10,6 +10,14 @@
 <script>
 export default {
     middleware: 'authenticated',
+    head () {
+        return {
+        title: 'Theme preview - ' + process.env.APP_NAME,
+        meta: [
+            { hid: 'robots', name: 'robots', content: 'noindex' }
+        ]
+        }
+    },
     data() {
         return {
             id: null,

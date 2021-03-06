@@ -87,12 +87,43 @@
     export default {
         layout: 'dashboard',
         middleware: 'authenticated',
+        head() {
+            return {
+                title: this.addon.displayName + ' theme - ' + process.env.APP_NAME,
+                meta: [
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                    },
+                    {
+                        hid: 'twitter:description',
+                        name: 'twitter:description',
+                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                    },
+                    {
+                        hid: 'og:title',
+                        name: 'og:title',
+                        content: this.addon.displayName + ' theme - ' + process.env.APP_NAME
+                    },
+                    {
+                        hid: 'twitter:title',
+                        name: 'twitter:title',
+                        content: this.addon.displayName + ' theme - ' + process.env.APP_NAME
+                    },
+                    {
+                        hid: 'og:description',
+                        name: 'og:description',
+                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                    },
+                ],
+            }
+        },
         data() {
             return {
                 id: null,
                 activeProfileId: null,
-                intent: null,
-                pendingTag: '',
+                /*intent: null,
                 addon: {
                     id: null,
                     displayName: null,
@@ -100,7 +131,8 @@
                     global: false,
                     tags: [],
                     resourceId: null
-                },
+                },*/
+                pendingTag: '',
                 themes: [],
                 colors: {
                         fill: {
@@ -116,33 +148,47 @@
                 favorites: []
             }
         },
-        async mounted() {
-            this.addon.id = Number(this.$route.path.replace('/dashboard/marketplace/addon/', ''));
-            console.log(this.addon.id);
-            await this.getUserData();
-            await this.loadThemes();
-            if(this.$route.path.replace('/dashboard/marketplace/addon/', '') == 'submit') {
+        async asyncData(ctx) {
+            let response = {
+                addon: {
+                    id: null,
+                    displayName: null,
+                    description: null,
+                    global: false,
+                    tags: [],
+                    resourceId: null
+                },
+                intent: null
+            };
+            response.addon.id = Number(ctx.route.path.replace('/dashboard/marketplace/addon/', ''));
+            console.log(response.addon.id);
+            if(ctx.route.path.replace('/dashboard/marketplace/addon/', '') == 'submit') {
                 // set intent to submit
-                this.intent = 'submit';
-            } else {   
-                this.addon = await this.$axios.$post('/marketplace/addon/' + this.$route.path.replace('/dashboard/marketplace/addon/', ''), {
-                    token: this.$store.getters['auth/getToken'],
+                response.intent = 'submit';
+            } else {
+                response.addon = await ctx.$axios.$post('/marketplace/addon/' + ctx.route.path.replace('/dashboard/marketplace/addon/', ''), {
+                    token: ctx.store.getters['auth/getToken'],
                     detailed: true
                 });
-                console.log(this.addon);
+                console.log(response.addon);
                 // If user is author
-                if(this.addon.userId == this.id) {
+                if(response.addon.userId == response.id) {
                     // Set intent to edit
-                    this.intent = 'edit';
+                    response.intent = 'edit';
                 } else {
                     // Else, set intent to view
-                    this.intent = 'view';
-                    this.getInstalledAddons();
-                    this.getFavoritedAddons();
+                    response.intent = 'view';
                 }
                 console.log('Loaded!');
-                console.log(this.addon);
+                console.log(ctx.addon);
+                 return response;
             }
+        },
+        async mounted() {
+            await this.getUserData();
+            await this.loadThemes();
+            this.getInstalledAddons();
+            this.getFavoritedAddons();
         },
         watch: {
             pendingTag(value) {

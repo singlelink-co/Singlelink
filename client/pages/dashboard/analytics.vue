@@ -74,7 +74,36 @@ export default Vue.extend({
   name: 'DashboardAnalytics',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Profile Analytics - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View your profile analytics from your analytics dashboard.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View your profile analytics from your analytics dashboard.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Profile Analytics - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Profile Analytics - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View your profile analytics from your analytics dashboard.'
+      },
+    ],
+  },
   data() {
     return {
       analytics: {

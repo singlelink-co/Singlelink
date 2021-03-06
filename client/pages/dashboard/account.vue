@@ -474,7 +474,36 @@ export default Vue.extend({
   name: 'DashboardSettings',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Account settings - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Manage your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Manage your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Account settings - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Account settings - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Manage your ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
   data() {
     return {
       loaded: false,

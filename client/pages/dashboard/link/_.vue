@@ -51,7 +51,36 @@ type ModalIntent = "create" | "edit";
 export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Link panel - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View, manage, and create new links from your ' + process.env.APP_NAME + ' link panel'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View, manage, and create new links from your ' + process.env.APP_NAME + ' link panel'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Link panel - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Link panel - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View, manage, and create new links from your ' + process.env.APP_NAME + ' link panel'
+      },
+    ],
+  },
   data() {
     const pendingLink: Link = {
       id: "",

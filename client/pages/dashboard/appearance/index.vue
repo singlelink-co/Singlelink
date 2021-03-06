@@ -364,7 +364,36 @@ export default Vue.extend({
   name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Site appearance - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content:  'Site appearance - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content:  'Site appearance - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+    ],
+  },
   data() {
     return {
       error: '',

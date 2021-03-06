@@ -200,7 +200,36 @@ type ModalIntent = "create" | "edit";
 export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Dashboard - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View, manage, and create new microsites from your ' + process.env.APP_NAME + ' dashboard'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View, manage, and create new microsites from your ' + process.env.APP_NAME + ' dashboard'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Dashboard - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Dashboard - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View, manage, and create new microsites from your ' + process.env.APP_NAME + ' dashboard'
+      },
+    ],
+  },
   data() {
     const pendingLink: Link = {
       id: "",

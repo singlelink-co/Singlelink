@@ -80,6 +80,42 @@ export default Vue.extend({
 
   middleware: 'unauthenticated',
 
+  head: {
+    title: 'Login - ' + process.env.APP_NAME,
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Login - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Login - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
+
   data: () => {
     return {
       email: '',

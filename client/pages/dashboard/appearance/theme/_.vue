@@ -66,6 +66,14 @@
 export default {
     middleware: 'authenticated',
     layout: 'dashboard',
+    head () {
+        return {
+        title: 'Theme editing - ' + process.env.APP_NAME,
+        meta: [
+            { hid: 'robots', name: 'robots', content: 'noindex' }
+        ]
+        }
+    },
     data() {
         return {
             id: null,

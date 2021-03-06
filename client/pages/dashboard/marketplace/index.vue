@@ -34,7 +34,36 @@ export default Vue.extend({
   name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Marketplace - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View the available themes & plugins on the ' + process.env.APP_NAME + ' marketplace.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View the available themes & plugins on the ' + process.env.APP_NAME + ' marketplace.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Marketplace - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Marketplace - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View the available themes & plugins on the ' + process.env.APP_NAME + ' marketplace.'
+      },
+    ],
+  },
   data() {
     return {
       error: '',

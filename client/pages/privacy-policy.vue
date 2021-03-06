@@ -163,6 +163,41 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "PrivacyPolicy",
+  head: {
+    title: 'Privacy Policy - ' + process.env.APP_NAME,
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View our privacy policy here at ' + process.env.APP_NAME + '.' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View our privacy policy here at ' + process.env.APP_NAME + '.' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Privacy Policy - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Privacy Policy - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View our privacy policy here at ' + process.env.APP_NAME + '.' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
   data() {
     return {
       organization: process.env.ORGANIZATION,

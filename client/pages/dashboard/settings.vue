@@ -255,7 +255,36 @@ export default Vue.extend({
   name: 'DashboardSettings',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Site settings - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Take administrative control over your microsites through the settings panel.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Take administrative control over your microsites through the settings panel.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Site settings - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Site settings - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Take administrative control over your microsites through the settings panel.'
+      },
+    ],
+  },
   data() {
     return {
       loaded: false,
