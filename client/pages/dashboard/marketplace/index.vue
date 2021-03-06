@@ -7,19 +7,19 @@
       <a href="/dashboard/marketplace/addon/submit" class="bg-indigo-200 border border-indigo-600 hover:bg-indigo-300 px-6 py-2 rounded-lg text-sm font-semibold text-indigo-500">Submit your theme<span class="ml-2 text-xl leading-none">+</span></a>
     </div>
     <!-- Featured section -->
-    <div class="rounded-lg mb-10 px-12 py-10 bg-indigo-500 w-full flex flex-col lg:flex-row justify-start">
-        <div class="rounded bg-gray-200 w-56 h-40 lg:mr-12" style="background-image:url('https://api.singlelink.co/profile/thumbnail/jim');background-size:cover;background-position:top left;background-repeat:no-repeat;"></div>
-        <div class="flex flex-col flex-1">
+    <div v-if="addons.featured.length>0" class="rounded-lg mb-10 px-12 py-10 bg-indigo-500 w-full flex flex-col lg:flex-row justify-start">
+        <div class="relative rounded" style="width: 201px; height: 217px; overflow: hidden;"><iframe scrolling="no" :src="'/dashboard/marketplace/preview/' + addons.featured[0].id" style="pointer-events: none; width: 375px; height: 406px; transform: scale(0.536) translate(-163px, -175px); top: 0px; left: 0px; position: absolute;"></iframe> <!----> <!----></div>
+        <div class="flex flex-col flex-1 ml-6">
             <h5 class="tracking-wide font-bold uppercase text-sm text-indigo-300 mb-1">Featured theme</h5>
-            <h2 class="text-white font-bold tracking-tight text-2xl mb-2">Bitcoin Binance!</h2>
-            <span class="text-gray-200 font-medium mb-4">The ultimate theme for Bitcoin lovers, take pride in your love for cryptocurrency with this exclusive Binance related theme.</span>
-            <a href="/dashboard/marketplace/addon/14" class="bg-indigo-600 rounded-lg px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700" style="width:fit-content;">See details</a>
+            <h2 class="text-white font-bold tracking-tight text-2xl mb-2">{{ addons.featured[0].displayName }}</h2>
+            <span class="text-gray-200 font-medium mb-4">{{ addons.featured[0].description }}</span>
+            <a :href="'/dashboard/marketplace/addon/' + addons.featured[0].id" class="bg-indigo-600 rounded-lg px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700" style="width:fit-content;">See details</a>
         </div>
     </div>
     <!-- End featured section -->
-    <!--<theme-list name="🔥 Trending themes" :preview="false" :themes="themes" :extended="false"/>-->
-    <theme-list name="✨ Newest themes" :preview="false" :themes="addons" :addon="true" :extended="false"/>
-    <theme-list name="Your submissions" :preview="false" :themes="addons" :addon="true" :extended="false"/>
+    <theme-list v-if="addons.hot.length>0" name="🔥 Trending themes" :preview="false" :themes="addons.hot" :addon="true" :extended="false" class="mb-8"/>
+    <theme-list v-if="addons.new.length>0" name="✨ Newest themes" :preview="false" :themes="addons.new" :addon="true" :extended="false" class="mb-8"/>
+    <theme-list v-if="addons.submissions.length>0" name="Your submissions" :preview="false" :themes="addons.submissions" :addon="true" :extended="false"/>
   </section>
 </template>
 
@@ -67,7 +67,13 @@ export default Vue.extend({
   data() {
     return {
       error: '',
-      addons: new Array<Addon>(),
+      addons: {
+        featured: new Array<Addon>(),
+        hot: new Array<Addon>(),
+        new: new Array<Addon>(),
+        submissions: new Array<Addon>(),
+      },
+      top_feature: null,
       userId: '',
       isAdmin: false
     };
@@ -89,16 +95,26 @@ export default Vue.extend({
   methods: {
     async loadAddons() {
       try {
-        // Grab addons from response
-        this.addons = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+        // Fetch featured addons from response
+        this.addons.featured = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+          sorting: "featured",
           token: this.$store.getters['auth/getToken'],
           detailed: true
         }));
-        console.log('addons!');
-        console.log(this.addons);
+        // Fetch hottest addons from response
+        this.addons.hot = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+          sorting: "currentInstalls",
+          token: this.$store.getters['auth/getToken'],
+          detailed: true
+        }));
+        // Grab newest addons from response
+        this.addons.new = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+          token: this.$store.getters['auth/getToken'],
+          detailed: true
+        }));
 
-        // Enrich theme data
-        
+        console.log('Addons');
+        console.log(this.addons);
 
       } catch (error) {
         console.log('Failed to get addons');

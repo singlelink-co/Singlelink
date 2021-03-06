@@ -170,23 +170,23 @@
                     token: ctx.store.getters['auth/getToken'],
                     detailed: true
                 });
-                console.log(response.addon);
-                // If user is author
-                if(response.addon.userId == response.id) {
-                    // Set intent to edit
-                    response.intent = 'edit';
-                } else {
-                    // Else, set intent to view
-                    response.intent = 'view';
-                }
-                console.log('Loaded!');
-                console.log(ctx.addon);
                  return response;
             }
         },
         async mounted() {
             await this.getUserData();
             await this.loadThemes();
+            console.log(this.addon);
+                // If user is author
+                if(this.addon.userId == this.id) {
+                    // Set intent to edit
+                    this.intent = 'edit';
+                } else {
+                    // Else, set intent to view
+                    this.intent = 'view';
+                }
+                console.log('Loaded!');
+                console.log(this.addon);
             this.getInstalledAddons();
             this.getFavoritedAddons();
         },
@@ -202,7 +202,8 @@
                     const token = this.$store.getters['auth/getToken'];
 
                     const userResponse = await this.$axios.$post('/user', {
-                        token                    });
+                        token
+                    });
                     this.activeProfile = userResponse.activeProfileId;
                     this.id = userResponse.id;
                     console.log(userResponse);
