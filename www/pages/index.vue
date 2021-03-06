@@ -39,7 +39,7 @@
         <div class="phone-display relative" style="right:50px; height:550px;">
             <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/umberto" scrolling="no"/>
         </div>
-        <testimonial data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Dec 18, 2020" avatar="/adrenaline-hunter.png" platform="discord" name="Umberto Gnocchi" handle="CGI & Motion Design Artist" content="Thank you! What I like is that in 5 minutes I’ve configured everything."/>
+        <testimonial data-aos-disable="mobile" data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Dec 18, 2020" avatar="/adrenaline-hunter.png" platform="discord" name="Umberto Gnocchi" handle="CGI & Motion Design Artist" content="Thank you! What I like is that in 5 minutes I’ve configured everything."/>
       </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
         <h3 class="neg-top">Getting online has never been easier</h3>
@@ -58,7 +58,7 @@
         <div class="phone-display relative" style="left:50px;">
             <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/Vibez" scrolling="no"/>
         </div>
-        <testimonial data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute left-0" date="Jan 22, 2021" avatar="/vibez.png" platform="ph" name="VibeszCS" handle="Twitch Streamer" content="TL:DR: Doesn't get much better than this... Beginners can easily add links and colors & have a working landing page in less then five minutes.... Neutron Creative sure knows how to make a good program!"/>
+        <testimonial data-aos-disable="mobile" data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute left-0" date="Jan 22, 2021" avatar="/vibez.png" platform="ph" name="VibeszCS" handle="Twitch Streamer" content="TL:DR: Doesn't get much better than this... Beginners can easily add links and colors & have a working landing page in less then five minutes.... Neutron Creative sure knows how to make a good program!"/>
       </div>
     </section>
 
@@ -67,7 +67,7 @@
         <div class="phone-display relative" style="right:50px;">
             <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/remi" scrolling="no"/>
         </div>
-        <testimonial data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Feb 23, 2021" avatar="https://pbs.twimg.com/profile_images/1361677841654497281/Mys20SoV_400x400.jpg" platform="twitter" name="Rémi Carreiro" handle="Architectural Photographer" content="If you’re looking to set up a little landing page for yourself, check out @SingleLink. I stumbled across it while looking for alternatives to Linktree and couldn’t be happier with it."/>
+        <testimonial data-aos-disable="mobile" data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Feb 23, 2021" avatar="https://pbs.twimg.com/profile_images/1361677841654497281/Mys20SoV_400x400.jpg" platform="twitter" name="Rémi Carreiro" handle="Architectural Photographer" content="If you’re looking to set up a little landing page for yourself, check out @SingleLink. I stumbled across it while looking for alternatives to Linktree and couldn’t be happier with it."/>
       </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
         <h3>Scale to infinite heights instantly</h3>
