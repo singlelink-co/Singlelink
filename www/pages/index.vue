@@ -6,7 +6,7 @@
       <div class="flex flex-row items-center justify-center lg:space-x-10 relative">
         <img data-aos="fade-in"  data-aos-easing="ease" data-aos-duration="1000" data-aos-delay="500" style="width:180px;height:auto;position:absolute;z-index:11;left:102px;top:178px;" src="/Pink-arrow.svg"/>
         <img data-aos="fade-in"  data-aos-easing="ease" data-aos-duration="1000" data-aos-delay="500" style="width:120px;height:auto;position:absolute;z-index:11;right:190px;top:130px;" src="/Purple-arrow.svg"/>
-        <div class="phone-container">
+        <div class="phone-container opacity-0 md:opacity-100">
           <div class="mini phone-display relative">
               <div class="w-full h-full" style="background-image:url('/Instagram-Screen.svg');background-position:top left;background-size: 100% auto;"></div>
           </div>
@@ -17,7 +17,7 @@
               <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/influencer" scrolling="no"/>
           </div>
         </div>
-        <div class="phone-container">
+        <div class="phone-container opacity-0 md:opacity-100">
           <div class="mini phone-display relative">
               <div class="w-full h-full" style="background-image:url('/Amazon-Screen.svg');background-position:top left;background-size: 100% auto;"></div>
           </div>
@@ -25,7 +25,7 @@
       </div>
       <!---->
       <div class="w-full flex flex-col items-center"  data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" data-aos-delay="1000">
-        <h1 style="margin-top: -115px; margin-bottom: 12px;">Increase engagement by 50% or more with<a href="/gallery" style="text-shadow: 0 0 15px rgba(83,83,238,.5);" class="text-indigo-600 ml-4">Singlelink.</a></h1>
+        <h1 style="margin-top: -115px; margin-bottom: 12px;max-width: ">The open-source micro-site platform,<a href="/gallery" style="text-shadow: 0 0 15px rgba(83,83,238,.5);" class="text-indigo-600 ml-4">Singlelink.</a></h1>
         <p class="mb-6 text-2xl max-w-2xl mx-auto">
           The powerful, easy-to-use, and customizable micro-site that gets your content to your consumers in fewer clicks.
         </p>
@@ -42,7 +42,7 @@
         <testimonial data-aos="fade-up"  data-aos-easing="ease" data-aos-duration="1000" :at="false" style="top:300px;" class="shadow absolute right-0" date="Dec 18, 2020" avatar="/adrenaline-hunter.png" platform="discord" name="Umberto Gnocchi" handle="CGI & Motion Design Artist" content="Thank you! What I like is that in 5 minutes I’ve configured everything."/>
       </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
-        <h3>Getting online has never been easier</h3>
+        <h3 class="neg-top">Getting online has never been easier</h3>
         <p class="text-xl mb-8">Building your Singlelink takes just minutes, and publishing to your link or custom domain is instant. There’s no-code needed, and we have hundreds of available themes for you to choose from.</p>
         <a style="width:fit-content;" class="text-center shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
       </div>
@@ -54,7 +54,7 @@
         <p class="text-xl mb-8">Building & customizing your Singlelink from top-to-bottom is easy with our optimized no-code builder. You can control every detail without code from your phone or desktop, and go further with available custom HTML & CSS if you choose.</p>
         <a style="width:fit-content;" class="text-center shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
       </div>
-      <div class="flex flex-col relative justify-start">
+      <div class="order-first lg:order-2 flex flex-col relative justify-start">
         <div class="phone-display relative" style="left:50px;">
             <iframe class="w-full" id="preview-frame" src="https://singlel.ink/u/Vibez" scrolling="no"/>
         </div>
@@ -266,5 +266,9 @@ import wallOfLove from '../components/wall-of-love.vue';
 
 .phone-display > div {
   border-radius: 50px;
+}
+
+.interface.wide.row.mx-none {
+  transform:translateX(0px)
 }
 </style>

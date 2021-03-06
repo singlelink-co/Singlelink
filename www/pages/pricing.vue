@@ -10,8 +10,8 @@
       <div class="flex items-center justify-end w-full flex-row mb-6">
         <span class="text-gray-700 font-semibold mr-4 text-sm">Viewing plans for</span>
         <select v-model="intent" class="toggle">
-          <option value="personal">personal use</option>
-          <option value="business">commercial use</option>
+          <option value="personal">Personal use</option>
+          <option value="business">Commercial use</option>
         </select>
       </div>
       <div class="p-12 rounded-lg shadow bg-white flex flex-col mb-8" v-if="intent=='personal'">
