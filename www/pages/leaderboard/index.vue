@@ -54,6 +54,37 @@
 
 <script>
     export default {
+        head: {
+      title: 'Leaderboard - Singlelink',
+      meta: [
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: 'Leaderboard - Singlelink'
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: 'See who the top creators on Singlelink are at all times.'
+        },
+        {
+          hid: 'twitter:title',
+          name: 'twitter:title',
+          content: 'Leaderboard - Singlelink'
+        },
+        {
+          hid: 'twitter:description',
+          name: 'twitter:description',
+          content: 'See who the top creators on Singlelink are at all times.'
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'See who the top creators on Singlelink are at all times.'
+        },
+
+      ],
+    },
         data() {
             return {
                 sites: [],

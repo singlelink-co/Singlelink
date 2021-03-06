@@ -95,32 +95,32 @@ import wallOfLove from '../components/wall-of-love.vue';
   export default {
   components: { wallOfLove, Testimonial },
     head: {
-      title: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥',
+      title: 'Singlelink - The open-source micro-site platform',
       meta: [
         {
           hid: 'og:title',
           name: 'og:title',
-          content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥'
+          content: 'Singlelink - The open-source micro-site platform'
         },
         {
           hid: 'og:description',
           name: 'og:description',
-          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: 'Singlelink - You don\'t need a website, you need a Singlelink 🔗🔥'
+          content: 'Singlelink - The open-source micro-site platform'
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
-          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
         {
           hid: 'description',
           name: 'description',
-          content: 'Singlelink is your beautiful, easy-to-use, and powerful online profile that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
+          content: 'Singlelink is your beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'
         },
       ],
     },
@@ -161,24 +161,6 @@ import wallOfLove from '../components/wall-of-love.vue';
     },
     mounted: function() {
       this.fetch_analytics();
-      let interval = 4500;
-      setTimeout(function() {
-        // wait
-      }, interval);
-      setInterval(function() {
-        // Turn on or off
-        let active = true;
-
-        console.log(this.active_profile);
-        if(active) this.active_profile = this.profile[this.i];
-        this.total_run++;
-        if(this.total_run >= 5) return clearInterval();
-        if(this.i >= (this.profile.length - 1)) {
-          this.i=0;
-        } else {
-          this.i++;
-        }
-      }.bind(this), interval);
     },
     methods: {
         fetch_analytics: async function() {
