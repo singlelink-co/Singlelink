@@ -27,11 +27,13 @@
         <h2 class="max-w-2xl mb-3">You're less than ten minutes from your new micro-site</h2>
         <p class="text-xl max-w-2xl mb-6">Our average user takes just under ten minutes from signup to site launch, and can expect a CTR of +50% instantly after publishing. It’s 100% free, no credit card required.</p>
         <a class="text-center mb-8 w-full shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
+        <!--
         <div class="flex flex-col items-center justify-center relative rounded-lg shadow-lg mb-8 overflow-hidden w-full max-w-2xl video" style="height: 344px;background-image: url('/application-screenshot.png');background-repeat:no-repeat;background-position:center;background-size:cover;">
           <div class="rounded-full w-12 h-12 flex items-center justify-center" style="background:rgba(0,0,0,.5);">
             <img src="play.svg" class="w-4 h-auto"/>
           </div>
         </div>
+        -->
         <!--<h2>Build your Singlelink in seconds</h2>
         <p class="mb-8">Creating your first Singlelink is free, effortless, and takes just seconds. There's no credit card required and we won't sell your data (we're open-source).</p>-->
         <!--<div class="flex flex-col w-full lg:w-auto lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4">
