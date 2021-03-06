@@ -109,6 +109,7 @@ export default Vue.extend({
         }));
         // Grab newest addons from response
         this.addons.new = (await this.$axios.$post<Addon[]>('/marketplace/addons', {
+          sorting: "new",
           token: this.$store.getters['auth/getToken'],
           detailed: true
         }));
