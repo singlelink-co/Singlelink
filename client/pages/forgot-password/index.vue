@@ -61,6 +61,42 @@ export default Vue.extend({
   name: 'ForgotPassword',
   middleware: 'unauthenticated',
 
+  head: {
+    title: 'Forgot your password? - ' + process.env.APP_NAME,
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Request a password rest for your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Request a password rest for your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Forgot your password? - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Forgot your password? - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Request a password rest for your ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
+
   data: () => {
     return {
       email: '',

@@ -5,7 +5,15 @@
 ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 */
 module.exports = {
-  theme: {},
+  extend: {
+    theme: {
+      colors: {
+        indigo: {
+          600: '#5353EC'
+        }
+      }
+    },
+  },
   variants: {},
   plugins: [],
   purge: {

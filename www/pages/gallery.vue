@@ -1,6 +1,6 @@
 <template>
   	<div>
-		<section class="mb-0">
+		<section class="mb-0 mt-16">
 			<h1>Get inspired</h1>
 			<p class="mb-8">
 				View our gallery of community examples, get inspiration, then build your Singlelink profile for free in seconds.

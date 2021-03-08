@@ -1,20 +1,20 @@
 <h1 align="center">
     <br>
     <br>
-    <a href="https://singlelink.co"><img src="client/static/singlelink-brandmark-background@2x.png" width="215"/></a>
+    <a href="https://singlelink.co"><img src="www/static/GH-Header.png" width="100%"/></a>
     <br>
     <br>
 </h1>
 
-<br>
+<h3 align="center">
+    <a href="https://singlelink.co">Singlelink</a> is the open-source micro-site platform.
+</h3>
 
-<h4 align="center">
-    <a href="https://singlelink.co">Singlelink</a> is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.
-</h4>
+<br>
 
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/Public%20Beta-2.1.7-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/Public%20Beta-2.2.8-%2303d2d4" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
         <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
@@ -48,7 +48,7 @@
 <br>
 
 <!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
-<img src="https://singlelink.co/og-image-rounded.png" alt="Singlelink promotional graphic"/>
+<img src="www/static/GH-Body.png" alt="Singlelink promotional graphic"/>
 
 <br>
 
@@ -275,21 +275,5 @@ Yes! We're actively daily on <a href="https://discord.com/invite/3pBM4Px" target
     <li>Cowlytics, Real-time Stripe analytics & forcesting for SaaS (https://www.cowlytics.co)</li>
     <li>Neutron, Faster websites in one-click (https://neutroncreative.com)</li>
 </ul>
-
 <br>
-<h2 id="license">License</h2>
-<p><a href="https://singlelink.co">Singlelink</a> is a free & open-source link manager built with <a href="https://nuxtjs.org/" target="_blank">NuxtJS</a>, <a target="_blank" href="https://nodejs.org/en/">NodeJS</a>, <a  target="_blank" href="https://tailwindcss.com/">TailwindCSS</a>, and <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>.</p>
-    <p>Copyright (C) 2020  Neutron Creative Inc.</p>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>
+<img src="www/static/GH-Footer.png"/>

@@ -27,17 +27,47 @@ export default Vue.extend({
   name: 'Tours',
   layout: 'dashboard',
   middleware: 'authenticated',
+  head: {
+    title: 'Product tours - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Learn more about ' + process.env.APP_NAME + ' through guided product tours.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Learn more about ' + process.env.APP_NAME + ' through guided product tours.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Dashboard - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Dashboard - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Learn more about ' + process.env.APP_NAME + ' through guided product tours.'
+      },
+    ],
+  },
   data: () => {
     return {
       app_name: process.env.APP_NAME,
       tours: [
         {
-          name: 'Getting started: Your first profile',
-          description: 'Learn how to create your first Singlelink, add your first link, and publish your profile.',
-          url: '/dashboard?tour=sl-101',
-          completed: '10/29/20'
+          name: 'Singlelink 101 - Creating your first link',
+          description: 'Learn how to add your first link to your Singlelink profile!',
+          url: '/dashboard?tour=sl-101-01',
+          //completed: '10/29/20'
         },
-        {
+        /*{
           name: 'Customization: Entrance to your appearance panel',
           description: 'Learn the basics of customizing your profile with our appearance panel and custom link css.',
           url: '/dashboard/appearance?tour=custom-101',
@@ -48,7 +78,7 @@ export default Vue.extend({
           description: 'Learn advanced techniques for styling your profile using custom HTML/CSS.',
           url: '/dashboard/appearance?tour=custom-102',
           completed: false
-        }
+        }*/
       ]
     };
   }

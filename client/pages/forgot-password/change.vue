@@ -67,7 +67,36 @@ import Vue from "vue";
 export default Vue.extend({
   name: 'ChangeForgotPassword',
   middleware: 'unauthenticated',
-
+  head: {
+    title: 'Password reset - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Reset the password of your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Reset the password of your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Password reset - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Password reset - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Reset the password of your ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
   data: () => {
     return {
       password: '',

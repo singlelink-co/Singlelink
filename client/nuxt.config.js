@@ -1,3 +1,5 @@
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+
 export default {
   /*
   ** Nuxt rendering mode
@@ -88,7 +90,7 @@ export default {
       {
         rel: 'stylesheet',
         href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'
-      }
+      },
     ],
     script: [
       {
@@ -97,6 +99,11 @@ export default {
         defer: true,
         'data-domain': 'singlelink.co',
         async: true
+      },
+      {
+        hid: 'simplefileupload',
+        src: 'https://app.simplefileupload.com/buckets/299048f4bf460802e90ea160f0c46064.js',
+        defer: true
       }
     ]
   },
@@ -112,6 +119,14 @@ export default {
     {
       src: '~plugins/draggable.js',
       ssr: true
+    },
+    {
+      src: '~plugins/cssjson.js',
+      srr: true,
+    },
+    {
+      src: '~plugins/monaco.js',
+      ssr: false
     }
   ],
   /*
@@ -164,17 +179,27 @@ export default {
     ICON_WIDTH: process.env.ICON_WIDTH ?? '46px',
     ORGANIZATION: process.env.ORGANIZATION ?? 'Neutron Creative Inc.',
     FREE_SIGNUP: process.env.FREE_SIGNUP || true,
+    QR_API: process.env.QR_API || null,
   },
 
   sitemap: {
     hostname: 'https://' + process.env.HOSTNAME ?? 'app.singlelink.co'
   },
-
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    plugins: [
+      new MonacoWebpackPlugin({
+        features: [
+          '!goToDefinitionCommands',
+          '!goToDefinitionMouse',
+          '!referenceSearch'
+        ],
+        languages: ['css', 'html'],
+      })
+    ],
     extend(config, ctx) {
       // const vue = ctx.loaders.vue;
 

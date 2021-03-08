@@ -98,23 +98,23 @@ export default Vue.extend({
     const profile: Profile = this.profile;
 
     return {
-      title: profile.headline ?? '',
+      title: profile.headline + ' - ' + process.env.APP_NAME ?? '',
 
       meta: [
         {
           hid: 'title',
           name: 'title',
-          content: profile.headline ?? ''
+          content: profile.headline + ' - ' + process.env.APP_NAME ?? ''
         },
         {
           hid: 'og:title',
           name: 'og:title',
-          content: profile.headline ?? ''
+          content: profile.headline + ' - ' + process.env.APP_NAME ?? ''
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: profile.headline ?? ''
+          content: profile.headline + ' - ' + process.env.APP_NAME ?? ''
         },
         {
           hid: 'description',

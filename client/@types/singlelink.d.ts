@@ -42,3 +42,30 @@ interface LinkVisit {
   link: any,
   views: any
 }
+
+interface Addon {
+  id: string,
+  userId: string,
+  resourceId: string,
+  type: AddonType,
+  description: string,
+  author: string,
+  tags: string[],
+  featuredSorting: number,
+  price: number,
+  paymentFrequency: string,
+  global: boolean,
+  version: string,
+  createdOn: string,
+  lastUpdated: string
+}
+
+type AddonType = 'theme' | 'preset' | 'plugin';
+
+interface AddonInstall {
+  id: string,
+  profileId: string,
+  addonId: string,
+  createdOn: string
+}
+© 2021 GitHub, Inc.

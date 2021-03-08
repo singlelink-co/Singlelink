@@ -7,7 +7,7 @@
       </h1>
       <div
         v-if="error"
-        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-11/12 max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
+        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded w-full max-w-sm justify-center items-center text-sm border border-orange-300 shadow-sm"
       >
         <img style="width: 12px;" src="/caution.svg">
         <div class="flex flex-col ml-2">
@@ -63,6 +63,7 @@
         </button>
         <p v-if="free_signup" class="mt-6 text-center mx-auto text-gray-700">Or, <a class="text-indigo-600 hover:underline" href="/create-account">create
         your new account for free</a></p>
+        <a href="https://singlelink.co" class="mt-2 flex items-start justify-center text-xs mx-auto hover:underline text-center w-full text-gray-500">Learn more about Singlelink</a>
       </form>
     </section>
     <section class="flex text-center text-gray-600 text-sm mt-auto mb-4 p-8">All rights reserved.<br>Copyright ©{{ new Date().getFullYear() }}
@@ -78,6 +79,42 @@ export default Vue.extend({
   name: 'Index',
 
   middleware: 'unauthenticated',
+
+  head: {
+    title: 'Login - ' + process.env.APP_NAME,
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Login - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Login - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Login to your ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
 
   data: () => {
     return {

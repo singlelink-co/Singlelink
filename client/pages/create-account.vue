@@ -98,7 +98,41 @@ import {StatusCodes} from "http-status-codes";
 export default Vue.extend({
   name: 'CreateAccount',
   middleware: 'unauthenticated',
-
+  head: {
+    title: 'Create your free account - ' + process.env.APP_NAME,
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Create your free ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Create your free ' + process.env.APP_NAME + ' account.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Create your free account - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Create your free account - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Create your free ' + process.env.APP_NAME + ' account.'
+      },
+    ],
+  },
   data() {
     return {
       email: '',
@@ -152,7 +186,7 @@ export default Vue.extend({
         this.$store.commit('auth/login', response.data.token);
         this.$nuxt.$loading.finish();
 
-        await this.$router.push('/dashboard');
+        window.location.href='/dashboard?tour=sl-101-01';
       } catch (err) {
         if (err.response) {
           if (err.response.status === StatusCodes.CONFLICT) {

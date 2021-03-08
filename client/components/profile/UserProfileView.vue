@@ -32,12 +32,12 @@
         }
       </component>
 
-      <component :is="'style'" v-if="profile.customCss">
-        {{ profile.customCss || null }}
-      </component>
-
       <component :is="'style'" v-if="(theme ? theme.customCss : false)">
         {{ theme.customCss || null }}
+      </component>
+
+      <component :is="'style'" v-if="profile.customCss">
+        {{ profile.customCss || null }}
       </component>
 
       <img
@@ -81,7 +81,7 @@
         </h3>
       </div>
 
-      <div v-if="loaded && profile.showWatermark">
+      <div v-if="loaded && profile.showWatermark" id="sl-watermark">
         <p v-if="theme" :style="`color:${theme.colors.text.primary}`" class="mt-4 text-sm">
           Proudly built with {{ app_name }} 🔗
         </p>
@@ -92,6 +92,7 @@
           v-if="free_signup"
           class="text-indigo-600 hover:underline text-sm"
           :href="'https://' + hostname + '/create-account'"
+          target="_blank"
         >Create your
           free profile in seconds</a>
         <base target="_blank">
@@ -117,6 +118,14 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    preview: {
+      type: Boolean,
+      default: false
+    },
+    profileData: {
+      type: Object,
+      default: null
+    }
   },
 
   data() {
@@ -135,11 +144,11 @@ export default Vue.extend({
       },
       user: {
         name: null,
-        emailHash: null,
+        emailHash: null as any,
         avatarUrl: null
       },
-      theme: null,
-      links: null,
+      theme: null as any,
+      links: null as any,
       hostname: process.env.HOSTNAME,
       api_url: process.env.API_URL,
       app_name: process.env.APP_NAME,
@@ -152,7 +161,30 @@ export default Vue.extend({
     if (this.authenticated) {
       await this.getAuthenticatedProfile();
     } else {
-      await this.getProfile();
+      if(!this.preview) {
+        await this.getProfile();
+      } else {
+        // do nothing
+        await this.getAuthenticatedProfile();
+        this.profile.customCss = this.profileData.customCss;
+        this.profile.customHtml = this.profileData.customHtml;
+        this.theme = this.profileData;
+        /*this.user = {
+          name: null,
+          emailHash: 'something',
+          avatarUrl: null,
+        };
+        this.links = [
+          {
+            id: 0,
+            label: 'Example link',
+            subtitle: null,
+            url: '#',
+            customCss: ''
+          }
+        ];*/
+        this.loaded = true;
+      }
     }
   },
 
@@ -188,6 +220,13 @@ export default Vue.extend({
       }
 
       this.loaded = true;
+    },
+
+    async getTheme() {
+      //if(!this.themeData) this.themeData = {}; // fetch theme
+      //this.theme = this.themeData;
+      this.profile.customCss = this.theme?.customCss;
+      this.profile.customHtml = this.theme?.customHtml;
     },
 
     async getAuthenticatedProfile() {
@@ -240,5 +279,9 @@ export default Vue.extend({
 
 .nc-link:active {
   transform: scale(1);
+}
+
+body {
+  overflow-x: hidden;
 }
 </style>

@@ -22,6 +22,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+
 .nc-avatar {
   width: 60px;
   height: 60px;

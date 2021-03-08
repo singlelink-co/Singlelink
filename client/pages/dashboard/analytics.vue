@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
     <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
-      Profile analytics <span class="hidden lg:flex ml-2">(30 days)</span>
+      Site analytics <span class="hidden lg:flex ml-2">(30 days)</span>
     </h1>
 
       <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-white" v-if="user.activeProfile.metadata.privacyMode">
@@ -35,7 +35,7 @@
         Click through rate
       </h2>
       <h4 v-if="analytics.clickThroughRate" class="mt-2 lg:mt-0 lg:ml-auto text-indigo-600 text-3xl lg:text-2xl font-bold">
-        {{ analytics.clickThroughRate.toFixed(2) }}%
+        {{ ((visitSum / analytics.totalProfileViews)*100).toFixed(2) }}%
       </h4>
     </div>
 
@@ -51,7 +51,8 @@
       >
         <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
           <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
+          <span v-if="link.link.url && link.link.url.length > 31" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 32) }}...</span>
+          <span v-if="link.link.url && link.link.url.length < 32" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
         </div>
         <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
           <span class="text-sm uppercase text-gray-700 font-semibold mr-1 lg:mr-0 lg:mb-2">Total clicks</span>
@@ -73,7 +74,36 @@ export default Vue.extend({
   name: 'DashboardAnalytics',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Site Analytics - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'View your site analytics from your analytics dashboard.'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'View your site analytics from your analytics dashboard.'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: 'Site Analytics - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Site Analytics - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'View your site analytics from your analytics dashboard.'
+      },
+    ],
+  },
   data() {
     return {
       analytics: {
@@ -117,6 +147,8 @@ export default Vue.extend({
         this.analytics = await this.$axios.$post('/analytics/profile', {
           token: this.$store.getters['auth/getToken']
         });
+        console.log('analytics');
+        console.log(this.analytics);
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
@@ -130,24 +162,24 @@ export default Vue.extend({
           token
         });
 
-        const profileResponse = await this.$axios.$post('/profile/active-profile', {
+        const siteResponse = await this.$axios.$post('/profile/active-profile', {
           token
         });
 
         this.user.name = userResponse.name;
         this.user.emailHash = userResponse.emailHash;
 
-        this.user.activeProfile.imageUrl = profileResponse.imageUrl;
-        this.user.activeProfile.headline = profileResponse.headline;
-        this.user.activeProfile.subtitle = profileResponse.subtitle;
-        this.user.activeProfile.handle = profileResponse.handle;
-        this.user.activeProfile.customDomain = profileResponse.customDomain;
-        this.user.activeProfile.visibility = profileResponse.visibility;
-        this.user.activeProfile.showWatermark = profileResponse.showWatermark;
+        this.user.activeProfile.imageUrl = siteResponse.imageUrl;
+        this.user.activeProfile.headline = siteResponse.headline;
+        this.user.activeProfile.subtitle = siteResponse.subtitle;
+        this.user.activeProfile.handle = siteResponse.handle;
+        this.user.activeProfile.customDomain = siteResponse.customDomain;
+        this.user.activeProfile.visibility = siteResponse.visibility;
+        this.user.activeProfile.showWatermark = siteResponse.showWatermark;
 
-        this.user.activeProfile.metadata.privacyMode = profileResponse.metadata.privacyMode;
+        this.user.activeProfile.metadata.privacyMode = siteResponse.metadata.privacyMode;
 
-        this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
+        this.$set(this.user.activeProfile, 'user.activeProfile', siteResponse);
 
         this.originalHandle = this.user.activeProfile.handle;
       } catch (err) {

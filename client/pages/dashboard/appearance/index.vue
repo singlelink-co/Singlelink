@@ -6,165 +6,89 @@
 
     <!-- Your Themes-->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Your Themes
-      </h2>
-
-      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
-
-        <div
-          v-for="theme in themes"
-          v-if="themes"
-          :key="theme.id"
-          class="rounded-lg nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;min-height:80px;`"
-          :class="{'active': activeThemeId === theme.id}"
-          @click="selectTheme(theme.id)"
-        >
-          <i
-            v-if="!theme.global"
-            class="fas fa-pencil-alt edit-icon"
-            @click.stop="openModal('edit'); pendingTheme=theme;"
-          />
-          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
-            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
-          </div>
-        </div>
-
-        <div class="rounded-lg nc-theme nc-add bg-gray-200" style="min-width:78px;min-height:80pxpx;" @click="openModal('create')">
-          <div class="nc-inner flex items-center justify-center">
-            <span class="font-semibold text-gray-700 text-4xl">+</span>
-          </div>
-        </div>
-      </div>
+      <theme-list :active="activeThemeId" name="Your themes" :themes="themes" :extended="false" icon="edit"/>
+      <a
+        type="button"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        href="/dashboard/appearance/theme/create">
+        Create new theme
+      </a>
 
     </div>
 
-    <!-- Global Themes-->
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Global Themes
-      </h2>
-
-      <div class="flex flex-row overflow-x-scroll hide-scrollbar">
-        <div
-          class="rounded-lg nc-theme bg-gray-200"
-          style="min-width:78px;min-height:80px;"
-          :class="{'active': !activeThemeId}"
-          @click="selectTheme(null)"
-        >
-          <div class="nc-inner bg-white">
-            <div class="nc-bottom-inner bg-gray-600"/>
-          </div>
-        </div>
-
-        <div
-          v-for="theme in globalThemes"
-          v-if="globalThemes"
-          :key="theme.id"
-          class="rounded-lg nc-theme"
-          :style="`background:${theme.colors.fill.primary}; position: relative;min-width:78px;height:80px;`"
-          :class="{'active': activeThemeId === theme.id}"
-          @click="selectTheme(theme.id)"
-        >
-          <i
-            class="fas fa-eye edit-icon"
-            @click.stop="openModal('view'); pendingTheme=theme;"
-          />
-          <div class="nc-inner" :style="`background:${theme.colors.fill.secondary};`">
-            <div class="nc-bottom-inner" :style="`background:${theme.colors.text.primary};`"/>
-          </div>
-        </div>
-      </div>
-
-    </div>
     
-    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Customization
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <div class="flex flex-col lg:flex-row space-y-2 lg:space-x-4 lg:space-y-0 items-center">
-        <div class="flex flex-col flex-grow">
-        <label class="font-medium text-sm text-gray-800" for="customization_background">Background Color</label>
-        <input
-          id="customization_background"
-          v-model="customization.background"
-          class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-          type="text"
-          placeholder="e.g. #5353EC"
-        >
-        <input
-          id="customization_background_picker"
-          v-model="customization.background"
-          class="mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-          type="color"
-          aria-label="Color picker"
-        >
-        </div>
-        <span class="text-gray-500 uppercase tracking-wide mx-4 text-xs font-medium">Or</span>
-        <div class="flex flex-col flex-grow ">
-          <label class="font-medium text-sm text-gray-800" for="customization_background">Background Image Url</label>
-          <input
-            id="customization_background"
-            v-model="customization.background"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-            type="text"
-            placeholder="e.g. #5353EC"
-          >
-          <input
-            id="customization_background_picker"
-            v-model="customization.background"
-            class="mt-2 text-sm border-solid border-gray-300 rounded-lg border opacity-0"
-            type="color"
-            aria-label="Color picker"
-          >
-        </div>
-      </div>
-    </div>-->
-
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+      <builder v-if="builderCssLoaded" v-model="builderCss"/>
+      <button
+        type="button"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        @click="saveChanges"
+      >
+        Save changes
+      </button>
+    </div>
+    
+    <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+              <span class="text-orange-500 text-sm text-center mx-auto w-full">
+                View on desktop to edit custom HTML & CSS
+              </span>
+            </div>
+    <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Custom HTML
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <textarea
-        v-model="customHtml"
-        rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-        placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-        aria-label="Custom HTML"
-      />
+      <MonacoEditor
+                height="350"
+                language="html"
+                theme="vs-dark"
+                :options="{
+                  extraEditorClassName: 'rounded overflow-hidden mb-2',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
+                }"
+                v-model="customHtml"
+              ></MonacoEditor>
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
       </button>
     </div>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+    <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
       <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
         <h2 class="text-gray-800 font-semibold text-lg">
           Custom CSS
         </h2>
         <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
       </div>
-      <textarea
-        v-model="customCss"
-        rows="5"
-        class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-        placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-        aria-label="Custom CSS"
-      />
+      <MonacoEditor
+                height="350"
+                language="css"
+                theme="vs-dark"
+                :options="{
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
+                }"
+                v-model="editorCss"
+              ></MonacoEditor>
       <button
         type="button"
-        class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+        class="inline-flex mt-4 p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
         @click="saveChanges"
       >
         Save changes
@@ -330,32 +254,45 @@
 
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+            <div class="flex lg:hidden flex-col p-4 bg-orange-200 border border-orange-600 rounded-lg w-full mb-8">
+              <span class="text-orange-500 text-sm text-center mx-auto w-full">
+                View on desktop to edit custom HTML & CSS
+              </span>
+            </div>
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom HTML
               </h2>
-              <textarea
+              <MonacoEditor
+                height="350"
+                language="html"
+                theme="vs-dark"
+                :options="{
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
+                }"
                 v-model="pendingTheme.customHtml"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="Place your third party scripts here (e.g. Google Analytics, Intercom, etc.)"
-                aria-label="Custom HTML"
-                :disabled="modalIntent === 'view'"
-              />
+              ></MonacoEditor>
             </div>
 
-            <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full">
+            <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
               <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
                 Custom CSS
               </h2>
-              <textarea
+             <MonacoEditor
+                height="350"
+                language="css"
+                theme="vs-dark"
+                :options="{
+                  extraEditorClassName: 'rounded overflow-hidden',
+                  autoIndent: 'full',
+                  autoClosingQuotes: true,
+                  readOnly: (modalIntent === 'view'),
+                }"
                 v-model="pendingTheme.customCss"
-                rows="5"
-                class="p-2 mt-2 mb-4 text-sm border-solid border-gray-300 rounded-lg border"
-                placeholder="e.g. a { color: rgba(0,0,0,.8); }"
-                aria-label="Custom CSS"
-                :disabled="modalIntent === 'view'"
-              />
+              ></MonacoEditor>
             </div>
           </form>
           <div
@@ -418,20 +355,53 @@
 
 <script lang="ts">
 import Vue from "vue";
+import themeList from "~/components/theme/theme-list.vue";
 
 type ThemeModalIntent = "create" | "edit" | "view";
 
 export default Vue.extend({
+  components: { themeList },
   name: 'DashboardAppearance',
   layout: 'dashboard',
   middleware: 'authenticated',
-
+  head: {
+    title: 'Site appearance - ' + process.env.APP_NAME,
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content:  'Site appearance - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content:  'Site appearance - ' + process.env.APP_NAME
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: 'Design your ' + process.env.APP_NAME + ' without limits in our appearance & customization panel'
+      },
+    ],
+  },
   data() {
     return {
       error: '',
       themes: new Array<Theme>(),
       globalThemes: new Array<Theme>(),
       activeThemeId: '',
+      editorCss: '',
+      builderCss: '',
       customCss: '',
       customHtml: '',
       modalActive: false,
@@ -479,7 +449,8 @@ export default Vue.extend({
             },
           }
         },
-      isAdmin: false
+      isAdmin: false,
+      builderCssLoaded: false
     };
   },
 
@@ -520,125 +491,9 @@ export default Vue.extend({
           includeGlobal: false
         }));
 
-        this.globalThemes = (await this.$axios.$post<Theme[]>('/themes', {
-          token: this.$store.getters['auth/getToken'],
-          onlyGlobal: true
-        }));
       } catch (error) {
         console.log('Failed to get themes');
         console.log(error);
-      }
-    },
-
-    async saveCreateTheme(close: boolean) {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/create', {
-          token: this.$store.getters['auth/getToken'],
-          label: this.pendingTheme.label,
-          colors: {
-            fill: {
-              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
-              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
-            },
-            text: {
-              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
-              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
-            }
-          },
-          customCss: this.pendingTheme.customCss,
-          customHtml: this.pendingTheme.customHtml,
-        });
-
-        this.themes.push(response);
-
-        if (this.pendingTheme.global) {
-          const token = this.$store.getters['auth/getToken'];
-
-          await this.$axios.$post('theme/admin/set-global', {
-            token,
-            id: response.id,
-            global: this.pendingTheme.global
-          });
-        }
-
-        if (close) {
-          this.closeModal();
-          return;
-        }
-
-        this.setPending(null);
-        this.$root.$emit('refreshUserProfileView');
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
-      }
-    },
-
-    async saveEditTheme() {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/update', {
-          token: this.$store.getters['auth/getToken'],
-          id: this.pendingTheme.id,
-          label: this.pendingTheme.label,
-          colors: {
-            fill: {
-              primary: this.pendingTheme.colors.fill.primary ?? 'rgba(255,255,255,1)',
-              secondary: this.pendingTheme.colors.fill.secondary ?? 'rgba(255,255,255,.85)'
-            },
-            text: {
-              primary: this.pendingTheme.colors.text.primary ?? 'rgba(0,0,0,1)',
-              secondary: this.pendingTheme.colors.text.secondary ?? 'rgba(0,0,0,.85)'
-            }
-          },
-          customCss: this.pendingTheme.customCss,
-          customHtml: this.pendingTheme.customHtml,
-        });
-
-        const themeId = response.id;
-        const index = this.themes.findIndex(x => x.id === themeId);
-
-        this.themes[index] = this.pendingTheme;
-
-        if (this.pendingTheme.global) {
-          const token = this.$store.getters['auth/getToken'];
-
-          await this.$axios.$post('theme/admin/set-global', {
-            token,
-            id: response.id,
-            global: this.pendingTheme.global
-          });
-        }
-
-        this.closeModal();
-        this.$root.$emit('refreshUserProfileView');
-
-        return;
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
-      }
-    },
-
-    async deleteTheme() {
-      try {
-        const response = await this.$axios.$post<Theme>('/theme/delete', {
-          token: this.$store.getters['auth/getToken'],
-          id: this.pendingTheme.id,
-        });
-
-        const themeId = response.id;
-        const index = this.themes.findIndex(x => x.id === themeId);
-
-        this.themes.splice(index, 1);
-
-        this.closeModal();
-        this.setPending(null);
-        this.$root.$emit('refreshUserProfileView');
-
-        return;
-      } catch (error) {
-        this.error = 'Failed to create theme';
-        console.log('Failed to create theme');
       }
     },
 
@@ -670,6 +525,11 @@ export default Vue.extend({
 
         this.activeThemeId = profileResponse.themeId ?? null;
         this.customCss = profileResponse.customCss ?? '';
+        this.editorCss = this.customCss.split('/* SL-NO-CODE */')[0];
+        if(this.customCss.split('/* SL-NO-CODE */').length > 1) {
+          this.builderCss = this.customCss.split('/* SL-NO-CODE */')[1];
+        }
+        this.builderCssLoaded = true;
         this.customHtml = profileResponse.customHtml ?? '';
       } catch (err) {
         console.log('Error getting user data');
@@ -679,9 +539,12 @@ export default Vue.extend({
 
     async saveChanges() {
       try {
+        console.log('Builder CSS');
+        console.log(this.builderCss);
+
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
-          customCss: this.customCss,
+          customCss: this.editorCss + '/* SL-NO-CODE */' + this.builderCss,
           customHtml: this.customHtml
         });
 
@@ -709,7 +572,7 @@ export default Vue.extend({
         customCss: undefined,
         customHtml: undefined,
       };
-    }
+    },
   }
 });
 </script>
