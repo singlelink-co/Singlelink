@@ -88,33 +88,37 @@
         layout: 'dashboard',
         middleware: 'authenticated',
         head() {
+            let description = '';
+            let displayName = 'Un-named';
+            if(this.addon.description) description = this.addon.description;
+            if(this.addon.displayName) displayName = this.addon.displayName;
             return {
-                title: this.addon.displayName + ' theme - ' + process.env.APP_NAME,
+                title: displayName + ' theme - ' + process.env.APP_NAME,
                 meta: [
                     {
                         hid: 'description',
                         name: 'description',
-                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                        content: description + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
                     },
                     {
                         hid: 'twitter:description',
                         name: 'twitter:description',
-                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                        content: description + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
                     },
                     {
                         hid: 'og:title',
                         name: 'og:title',
-                        content: this.addon.displayName + ' theme - ' + process.env.APP_NAME
+                        content: displayName + ' theme - ' + process.env.APP_NAME
                     },
                     {
                         hid: 'twitter:title',
                         name: 'twitter:title',
-                        content: this.addon.displayName + ' theme - ' + process.env.APP_NAME
+                        content: displayName + ' theme - ' + process.env.APP_NAME
                     },
                     {
                         hid: 'og:description',
                         name: 'og:description',
-                        content: this.addon.description.substr(0,64) + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
+                        content: description + '... Download this theme in seconds for free by creating a free ' + process.env.APP_NAME + 'account!'
                     },
                 ],
             }
@@ -160,12 +164,14 @@
                 },
                 intent: null
             };
-            response.addon.id = Number(ctx.route.path.replace('/dashboard/marketplace/addon/', ''));
             console.log(response.addon.id);
             if(ctx.route.path.replace('/dashboard/marketplace/addon/', '') == 'submit') {
                 // set intent to submit
                 response.intent = 'submit';
+                console.log('Submit!');
+                return response;
             } else {
+                response.addon.id = Number(ctx.route.path.replace('/dashboard/marketplace/addon/', ''));
                 response.addon = await ctx.$axios.$post('/marketplace/addon/' + ctx.route.path.replace('/dashboard/marketplace/addon/', ''), {
                     token: ctx.store.getters['auth/getToken'],
                     detailed: true
@@ -178,13 +184,15 @@
             await this.loadThemes();
             console.log(this.addon);
                 // If user is author
-                if(this.addon.userId == this.id) {
+                if(this.intent != 'submit' && this.addon.userId == this.id) {
                     // Set intent to edit
                     this.intent = 'edit';
                 } else {
                     // Else, set intent to view
-                    this.intent = 'view';
+                    if(this.intent != 'submit') this.intent = 'view';
                 }
+                console.log('Intent');
+                console.log(this.intent);
                 console.log('Loaded!');
                 console.log(this.addon);
             this.getInstalledAddons();
