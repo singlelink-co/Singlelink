@@ -302,8 +302,8 @@
                 console.log('favorites');
                 console.log(this.favorites);
                 console.log('Addon id');
-                console.log(this.addon.id);
-                console.log(this.favorites.indexOf(Number(this.addon.id)));
+                /*console.log(this.addon.id);
+                console.log(this.favorites.indexOf(Number(this.addon.id)));*/
             },
             async toggleFavoriteAddon() {
                 let favorite = await this.$axios.$post('/marketplace/user/favorite/' + this.$route.path.replace('/dashboard/marketplace/addon/', ''), {
@@ -311,10 +311,12 @@
                     //id: this.id,
                     //profileId: this.activeProfileId
                 });
-                if(this.favorites.indexOf(Number(this.addon.id)) >= 0) {
-                    this.favorites.splice(this.favorites.indexOf(Number(this.addon.id)));
-                } else {
-                    this.favorites.push(Number(this.addon.id));
+                if(this.intent != 'submit') {
+                    if(this.favorites.indexOf(Number(this.addon.id)) >= 0) {
+                        this.favorites.splice(this.favorites.indexOf(Number(this.addon.id)));
+                    } else {
+                        this.favorites.push(Number(this.addon.id));
+                    }
                 }
                 console.log('Toggled favorite!');
                 console.log(favorite);
