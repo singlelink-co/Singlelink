@@ -98,7 +98,7 @@ export default Vue.extend({
       top_feature: null,
       userId: '',
       isAdmin: false,
-      query: null
+      query: null as any
     };
   },
 
@@ -169,12 +169,10 @@ export default Vue.extend({
       if(!this.query) return;
       try {
         // Fetch query addons from response
-        this.addons.query = (await this.$axios.$post<Addon[]>('/marketplace/addons/search', {
-          query: this.query,
-          //token: this.$store.getters['auth/getToken'],
-          limit: 50,
-          detailed: true
-        }));
+        let url = '/marketplace/addons/search?detailed=true&query=' + encodeURI(this.query);
+        this.addons.query = (await this.$axios.$get<Addon[]>(url));
+        console.log('url');
+        console.log(url);
         console.log(this.addons.query);
         console.log('done');
       } catch(err) {
