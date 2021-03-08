@@ -243,7 +243,7 @@
           Your {{ app_name }}:&nbsp;
         </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline flex" :href="profileUrl">{{ profileUrl }}</a>
-        <img @click="share_modal=!share_modal" src="/export.svg" class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
+        <img @click="share_modal=!share_modal" src="/Export.svg" class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
       </div>
       <!-- Share modal -->
       <div v-if="share_modal" class="absolute bg-white p-4 text-center rounded-lg shadow z-20 w-full flex flex-col items-center justify-start" style="top: 63px; max-width: 265px;">
