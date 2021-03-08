@@ -169,7 +169,7 @@ export class MarketplaceService extends DatabaseService {
    * @param userId The user id requesting the addons.
    */
   async getAuthoredAddons(userId: string): Promise<Addon[]> {
-    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where user_id=$2", [userId]);
+    let queryResult = await this.pool.query<DbAddon>("select * from marketplace.addons where user_id=$1", [userId]);
 
     if (queryResult.rowCount < 1)
       return [];
@@ -272,11 +272,11 @@ export class MarketplaceService extends DatabaseService {
 
   /**
    * Deletes an addon.
-   *s
+   *
    * @return the id of the deleted object
    */
-  async deleteAddon(id: string): Promise<string> {
-    let queryResult = await this.pool.query("delete from marketplace.addons where id=$1 returning id;", [id]);
+  async deleteAddon(id: string) {
+    let queryResult = await this.pool.query<{ id: number }>("delete from marketplace.addons where id=$1 returning id;", [id]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The addon couldn't be found.");
