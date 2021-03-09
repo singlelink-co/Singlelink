@@ -20,7 +20,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Singlelink is your beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!' },
-      { name: 'og:image', content: 'https://singlelink.co/og-image-updated.png' },
+      { name: 'og:image', content: 'https://singlelink.co/og-image-updated.jpg' },
       { name: 'og:title', content: 'Singlelink - The open-source micro-site platform' },
       { name: 'og:description', content: 'Singlelink is your beautiful, easy-to-use, and powerful micro-site that focuses on the content your consumers care about most, and nothing else. Sign up free in seconds, no credit card required!'},
       { name: 'twitter:image', content: 'https://singlelink.co/og-image-updated.jpg' },
