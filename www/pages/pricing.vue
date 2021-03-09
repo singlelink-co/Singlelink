@@ -72,7 +72,7 @@
       <div class="flex lg:flex-row flex-col space-y-8 lg:space-x-8 lg:space-y-0" v-if="intent=='personal'">
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
-          <h3 class="text-3xl font-extrabold mt-4 mb-0 lg:mt-0">Whale 🐳</h3>
+          <h3 class="text-3xl font-extrabold mt-4 mb-0 lg:mt-0">Pro</h3>
 				  <h4 class="text-xl font-medium text-indigo-600 lg:ml-auto lg:mr-0 mx-auto lg:mt-0 mt-2">$8/Month</h4>
         </div>
         <p class="mb-8 text-gray-600 font-medium leading-relaxed">The power users choice, perfect for those who go the extra mile and then some with Singlelink.</p>
