@@ -43,7 +43,7 @@
       </div>
       <div class="flex flex-col lg:ml-12 flex-grow justify-start">
         <h3 class="neg-top">Getting online has never been easier</h3>
-        <p class="text-xl mb-8">Building your Singlelink takes just minutes, and publishing to your link or custom domain is instant. There’s no-code needed, and we have hundreds of available themes for you to choose from.</p>
+        <p class="text-xl mb-8">Building your Singlelink takes just minutes, and publishing to your link or custom domain is instant. There’s no code needed, and we have hundreds of available themes for you to choose from.</p>
         <a style="width:fit-content;" class="text-center shadow-lg lg:w-auto font-bold text-white px-8 py-6 lg:py-5 rounded-lg purple-btn hover:bg-indigo-500" href="https://app.singlelink.co/create-account">Create your free Singlelink</a>
       </div>
     </section>
