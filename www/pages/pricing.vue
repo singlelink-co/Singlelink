@@ -63,7 +63,7 @@
                     </li>
                     <li class="mb-2">
                       <span class="mr-2">✅</span>
-                      Limited advertisements
+                      Singlelink watermark
                     </li>
                   </div>
                 </ul>
@@ -81,6 +81,10 @@
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
                     Everything in the free tier
+                  </li>
+                  <li class="mb-2">
+                    <span class="mr-2">✅</span>
+                    No ads or watermarks!
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
@@ -124,6 +128,10 @@
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
                     Dedicated instance & database
+                  </li>
+                  <li class="mb-2">
+                    <span class="mr-2">✅</span>
+                    Optional whitelabeled watermark
                   </li>
                   <li class="mb-2">
                     <span class="mr-2">✅</span>
