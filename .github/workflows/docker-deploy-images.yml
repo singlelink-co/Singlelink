@@ -1,0 +1,32 @@
+name: Docker Deploy Images
+
+on:
+  push:
+    branches: [ production ]
+  pull_request:
+    branches: [ production ]
+
+env:
+  REG_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+  REG_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+
+jobs:
+  build-production:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login
+        run: docker login -u $REG_USERNAME -p $REG_PASSWORD
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build Image
+        run: docker-compose build
+        working-directory: ./
+
+      - name: Push Image
+        run: docker-compose push
+        working-directory: ./
