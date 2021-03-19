@@ -25,7 +25,7 @@ An easy way to do this is to use a cron job that automatically sends a query to 
 ##### Ubuntu
 `sudo apt install postgresql-client`
 
-#### Other Distros
+##### Other Distros
 You can find installation methods here: https://www.postgresql.org/download/linux/
 
 #### Create a script with the update query inside
