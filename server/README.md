@@ -20,14 +20,18 @@
 
 ### Setting a Cron Job for 10 minutes (Preferred Method)
 
+#### Make sure the PostgreSQL client is installed
+`sudo apt-get install postgresql-client`
+
+#### Create a script with the update query inside
 ```sh
 #!/bin/sh
-# /root/update_analytics.sh
+# /root/cronscripts/update_analytics.sh
 # Make sure your permissions allow your script to be executable!
-sql <connection_string> -c 'refresh materialized view analytics.global_stats
+psql <connection_string> -c 'refresh materialized view analytics.global_stats'
 ```
 
-After you save that script somewhere, type in:
+After you save that script in /root/cronscripts/update_analytics.sh (or wherever you want), type in:
 ```bash
 > crontab -e
 
@@ -35,7 +39,7 @@ and enter:
 > */10 * * * * /root/cronscripts/update_analytics.sh
 ```
 
-This will update your analytics every 10 minutes.
+This will update your analytics every 10 minutes. Change the cronjob's timing however you prefer in order to increase/decrease the update frequency. The more often the analytics have to refresh, the more the database usage may increase, so keep this in mind if you increase the frequency.
 
 # Introduction
 
