@@ -165,8 +165,8 @@ class StatsExporter {
     json.push(await this.countUsersWithMultipleProfiles());
     json.push(await this.averagePageVisitsPerProfile());
 
-    const daysIncrement = 30;
-    const maxDays = 180;
+    const daysIncrement = 1;
+    const maxDays = 8;
 
     for (let i = 0; i < maxDays; i += daysIncrement) {
       json.push(await this.countUsersCreated(i, i + daysIncrement));

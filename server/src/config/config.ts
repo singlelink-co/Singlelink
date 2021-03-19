@@ -1,3 +1,13 @@
+import * as fs from "fs";
+
+if (!fs.existsSync(__dirname + "/../config.json")) {
+  fs.copyFileSync(__dirname + "/../config.template.json", __dirname + "/../config.json");
+
+  console.log("New configuration generated: " + __dirname + ".json");
+} else {
+  console.log("Using existing configuration: " + __dirname + ".json");
+}
+
 export let config = require("../config.json");
 
 /**
@@ -136,7 +146,7 @@ if (process.env.MIXPANEL_TOKEN) {
 
 if (process.env.DELETE_ADDON_INSTALLS_THRESHOLD) {
   config.settings.marketplaceDeleteAddonThreshold = process.env.DELETE_ADDON_INSTALLS_THRESHOLD;
-} else if (!config.settings?.marketplaceDeleteAddonThreshold && config.settings?.marketplaceDeleteAddonThreshold !== 0) {
+} else if (!config.settings?.marketplaceDeleteAddonThreshold) {
   config.settings.marketplaceDeleteAddonThreshold = 10;
 }
 
