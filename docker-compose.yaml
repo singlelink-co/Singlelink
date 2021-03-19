@@ -1,18 +1,6 @@
 version: "3.1"
 
 services:
-  singlelink-client:
-    image: neutroncreative/singlelink-editor:latest
-    build:
-      context: client
-      dockerfile: client.Dockerfile
-    environment:
-      - HOSTNAME
-      - API_URL
-    ports:
-      - "80:80"
-    expose:
-      - "80"
   singlelink-server:
     image: neutroncreative/singlelink-server:latest
     build:
@@ -40,6 +28,23 @@ services:
       - MIXPANEL_TOKEN
       - DELETE_ADDON_INSTALLS_THRESHOLD
     ports:
-      - "5566:80"
-    expose:
-      - "5566"
+      - "5566:5566"
+    networks:
+      - singlelink
+  singlelink-client:
+    image: neutroncreative/singlelink-editor:latest
+    build:
+      context: client
+      dockerfile: client.Dockerfile
+    depends_on:
+      - singlelink-server
+    environment:
+      - HOSTNAME
+      - API_URL
+    ports:
+      - "80:80"
+    networks:
+      - singlelink
+
+networks:
+  singlelink:

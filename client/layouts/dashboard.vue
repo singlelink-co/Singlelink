@@ -40,9 +40,9 @@
               type="text"
               placeholder="Filter profiles..."
               aria-label="Filter profiles"
-              @input="onFilterProfilesInput"
               class="text-sm p-2 mr-auto"
               style="outline:none !important;"
+              @input="onFilterProfilesInput"
             >
             <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
           </li>
@@ -95,14 +95,25 @@
     </section>
 
     <!-- Mobile Navbar -->
-    <section class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0">
-      <a href="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"/></a>
-      <button @click="mobile_menu=!mobile_menu" type="button" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded-lg text-white font-semibold tracking-wide" style="outline: none !important;">
+    <section
+      class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0"
+    >
+      <a href="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"></a>
+      <button
+        type="button"
+        class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded-lg text-white font-semibold tracking-wide"
+        style="outline: none !important;"
+        @click="mobile_menu=!mobile_menu"
+      >
         <span v-if="!mobile_menu" class="mr-2">Open</span>
         <span v-if="mobile_menu" class="mr-2">Close</span>
         menu
       </button>
-      <nav v-if="mobile_menu" class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full" style="top: 64px;">
+      <nav
+        v-if="mobile_menu"
+        class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full"
+        style="top: 64px;"
+      >
         <a href="/dashboard" class="w-full">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard')">
             Links
@@ -114,12 +125,18 @@
           </div>
         </a>
         <a href="/dashboard/appearance" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-appearance')">
+          <div
+            class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center"
+            :class="getActiveStyles('dashboard-appearance')"
+          >
             Appearance
           </div>
         </a>
         <a href="/dashboard/marketplace" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-marketplace')">
+          <div
+            class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center"
+            :class="getActiveStyles('dashboard-marketplace')"
+          >
             Marketplace
           </div>
         </a>
@@ -133,7 +150,9 @@
             Admin
           </div>
         </a>
-        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect();mobile_menu=false;">Profiles</div>
+        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect();mobile_menu=false;">
+          Profiles
+        </div>
       </nav>
     </section>
     <!-- End mobile navbar -->
@@ -155,7 +174,7 @@
             Appearance
           </div>
         </a>
-        <a href="/dashboard/marketplace" id="marketplace-link">
+        <a id="marketplace-link" href="/dashboard/marketplace">
           <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-marketplace')">
             Marketplace
           </div>
@@ -175,57 +194,75 @@
       <!-- Render Nuxt-->
       <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto content-nuxt"/>
 
-      <div class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0">
+      <div
+        class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0"
+      >
         <a
-        style="margin-right:.5rem !important;"
-        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-        href="/dashboard/account"
+          style="margin-right:.5rem !important;"
+          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+          href="/dashboard/account"
         >
-        <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Account</a>
+          <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
+          Account</a>
         <a
-        style="margin-right:.5rem !important;"
-        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-        href="/dashboard/tours"
+          style="margin-right:.5rem !important;"
+          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+          href="/dashboard/tours"
         >
-        <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Tours</a>
+          <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
+          Tours</a>
         <div
-        style="margin-right:.5rem !important;"
-        class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-        @click="toggleProfileSelect"
+          style="margin-right:.5rem !important;"
+          class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+          @click="toggleProfileSelect"
         >
-        <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Switch profiles</div>
+          <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
+          Switch profiles
+        </div>
         <a
-        style="margin-right:.5rem !important;"
-        class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-        href="https://discord.gg/3pBM4Px"
+          style="margin-right:.5rem !important;"
+          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
+          href="https://discord.gg/3pBM4Px"
         >
-        <img src="/Lifepreserver simple.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;"/>
-        Get help</a>
+          <img src="/Lifepreserver simple.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
+          Get help</a>
         <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
         <span style="margin-left:auto !important;" class=" pr-4">{{ version }}</span>
         <a
-        class="text-indigo-600 flex bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-2 font-medium"
-        href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
-      >Changelog</a>
+          class="text-indigo-600 flex bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-2 font-medium"
+          href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
+        >Changelog</a>
       </div>
     </section>
 
     <!-- Mobile Preview Section -->
-    <section class="bg-white lg:hidden flex flex-col items-center justify-center absolute z-10 bottom-0 left-0 right-0" style="box-shadow: 0 1px -5px  rgba(0,0,0,.1);max-height:100vh;">
+    <section
+      class="bg-white lg:hidden flex flex-col items-center justify-center absolute z-10 bottom-0 left-0 right-0"
+      style="box-shadow: 0 1px 0 rgba(0,0,0,.1);max-height:100vh;"
+    >
       <!--<button @click="mobile_preview=!mobile_preview" class="w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
         <span v-if="!mobile_preview" class="mr-2">Open</span>
         <span v-if="mobile_preview" class="mr-2">Close</span>
         preview
         </button>-->
-        <a :href="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`" class="text-center w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
+      <a
+        :href="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`"
+        class="text-center w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3"
+        style="outline: none !important;"
+      >
         <span class="mr-2">Open</span>
         preview
-        </a>
-      <div v-if="mobile_preview" class="w-full overflow-y-scroll flex flex-col items-center justify-center" style="max-height: calc(100vh - 100px);">
-        <iframe :src="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`" style="height: 10000px;" class="w-full"/>
+      </a>
+      <div
+        v-if="mobile_preview"
+        class="w-full overflow-y-scroll flex flex-col items-center justify-center"
+        style="max-height: calc(100vh - 100px);"
+      >
+        <iframe
+          :src="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`"
+          style="height: 10000px;"
+          class="w-full"
+        />
       </div>
     </section>
 
@@ -243,123 +280,151 @@
           Your {{ app_name }}:&nbsp;
         </p>
         <a class="text-indigo-600 hover:text-indigo-700 hover:underline flex" :href="profileUrl">{{ profileUrl }}</a>
-        <img @click="share_modal=!share_modal" src="/Export.svg" class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex" style="margin-left:auto;margin-right:1.5rem;"/>
+        <img
+          src="/Export.svg"
+          class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex"
+          style="margin-left:auto;margin-right:1.5rem;"
+          @click="share_modal=!share_modal"
+        >
       </div>
       <!-- Share modal -->
-      <div v-if="share_modal" class="absolute bg-white p-4 text-center rounded-lg shadow z-20 w-full flex flex-col items-center justify-start" style="top: 63px; max-width: 265px;">
-          <p class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200">QR code:</p>
-          <img v-if="qr_src" style="margin-bottom:.5rem;" :src="'https://qr.io/qr-svg/' + qr_src + '.svg'"/>
-          <p class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200">Share on social media</p>
-          <p class="text-gray-500 font-medium text-sm py-2 tracking-wide">Coming soon!</p>
+      <div
+        v-if="share_modal"
+        class="absolute bg-white p-4 text-center rounded-lg shadow z-20 w-full flex flex-col items-center justify-start"
+        style="top: 63px; max-width: 265px;"
+      >
+        <p
+          class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200"
+        >QR code:</p>
+        <img v-if="qr_src" style="margin-bottom:.5rem;" :src="'https://qr.io/qr-svg/' + qr_src + '.svg'">
+        <p
+          class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200"
+        >Share on social media</p>
+        <p class="text-gray-500 font-medium text-sm py-2 tracking-wide">
+          Coming soon!
+        </p>
       </div>
       <!-- End modal -->
-      <div class="flex flex-col items-center justify-start overflow-y-scroll absolute p-4" style="height: calc(100vh - 57.5px);bottom:0;width:100%;left:0; right:0;">
+      <div
+        class="flex flex-col items-center justify-start overflow-y-scroll absolute p-4"
+        style="height: calc(100vh - 57.5px);bottom:0;width:100%;left:0; right:0;"
+      >
         <!-- Preview Mode selector -->
         <div class="flex flex-col items-center justify-start space-y-2 w-full relative z-10">
-          <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview Mode:&nbsp;</label>
+          <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview
+            Mode:&nbsp;</label>
           <div class="flex flex-row items-center justify-center space-x-2 w-full">
-          <select
-            id="user-profile-view-type"
-            v-model="previewMode"
-            class="text-sm text-gray-600 p-3 rounded-lg font-medium flex border border-gray-200 w-40"
-          >
-            <option selected value="mobile">
-              Mobile
-            </option>
-            <option value="desktop">
-              Desktop
-            </option>
-          </select>
-          <i :class="getPreviewModeIcon()"/>
+            <select
+              id="user-profile-view-type"
+              v-model="previewMode"
+              class="text-sm text-gray-600 p-3 rounded-lg font-medium flex border border-gray-200 w-40"
+            >
+              <option selected value="mobile">
+                Mobile
+              </option>
+              <option value="desktop">
+                Desktop
+              </option>
+            </select>
+            <i :class="getPreviewModeIcon()"/>
           </div>
         </div>
 
         <div class="user-profile-preview-parent" style="transform:translateY(-130px);">
           <div v-if="originalHandle" :class="checkPreviewMode()">
             <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
-              <iframe class="w-full" id="preview-frame" :src="`/u-preview/${user.activeProfile.handle}`"/>
+              <iframe id="preview-frame" class="w-full" :src="`/u-preview/${user.activeProfile.handle}`"/>
             </div>
           </div>
         </div>
 
-          <!-- Visibility notification -->
-          <a href="/dashboard/settings" v-if="profile_visibility=='unpublished'" class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg" style="bottom: 20px; left:20px; width: calc(100% - 40px);">
-            <span class="font-semibold pr-1">Warning:</span>
-            <span>Your profile is currently hidden!</span>
-            <div class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1" style="margin-left:auto !important;">Go to settings</div>
-          </a>
+        <!-- Visibility notification -->
+        <a
+          v-if="profile_visibility==='unpublished'"
+          href="/dashboard/settings"
+          class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg"
+          style="bottom: 20px; left:20px; width: calc(100% - 40px);"
+        >
+          <span class="font-semibold pr-1">Warning:</span>
+          <span>Your profile is currently hidden!</span>
+          <div
+            class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1"
+            style="margin-left:auto !important;"
+          >Go to settings
+          </div>
+        </a>
       </div>
     </section>
 
     <!-- Mobile profile selector -->
-      <ul
-          v-if="selectingProfile"
-          class="lg:hidden absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
-          style="left:0;bottom:0;right:0;width: 100%;"
+    <ul
+      v-if="selectingProfile"
+      class="lg:hidden absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
+      style="left:0;bottom:0;right:0;width: 100%;"
+    >
+
+      <li class="flex flex-row items-center justify-left profile-search">
+        <!-- Create new profile-->
+        <input
+          type="text"
+          placeholder="Filter profiles..."
+          aria-label="Filter profiles"
+          class="text-sm p-2 mr-auto flex-grow lg:flex-auto"
+          style="outline:none !important;"
+          @input="onFilterProfilesInput"
         >
+        <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
+      </li>
 
-          <li class="flex flex-row items-center justify-left profile-search">
-            <!-- Create new profile-->
-            <input
-              type="text"
-              placeholder="Filter profiles..."
-              aria-label="Filter profiles"
-              @input="onFilterProfilesInput"
-              class="text-sm p-2 mr-auto flex-grow lg:flex-auto"
-              style="outline:none !important;"
-            >
-            <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
-          </li>
+      <li
+        v-for="profile in filteredProfiles"
+        :key="profile.handle"
+        class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
+        :style="!profile.handle ? 'max-height: 51px;' : ''"
+        @click="selectProfile(profile.id)"
+      >
+        <img
+          v-if="profile.handle"
+          class="mr-2 rounded-full"
+          onerror="this.src='https://www.gravatar.com/avatar'"
+          style="width:35px; height:35px; margin-right: 10px;"
+          :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
+          alt="avatar"
+        >
+        c
+        <div
+          v-if="!profile.handle"
+          class="mr-2 rounded-full"
+          style="width: 100%; max-width: 35px; max-height: 58px; margin-right: 10px;"
+        >
+          &nbsp;
+          <br>
+          &nbsp;
+        </div>
 
-          <li
-            v-for="profile in filteredProfiles"
-            :key="profile.handle"
-            class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
-            :style="!profile.handle ? 'max-height: 51px;' : ''"
-            @click="selectProfile(profile.id)"
-          >
-            <img
-              v-if="profile.handle"
-              class="mr-2 rounded-full"
-              onerror="this.src='https://www.gravatar.com/avatar'"
-              style="width:35px; height:35px; margin-right: 10px;"
-              :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
-              alt="avatar"
-            >
-c
-            <div
-              v-if="!profile.handle"
-              class="mr-2 rounded-full"
-              style="width: 100%; max-width: 35px; max-height: 58px; margin-right: 10px;"
-            >
-              &nbsp;
-              <br>
-              &nbsp;
-            </div>
+        <div class="flex flex-col">
+          <span class="text-sm font-medium">{{ profile.handle }}</span>
+          <span class="text-xs text-gray-700">{{ profile.headline }}</span>
+        </div>
+      </li>
 
-            <div class="flex flex-col">
-              <span class="text-sm font-medium">{{ profile.handle }}</span>
-              <span class="text-xs text-gray-700">{{ profile.headline }}</span>
-            </div>
-          </li>
+      <li class="flex flex-row items-center justify-center button-controls">
+        <!-- Create new profile-->
+        <span
+          class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+          @click="createNewProfile"
+        >Create new</span>
 
-          <li class="flex flex-row items-center justify-center button-controls">
-            <!-- Create new profile-->
-            <span
-              class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
-              @click="createNewProfile"
-            >Create new</span>
+        <!-- Logout-->
+        <a href="/logout" class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</a>
+      </li>
 
-            <!-- Logout-->
-            <a href="/logout" class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</a>
-          </li>
-
-        </ul>
+    </ul>
     <!-- End profile selector -->
 
     <GDPRContentModal/>
 
-    <div v-html="usetiful_script"></div>
+    <div v-html="usetiful_script"/>
 
   </div>
 </template>
@@ -458,21 +523,21 @@ export default Vue.extend({
       console.warn("Failed to retrieve version from server.");
     }
 
-    if(process.env.QR_API) {
+    if (process.env.QR_API) {
       try {
-        let qr_request = await this.$axios.post('https://api.qr.io/v1/create', {
+        const qrRequest = await this.$axios.post('https://api.qr.io/v1/create', {
           apikey: process.env.QR_API,
-          data:"https://singlel.ink/u/" + this.user.activeProfile.handle,
-          transparent:"on",
-          frontcolor:"#5353EC",
-          marker_out_color:"#09FDFD",
-          marker_in_color:"#1127EF",
-          pattern:"special-circle",
-          marker:"rounded",
-          marker_in:"rounded",
+          data: "https://singlel.ink/u/" + this.user.activeProfile.handle,
+          transparent: "on",
+          frontcolor: "#5353EC",
+          marker_out_color: "#09FDFD",
+          marker_in_color: "#1127EF",
+          pattern: "special-circle",
+          marker: "rounded",
+          marker_in: "rounded",
         });
-        this.qr_src = qr_request.data.qrid;
-      } catch(err) {
+        this.qr_src = qrRequest.data.qrid;
+      } catch (err) {
         console.log('error');
         console.log(err);
       }
@@ -572,7 +637,7 @@ export default Vue.extend({
             this.active = "dashboard-appearance";
             break;
           case "dashboard-marketplace":
-            this.active="dashboard-marketplace";
+            this.active = "dashboard-marketplace";
             break;
           case "dashboard-analytics":
             this.active = "dashboard-analytics";
@@ -669,9 +734,9 @@ export default Vue.extend({
   }
 }
 
-@media(max-width:1024px) {
+@media(max-width: 1024px) {
   html, body {
-    overflow-y:hidden !important;
+    overflow-y: hidden !important;
     height: 100vh !important;
     max-height: 100vh !important;
   }
@@ -679,10 +744,10 @@ export default Vue.extend({
     height: calc(100% - 111px);
     max-height: calc(100% - 111px);
     min-height: calc(100% - 111px);
-    position:absolute;
+    position: absolute;
     top: 64px;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
     z-index: 0;
     overflow-y: scroll;
   }
@@ -695,8 +760,8 @@ export default Vue.extend({
 }
 
 .iframe-container::-webkit-scrollbar {
-    width: 0px;
-    background: transparent; /* make scrollbar transparent */
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
 
 html {
@@ -757,7 +822,7 @@ html {
 
 .desktop-display > div {
   @apply rounded-lg;
-  max-height:calc(100vh - 300px);
+  max-height: calc(100vh - 300px);
 }
 
 .desktop-display {
@@ -831,28 +896,28 @@ html {
 </style>
 
 <style>
-  .ace_editor, .ace_editor * {
-    font-size: 14px impo !important;
-    font-variant-ligatures: none !important;
-    font-style: normal !important;
-  }
+.ace_editor, .ace_editor * {
+  font-size: 14px impo !important;
+  font-variant-ligatures: none !important;
+  font-style: normal !important;
+}
 </style>
 <style>
-  /* required class */
-  .my-editor {
-    /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
-    background: #2d2d2d;
-    color: #ccc;
+/* required class */
+.my-editor {
+  /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
+  background: #2d2d2d;
+  color: #ccc;
 
-    /* you must provide font-family font-size line-height. Example: */
-    font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 5px;
-  }
+  /* you must provide font-family font-size line-height. Example: */
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+}
 
-  /* optional class for removing the outline */
-  .prism-editor__textarea:focus {
-    outline: none;
-  }
+/* optional class for removing the outline */
+.prism-editor__textarea:focus {
+  outline: none;
+}
 </style>

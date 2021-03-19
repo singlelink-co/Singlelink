@@ -68,4 +68,3 @@ interface AddonInstall {
   addonId: string,
   createdOn: string
 }
-© 2021 GitHub, Inc.
