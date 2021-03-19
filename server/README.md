@@ -19,27 +19,31 @@
 > this view for accurate analytics.
 
 ### Setting a Cron Job for 10 minutes (Preferred Method)
+An easy way to do this is to use a cron job that automatically sends a query to the database requesting that the analytics be updated.
 
 #### Make sure the PostgreSQL client is installed
-`sudo apt-get install postgresql-client`
+##### Ubuntu
+`sudo apt install postgresql-client`
+
+#### Other Distros
+You can find installation methods here: https://www.postgresql.org/download/linux/
 
 #### Create a script with the update query inside
 ```sh
 #!/bin/sh
 # /root/cronscripts/update_analytics.sh
 # Make sure your permissions allow your script to be executable!
+# The connection string is your PostgreSQL connection string that you use to connect to your database.
 psql <connection_string> -c 'refresh materialized view analytics.global_stats'
 ```
 
 After you save that script in /root/cronscripts/update_analytics.sh (or wherever you want), type in:
-```bash
-> crontab -e
+`crontab -e`
 
-and enter: 
-> */10 * * * * /root/cronscripts/update_analytics.sh
-```
+and within the text editor, enter:
+`*/10 * * * * /root/cronscripts/update_analytics.sh`
 
-This will update your analytics every 10 minutes. Change the cronjob's timing however you prefer in order to increase/decrease the update frequency. The more often the analytics have to refresh, the more the database usage may increase, so keep this in mind if you increase the frequency.
+Once saved, this will update your analytics every 10 minutes. Change the cronjob's timing however you prefer in order to increase/decrease the update frequency. The more often the analytics have to refresh, the more the database usage may increase, so keep this in mind if you increase the frequency.
 
 # Introduction
 
