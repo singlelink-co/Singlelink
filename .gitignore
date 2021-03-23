@@ -4,6 +4,9 @@
 **/config.json
 **/config.js
 
+# Kubernetes
+**/secrets.yaml
+
 dist
 
 ### Node template

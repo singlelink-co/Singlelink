@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: singlelink-client
+  name: singlelink-editor
   namespace: singlelink
 spec:
   selector:
-    app: singlelink-client
+    app: singlelink-editor
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
@@ -22,68 +23,36 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: singlelink-client
-  namespace: singlelink
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: "Host(`app.singlelink.co`)"
-      kind: Rule
-      services:
-        - name: singlelink-client
-          namespace: singlelink
-          port: 80
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: singlelink-server
-  namespace: singlelink
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: "Host(`app.singlelink.co`)"
-      kind: Rule
-      services:
-        - name: singlelink-server
-          namespace: singlelink
-          port: 80
+      targetPort: 5566
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: singlelink-client
+  name: singlelink-editor
   labels:
-    app: singlelink-client
+    app: singlelink-editor
   namespace: singlelink
 spec:
   selector:
     matchLabels:
-      app: singlelink-client
+      app: singlelink-editor
   template:
     metadata:
       labels:
-        app: singlelink-client
+        app: singlelink-editor
       namespace: singlelink
     spec:
-      #TODO Add relevant config info later
       containers:
-        - name: singlelink-client
-          image: singlelink-client:latest
+        - name: singlelink-editor
+          image: singlelink-editor:latest
           ports:
             - containerPort: 80
           env:
-            - name: HOST
+            - name: HOSTNAME
               value: "0.0.0.0"
-      imagePullSecrets:
-        - name: digitalocean
+            - name: API_URL
+              value: "api.singlelink.co"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -102,7 +71,6 @@ spec:
         app: singlelink-server
       namespace: singlelink
     spec:
-      #TODO Add relevant config info later
       containers:
         - name: singlelink-server
           image: singlelink-server:latest
@@ -111,6 +79,3 @@ spec:
           env:
             - name: HOST
               value: "0.0.0.0"
-      imagePullSecrets:
-        - name: digitalocean
-
