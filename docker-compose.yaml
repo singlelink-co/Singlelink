@@ -31,7 +31,7 @@ services:
       - "5566:5566"
     networks:
       - singlelink
-  singlelink-client:
+  singlelink-editor:
     image: neutroncreative/singlelink-editor:latest
     build:
       context: client

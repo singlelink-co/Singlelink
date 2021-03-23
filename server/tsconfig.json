@@ -23,6 +23,7 @@
   "include": [
     // Only copied if config.json exists in src dir
     "src/config.json",
+    "src/config.template.json",
     "src"
   ],
   "exclude": [

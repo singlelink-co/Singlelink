@@ -6,6 +6,9 @@
 
 # Kubernetes
 **/secrets.yaml
+kubernetes/2_editor-config.yaml
+kubernetes/3_server-config.yaml
+**/renderer-config.yaml
 
 dist
 

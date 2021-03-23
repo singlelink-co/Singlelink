@@ -37,6 +37,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-editor
+  replicas: 20
   template:
     metadata:
       labels:
@@ -48,11 +49,9 @@ spec:
           image: singlelink-editor:latest
           ports:
             - containerPort: 80
-          env:
-            - name: HOSTNAME
-              value: "0.0.0.0"
-            - name: API_URL
-              value: "api.singlelink.co"
+          envFrom:
+            - configMapRef:
+                name: singlelink-editor-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -65,6 +64,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-server
+  replicas: 20
   template:
     metadata:
       labels:
@@ -76,6 +76,8 @@ spec:
           image: singlelink-server:latest
           ports:
             - containerPort: 80
-          env:
-            - name: HOST
-              value: "0.0.0.0"
+          envFrom:
+            - secretRef:
+                name: singlelink-server-secrets
+            - configMapRef:
+                name: singlelink-server-config
