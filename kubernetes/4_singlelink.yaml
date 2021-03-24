@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: singlelink-editor
   namespace: singlelink
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
 spec:
   selector:
     app: singlelink-editor
@@ -17,14 +20,34 @@ kind: Service
 metadata:
   name: singlelink-server
   namespace: singlelink
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
 spec:
   selector:
     app: singlelink-server
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5566
+      targetPort: 80
   type: LoadBalancer
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: singlelink-renderer
+#  namespace: singlelink
+#  annotations:
+#    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+#    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
+#spec:
+#  selector:
+#    app: singlelink-renderer
+#  ports:
+#    - protocol: TCP
+#      port: 80
+#      targetPort: 80
+#  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -37,7 +60,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-editor
-  replicas: 20
+  replicas: 8
   template:
     metadata:
       labels:
@@ -46,7 +69,7 @@ spec:
     spec:
       containers:
         - name: singlelink-editor
-          image: singlelink-editor:latest
+          image: neutroncreative/singlelink-editor:latest
           ports:
             - containerPort: 80
           envFrom:
@@ -64,7 +87,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-server
-  replicas: 20
+  replicas: 16
   template:
     metadata:
       labels:
@@ -73,7 +96,7 @@ spec:
     spec:
       containers:
         - name: singlelink-server
-          image: singlelink-server:latest
+          image: neutroncreative/singlelink-server:latest
           ports:
             - containerPort: 80
           envFrom:
