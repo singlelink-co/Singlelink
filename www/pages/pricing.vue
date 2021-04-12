@@ -3,7 +3,7 @@
     <section class="mb-12 mt-6">
       <h1 class="my-10">Pricing & plans</h1>
       <p class="mb-8 text-2xl">
-        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
+        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we have plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
       </p>
     </section>
     <section class="mb-20 w-full">
