@@ -199,6 +199,7 @@ import wallOfLove from '../components/wall-of-love.vue';
                       }
                   }
                   this.users = users;
+                  this.users += 3; // Add untracked signups from beta platform temporarily while accounts are migrated to production
                   this.links = links;
                   this.profiles = profiles;
                   this.profilesPublished = profilesPublished;

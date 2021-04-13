@@ -3,7 +3,7 @@
     <section class="mb-12 mt-6">
       <h1 class="my-10">Pricing & plans</h1>
       <p class="mb-8 text-2xl">
-        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
+        Singlelink is 100% free & open-source, because we believe you should have the right to own your content. Should you want more from your Singlelink, we have plans for individuals starting at $8/Month, plans for businesses starting at $25/Month.
       </p>
     </section>
     <section class="mb-20 w-full">
@@ -111,7 +111,7 @@
                     Direct support via Discord DMs
                   </li>
         </ul>
-        <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="mailto:sales@neutroncreative.com">Pre-order now for $8</a>
+        <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="https://app.singlelink.co/create-account">Sign up now, coming soon!</a>
         </div>
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
@@ -210,7 +210,7 @@
                     </li>
                   </div>
                 </ul>
-                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="mailto:sales@singlelink.co">Pre-order now for $25</a>
+                <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="mailto:sales@singlelink.co">Contact our sales team</a>
       </div>
       <div class="flex lg:flex-row flex-col space-y-8 lg:space-x-8 lg:space-y-0" v-if="intent=='business'">
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
@@ -250,7 +250,7 @@
                     Direct support via Phone & Email
                   </li>
         </ul>
-        <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="mailto:sales@neutroncreative.com">Pre-order now for $50</a>
+        <a class="text-center w-full text-sm font-medium text-white px-6 py-6 lg:py-5 rounded-lg purple-btn" href="mailto:sales@neutroncreative.com">Contact our sales team</a>
         </div>
         <div class="p-8 rounded-lg bg-white shadow-lg relative overflow-hidden w-full lg:w-1/2 flex flex-col">
         <div class="flex flex-col lg:flex-row mb-2 items-center">
