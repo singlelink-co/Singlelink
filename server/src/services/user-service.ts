@@ -9,6 +9,7 @@ import {HttpError} from "../utils/http-error";
 import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
 import crypto from "crypto";
+import {Auth} from "../utils/auth";
 
 interface LoginResultData {
   user: {
@@ -199,7 +200,7 @@ export class UserService extends DatabaseService {
    * @param email
    * @param password
    */
-  async loginUser(email: string, password: string): Promise<LoginResultData> {
+  async loginWithEmail(email: string, password: string): Promise<LoginResultData> {
     let user = await this.getSensitiveUserWithPasswordByEmail(email);
     let profileQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
     let activeProfile;
@@ -227,13 +228,43 @@ export class UserService extends DatabaseService {
   }
 
   /**
+   * Logs in a user with Google OAuth and returns LoginResultData.
+   *
+   * @param email
+   */
+  async loginWithGoogle(email: string): Promise<LoginResultData> {
+    if (!await Auth.checkGoogleAuthEnabled(this, email)) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "This account doesn't have google sign in enabled!");
+    }
+
+    let user = await this.getSensitiveUserWithPasswordByEmail(email);
+    let profileQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
+    let activeProfile;
+
+    if (profileQuery.rowCount > 0) {
+      activeProfile = DbTypeConverter.toProfile(profileQuery.rows[0]);
+    }
+
+    let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email
+      },
+      activeProfile,
+      token
+    };
+  }
+
+  /**
    * Creates a new user.
    *
    * @param email
    * @param password
    * @param name
    */
-  async createUser(email: string, password: string, name?: string): Promise<SensitiveUser> {
+  async createUserWithEmail(email: string, password: string, name?: string): Promise<SensitiveUser> {
     let passHash = await bcrypt.hash(password, 10);
 
     // Force lowercase
@@ -250,6 +281,44 @@ export class UserService extends DatabaseService {
     if (userInsertQuery.rowCount < 1) {
       throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
+
+    let dbSensitiveUser = userInsertQuery.rows[0];
+
+    return DbTypeConverter.toSensitiveUser(dbSensitiveUser);
+  }
+
+  /**
+   * Creates a new user with a Google account.
+   * The password field is set to a random value.
+   *
+   * @param email
+   * @param name
+   */
+  async createUserWithGoogle(email: string, name?: string): Promise<SensitiveUser> {
+    let passHash = await bcrypt.hash(StringUtils.generateRandomPassword(), 10);
+
+    // Force lowercase
+    email = email.toLowerCase();
+
+    let userInsertQuery = await this.pool.query<DbSensitiveUser>("insert into app.users(email, email_hash, pass_hash, full_name) values ($1, $2, $3, $4) on conflict do nothing returning *",
+      [
+        email,
+        crypto.createHash("md5").update(email).digest("hex"),
+        passHash,
+        name
+      ]);
+
+    let enableGoogleSignInQueryResult = await this.pool.query<{ google_enabled: boolean }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_enabled}', true, true) where email=$2 returning private_metadata->'google_enabled' as google_enabled",
+      [
+        email
+      ]);
+
+    if (userInsertQuery.rowCount < 1) {
+      throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
+    }
+
+    if (enableGoogleSignInQueryResult.rowCount < 1)
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
 
     let dbSensitiveUser = userInsertQuery.rows[0];
 

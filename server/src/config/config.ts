@@ -150,6 +150,17 @@ if (process.env.DELETE_ADDON_INSTALLS_THRESHOLD) {
   config.settings.marketplaceDeleteAddonThreshold = 10;
 }
 
+if (process.env.GOOGLE_CLIENT_ID) {
+  config.google.clientId = process.env.GOOGLE_CLIENT_ID;
+}
+
+if (process.env.GOOGLE_CLIENT_SECRET) {
+  config.google.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+}
+
+if (process.env.GOOGLE_REDIRECT_URL) {
+  config.google.redirectUrl = process.env.GOOGLE_REDIRECT_URL;
+}
 
 // Extra logic for debug messages
 

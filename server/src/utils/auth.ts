@@ -496,6 +496,18 @@ export class Auth {
       });
   }
 
+  static async checkGoogleAuthEnabled(service: DatabaseService, email: string): Promise<boolean> {
+    const queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where email=$1", [email]);
+
+    if (queryResult.rowCount < 1)
+      return false;
+
+    const googleEnabledQuery = await this.pool.query<{ google_enabled: boolean | null | undefined }>("select private_metadata->'google_enabled' as google_enabled from app.users where id=7");
+    const row = googleEnabledQuery.rows[0];
+
+    return !!(row.google_enabled);
+  }
+
   /**
    * Validates ownership of the requested resource.
    */

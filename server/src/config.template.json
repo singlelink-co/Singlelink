@@ -27,6 +27,11 @@
   "settings": {
     "marketplaceDeleteAddonThreshold": 10
   },
+  "google": {
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
   "messages": {
     "passwordResetEmail": {
       "subjectCharset": "UTF-8",

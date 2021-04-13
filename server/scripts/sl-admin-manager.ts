@@ -15,6 +15,9 @@
  */
 
 import {Pool} from "pg";
+import {UserService} from "../src/services/user-service";
+import {DatabaseManager} from "../src/data/database-manager";
+import * as fs from "fs";
 
 interface DbPermissionGroup {
   id: string,
@@ -25,6 +28,8 @@ interface DbPermissionGroup {
 class SinglelinkManager {
   pgUrl: string;
   pool: Pool;
+  databaseManager: DatabaseManager;
+  userService: UserService;
 
   constructor() {
     this.pgUrl = process.env.POSTGRESQL ?? "";
@@ -45,6 +50,11 @@ class SinglelinkManager {
     this.pool.on("error", client => {
       console.error(`PG Database error! ${client.name}, ${client.message}, ${client.stack}`);
     });
+
+    this.databaseManager = new DatabaseManager();
+    this.databaseManager.pool = this.pool;
+
+    this.userService = new UserService(this.databaseManager);
   }
 
   async parseInput() {
@@ -56,13 +66,15 @@ class SinglelinkManager {
     switch (command) {
       case "admin":
         if (args.length < 3) {
-          console.log("You need to provide the userId of the user to make an admin.");
+          console.log("You need to provide the email of the user.");
         }
 
         if (args[1].toLowerCase() === "add") {
           await this.addAdmin(args[2]);
         } else if (args[1].toLowerCase() == "remove") {
           await this.removeAdmin(args[2]);
+        } else if (args[1].toLowerCase() == "gdpr-package") {
+          await this.downloadDataPackage(args[2]);
         }
 
         break;
@@ -118,6 +130,15 @@ class SinglelinkManager {
         console.log(`${user.rows[0].email} Group: ${row.group_name} Perms: ${user.rows[0].permissions}`);
       }
     }
+  }
+
+  async downloadDataPackage(email: string) {
+    let user = await this.userService.getUserByEmail(email);
+    let data = await this.userService.generateDataPackage(user);
+
+    let filename = user.id + '-data-package.json';
+
+    fs.writeFileSync(filename, data);
   }
 }
 

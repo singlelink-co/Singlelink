@@ -8,6 +8,13 @@ export class StringUtils {
   }
 
   /**
+   * Generates a random password string. Maximum possible length 32 characters, minimum length 20.
+   */
+  static generateRandomPassword(): string {
+    return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  }
+
+  /**
    * Replaces expressions within a string based on the valueObject.
    *
    * Ex: parseTemplate("Hello {{world}}!", {world: "yo"}) == "Hello yo!"

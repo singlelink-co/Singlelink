@@ -6,27 +6,10 @@ import {ReplyUtils} from "../utils/reply-utils";
 import {StatusCodes} from "http-status-codes";
 import {HttpError} from "../utils/http-error";
 import {ProfileService} from "../services/profile-service";
-import * as jwt from "jsonwebtoken";
 import {config} from "../config/config";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import Mixpanel from "mixpanel";
 import {Readable} from "stream";
-
-interface LoginUserRequest extends RequestGenericInterface {
-  Body: {
-    email?: string,
-    password?: string
-  }
-}
-
-interface CreateUserRequest extends RequestGenericInterface {
-  Body: {
-    email?: string,
-    password?: string,
-    name: string,
-    handle: string
-  }
-}
 
 interface UserRequestResetPasswordRequest extends RequestGenericInterface {
   Body: {
@@ -110,8 +93,6 @@ export class UserController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated
-    this.fastify.all<LoginUserRequest>('/user/login', this.LoginUser.bind(this));
-    this.fastify.all<CreateUserRequest>('/user/create', this.CreateUser.bind(this));
     this.fastify.all<UserRequestResetPasswordRequest>('/user/request-reset-password', userRequestResetPasswordOpts, this.UserRequestResetPassword.bind(this));
     this.fastify.all<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
 
@@ -126,114 +107,6 @@ export class UserController extends Controller {
     this.fastify.all<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
 
     this.fastify.post<SetEmailNotifications>('/user/set-email-notifications', Auth.ValidateWithData, this.SetEmailNotifications.bind(this));
-  }
-
-  /**
-   * Route for /user/login
-   * @param request
-   * @param reply
-   */
-  async LoginUser(request: FastifyRequest<LoginUserRequest>, reply: FastifyReply) {
-    try {
-      let body = request.body;
-
-      if (!body.email) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
-        return;
-      }
-
-      if (!body.password) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
-        return;
-      }
-
-      let loginResultData = await this.userService.loginUser(body.email, body.password);
-
-      if (this.mixpanel)
-        this.mixpanel.track('user logged in', {
-          distinct_id: loginResultData.user.id,
-          $ip: request.ip,
-          profile: loginResultData.activeProfile?.id
-        });
-
-      return loginResultData;
-    } catch (e) {
-      if (e instanceof HttpError) {
-        reply.code(e.statusCode);
-        return ReplyUtils.error(e.message, e);
-      }
-
-      throw e;
-    }
-  }
-
-  /**
-   * Route for /user/create
-   * @param request
-   * @param reply
-   */
-  async CreateUser(request: FastifyRequest<CreateUserRequest>, reply: FastifyReply) {
-    try {
-      let body = request.body;
-
-      if (!body.email) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No email was provided."));
-        return;
-      }
-
-      if (!body.password) {
-        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
-        return;
-      }
-
-      try {
-        let checkProfile = await this.profileService.getProfileByHandle(body.handle, false);
-
-        if (checkProfile) {
-          reply.code(StatusCodes.CONFLICT);
-          return ReplyUtils.error("The profile couldn't be added because it is already being used.");
-        }
-      } catch (e) {
-        if (e instanceof HttpError) {
-          if (e.statusCode !== StatusCodes.NOT_FOUND) {
-            reply.code(e.statusCode);
-            return ReplyUtils.error(e.message, e);
-          }
-        }
-      }
-
-      let user = await this.userService.createUser(body.email, body.password, body.name);
-      let profile = await this.profileService.createProfile(user.id, body.handle);
-      await this.userService.setActiveProfile(user.id, profile.id);
-
-      let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
-
-      if (this.mixpanel)
-        this.mixpanel.track('user created', {
-          distinct_id: user.id,
-          $ip: request.ip,
-          profile: profile.id,
-        });
-
-      if (this.mixpanel)
-        this.mixpanel.people.set(user.id, {
-          '$email': user.email,
-          '$created': user.createdOn
-        });
-
-      return {
-        user,
-        activeProfile: profile,
-        token
-      };
-    } catch (e) {
-      if (e instanceof HttpError) {
-        reply.code(e.statusCode);
-        return ReplyUtils.error(e.message, e);
-      }
-
-      throw e;
-    }
   }
 
   /**
