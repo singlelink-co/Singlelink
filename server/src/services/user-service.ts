@@ -231,10 +231,11 @@ export class UserService extends DatabaseService {
    * Logs in a user with Google OAuth and returns LoginResultData.
    *
    * @param email
+   * @param googleId
    */
-  async loginWithGoogle(email: string): Promise<LoginResultData> {
-    if (!await Auth.checkGoogleAuthEnabled(this, email)) {
-      throw new HttpError(StatusCodes.UNAUTHORIZED, "This account doesn't have google sign in enabled!");
+  async loginWithGoogle(email: string, googleId: string): Promise<LoginResultData> {
+    if (!await Auth.checkGoogleAuthId(this, email, googleId)) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "Invalid google authentication!");
     }
 
     let user = await this.getSensitiveUserWithPasswordByEmail(email);
@@ -292,9 +293,10 @@ export class UserService extends DatabaseService {
    * The password field is set to a random value.
    *
    * @param email
+   * @param googleId
    * @param name
    */
-  async createUserWithGoogle(email: string, name?: string): Promise<SensitiveUser> {
+  async createUserWithGoogle(email: string, googleId: string, name?: string): Promise<SensitiveUser> {
     let passHash = await bcrypt.hash(StringUtils.generateRandomPassword(), 10);
 
     // Force lowercase
@@ -308,8 +310,9 @@ export class UserService extends DatabaseService {
         name
       ]);
 
-    let enableGoogleSignInQueryResult = await this.pool.query<{ google_enabled: boolean }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_enabled}', true, true) where email=$2 returning private_metadata->'google_enabled' as google_enabled",
+    let enableGoogleSignInQueryResult = await this.pool.query<{ google_id: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where email=$2 returning private_metadata->'google_id' as google_id",
       [
+        googleId,
         email
       ]);
 

@@ -12,17 +12,23 @@ export class AuthService extends DatabaseService {
     super(databaseManager);
   }
 
-  // TODO implement/test properly later, toggle google for account
-  async toggleGoogleForAccount(email: string, enable: boolean) {
-    let queryResult = await this.pool.query<{ google_enabled: boolean }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_enabled}', $1, true) where email=$2 returning private_metadata->'google_enabled' as google_enabled",
+  /**
+   * Sets the Google Id for an account.
+   * Set null to disable.
+   *
+   * @param email
+   * @param googleId
+   */
+  async setGoogleId(email: string, googleId: string | null) {
+    let queryResult = await this.pool.query<{ google_id: string | null | undefined }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where email=$2 returning private_metadata->'google_id' as google_id",
       [
-        enable,
+        googleId,
         email
       ]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
 
-    return queryResult.rows[0].google_enabled;
+    return !!(queryResult.rows[0].google_id);
   }
 }

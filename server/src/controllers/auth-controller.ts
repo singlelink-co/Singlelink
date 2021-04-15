@@ -4,7 +4,7 @@ import {Controller} from "./controller";
 import {AuthService} from "../services/auth-service";
 import {Auth as GoogleAuth, google} from 'googleapis';
 import {config} from "../config/config";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {AuthenticatedRequest} from "../utils/auth";
 import {StatusCodes} from "http-status-codes";
 import {ReplyUtils} from "../utils/reply-utils";
 import {HttpError} from "../utils/http-error";
@@ -29,19 +29,11 @@ interface EmailCreateUserRequest extends RequestGenericInterface {
   }
 }
 
-interface GoogleLoginRequest extends FastifyRequest {
-  Body: {}
-}
-
 interface GoogleOAuthRedirectRequest extends FastifyRequest {
   Params: {
     code: string,
     state: string
   }
-}
-
-interface CreateGoogleUserRequest extends AuthenticatedRequest {
-  Body: {} & AuthenticatedRequest["Body"]
 }
 
 interface AssignGoogleUserRequest extends AuthenticatedRequest {
@@ -82,21 +74,21 @@ export class AuthController extends Controller {
   }
 
   registerRoutes(): void {
+    // Unauthenticated
+    this.fastify.all<EmailLoginUserRequest>('/auth/email/login', this.EmailLoginUser.bind(this));
+    this.fastify.all<EmailCreateUserRequest>('/auth/email/create', this.EmailCreateUser.bind(this));
+    this.fastify.all<EmailLoginUserRequest>('/user/login', this.EmailLoginUser.bind(this));
+    this.fastify.all<EmailCreateUserRequest>('/user/create', this.EmailCreateUser.bind(this));
+
     if (config.google.clientId) {
       console.log("Google OAuth Authentication enabled.");
 
       // Unauthenticated
-      this.fastify.all<EmailLoginUserRequest>('/auth/email/login', this.EmailLoginUser.bind(this));
-      this.fastify.all<EmailCreateUserRequest>('/auth/email/create', this.EmailCreateUser.bind(this));
-      this.fastify.all<EmailLoginUserRequest>('/user/login', this.EmailLoginUser.bind(this));
-      this.fastify.all<EmailCreateUserRequest>('/user/create', this.EmailCreateUser.bind(this));
+      this.fastify.all('/auth/google/login', authGoogleRateLimit, this.GetGoogleLoginLink.bind(this));
+      this.fastify.all('/auth/google/create', authGoogleRateLimit, this.GetGoogleCreateLink.bind(this));
+      this.fastify.all('/auth/google/assign', authGoogleRateLimit, this.GetGoogleAssignLink.bind(this));
 
-      this.fastify.all<GoogleLoginRequest>('/auth/google/login', authGoogleRateLimit, this.GetGoogleLoginLink.bind(this));
-      this.fastify.all<CreateGoogleUserRequest>('/auth/google/create', authGoogleRateLimit, this.GetGoogleCreateLink.bind(this));
       this.fastify.all<GoogleOAuthRedirectRequest>('/auth/google/redirect', authGoogleRateLimit, this.GoogleOAuthRedirect.bind(this));
-
-      // Authenticated
-      this.fastify.all<AssignGoogleUserRequest>('/auth/google/assign', Auth.ValidateWithData, this.AssignGoogleUser.bind(this));
     }
   }
 
@@ -107,7 +99,7 @@ export class AuthController extends Controller {
    * @param reply
    * @constructor
    */
-  async GetGoogleLoginLink(request: FastifyRequest<GoogleLoginRequest>, reply: FastifyReply) {
+  async GetGoogleLoginLink(request: FastifyRequest, reply: FastifyReply) {
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
@@ -126,7 +118,7 @@ export class AuthController extends Controller {
    * @param reply
    * @constructor
    */
-  async GetGoogleCreateLink(request: FastifyRequest<CreateGoogleUserRequest>, reply: FastifyReply) {
+  async GetGoogleCreateLink(request: FastifyRequest, reply: FastifyReply) {
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
@@ -135,6 +127,25 @@ export class AuthController extends Controller {
         'https://www.googleapis.com/auth/userinfo.profile'
       ],
       state: JSON.stringify({"mode": "create"})
+    });
+  }
+
+  /**
+   * Route for /auth/google/assign
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async GetGoogleAssignLink(request: FastifyRequest, reply: FastifyReply) {
+    return this.googleAuth.generateAuthUrl({
+      access_type: 'offline',
+      prompt: 'consent',
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+      ],
+      state: JSON.stringify({"mode": "assign"})
     });
   }
 
@@ -174,20 +185,25 @@ export class AuthController extends Controller {
     let userInfoResponse = await oauth2.userinfo.v2.me.get();
 
     let email = userInfoResponse.data.email;
+    let googleId = userInfoResponse.data.id;
     let name = userInfoResponse.data.name ?? undefined;
+
+    if (!googleId) {
+      return ReplyUtils.error("The google account doesn't have an associated id, so it can't be used to create a user.");
+    }
+
+    if (!email) {
+      return ReplyUtils.error("The email associated with this google account couldn't be found.");
+    }
 
     // Check the type of login
 
     switch (state.mode) {
       case "login":
         try {
-          if (!email) {
-            return ReplyUtils.error("The email associated with this google account couldn't be found.");
-          }
-
           // Make sure the user has google sign in enabled for security purposes
           // then log them in normally
-          let loginResultData = await this.userService.loginWithGoogle(email);
+          let loginResultData = await this.userService.loginWithGoogle(email, googleId);
 
           if (this.mixpanel)
             this.mixpanel.track('user logged in with google', {
@@ -205,14 +221,9 @@ export class AuthController extends Controller {
 
           throw e;
         }
-
       case "create":
         try {
-          if (!email) {
-            return ReplyUtils.error("The email associated with this google account couldn't be found.");
-          }
-
-          let user = await this.userService.createUserWithGoogle(email, name);
+          let user = await this.userService.createUserWithGoogle(email, googleId, name);
           let profile = await this.profileService.createProfile(user.id);
           await this.userService.setActiveProfile(user.id, profile.id);
 
@@ -246,7 +257,26 @@ export class AuthController extends Controller {
         }
 
       case "assign":
-      // TODO Implement
+        try {
+          let result = await this.authService.setGoogleId(email, googleId);
+          let user = await this.userService.getUserByEmail(email);
+
+          if (this.mixpanel)
+            this.mixpanel.track('user enabled google account', {
+              distinct_id: user.id,
+              $ip: request.ip,
+            });
+
+          return ReplyUtils.success(`Google enabled: ${result}`);
+        } catch (e) {
+          if (e instanceof HttpError) {
+            reply.code(e.statusCode);
+            return ReplyUtils.error(e.message, e);
+          }
+
+          throw e;
+        }
+
       default:
     }
   }
@@ -357,19 +387,5 @@ export class AuthController extends Controller {
 
       throw e;
     }
-  }
-
-  // TODO Implement assign google user route
-  /**
-   * Route for /auth/google/assign
-   *
-   * This allows users to assign a google account to an existing Singlelink account.
-   *
-   * @param request
-   * @param reply
-   * @constructor
-   */
-  async AssignGoogleUser(request: FastifyRequest<AssignGoogleUserRequest>, reply: FastifyReply) {
-
   }
 }
