@@ -310,15 +310,15 @@ export class UserService extends DatabaseService {
         name
       ]);
 
+    if (userInsertQuery.rowCount < 1) {
+      throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
+    }
+
     let enableGoogleSignInQueryResult = await this.pool.query<{ google_id: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where email=$2 returning private_metadata->'google_id' as google_id",
       [
         googleId,
         email
       ]);
-
-    if (userInsertQuery.rowCount < 1) {
-      throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
-    }
 
     if (enableGoogleSignInQueryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
