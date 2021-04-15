@@ -21,6 +21,8 @@ create table if not exists app.users
     metadata          jsonb               not null default '{}',
     private_metadata  jsonb               not null default '{
       "favorites": [],
+      "google_id": null,
+      "github_id": null,
       "emailNotifications": {
         "major": true,
         "minor": true,
@@ -32,7 +34,9 @@ create table if not exists app.users
 );
 
 create index if not exists accounts_email_index on app.users (email);
-create index if not exists accounts_metadata_favorites on app.users ((metadata -> 'favorites'));
+create index if not exists accounts_private_metadata_favorites on app.users ((private_metadata -> 'favorites'));
+create index if not exists accounts_private_metadata_google_id on app.users ((private_metadata -> 'google_id'));
+create index if not exists accounts_private_metadata_github_id on app.users ((private_metadata -> 'github_id'));
 
 /*
  Creates a theme table that contains all user themes.

@@ -1,10 +1,10 @@
-import {FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface} from "fastify";
+import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, RequestGenericInterface} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
 import {AuthService} from "../services/auth-service";
 import {Auth as GoogleAuth, google} from 'googleapis';
 import {config} from "../config/config";
-import {AuthenticatedRequest} from "../utils/auth";
+import {Auth, AuthenticatedRequest} from "../utils/auth";
 import {StatusCodes} from "http-status-codes";
 import {ReplyUtils} from "../utils/reply-utils";
 import {HttpError} from "../utils/http-error";
@@ -12,6 +12,7 @@ import * as jwt from "jsonwebtoken";
 import {UserService} from "../services/user-service";
 import {ProfileService} from "../services/profile-service";
 import Mixpanel from "mixpanel";
+import {StringUtils} from "../utils/string-utils";
 
 interface EmailLoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -40,13 +41,23 @@ interface AssignGoogleUserRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
 
-const authGoogleRateLimit = {
+const googleRateLimit = {
   config: {
     rateLimit: {
       max: 4,
       timeWindow: '1 min'
     }
   }
+};
+
+const authGoogleRateLimit = {
+  config: {
+    rateLimit: {
+      max: 4,
+      timeWindow: '1 min'
+    }
+  },
+  preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
 /**
@@ -75,20 +86,22 @@ export class AuthController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated
-    this.fastify.all<EmailLoginUserRequest>('/auth/email/login', this.EmailLoginUser.bind(this));
-    this.fastify.all<EmailCreateUserRequest>('/auth/email/create', this.EmailCreateUser.bind(this));
     this.fastify.all<EmailLoginUserRequest>('/user/login', this.EmailLoginUser.bind(this));
     this.fastify.all<EmailCreateUserRequest>('/user/create', this.EmailCreateUser.bind(this));
+    this.fastify.all<EmailLoginUserRequest>('/auth/email/login', this.EmailLoginUser.bind(this));
+    this.fastify.all<EmailCreateUserRequest>('/auth/email/create', this.EmailCreateUser.bind(this));
 
     if (config.google.clientId) {
       console.log("Google OAuth Authentication enabled.");
 
       // Unauthenticated
-      this.fastify.all('/auth/google/login', authGoogleRateLimit, this.GetGoogleLoginLink.bind(this));
-      this.fastify.all('/auth/google/create', authGoogleRateLimit, this.GetGoogleCreateLink.bind(this));
-      this.fastify.all('/auth/google/assign', authGoogleRateLimit, this.GetGoogleAssignLink.bind(this));
+      this.fastify.all('/auth/google/login', googleRateLimit, this.GetGoogleLoginLink.bind(this));
+      this.fastify.all('/auth/google/create', googleRateLimit, this.GetGoogleCreateLink.bind(this));
 
-      this.fastify.all<GoogleOAuthRedirectRequest>('/auth/google/redirect', authGoogleRateLimit, this.GoogleOAuthRedirect.bind(this));
+      // Authenticated
+      this.fastify.all<AuthenticatedRequest>('/auth/google/assign', authGoogleRateLimit, this.GetGoogleAssignLink.bind(this));
+
+      this.fastify.all<GoogleOAuthRedirectRequest>('/auth/google/redirect', googleRateLimit, this.GoogleOAuthRedirect.bind(this));
     }
   }
 
@@ -100,14 +113,16 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GetGoogleLoginLink(request: FastifyRequest, reply: FastifyReply) {
+    let nonce = StringUtils.generateNonce(16);
+    let token = jwt.sign({nonce: nonce, type: "google_oauth"}, config.secret, {expiresIn: '15m'});
+
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
       scope: [
-        'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
       ],
-      state: JSON.stringify({"mode": "login"})
+      state: JSON.stringify({"mode": "login", "token": token})
     });
   }
 
@@ -119,6 +134,9 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GetGoogleCreateLink(request: FastifyRequest, reply: FastifyReply) {
+    let nonce = StringUtils.generateNonce(16);
+    let token = jwt.sign({nonce: nonce, type: "google_oauth"}, config.secret, {expiresIn: '15m'});
+
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
@@ -126,26 +144,34 @@ export class AuthController extends Controller {
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
       ],
-      state: JSON.stringify({"mode": "create"})
+      state: JSON.stringify({"mode": "create", "token": token})
     });
   }
 
   /**
    * Route for /auth/google/assign
    *
+   * Authenticated, requires valid user.
+   *
    * @param request
    * @param reply
    * @constructor
    */
-  async GetGoogleAssignLink(request: FastifyRequest, reply: FastifyReply) {
+  async GetGoogleAssignLink(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
+    let nonce = StringUtils.generateNonce(16);
+    let token = jwt.sign({
+      nonce: nonce,
+      userId: request.body.authUser.id,
+      type: "google_auth"
+    }, config.secret, {expiresIn: '15m'});
+
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
       scope: [
-        'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
       ],
-      state: JSON.stringify({"mode": "assign"})
+      state: JSON.stringify({"mode": "assign", "token": token})
     });
   }
 
@@ -162,8 +188,25 @@ export class AuthController extends Controller {
     let code = request.params.code;
     let stateRaw = request.params.state;
     let state: {
-      "mode": "login" | "create" | "assign"
+      mode: "login" | "create" | "assign",
+      token: string
     } = JSON.parse(stateRaw);
+
+    let decoded = <{ nonce: string | undefined, userId: string | undefined, type: TokenType }>jwt.verify(
+      state.token,
+      config.secret,
+      {
+        maxAge: "15m"
+      });
+
+    if (!decoded.nonce) {
+      return ReplyUtils.error("Invalid token.");
+    }
+
+    if (decoded?.type !== "google_oauth") {
+      reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
+      return;
+    }
 
     let data = await this.googleAuth.getToken(code);
     let tokens = data.tokens;
@@ -184,7 +227,6 @@ export class AuthController extends Controller {
 
     let userInfoResponse = await oauth2.userinfo.v2.me.get();
 
-    let email = userInfoResponse.data.email;
     let googleId = userInfoResponse.data.id;
     let name = userInfoResponse.data.name ?? undefined;
 
@@ -192,18 +234,16 @@ export class AuthController extends Controller {
       return ReplyUtils.error("The google account doesn't have an associated id, so it can't be used to create a user.");
     }
 
-    if (!email) {
-      return ReplyUtils.error("The email associated with this google account couldn't be found.");
-    }
-
     // Check the type of login
 
     switch (state.mode) {
       case "login":
         try {
+          let user = await this.userService.getUserByGoogleId(googleId);
+
           // Make sure the user has google sign in enabled for security purposes
           // then log them in normally
-          let loginResultData = await this.userService.loginWithGoogle(email, googleId);
+          let loginResultData = await this.userService.loginWithGoogle(user.id, googleId);
 
           if (this.mixpanel)
             this.mixpanel.track('user logged in with google', {
@@ -223,11 +263,17 @@ export class AuthController extends Controller {
         }
       case "create":
         try {
+          let email = userInfoResponse.data.email;
+
+          if (!email) {
+            return ReplyUtils.error("The email associated with this google account couldn't be found.");
+          }
+
           let user = await this.userService.createUserWithGoogle(email, googleId, name);
           let profile = await this.profileService.createProfile(user.id);
           await this.userService.setActiveProfile(user.id, profile.id);
 
-          let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
+          let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
 
           if (this.mixpanel)
             this.mixpanel.track('user created with google', {
@@ -258,12 +304,17 @@ export class AuthController extends Controller {
 
       case "assign":
         try {
-          let result = await this.authService.setGoogleId(email, googleId);
-          let user = await this.userService.getUserByEmail(email);
+          if (!decoded.userId) {
+            return ReplyUtils.error("Invalid token.");
+          }
+
+          let userId = decoded.userId;
+
+          let result = await this.authService.setGoogleId(userId, googleId);
 
           if (this.mixpanel)
-            this.mixpanel.track('user enabled google account', {
-              distinct_id: user.id,
+            this.mixpanel.track('user changed google account', {
+              distinct_id: userId,
               $ip: request.ip,
             });
 
@@ -359,7 +410,7 @@ export class AuthController extends Controller {
       let profile = await this.profileService.createProfile(user.id, body.handle);
       await this.userService.setActiveProfile(user.id, profile.id);
 
-      let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
+      let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
 
       if (this.mixpanel)
         this.mixpanel.track('user created', {

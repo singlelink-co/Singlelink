@@ -130,10 +130,15 @@ export class Auth {
           return;
         }
 
-        let dAuthToken: { email: string } = <{ email: string }>decoded;
+        let dAuthToken = <{ userId: string, type: TokenType }>decoded;
 
-        if (!dAuthToken?.email) {
+        if (!dAuthToken?.userId) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        if (dAuthToken?.type !== "auth") {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
           return;
         }
 
@@ -178,10 +183,15 @@ export class Auth {
           return;
         }
 
-        let dAuthToken: { email: string } = <{ email: string }>decoded;
+        let dAuthToken = <{ userId: string, type: TokenType }>decoded;
 
-        if (!dAuthToken?.email) {
+        if (!dAuthToken?.userId) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        if (dAuthToken?.type !== "auth") {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
           return;
         }
 
@@ -190,9 +200,9 @@ export class Auth {
           // First, we need to grab the user account from the token.
 
           let accountQuery = await Auth.pool.query<DbUser>(
-            "select * from app.users where email=$1",
+            "select * from app.users where id=$1",
             [
-              dAuthToken.email
+              dAuthToken.userId
             ]
           );
 
@@ -288,10 +298,15 @@ export class Auth {
           return;
         }
 
-        let dAuthToken: { email: string } = <{ email: string }>decoded;
+        let dAuthToken = <{ userId: string, type: TokenType }>decoded;
 
-        if (!dAuthToken?.email) {
+        if (!dAuthToken?.userId) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        if (dAuthToken?.type !== "auth") {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
           return;
         }
 
@@ -300,9 +315,9 @@ export class Auth {
           // First, we need to grab the user account from the token.
 
           let accountQuery = await Auth.pool.query<DbSensitiveUser>(
-            "select * from app.users where email=$1",
+            "select * from app.users where id=$1",
             [
-              dAuthToken.email
+              dAuthToken.userId
             ]
           );
 
@@ -398,10 +413,15 @@ export class Auth {
           return;
         }
 
-        let dAuthToken: { email: string } = <{ email: string }>decoded;
+        let dAuthToken = <{ userId: string, type: TokenType }>decoded;
 
-        if (!dAuthToken?.email) {
+        if (!dAuthToken?.userId) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        if (dAuthToken?.type !== "auth") {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
           return;
         }
 
@@ -410,9 +430,9 @@ export class Auth {
           // First, we need to grab the user account from the token.
 
           let accountQuery = await Auth.pool.query<DbUser>(
-            "select * from app.users where email=$1",
+            "select * from app.users where id=$1",
             [
-              dAuthToken.email
+              dAuthToken.userId
             ]
           );
 
@@ -496,17 +516,16 @@ export class Auth {
       });
   }
 
-  static async checkGoogleAuthId(service: DatabaseService, email: string, googleId: string): Promise<boolean> {
-    const queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where email=$1", [email]);
+  static async checkGoogleAuthId(service: DatabaseService, userId: string, googleId: string): Promise<boolean> {
+    const queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select 1 from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount < 1)
       return false;
 
-    const googleEnabledQuery = await this.pool.query<{ google_id: string | null | undefined }>("select private_metadata->'google_id' as google_id from app.users where email=$1", [email]);
-    const row = googleEnabledQuery.rows[0];
-    let dbGoogleId = row.google_id;
+    const googleEnabledQuery = await this.pool.query<{ google_id: string | null | undefined }>("select 1 from app.users where id=$1 and private_metadata->'google_id'=$2",
+      [userId, googleId]);
 
-    return !!(dbGoogleId && dbGoogleId === googleId);
+    return googleEnabledQuery.rowCount >= 1;
   }
 
   /**

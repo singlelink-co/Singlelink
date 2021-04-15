@@ -16,14 +16,14 @@ export class AuthService extends DatabaseService {
    * Sets the Google Id for an account.
    * Set null to disable.
    *
-   * @param email
+   * @param userId
    * @param googleId
    */
-  async setGoogleId(email: string, googleId: string | null) {
-    let queryResult = await this.pool.query<{ google_id: string | null | undefined }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where email=$2 returning private_metadata->'google_id' as google_id",
+  async setGoogleId(userId: string, googleId: string | null) {
+    let queryResult = await this.pool.query<{ google_id: string | null | undefined }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where id=$2 returning private_metadata->'google_id' as google_id",
       [
         googleId,
-        email
+        userId
       ]);
 
     if (queryResult.rowCount < 1)

@@ -11,6 +11,7 @@ import {CustomDomainHandler} from "./utils/custom-domains";
 import {AdminController} from "./controllers/admin-controller";
 import {PermissionController} from "./controllers/permission-controller";
 import {MarketplaceController} from "./controllers/marketplace-controller";
+import {AuthController} from "./controllers/auth-controller";
 
 console.log("Initializing Singlelink");
 
@@ -29,6 +30,7 @@ async function start() {
 
   // SingleLink main controllers
   server.addController(new AnalyticsController(server.fastify, database));
+  server.addController(new AuthController(server.fastify, database));
   server.addController(new LinkController(server.fastify, database));
   server.addController(new ProfileController(server.fastify, database));
   server.addController(new ThemeController(server.fastify, database));

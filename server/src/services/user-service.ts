@@ -58,6 +58,20 @@ export class UserService extends DatabaseService {
   }
 
   /**
+   * Gets a user by their google id.
+   *
+   * @param googleId
+   */
+  async getUserByGoogleId(googleId: string): Promise<User> {
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where private_metadata->'google_id'=$1", [googleId]);
+
+    if (queryResult.rowCount < 1)
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
+
+    return DbTypeConverter.toUser(queryResult.rows[0]);
+  }
+
+  /**
    * Gets a sensitive user by the account Id.
    *
    * @param userId
@@ -78,6 +92,20 @@ export class UserService extends DatabaseService {
    */
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
     let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
+
+    if (queryResult.rowCount < 1)
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
+
+    return DbTypeConverter.toSensitiveUser(queryResult.rows[0]);
+  }
+
+  /**
+   * Gets a user by their google id.
+   *
+   * @param googleId
+   */
+  async getSensitiveUserByGoogleId(googleId: string): Promise<SensitiveUser> {
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where private_metadata->'google_id'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -114,13 +142,27 @@ export class UserService extends DatabaseService {
   }
 
   /**
+   * Gets a user by their google id.
+   *
+   * @param googleId
+   */
+  async getSensitiveUserWithPasswordByGoogleId(googleId: string): Promise<SensitiveUserWithPassword> {
+    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where private_metadata->'google_id'=$1", [googleId]);
+
+    if (queryResult.rowCount < 1)
+      throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
+
+    return DbTypeConverter.toSensitiveUserWithPassword(queryResult.rows[0]);
+  }
+
+  /**
    * Changes a userId's password requiring only a password reset token.
    *
    * @param token
    * @param password
    */
   async setPasswordWithToken(token: string, password: string) {
-    let decoded: any = jwt.verify(token, config.secret, {
+    let decoded = <{userId: string, type: TokenType}>jwt.verify(token, config.secret, {
       maxAge: "15m"
     });
 
@@ -128,7 +170,7 @@ export class UserService extends DatabaseService {
       return false;
     }
 
-    if (!decoded.passwordReset) {
+    if (decoded?.type !== "passwordReset") {
       return false;
     }
 
@@ -153,7 +195,7 @@ export class UserService extends DatabaseService {
     let token = jwt.sign(
       {
         userId: user.id,
-        passwordReset: true
+        type: "passwordReset"
       },
       config.secret,
       {expiresIn: '15m'}
@@ -215,7 +257,7 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.UNAUTHORIZED, "The password was incorrect.");
     }
 
-    let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
+    let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
 
     return {
       user: {
@@ -230,15 +272,15 @@ export class UserService extends DatabaseService {
   /**
    * Logs in a user with Google OAuth and returns LoginResultData.
    *
-   * @param email
+   * @param userId
    * @param googleId
    */
-  async loginWithGoogle(email: string, googleId: string): Promise<LoginResultData> {
-    if (!await Auth.checkGoogleAuthId(this, email, googleId)) {
+  async loginWithGoogle(userId: string, googleId: string): Promise<LoginResultData> {
+    if (!await Auth.checkGoogleAuthId(this, userId, googleId)) {
       throw new HttpError(StatusCodes.UNAUTHORIZED, "Invalid google authentication!");
     }
 
-    let user = await this.getSensitiveUserWithPasswordByEmail(email);
+    let user = await this.getSensitiveUserWithPassword(userId);
     let profileQuery = await this.pool.query<DbProfile>("select * from app.profiles where user_id=$1", [user.id]);
     let activeProfile;
 
@@ -246,7 +288,7 @@ export class UserService extends DatabaseService {
       activeProfile = DbTypeConverter.toProfile(profileQuery.rows[0]);
     }
 
-    let token = jwt.sign({email: user.email}, config.secret, {expiresIn: '168h'});
+    let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
 
     return {
       user: {
