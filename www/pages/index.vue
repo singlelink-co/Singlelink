@@ -151,7 +151,11 @@ import wallOfLove from '../components/wall-of-love.vue';
         themes: '...',
         enterprise_users: [
             {
-                url: 'https://api.norseapps.com/analytics'
+                // Norsegoods estimate
+                users: 10,
+                links: 0,
+                profiles: 0,
+                themes: 0
             },
             {
                 url: 'https://api.tinypage.app/analytics'
