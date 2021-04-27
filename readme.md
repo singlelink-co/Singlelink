@@ -7,7 +7,7 @@
 </h1>
 
 <h3 align="center">
-    <a href="https://singlelink.co">Singlelink</a> is the open-source micro-site platform.
+    <a href="https://singlelink.co">Singlelink</a> is the open-source micro-site platform & Linktree alternative.
 </h3>
 
 <br>
@@ -70,16 +70,16 @@
 git clone https://github.com/Neutron-Creative/Singlelink.git
 
 # Enter client of new project
-cd Singlelink
+cd Singlelink/client
 
 # Install necessary dependencies
 npm install
-sudo npm install -g nuxt-start
 
 # Set API Url
 export API_URL=<your-api-url>
 
-# Optionally, customize your instance
+# Optionally, customize your instance.
+# You can also set these permanently via the .env file
 export META_TITLE=<your-seo-meta-title>
 export META_DESCRIPTION=<your-seo-meta-description>
 export META_IMAGE=<your-meta-image>
@@ -95,7 +95,7 @@ export FREE_SIGNUP=<is-freesignup-enabled>
 npm run build
 
 # Start your server
-npm start
+npm run start
 
 ```
 
@@ -117,12 +117,11 @@ cp src/config.example.js src/config.js
 # Modify config.js (set API domain to localhost & client domain as neccessary)
 vim config.js
 
-# Install necessary dev dependencies
-sudo npm install -g forever nodemon
+# Build server
+npm run build
 
 # Start your server
-forever start index.js
-
+npm run start
 ```
 
 <br>
@@ -132,18 +131,11 @@ forever start index.js
 <p>Develop on the client if you're looking to make changes to the interface or styles of the application.<br>Note, pay attention to the notice below. You'll need to build & start the client before each usage to have your changes reflect properly in the application.</p>
 
 ```Bash
-# ---------------------------------------------------------------------------------- #
-# NOTICE: Anytime you make changes, kill the server, rebuild, and restart as follows #
-# ---------------------------------------------------------------------------------- #
-
 ## CD into Client
 cd Singlelink/client
 
-# Rebuild application (compiles .vue files into raw html, css, and js)
-npm run build
-
-# Restart server
-npm run start
+# Run developer client
+npm run dev
 
 ```
 
@@ -154,8 +146,8 @@ npm run start
 ## CD into Server
 cd Singlelink/server
 
-# Start nodemon
-nodemon index.js
+# Run developer server
+npm run dev
 ```
 
 <br>
@@ -172,18 +164,8 @@ ssh root@<your-server-ip>
 # Enter tmux session (if first time then tmux && cd Singlelink)
 tmux attach
 
-# Break existing client host session
-# Not to be typed, press both keys simultaneously
-# Ctrl + C
-
-# Pull changes from remote origin master branch
-git pull
-
-# Rebuild Nuxt JS
-npm run build
-
-# Restart server session
-nuxt-start ./ -H <your-client-ip> -p 80
+# Pull latest changes from git, install dependencies, rebuild, and restart the server
+git pull;npm i;npm run build;npm run start;
 
 # Exit tmux session
 # Not to be typed, press both keys simultaneously
@@ -206,11 +188,8 @@ ssh root@<your-server-ip>
 # Enter correct directory
 cd ~/Singlelink/server/
 
-# Pull latest changes from git
-git pull
-
-# Restart server with changes (if first time then forever start index.js)
-forever restart index.js
+# Pull latest changes from git, install dependencies, rebuild, and restart the server
+git pull;npm i;npm run build;npm run start;
 
 # Exit server, changes are deployed!
 
