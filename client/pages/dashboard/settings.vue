@@ -1,9 +1,9 @@
 <template>
-  <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
+  <section class="flex flex-shrink-0 flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
+    <h1 class="text-white font-extrabold tracking-tight text-3xl w-full mb-4">
       Site settings
     </h1>
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8">
+    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8">
       <transition name="fade">
         <div
           v-if="error"
@@ -16,13 +16,13 @@
         </div>
       </transition>
 
-      <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
-        Details
+      <h2 class="text-white font-bold text-xl w-full mb-2">
+        Site details
       </h2>
       <form class="flex flex-col">
         <div class="flex flex-col lg:flex-row mb-3">
           <div class="flex flex-col w-full lg:w-1/2 mr-4 mb-3 lg:mb-0">
-            <label class="font-medium text-sm text-gray-800" for="name">Headline</label>
+            <label class="font-medium text-sm text-white" for="name">Headline</label>
             <input
               id="name"
               v-model="user.activeProfile.headline"
@@ -32,7 +32,7 @@
             >
           </div>
           <div class="flex flex-col w-full lg:w-1/2">
-            <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle</label>
+            <label class="font-medium text-sm text-white" for="subtitle">Subtitle</label>
             <input
               id="subtitle"
               v-model="user.activeProfile.subtitle"
@@ -44,10 +44,10 @@
         </div>
         <div class="flex flex-col lg:flex-row mb-4">
           <div class="flex flex-col w-full lg:w-1/2 mr-3 mb-3 lg:mb-0">
-            <label class="font-medium text-sm text-gray-800" for="handle">Handle</label>
+            <label class="font-medium text-sm text-white" for="handle">Handle</label>
             <div class="flex flex-row rounded-lg border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
-                class="flex p-2 bg-gray-100 border text-gray-700 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
+                class="flex p-2 bg-gray-100 border text-gray-100 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
               >{{ hostname }}/u/</span>
               <input
                 id="handle"
@@ -60,7 +60,7 @@
             </div>
           </div>
           <div class="flex flex-col w-full lg:w-1/2">
-            <label class="font-medium text-sm text-gray-800" for="visibility">Visibility</label>
+            <label class="font-medium text-sm text-white" for="visibility">Visibility</label>
             <select
               id="visibility"
               v-model="user.activeProfile.visibility"
@@ -80,8 +80,8 @@
         </div>
         <div class="flex flex-row items-center justify-center space-x-4 mb-4">
           <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload" v-model="user.activeProfile.imageUrl">
-          <div class="flex flex-col w-full">
-          <label class="font-medium text-sm text-gray-800" for="image_url">Avatar Image URL</label>
+          <div class="flex flex-col w-auto flex-grow flex-1">
+          <label class="font-medium text-sm text-white" for="image_url">Avatar Image URL</label>
           <input
             id="image_url"
             v-model="user.activeProfile.imageUrl"
@@ -105,8 +105,8 @@
 
         <div class="flex flex-col w-full mb-6">
           <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full">
-          <label class="font-medium text-sm text-gray-800" for="custom_domain">Custom domain</label>
-            <a href="https://www.notion.so/neutroncreative/Setting-up-your-custom-domain-907421b1ac3841dbbd8d9a7d41d17f9a" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
+          <label class="font-medium text-sm text-white" for="custom_domain">Custom domain</label>
+            <a href="https://www.notion.so/neutroncreative/Setting-up-your-custom-domain-907421b1ac3841dbbd8d9a7d41d17f9a" class="text-gray-300 text-xs hover:underline hover:text-gray-200">Need help? Read our documentation</a>
           </div>
           <input
             id="custom_domain"
@@ -129,14 +129,14 @@
 
           <label
             for="themeGlobal"
-            class="ml-4 flex font-medium text-sm leading-5 text-gray-600 w-full lg:w-auto flex-col"
+            class="ml-4 flex font-medium text-sm leading-5 text-gray-200 w-full lg:w-auto flex-col"
             style="max-width:calc(100% - 32px)"
           >
             Display Watermark ("Proudly built with {{ app_name }}!")
             <br>
             <span
               v-show="showWatermarkNotice"
-              class="mt-1 flex text-gray-800 font-semibold text-xs lg:text-sm"
+              class="mt-1 flex text-white font-semibold text-xs lg:text-sm"
             >
               This is completely optional, but it really helps us out! Mind spreading the word about {{ app_name }}?
             </span>
@@ -153,7 +153,7 @@
             aria-label="privacy mode"
           >
 
-          <label class="ml-4 block text-sm leading-5 text-gray-600">
+          <label class="ml-4 block text-sm leading-5 text-gray-200">
             Privacy mode (Disables site analytics & discovery)
           </label>
         </div>
@@ -169,12 +169,12 @@
     </div>
 
     <!-- Delete site -->
-    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-lg justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
-        <h2 class="text-gray-800 font-semibold text-lg w-full">
+        <h2 class="text-white font-semibold text-lg w-full">
           Delete this site
         </h2>
-        <p class="text-gray-600 font-medium">Done with this site? Click the button on your right to delete this
+        <p class="text-gray-200 font-medium">Done with this site? Click the button on your right to delete this
           site and all related content.</p>
       </div>
       <button
@@ -194,11 +194,11 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setDeleteProfileModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full max-w-lg" @click.stop>
-          <h2 class="text-gray-800 font-semibold text-xl">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full max-w-lg" @click.stop>
+          <h2 class="text-white font-semibold text-xl">
             Are you sure?
           </h2>
-          <p class="text-gray-600 text-sm">
+          <p class="text-gray-200 text-sm">
             Deleting this site is irreversible, please confirm to continue.
           </p>
           <button
@@ -220,15 +220,15 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setPasswordModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full max-w-lg" @click.stop>
-          <h2 class="text-gray-800 font-semibold text-xl">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full max-w-lg" @click.stop>
+          <h2 class="text-white font-semibold text-xl">
             {{ passwordError ? "Error on password request!" : "Password reset requested" }}
           </h2>
-          <p v-if="!passwordError" class="text-gray-600 text-sm">A password reset link has been sent to your account
+          <p v-if="!passwordError" class="text-gray-200 text-sm">A password reset link has been sent to your account
             email inbox successfully.
             Make sure to check your spam folder.</p>
 
-          <p v-if="passwordError" class="text-gray-600 text-sm">
+          <p v-if="passwordError" class="text-gray-200 text-sm">
             <i class="fas fa-exclamation-triangle"/>
             {{ passwordError }}
           </p>

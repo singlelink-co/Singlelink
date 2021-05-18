@@ -1,10 +1,10 @@
 <template>
-  <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
+  <section class="flex flex-shrink-0 flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
+    <h1 class="text-white font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
       Site analytics <span class="hidden lg:flex ml-2">(30 days)</span>
     </h1>
 
-      <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-white" v-if="user.activeProfile.metadata.privacyMode">
+      <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-opaqueWhite" v-if="user.activeProfile.metadata.privacyMode">
         <div class="w-full p-6 bg-red-200 border-red-600 border rounded-lg text-red-500 flex flex-col xl:flex-row xl:items-center justify-start">
           <span class="text-xl xl:text-base font-bold mb-1 xl:mb-0 xl:mr-2">Notice:</span>
           <span class="text-sm">Privacy mode is currently enabled. Disable privacy mode to collect analytics data!</span>
@@ -12,16 +12,16 @@
       </div>
 
       <div class="flex lg:flex-row flex-col items-center justify-center w-full" v-if="!user.activeProfile.metadata.privacyMode">
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:mr-2">
-          <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:mr-2">
+          <h2 class="text-white font-semibold text-lg w-full mb-2">
             Total views
           </h2>
           <h4 class="text-indigo-600 text-3xl font-bold" v-if="analytics.totalProfileViews">
             {{ analytics.totalProfileViews.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:ml-2">
-          <h2 class="text-gray-800 font-semibold text-lg w-full mb-2">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full lg:flex-grow lg:w-auto mb-8 lg:ml-2">
+          <h2 class="text-white font-semibold text-lg w-full mb-2">
             Total clicks
           </h2>
           <h4 v-if="analytics.clickThroughRate" class="text-indigo-600 text-3xl font-bold">
@@ -30,8 +30,8 @@
         </div>
       </div>
 
-    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg w-full mb-8 lg:items-center items-start"  v-if="!user.activeProfile.metadata.privacyMode">
-      <h2 class="text-gray-800 font-semibold text-lg">
+    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8 lg:items-center items-start"  v-if="!user.activeProfile.metadata.privacyMode">
+      <h2 class="text-white font-semibold text-lg">
         Click through rate
       </h2>
       <h4 v-if="analytics.clickThroughRate" class="mt-2 lg:mt-0 lg:ml-auto text-indigo-600 text-3xl lg:text-2xl font-bold">
@@ -39,25 +39,25 @@
       </h4>
     </div>
 
-    <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full mb-8"  v-if="!user.activeProfile.metadata.privacyMode">
-      <h2 class="text-gray-800 font-semibold text-lg mb-4">
+    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8"  v-if="!user.activeProfile.metadata.privacyMode">
+      <h2 class="text-white font-semibold text-lg mb-4">
         Link engagement
       </h2>
 
       <div
         v-for="link in analytics.linkVisits"
         :key="link.id"
-        class="rounded-lg shadow bg-white p-4 w-full font-medium mb-4 flex items-center justify-center lg:flex-row flex-col"
+        class="rounded-lg shadow bg-opaqueWhite p-4 w-full font-medium mb-4 flex items-center justify-center lg:flex-row flex-col"
       >
         <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
-          <span class="font-medium text-gray-900 mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url && link.link.url.length > 31" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 32) }}...</span>
-          <span v-if="link.link.url && link.link.url.length < 32" class="text-sm text-gray-700 overflow-x-hidden max-w-full">{{ link.link.url }}</span>
+          <span class="font-medium text-white font-bold mb-2">{{ link.link.label }}</span>
+          <span v-if="link.link.url && link.link.url.length > 31" class="text-sm text-gray-300 font-semibold overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 32) }}...</span>
+          <span v-if="link.link.url && link.link.url.length < 32" class="text-sm text-gray-300 font-semibold overflow-x-hidden max-w-full">{{ link.link.url }}</span>
         </div>
         <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
-          <span class="text-sm uppercase text-gray-700 font-semibold mr-1 lg:mr-0 lg:mb-2">Total clicks</span>
-          <span class="lg:hidden text-sm uppercase text-gray-700 font-semibold mr-2 lg:mr-0 lg:mb-2">:</span>
-          <h4 class="lg:ml-auto text-indigo-600 text-lg font-bold">
+          <span class="text-sm uppercase text-gray-200 font-bold mr-1 lg:mr-0 lg:mb-1">Total clicks</span>
+          <span class="lg:hidden text-sm uppercase text-gray-700 font-semibold mr-2 lg:mr-0 lg:mb-1">:</span>
+          <h4 class="lg:ml-auto text-indigo-600 text-xl font-bold">
             {{ link.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>

@@ -20,7 +20,7 @@ export default {
 
   server: {
     host: process.env.SERVER_HOST ?? '0.0.0.0',
-    port: process.env.PORT ?? 80
+    port: process.env.PORT ?? 3000
   },
 
   /*
@@ -91,6 +91,14 @@ export default {
         rel: 'stylesheet',
         href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'
       },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap'
+      }
     ],
     script: [
       {
@@ -110,7 +118,9 @@ export default {
   /*
   ** Global CSS
   */
-  css: [],
+  css: [
+    '~/assets/css/theme.css'
+  ],
   /*
   ** Plugins to load before mounting the App
   ** https://nuxtjs.org/guide/plugins
