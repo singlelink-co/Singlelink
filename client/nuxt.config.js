@@ -48,12 +48,12 @@ export default {
       {
         hid: 'og:image',
         name: 'og:image',
-        content: process.env.META_IMAGE ?? 'https://i.ibb.co/Mgb8N2x/open-graph-image-v2-1.png'
+        content: process.env.META_IMAGE ?? 'https://singlelink-22fp7.ondigitalocean.app/open-graph-image-v2.png'
       },
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content: process.env.META_IMAGE ?? 'https://i.ibb.co/Mgb8N2x/open-graph-image-v2-1.png'
+        content: process.env.META_IMAGE ?? 'https://singlelink-22fp7.ondigitalocean.app/open-graph-image-v2.png'
       },
       {
         hid: 'og:title',
