@@ -53,8 +53,8 @@
       >
         <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
           <span class="font-medium text-black font-bold text-lg mb-2">{{ link.link.label }}</span>
-          <span v-if="link.link.url && link.link.url.length > 31" class="text-black opacity-70 font-bold overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 32) }}...</span>
-          <span v-if="link.link.url && link.link.url.length < 32" class="text-black opacity-70 font-bold overflow-x-hidden max-w-full">{{ link.link.url }}</span>
+          <span v-if="link.link.url && link.link.url.length > 41" class="text-black opacity-70 font-bold overflow-x-hidden max-w-full">{{ link.link.url.substr(0, 42) }}...</span>
+          <span v-if="link.link.url && link.link.url.length < 42" class="text-black opacity-70 font-bold overflow-x-hidden max-w-full">{{ link.link.url }}</span>
         </div>
         <div class="lg:ml-auto flex flex-row lg:flex-col justify-start lg:justify-end items-center mt-2 lg:mt-0 w-full lg:w-auto">
           <span class="uppercase text-gray-800 font-bold mr-1 lg:mr-0 lg:mb-1">Total clicks</span>
