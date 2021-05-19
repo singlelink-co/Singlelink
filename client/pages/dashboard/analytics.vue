@@ -7,15 +7,15 @@
       </h1>
     </div>
 
-      <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-opaqueWhite" v-if="user.activeProfile.metadata.privacyMode">
-        <div class="w-full p-6 bg-red-200 border-red-600 border rounded-lg text-red-500 flex flex-col xl:flex-row xl:items-center justify-start">
+      <div class="flex flex-col items-center justify-center w-full p-6 rounded-2xl shadow bg-opaqueWhite" v-if="user.activeProfile.metadata.privacyMode">
+        <div class="w-full p-6 bg-red-200 border-red-600 border rounded-2xl text-red-500 flex flex-col xl:flex-row xl:items-center justify-start">
           <span class="text-xl xl:text-base font-bold mb-1 xl:mb-0 xl:mr-2">Notice:</span>
           <span class="text-sm">Privacy mode is currently enabled. Disable privacy mode to collect analytics data!</span>
         </div>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-x-4 w-full" v-if="!user.activeProfile.metadata.privacyMode">
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-lg mb-8">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-2xl mb-8">
           <h2 class="font-bold text-black opacity-70 text-lg w-full mb-1">
             Total views
           </h2>
@@ -23,7 +23,7 @@
             {{ analytics.totalProfileViews.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-lg mb-8">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-2xl mb-8">
           <h2 class="font-bold text-black opacity-70 text-lg w-full mb-1">
             Total clicks
           </h2>
@@ -31,7 +31,7 @@
             {{ visitSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
           </h4>
         </div>
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-lg mb-8">
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow items-center text-center rounded-2xl mb-8">
           <h2 class="font-bold text-black opacity-70 text-lg w-full mb-1">
             Click through rate
           </h2>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8"  v-if="!user.activeProfile.metadata.privacyMode">
+    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full mb-8"  v-if="!user.activeProfile.metadata.privacyMode">
       <h2 class="text-black font-bold opacity-70 text-lg mb-4">
         Link engagement
       </h2>
@@ -49,7 +49,7 @@
       <div
         v-for="link in analytics.linkVisits"
         :key="link.id"
-        class="rounded-lg shadow bg-opaqueWhite p-4 w-full font-medium mb-4 flex items-center justify-center lg:flex-row flex-col"
+        class="rounded-2xl shadow bg-opaqueWhite p-4 w-full font-medium mb-4 flex items-center justify-center lg:flex-row flex-col"
       >
         <div class="text-left mr-4 flex flex-col justify-start w-full lg:w-auto pt-1 px-2 lg:pt-0 lg:px-0">
           <span class="font-medium text-black font-bold text-lg mb-2">{{ link.link.label }}</span>
