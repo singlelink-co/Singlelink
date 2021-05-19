@@ -8,7 +8,7 @@
           <img src="/Compass.svg" style="width: 16px;height:auto;"/>
           <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;" placeholder="Search pages, guides, and documentation..."/>
         </div>
-        <div class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:bg-gdp hover:text-white">Refer a friend and get $10!</div>
+        <n-link to="/dashboard/referrals" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:bg-gdp hover:text-white">Refer a friend and get $10!</n-link>
       </div>
       <div class="flex flex-col lg:flex-row w-full max-w-6xl h-screen oveflow-x-hidden">
         <div class="flex flex-col text-black font-semibold nav justify-start">
@@ -118,10 +118,10 @@
                     <img src="/Cowboy hat face.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Contact support</span>
                 </a>
-                <a :class="getActiveStyles('dashboard-support')">
+                <n-link to="/dashboard/referrals" :class="getActiveStyles('dashboard-referrals')">
                     <img src="/Heart.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Referrals</span>
-                </a>
+                </n-link>
                 <n-link to="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
                     <img src="/Pencil.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Settings</span>
@@ -352,6 +352,9 @@ export default Vue.extend({
             break;
           case "dashboard-analytics":
             this.active = "dashboard-analytics";
+            break;
+          case "dashboard-referrals":
+            this.active = "dashboard-referrals";
             break;
           case "dashboard-settings":
             this.active = "dashboard-settings";
