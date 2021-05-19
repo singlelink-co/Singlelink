@@ -122,14 +122,14 @@
                     <img src="/Heart.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Referrals</span>
                 </a>
-                <a href="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
+                <n-link to="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
                     <img src="/Pencil.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Settings</span>
-                </a>
-                <a href="/logout" :class="getActiveStyles('logout')">
+                </n-link>
+                <n-link to="/logout" :class="getActiveStyles('logout')">
                     <img src="/Waving hand.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Logout</span>
-                </a>
+                </n-link>
             </div>
         </div>
         <Nuxt id="child" style="top:-88px;" class="relative lg:pt-24 p-16 flex-grow flex-1 w-auto lg:overflow-y-scroll lg:h-screen"/>
