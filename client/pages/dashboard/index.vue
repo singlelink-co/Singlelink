@@ -13,14 +13,14 @@
       >
         This micro-site doesn't have any links to display.<br>Click the button below to create one! 👇
       </div>
-      <button
+      <n-link
         type="button"
         class="button"
         id="add-new-link-btn"
-        @click="openModal('create')"
+        to="/link/"
       >
         Add new link
-      </button>
+      </n-link>
 
       <draggable
         v-if="links && links.length > 0"
@@ -28,12 +28,12 @@
         class="flex flex-col w-full flex-shrink-0"
         @change="updateLinkOrder"
       >
-        <div
+        <n-link
           v-for="link in sortedLinks"
           :key="link.id"
           class="flex flex-col flex-shrink-0 text-sm text-black p-4 bg-opaqueWhite text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
           style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
-          @click="editLink(link)"
+          :to="'/dashboard/link/' + link.id"
         >
           <span class="text-xl font-bold">{{ link.label }}
             <span v-if="link.useDeepLink" class="ml-2 text-black text-lg">
@@ -43,7 +43,7 @@
           <span v-if="link.subtitle" class="text-lg font-bold opacity-70 sl-subtitle mt-1">
             {{ link.subtitle }}
           </span>
-        </div>
+        </n-link>
       </draggable>
     </div>
 
