@@ -387,14 +387,18 @@ export default Vue.extend({
     },
 
     async copyUrl() {
-      var text = '';
       try {
-        text = 'https://'+this.user.activeProfile.customDomain || 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        let text = '';
+        if(this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
+        if(!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        console.log(text);
         let url = new URL(text);
         navigator.clipboard.writeText(url.toString());
         alert('Url copied to clipboard!');
       } catch (error) {
-        
+        let text = '';
+        if(this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
+        if(!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
         alert('Copy this url to the clipboard!\n' + text);
       }
     },
