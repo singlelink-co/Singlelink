@@ -386,12 +386,14 @@ export default Vue.extend({
     },
 
     async copyUrl() {
+      var text = '';
       try {
-        var text = 'https://'+this.user.activeProfile.customDomain || 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        text = 'https://'+this.user.activeProfile.customDomain || 'https://singlel.ink/u/' + this.user.activeProfile.handle;
         let url = new URL(text);
         navigator.clipboard.writeText(url.toString());
         alert('Url copied to clipboard!');
       } catch (error) {
+        
         alert('Copy this url to the clipboard!\n' + text);
       }
     },
