@@ -18,13 +18,13 @@
 
                 <div class="flex flex-col justify-start">
                     <span class="font-extrabold text-2xl leading-tight mt-4">{{ user.activeProfile.headline }}</span>
-                    <div class="flex flex-row items-center justify-start">
-                      <div>
+                    <div class="flex flex-row items-center justify-start flex-wrap" style="max-width:300px;">
+                      <div class="mb-1">
                         <span class="font-bold text-lg opacity-60" v-if="user.activeProfile.customDomain">{{ user.activeProfile.customDomain }}</span>
                         <span class="font-bold text-lg opacity-60" v-if="!user.activeProfile.customDomain && user.activeProfile.handle">singlel.ink/u/{{ user.activeProfile.handle }}</span>
                       </div>
-                      <div class="py-1 px-2 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer grow" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
-                      <div class="py-1 px-2 rounded-full text-sm font-extrabold leading-tight cursor-pointer grow" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
+                      <div class="py-1 px-2 mb-1 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer grow" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
+                      <div class="py-1 px-2 mb-1 rounded-full text-sm font-extrabold leading-tight cursor-pointer grow" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
 
                     </div>
                 </div>
@@ -697,10 +697,11 @@ html {
         opacity: .85;
     }
     .nav-link:hover {
-      @apply bg-opaqueIndigo;
+      @apply bg-opaqueIndigo text-gdp;
     }
     .nav-link.active {
         background:linear-gradient(90deg, rgba(83,83,236,.25) 00%, rgba(83,83,236,0.05) 100%);
+        @apply text-gdp;
     }
     .nav-link.active * {
         opacity: 1;

@@ -17,7 +17,7 @@
         type="button"
         class="button"
         id="add-new-link-btn"
-        to="/link/"
+        to="/dashboard/link/"
       >
         Add new link
       </n-link>
