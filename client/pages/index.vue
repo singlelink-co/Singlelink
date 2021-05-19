@@ -2,9 +2,9 @@
 	<div class="w-screen min-h-screen flex flex-col lg:flex-row text-black">
 		<section class="w-full lg:w-1/2 xl:w-5/12 flex flex-col lg:h-screen p-12 items-start justify-center">
             <div class="flex flex-col max-w-lg w-full mx-auto">
-                <h1 class="text-5xl font-bold mb-4">Login</h1>
-                <p class="opacity-80 font-semibold text-2xl mb-8">Manage and monitor your Singlelink sites.</p>
-                <a href="#" class="flex flex-row items-center font-semibold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-600 hover:border-black" style="border-width:3px;border-style:solid;">
+                <h1 class="text-5xl font-bold">Login</h1>
+                <p class="opacity-70 font-bold text-2xl mb-8">Manage and monitor your Singlelink sites.</p>
+                <a href="#" class="flex flex-row items-center font-bold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-300 hover:border-gray-600" style="border-width:3px;border-style:solid;">
                     <img src="/google-icon.png" class="w-5 mr-4"/>
                     Sign in with Google
                 </a>
@@ -29,7 +29,7 @@
                     <a href="#" class="text-indigo-500 hover:underline ml-auto font-bold">Forgot your password?</a>
                 </div>
                 <div @click="attemptLogin" class="button cursor-pointer">Login to your account</div>
-                <a href="/create-account" class="mx-auto text-center font-bold text-indigo-500 mb-4 text-sm hover:underline font-semibold">Don't have an account? Get started free</a>
+                <a href="/create-account" class="mx-auto text-center font-bold text-indigo-500 mb-4 text-sm hover:underline font-bold">Don't have an account? Get started free</a>
                 <span class="mx-auto font-bold text-center opacity-50 text-sm">©{{ new Date().getFullYear() }} Neutron Creative Inc., All rights reserved.</span>
             </div>
         </section>
@@ -174,10 +174,10 @@ body {
         background: rgba(0,0,0,.2);
     }
     label {
-        @apply mb-2 text-lg font-semibold;
+        @apply mb-2 text-lg font-bold;
     }
     .input-group input {
-        @apply w-full rounded-full px-8 py-3 text-lg text-gray-800 font-semibold outline-none;
+        @apply w-full rounded-full px-8 py-3 text-lg text-gray-800 font-bold outline-none;
 		box-shadow: 0 0 0 3px rgba(0,0,0,.1);
         transition: .1s ease-in;
     }
