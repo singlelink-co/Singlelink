@@ -17,11 +17,11 @@
                     <label>Email address</label>
                     <input v-model="email" type="text" placeholder="e.g. jane@singlelink.co"/>
                 </div>
-                <div class="flex flex-col w-full mb-4">
+                <div class="input-group flex flex-col w-full mb-4">
                     <label>Handle</label>
                     <input v-model="handle" type="text" placeholder="e.g. jim"/>
                 </div>
-                <div class="flex flex-col w-full mb-4">
+                <div class="input-group flex flex-col w-full mb-4">
                     <label>Password</label>
                     <input v-model="password" type="password" placeholder="Minimum 8 characters"/>
                 </div>
@@ -198,12 +198,12 @@ body {
     label {
         @apply mb-2 text-lg font-semibold;
     }
-    input {
+    .input-group input {
         @apply w-full rounded-full px-8 py-3 text-lg text-gray-800 font-semibold outline-none;
 		box-shadow: 0 0 0 3px rgba(0,0,0,.1);
         transition: .1s ease-in;
     }
-    input:focus {
+    .input-group input:focus {
         box-shadow: 0 0 0 4.5px rgba(83,83,236,.8);
     }
         .button {

@@ -23,8 +23,8 @@
                         <span class="font-bold text-lg opacity-60" v-if="user.activeProfile.customDomain">{{ user.activeProfile.customDomain }}</span>
                         <span class="font-bold text-lg opacity-60" v-if="!user.activeProfile.customDomain && user.activeProfile.handle">singlel.ink/u/{{ user.activeProfile.handle }}</span>
                       </div>
-                      <div class="py-1 px-2 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight ml-2 mr-1 cursor-pointer">copy</div>
-                      <div class="py-1 px-2 rounded-full text-sm font-extrabold leading-tight mx-1 cursor-pointer" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
+                      <div class="py-1 px-2 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
+                      <div class="py-1 px-2 rounded-full text-sm font-extrabold leading-tight cursor-pointer" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
 
                     </div>
                 </div>
@@ -385,7 +385,16 @@ export default Vue.extend({
       }
     },
 
-    
+    async copyUrl() {
+      try {
+        var text = 'https://'+this.user.activeProfile.customDomain || 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        let url = new URL(text);
+        navigator.clipboard.writeText(url.toString());
+        alert('Url copied to clipboard!');
+      } catch (error) {
+        alert('Copy this url to the clipboard!\n' + text);
+      }
+    },
 
     getPreviewModeIcon() {
       switch (this.previewMode) {
