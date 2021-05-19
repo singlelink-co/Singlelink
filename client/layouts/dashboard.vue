@@ -3,7 +3,7 @@
 <template>
     <div class="bg-whiteish flex flex-col items-center justify-center">
       <div class="flex flex-row w-full max-w-6xl py-6 justify-between relative" style="z-index:2;background:linear-gradient(180deg, #FFF 60%, rgba(255,255,255,.65) 80%, rgba(255,255,255,0) 100%);">
-        <img src="/sl-icon.svg" class="w-10" style="filter: drop-shadow(0px 10px 25px #5353EC);"/>
+        <n-link to="/dashboard"><img src="/sl-icon.svg" class="w-10" style="filter: drop-shadow(0px 10px 25px #5353EC);"/></n-link>
         <div class="flex flex-row items-center justify-start bg-opaqueBlack px-4 py-1 rounded-full w-full max-w-md" style="border: solid 2px rgba(0,0,0,.15);">
           <img src="/Compass.svg" style="width: 16px;height:auto;"/>
           <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;" placeholder="Search pages, guides, and documentation..."/>
