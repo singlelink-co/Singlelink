@@ -28,7 +28,7 @@
                     </div>
                     <a href="#" class="text-indigo-500 hover:underline ml-auto font-bold">Forgot your password?</a>
                 </div>
-                <div @click="attemptLogin" class="button">Login to your account</div>
+                <div @click="attemptLogin" class="button cursor-pointer">Login to your account</div>
                 <a href="/create-account" class="mx-auto text-center font-bold text-indigo-500 mb-4 text-sm hover:underline font-semibold">Don't have an account? Get started free</a>
                 <span class="mx-auto font-bold text-center opacity-50 text-sm">©{{ new Date().getFullYear() }} Neutron Creative Inc., All rights reserved.</span>
             </div>

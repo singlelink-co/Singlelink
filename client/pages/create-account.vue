@@ -31,7 +31,7 @@
                         <label for="remember-me" class="opacity-50 ml-3" style="margin-bottom:0;width:105px;font-size: 14px;"><nobr>Remember me?</nobr></label>
                     </div>
                 </div>
-                <div @click="attemptRegister" class="button">Get started free</div>
+                <div @click="attemptRegister" class="button cursor-pointer">Get started free</div>
                 <a href="/" class="mx-auto text-center text-indigo-500 mb-4 text-sm hover:underline font-bold">Already have an account? Click here to login</a>
                 <span class="mx-auto text-center opacity-50 font-bold text-sm">©{{ new Date().getFullYear() }} Neutron Creatixve Inc., All rights reserved.</span>
             </div>
