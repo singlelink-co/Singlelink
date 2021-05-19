@@ -114,7 +114,7 @@
                     <img src="/Compass.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Search & discover</span>
                 </a>
-                <a :class="getActiveStyles('dashboard-support')">
+                <a href="https://discord.gg/wqjKmsRP39" target="_blank" :class="getActiveStyles('dashboard-support')">
                     <img src="/Cowboy Hat face.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Contact support</span>
                 </a>
