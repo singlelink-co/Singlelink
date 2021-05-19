@@ -110,10 +110,10 @@
                     <img src="/Fire.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Leaderboard</span>
                 </a>
-                <a :class="getActiveStyles('dashboard-discover')">
+                <n-link to="/dashboard/discover" :class="getActiveStyles('dashboard-discover')">
                     <img src="/Compass.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Search & discover</span>
-                </a>
+                </n-link>
                 <a href="https://discord.gg/wqjKmsRP39" target="_blank" :class="getActiveStyles('dashboard-support')">
                     <img src="/Cowboy hat face.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Contact support</span>
@@ -123,7 +123,7 @@
                     <span class="ml-4 font-extrabold">Referrals</span>
                 </n-link>
                 <n-link to="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
-                    <img src="/Pencil.svg" style="width:24px;height:24px;"/>
+                    <img src="/Settings.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Settings</span>
                 </n-link>
                 <n-link to="/logout" :class="getActiveStyles('logout')">
@@ -132,7 +132,7 @@
                 </n-link>
             </div>
         </div>
-        <Nuxt id="child" style="top:-88px;" class="relative lg:pt-24 p-16 flex-grow flex-1 w-auto lg:overflow-y-scroll lg:h-screen"/>
+        <Nuxt id="child" style="top:-88px;padding-top:6.5rem !important;" class="relative p-16 flex-grow flex-1 w-auto lg:overflow-y-scroll lg:h-screen"/>
         </div>
     </div>
 </template>
@@ -355,6 +355,9 @@ export default Vue.extend({
             break;
           case "dashboard-referrals":
             this.active = "dashboard-referrals";
+            break;
+          case "dashboard-discover":
+            this.active = "dashboard-discover";
             break;
           case "dashboard-settings":
             this.active = "dashboard-settings";

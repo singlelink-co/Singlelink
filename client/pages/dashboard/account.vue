@@ -1,8 +1,11 @@
 <template>
   <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-black font-extrabold tracking-tight text-3xl mb-4">
-      Account settings
-    </h1>
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
+      <img class="w-8" src="/Settings.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        Account settings
+      </h1>
+    </div>
 
     <!-- Select billing tier -->
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">

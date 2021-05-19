@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
     <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
-      <img class="w-8" src="/Pencil.svg"/>
+      <img class="w-8" src="/Settings.svg"/>
       <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
         Site settings
       </h1>
