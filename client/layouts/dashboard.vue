@@ -106,7 +106,7 @@
                     <img src="/High voltage.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Marketplace</span>
                 </n-link>
-                <a href="https://singlelink.co/leaderboard" :class="getActiveStyles('dashboard-leaderboard')">
+                <a href="https://singlelink.co/leaderboard" target="_blank" :class="getActiveStyles('dashboard-leaderboard')">
                     <img src="/Fire.svg" style="width:24px;height:24px;"/>
                     <span class="ml-4 font-extrabold">Leaderboard</span>
                 </a>
