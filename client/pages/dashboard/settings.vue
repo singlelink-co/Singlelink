@@ -6,11 +6,11 @@
         Site settings
       </h1>
     </div>
-    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8">
+    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full mb-8">
       <transition name="fade">
         <div
           v-if="error"
-          class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded-lg w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
+          class="flex flex-row p-2 mb-4 bg-orange-200 text-orange-600 rounded-2xl w-full justify-center items-center text-sm border border-orange-300 shadow-sm"
         >
           <img style="width: 12px;" src="/caution.svg" alt="caution">
           <div class="flex flex-col ml-2">
@@ -29,7 +29,7 @@
             <input
               id="name"
               v-model="user.activeProfile.headline"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
               type="text"
               placeholder="e.g. Jane Doe, 21"
             >
@@ -39,7 +39,7 @@
             <input
               id="subtitle"
               v-model="user.activeProfile.subtitle"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
               type="text"
               placeholder="e.g. Developer at Neutron from Raleigh NC"
             >
@@ -48,7 +48,7 @@
         <div class="flex flex-col lg:flex-row mb-4">
           <div class="flex flex-col w-full lg:w-1/2 mr-3 mb-3 lg:mb-0">
             <label class="font-bold opacity-70 text-sm text-black" for="handle">Handle</label>
-            <div class="flex flex-row rounded-lg border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
+            <div class="flex flex-row rounded-2xl border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
                 class="flex p-2 bg-gray-100 border text-gray-900 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
               >{{ hostname }}/u/</span>
@@ -67,7 +67,7 @@
             <select
               id="visibility"
               v-model="user.activeProfile.visibility"
-              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
             >
               <option value="unpublished">
                 Unpublished, not viewable
@@ -88,13 +88,13 @@
           <input
             id="image_url"
             v-model="user.activeProfile.imageUrl"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
             type="text"
             placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
           >
           <div
             v-if="!profile_valid"
-            class="py-3 px-4 rounded-lg bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
+            class="py-3 px-4 rounded-2xl bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
           >
             <span class="font-semibold">Warning!</span>
             <span class="text-xs font-semibold">Your site picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
@@ -114,7 +114,7 @@
           <input
             id="custom_domain"
             v-model="user.activeProfile.customDomain"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
             type="text"
             placeholder="e.g. neutroncreative.com (no http/https)"
           >
@@ -172,7 +172,7 @@
     </div>
 
     <!-- Delete site -->
-    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-lg justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-black font-bold text-lg w-full">
           Delete this site
@@ -189,7 +189,7 @@
       </button>
     </div>
 
-    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-lg justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-7/12">
         <h2 class="text-black font-bold text-lg w-full">
           Account settings
@@ -212,7 +212,7 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setDeleteProfileModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full max-w-lg" @click.stop>
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full max-w-lg" @click.stop>
           <h2 class="text-black font-semibold text-xl">
             Are you sure?
           </h2>
@@ -221,7 +221,7 @@
           </p>
           <button
             type="button"
-            class="mt-4 w-full p-4 text-center text-md text-black bg-red-600 hover:bg-red-700 rounded-lg font-semibold"
+            class="mt-4 w-full p-4 text-center text-md text-black bg-red-600 hover:bg-red-700 rounded-2xl font-semibold"
             @click="deleteProfile"
           >
             Yes, delete this site
@@ -238,7 +238,7 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setPasswordModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full max-w-lg" @click.stop>
+        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full max-w-lg" @click.stop>
           <h2 class="text-black font-semibold text-xl">
             {{ passwordError ? "Error on password request!" : "Password reset requested" }}
           </h2>
@@ -252,7 +252,7 @@
           </p>
           <button
             type="button"
-            class="mt-4 p-3 text-center text-md text-black bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
+            class="mt-4 p-3 text-center text-md text-black bg-indigo-600 hover:bg-indigo-700 rounded-2xl font-semibold"
             @click="setPasswordModalActive(false)"
           >
             Close
