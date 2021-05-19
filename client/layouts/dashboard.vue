@@ -40,7 +40,7 @@
               type="text"
               placeholder="Filter profiles..."
               aria-label="Filter profiles"
-              class="text-sm p-2 mr-auto"
+              class="text-sm p-2 mr-auto font-bold"
               style="outline:none !important;background:transparent;"
               @input="onFilterProfilesInput"
             >
@@ -57,7 +57,7 @@
             <div
               v-if="profile.handle"
               class="w-8 h-8 rounded-full"
-              :style="'width: 35px; height:35px;margin-right:.75rem;background-size:cover;background-repeat:no-repeat;background-position:center;background-image:url(' + (profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash) + ');'"
+              :style="'width: 35px;height:35px;background:linear-gradient(146deg, rgba(0,255,240,1) 00%, rgba(173,255,0,1) 100%);margin-right:.75rem;background-size:cover;background-repeat:no-repeat;background-position:center;background-image:url(' + (profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash) + ');'"
               alt="avatar">
             </div>
             <div
@@ -72,19 +72,19 @@
 
             <div class="flex flex-col">
               <span class="text-base text-black font-bold">{{ profile.handle }}</span>
-              <span class="text-sm text-gray-800 font-semibold">{{ profile.headline }}</span>
+              <span class="text-sm text-black opacity-70 font-bold">{{ profile.headline }}</span>
             </div>
           </li>
 
           <li class="flex flex-row items-center justify-center button-controls">
             <!-- Create new profile-->
             <span
-              class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pl-4 text-xs text-gray-900"
+              class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pl-4 text-xs font-bold text-gray-700"
               @click="createNewProfile"
             >Create new</span>
 
             <!-- Logout-->
-            <a class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pr-4 text-xs text-gray-900" href="/logout">Logout</a>
+            <a class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pr-4 text-xs font-bold text-gray-700" href="/logout">Logout</a>
           </li>
 
         </ul>
