@@ -1,5 +1,11 @@
 <template>
   <section class="flex flex-col items-center h-full  flex-shrink-0">
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
+      <img class="w-8" src="/House.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        Site links
+      </h1>
+    </div>
     <div class="flex flex-col max-w-2xl items-center justify-center w-full flex-shrink-0">
       <div
         v-if="!links || links.length === 0"

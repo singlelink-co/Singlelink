@@ -1,8 +1,11 @@
 <template>
   <section class="flex flex-shrink-0 flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-black font-extrabold tracking-tight text-3xl w-full mb-4 flex flex-row items-start lg:items-center">
-      Site analytics <span class="hidden lg:flex ml-2">(30 days)</span>
-    </h1>
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4">
+      <img class="w-10" src="/Rocket.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        Site analytics <span class="hidden lg:flex ml-2">(30 days)</span>
+      </h1>
+    </div>
 
       <div class="flex flex-col items-center justify-center w-full p-6 rounded-lg shadow bg-opaqueWhite" v-if="user.activeProfile.metadata.privacyMode">
         <div class="w-full p-6 bg-red-200 border-red-600 border rounded-lg text-red-500 flex flex-col xl:flex-row xl:items-center justify-start">

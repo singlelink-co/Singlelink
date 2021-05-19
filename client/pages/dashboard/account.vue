@@ -1,49 +1,49 @@
 <template>
-  <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl w-full mb-4">
+  <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
+    <h1 class="text-black font-extrabold tracking-tight text-3xl mb-4">
       Account settings
     </h1>
 
     <!-- Select billing tier -->
-    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
+      <h2 class="text-black font-bold text-lg w-full">
           Select billing tier
         </h2>
-        <p class="text-gray-600 font-medium max-w-xl">
-          Singlelink is a free service, but if you'd like to upgrade or downgrade your account status you can do so here.
+        <p class="text-black font-bold opacity-70 max-w-xl">
+          Want to change your billing tier? Use the dropdown below.
         </p>
         <div class="flex flex-col mt-4 mb-2 w-full">
-          <label class="font-medium mb-3" for="tierSelect">Account tier</label>
+          <label class="font-bold opacity-70 text-black mb-3" for="tierSelect">Account tier</label>
           <div class="flex flex-col lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4 w-full">
             <select
               id="tierSelect"
-              class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow lg:max-w-md"
+              class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg font-bold border w-full lg:w-auto flex-grow lg:max-w-md"
             >
               <option>Forever free - $0/Month</option>
-              <option>Whale tier - $6/Month</option>
-              <option>Enterprise - Starting at $35/Month</option>
+              <option>Pro - $8/Month</option>
+              <option>Enterprise - Contact sales</option>
             </select>
             <button
               type="button"
-              class="w-full lg:w-auto flex py-3 px-6 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded-lg font-semibold justify-center align-center"
+              class="w-full lg:w-auto flex py-3 px-6 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded-lg font-bold justify-center align-center"
               @click="setPasswordModalActive(true)">
               Save changes
             </button>
           </div>
         </div>
-    </div>-->
+    </div>
 
     <!-- Billing information -->
-    <!--<div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full">
+    <div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
+      <h2 class="text-black font-bold text-lg w-full">
           Billing information
         </h2>
-        <p class="text-gray-600 font-medium max-w-xl">
+        <p class="text-black font-bold opacity-70 max-w-xl">
           Enter your billing information is required to upgrade your account to a paid tier.
         </p>
         <div class="w-full flex flex-col lg:flex-row grid grid-cols-3 gap-4">
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Full name</label>
+            <label class="font-bold text-black opacity-70 mb-3">Full name</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -51,7 +51,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Company name</label>
+            <label class="font-bold text-black opacity-70 mb-3">Company name</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -59,7 +59,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Phone number</label>
+            <label class="font-bold text-black opacity-70 mb-3">Phone number</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -69,7 +69,7 @@
         </div>
         <div class="w-full flex flex-col lg:flex-row grid grid-cols-5 gap-4">
           <div class="flex flex-col mt-4 mb-2 w-full col-span-2">
-            <label class="font-medium mb-3">Address</label>
+            <label class="font-bold text-black opacity-70 mb-3">Address</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -77,7 +77,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">City</label>
+            <label class="font-bold text-black opacity-70 mb-3">City</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -85,7 +85,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Zip code</label>
+            <label class="font-bold text-black opacity-70 mb-3">Zip code</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -93,7 +93,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Country</label>
+            <label class="font-bold text-black opacity-70 mb-3">Country</label>
             <select
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
               >
@@ -349,7 +349,7 @@
         </div>
         <div class="w-full flex flex-col lg:flex-row grid grid-cols-4 gap-4">
           <div class="flex flex-col mt-4 mb-2 w-full col-span-2">
-            <label class="font-medium mb-3">Card number</label>
+            <label class="font-bold text-black opacity-70 mb-3">Card number</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -357,7 +357,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Expiration date</label>
+            <label class="font-bold text-black opacity-70 mb-3">Expiration date</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -365,7 +365,7 @@
               >
           </div>
           <div class="flex flex-col mt-4 mb-2 w-full">
-            <label class="font-medium mb-3">Security code</label>
+            <label class="font-bold text-black opacity-70 mb-3">Security code</label>
             <input
                 class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow"
                 type="text"
@@ -375,61 +375,61 @@
         </div>
         <button
             type="button"
-            class="mt-4 py-3 px-6 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
+            class="mt-4 py-3 px-6 text-center text-base text-white bg-gdp hover:bg-indigo-500 rounded-2xl font-bold"
             @click=""
           >
             Save changes
           </button>
-    </div>-->
+    </div>
     
 
     <!-- Reset Password -->
     <div class="flex flex-col p-6 bg-white shadow rounded-lg justify-center items-start w-full mb-8">
-      <h2 class="text-gray-800 font-semibold text-lg w-full">
+      <h2 class="text-black font-bold text-lg w-full">
           Reset your password
         </h2>
-        <p class="text-gray-600 font-medium max-w-xl">
+        <p class="text-black font-bold opacity-70 max-w-xl">
           An email will be sent to you with a password reset link. Please type in the same email you used to sign up
           for this account to confirm.
         </p>
         <div class="flex flex-col mt-4 mb-2 w-full">
-          <label class="font-medium mb-3">Confirm your email address</label>
-          <div class="flex flex-col lg:flex-row items-center justify-start space-y-4 lg:space-y-0 lg:space-x-4 w-full">
+          <label class="font-bold text-black opacity-70 mb-3">Confirm your email address</label>
+          <div class="flex flex-col items-center justify-start space-y-4 w-full">
             <input
               id="passwordResetEmail"
               v-model="passwordEmail"
-              class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full lg:w-auto flex-grow lg:max-w-md"
+              class="px-2 py-3 text-sm border-solid border-gray-300 rounded-lg border w-full flex-grow"
               type="text"
               placeholder="e.g. jane@gmail.com"
               aria-label="password reset email"
             >
             <button
               type="button"
-              class="w-full lg:w-auto flex py-3 px-6 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded-lg font-semibold justify-center align-center"
+              class="w-full flex py-3 px-6 text-sm text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold justify-center align-center"
               @click="setPasswordModalActive(true)">
-              Reset password
+              Request password reset link
             </button>
           </div>
         </div>
     </div>
 
     <!-- Delete account -->
-    <!--<div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-lg justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
-        <h2 class="text-gray-800 font-semibold text-lg w-full">
+        <h2 class="text-black font-bold text-lg w-full">
           Delete this account
         </h2>
-        <p class="text-gray-600 font-medium">Done with this account? Click the button on your right to delete this
+        <p class="text-black font-bold opacity-70">Done with this account? Click the button on your right to delete this
           profile and all related content.</p>
       </div>
       <button
         type="button"
-        class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex p-3 text-sm text-white text-center bg-red-600 hover:bg-red-700 rounded-lg font-semibold w-1/3 justify-center align-center"
+        class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex px-6 py-3 text-sm text-white text-center bg-red-600 hover:bg-red-400 rounded-2xl font-bold w-1/3 justify-center align-center"
         @click="setDeleteAccountModalActive(true)"
       >
         Delete this account
       </button>
-    </div>-->
+    </div>
 
     <transition name="fade">
       <!-- Password reset confirmation modal -->
@@ -440,7 +440,7 @@
         @click="setPasswordModalActive(false)"
       >
         <div class="flex flex-col p-6 bg-white shadow rounded-lg w-full max-w-lg" @click.stop>
-          <h2 class="text-gray-800 font-semibold text-xl">
+          <h2 class="text-black font-bold text-xl">
             {{ passwordError ? "Error on password request!" : "Password reset requested" }}
           </h2>
           <p v-if="!passwordError" class="text-gray-600 text-sm">A password reset link has been sent to your account
@@ -453,7 +453,7 @@
           </p>
           <button
             type="button"
-            class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
+            class="mt-4 p-3 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-bold"
             @click="setPasswordModalActive(false)"
           >
             Close
@@ -694,5 +694,9 @@ export default Vue.extend({
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+input, select {
+  @apply font-bold;
 }
 </style>

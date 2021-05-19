@@ -1,8 +1,11 @@
 <template>
-  <section class="flex flex-shrink-0 flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
-    <h1 class="text-black font-extrabold tracking-tight text-3xl w-full mb-4">
-      Site settings
-    </h1>
+  <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
+      <img class="w-8" src="/Pencil.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        Site settings
+      </h1>
+    </div>
     <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-lg w-full mb-8">
       <transition name="fade">
         <div
@@ -194,7 +197,7 @@
         <p class="text-black opacity-70 font-semibold">Need to configure the account managing your micro-sites?</p>
       </div>
       <n-link
-        to="/account"
+        to="/dashboard/account"
         class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex p-3 px-6 text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold w-1/3 justify-center align-center"
       >
         Goto account settings

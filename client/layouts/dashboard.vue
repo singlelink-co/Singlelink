@@ -23,8 +23,8 @@
                         <span class="font-bold text-lg opacity-60" v-if="user.activeProfile.customDomain">{{ user.activeProfile.customDomain }}</span>
                         <span class="font-bold text-lg opacity-60" v-if="!user.activeProfile.customDomain && user.activeProfile.handle">singlel.ink/u/{{ user.activeProfile.handle }}</span>
                       </div>
-                      <div class="py-1 px-2 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
-                      <div class="py-1 px-2 rounded-full text-sm font-extrabold leading-tight cursor-pointer" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
+                      <div class="py-1 px-2 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer grow" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
+                      <div class="py-1 px-2 rounded-full text-sm font-extrabold leading-tight cursor-pointer grow" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
 
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                 </a>
             </div>
         </div>
-        <Nuxt id="child" style="top:-88px;" class="relative lg:pt-24 p-16 flex-grow flex-1 lg:overflow-y-scroll lg:h-screen"/>
+        <Nuxt id="child" style="top:-88px;" class="relative lg:pt-24 p-16 flex-grow flex-1 w-auto lg:overflow-y-scroll lg:h-screen"/>
         </div>
     </div>
 </template>
@@ -716,5 +716,8 @@ html {
       margin-right: .65rem !important;
     }
 
+  .grow:hover {
+    transform: scale(1.03);
+  }
     
 </style>
