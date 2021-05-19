@@ -28,7 +28,7 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative',
+    title: process.env.META_TITLE ?? 'Singlelink - The open-source Linktree alternative & micro-site platform',
     meta: [
       {charset: 'utf-8'},
       {
@@ -38,37 +38,37 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+        content: process.env.META_DESCRIPTION ?? "Singlelink is the open-source Linktree alternative without limits. Supercharge your micro-site in sixty seconds today!"
       },
       {
         hid: 'twitter:description',
         name: 'twitter:description',
-        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+        content: process.env.META_DESCRIPTION ?? "Singlelink is the open-source Linktree alternative without limits. Supercharge your micro-site in sixty seconds today!"
       },
       {
         hid: 'og:image',
         name: 'og:image',
-        content: process.env.META_IMAGE ?? 'https://singlelink.co/open-graph-image-v2.png'
+        content: process.env.META_IMAGE ?? 'https://i.ibb.co/Mgb8N2x/open-graph-image-v2-1.png'
       },
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content: process.env.META_IMAGE ?? 'https://singlelink.co/open-graph-image-v2.png'
+        content: process.env.META_IMAGE ?? 'https://i.ibb.co/Mgb8N2x/open-graph-image-v2-1.png'
       },
       {
         hid: 'og:title',
         name: 'og:title',
-        content: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative'
+        content: process.env.META_TITLE ?? "Singlelink is the open-source Linktree alternative without limits. Supercharge your micro-site in sixty seconds today!"
       },
       {
         hid: 'twitter:title',
         name: 'twitter:title',
-        content: process.env.META_TITLE ?? 'Singlelink - A free & open-source Linktree alternative'
+        content: process.env.META_TITLE ?? "Singlelink is the open-source Linktree alternative without limits. Supercharge your micro-site in sixty seconds today!"
       },
       {
         hid: 'og:description',
         name: 'og:description',
-        content: process.env.META_DESCRIPTION ?? 'One link for all your content, open-sourced via GPL v3 and built with NuxtJS, MongoDB, and NodeJS.'
+        content: process.env.META_DESCRIPTION ?? "Singlelink is the open-source Linktree alternative without limits. Supercharge your micro-site in sixty seconds today!"
       },
       {
         hid: 'twitter:url',
@@ -85,7 +85,7 @@ export default {
       {
         rel: 'icon',
         type: 'image/x-icon',
-        href: process.env.FAVICON ?? '/favicon.ico'
+        href: process.env.FAVICON ?? '/sl-icon.svg'
       },
       {
         rel: 'stylesheet',
