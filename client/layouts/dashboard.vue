@@ -8,7 +8,8 @@
           <img src="/Compass.svg" style="width: 16px;height:auto;"/>
           <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;" placeholder="Search pages, guides, and documentation..."/>
         </div>
-        <n-link to="/dashboard/referrals" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Refer a friend and get $10!</n-link>
+        <!--<n-link to="/dashboard/referrals" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Refer a friend and get $10!</n-link>-->
+        <n-link to="/dashboard/upgrade" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Upgrade and go pro!</n-link>
       </div>
       <div class="flex flex-col lg:flex-row w-full max-w-6xl h-screen oveflow-x-hidden">
         <div class="flex flex-col text-black font-semibold nav justify-start">
@@ -343,6 +344,9 @@ export default Vue.extend({
         switch (this.$route.name) {
           case "dashboard":
             this.active = "dashboard";
+            break;
+          case "dashboard-upgrade":
+            this.active = "dashboard-upgrade";
             break;
           case "dashboard-appearance":
             this.active = "dashboard-appearance";
