@@ -1,16 +1,16 @@
 <template>
-	<div class="w-screen min-h-screen flex flex-col lg:flex-row text-white">
+	<div class="w-screen min-h-screen flex flex-col lg:flex-row text-black">
 		<section class="w-full lg:w-1/2 xl:w-5/12 flex flex-col lg:h-screen p-12 items-start justify-center">
             <div class="flex flex-col max-w-lg w-full mx-auto">
                 <h1 class="text-5xl font-bold mb-4">Create an account</h1>
                 <p class="opacity-80 font-semibold text-2xl mb-8">Create your first Singlelink site free!</p>
-                <a href="#" class="flex flex-row items-center font-semibold justify-center rounded-full w-full px-8 py-4 text-lg border-2 border-gray-700 hover:border-white" >
+                <a href="#" class="flex flex-row items-center font-semibold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-600 hover:border-black" style="border-width:3px;border-style:solid;">
                     <img src="/google-icon.png" class="w-5 mr-4"/>
                     Sign up with Google
                 </a>
                 <div class="w-full flex flex-row items-center justify-center opacity-60 my-4">
                     <div class="line"></div>
-                    <p class="mx-4">Or, sign up with email</p>
+                    <p class="mx-4 font-bold">Or, sign up with email</p>
                     <div class="line"></div>
                 </div>
                 <div class="flex flex-col w-full mb-4">
@@ -32,11 +32,11 @@
                     </div>
                 </div>
                 <div @click="attemptRegister" class="button">Get started free</div>
-                <a href="/" class="mx-auto text-center text-indigo-500 mb-4 text-sm hover:underline font-semibold">Already have an account? Click here to login</a>
-                <span class="mx-auto text-center opacity-50 text-sm">©2021 Neutron Creatixve Inc., All rights reserved.</span>
+                <a href="/" class="mx-auto text-center text-indigo-500 mb-4 text-sm hover:underline font-bold">Already have an account? Click here to login</a>
+                <span class="mx-auto text-center opacity-50 font-bold text-sm">©{{ new Date().getFullYear() }} Neutron Creatixve Inc., All rights reserved.</span>
             </div>
         </section>
-		<section class="order-first lg:order-last right w-full lg:w-1/2 xl:w-7/12 flex flex-col lg:h-screen text-center items-center justify-center p-12">
+		<section class="order-first lg:order-last right w-full lg:w-1/2 xl:w-7/12 flex flex-col lg:h-screen text-center items-center justify-center p-12 text-white">
             <img src="/integrations.png" class="w-full max-w-sm"/>
             <h3 class="text-4xl font-bold max-w-sm mb-4">Integrations for all of your favorite apps</h3>
             <p class="text-2xl opacity-80 max-w-md">Connect your micro-site with your content from all your favorite platforms</p>
@@ -173,7 +173,7 @@ export default Vue.extend({
 
 <style>
 body {
-	background: #111;
+	background: #FEFEFE;
 }
 .NeutronLogo {
 	width: 180px;
@@ -193,13 +193,14 @@ body {
         height: 1px;
         width: auto;
         flex-grow: 1;
-        background: rgba(255,255,255,.2);
+        background: rgba(0,0,0,.2);
     }
     label {
         @apply mb-2 text-lg font-semibold;
     }
     input {
         @apply w-full rounded-full px-8 py-3 text-lg text-gray-800 font-semibold outline-none;
+		box-shadow: 0 0 0 3px rgba(0,0,0,.1);
         transition: .1s ease-in;
     }
     input:focus {

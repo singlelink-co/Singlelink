@@ -1,6 +1,6 @@
 <template>
   <section class="flex flex-col items-center h-full  flex-shrink-0">
-    <div class="flex flex-col p-8 max-w-2xl items-center justify-center w-full flex-shrink-0">
+    <div class="flex flex-col max-w-2xl items-center justify-center w-full flex-shrink-0">
       <div
         v-if="!links || links.length === 0"
         class="flex flex-row p-3 mt-4 mb-6 bg-orange-200 text-orange-600 rounded-2xl justify-center items-center text-sm text-center w-full border-3 text-lg font-semibold border-orange-300 shadow-sm"
@@ -25,7 +25,8 @@
         <div
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col flex-shrink-0 text-sm text-white p-4 bg-opaqueWhite text-center font-medium items-center justify-center rounded-2xl shadow w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
+          class="flex flex-col flex-shrink-0 text-sm text-black p-4 bg-opaqueWhite text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
+          style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
           @click="editLink(link)"
         >
           <span class="text-xl font-bold">{{ link.label }}
@@ -33,7 +34,7 @@
               <i class="fas fa-mobile-alt"/>
             </span>
           </span>
-          <span v-if="link.subtitle" class="text-base font-semibold opacity-75 sl-subtitle mt-1">
+          <span v-if="link.subtitle" class="text-lg font-bold opacity-70 sl-subtitle mt-1">
             {{ link.subtitle }}
           </span>
         </div>
@@ -51,16 +52,16 @@
         <div class="flex flex-col bg-blackish shadow rounded-lg overflow-hidden w-full max-w-xl" @click.stop>
 
           <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-700">
-            <h2 v-if="modalIntent === 'create'" class="text-white font-semibold text-xl">
+            <h2 v-if="modalIntent === 'create'" class="text-black font-semibold text-xl">
               Create new link
             </h2>
-            <h2 v-if="modalIntent === 'edit'" class="text-white font-semibold text-xl">
+            <h2 v-if="modalIntent === 'edit'" class="text-black font-semibold text-xl">
               Edit link
             </h2>
-            <p v-if="modalIntent === 'create'" class="text-gray-200 text-sm">Fill out the form below to add a new link
+            <p v-if="modalIntent === 'create'" class="text-gray-800 text-sm">Fill out the form below to add a new link
               to
               your page.</p>
-            <p v-if="modalIntent === 'edit'" class="text-gray-200 text-sm">Fill out the form below to edit & save your
+            <p v-if="modalIntent === 'edit'" class="text-gray-800 text-sm">Fill out the form below to edit & save your
               link changes.</p>
           </div>
 
@@ -79,7 +80,7 @@
             </transition>
 
             <div class="flex flex-col mb-4">
-              <label class="font-semibold text-base text-white" for="label">Label</label>
+              <label class="font-semibold text-base text-black" for="label">Label</label>
               <input
                 id="label"
                 v-model="pendingLink.label"
@@ -90,7 +91,7 @@
             </div>
 
             <div class="flex flex-col mb-4">
-              <label class="font-semibold text-base text-white" for="subtitle">Subtitle (optional)</label>
+              <label class="font-semibold text-base text-black" for="subtitle">Subtitle (optional)</label>
               <input
                 id="subtitle"
                 v-model="pendingLink.subtitle"
@@ -101,7 +102,7 @@
             </div>
 
             <div class="flex flex-col mb-4">
-              <label class="font-semibold text-base text-white" for="link">Link URL</label>
+              <label class="font-semibold text-base text-black" for="link">Link URL</label>
               <input
                 id="link"
                 v-model="pendingLink.url"
@@ -112,7 +113,7 @@
             </div>
 
             <div class="flex flex-col mb-4">
-              <label class="font-semibold text-base text-white" for="custom_css">Custom CSS</label>
+              <label class="font-semibold text-base text-black" for="custom_css">Custom CSS</label>
               <textarea
                 id="custom_css"
                 v-model="pendingLink.customCss"
@@ -123,7 +124,7 @@
             </div>
 
             <div class="flex flex-row justify-between items-center mb-3">
-              <label class="font-semibold text-base text-white" for="custom_css">
+              <label class="font-semibold text-base text-black" for="custom_css">
                 Create Deep Link
                 <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
                   <span class="ml-2 text-xl">
@@ -151,14 +152,14 @@
             <button
               type="button"
               id="save-and-add-link-btn"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-black text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveAndClose"
             >
               Save and add link
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-black text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="saveAndContinue"
             >
               Save and continue
@@ -171,14 +172,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-black text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveLinkChanges"
             >
               Save changes
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-black text-center bg-red-500 hover:bg-red-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="deleteLink"
             >
               Delete link
