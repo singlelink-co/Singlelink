@@ -156,7 +156,8 @@ export default Vue.extend({
         emailHash: '',
         activeProfile: {
           handle: '',
-          visibility: ''
+          visibility: '',
+          customDomain: '',
         },
       },
       share_modal: false,
