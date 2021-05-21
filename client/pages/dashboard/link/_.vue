@@ -9,13 +9,17 @@
     </div>
         <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
             <label class="font-semibold mb-2">Label</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label" placeholder="e.g. My beautiful theme" type="text"/>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label" placeholder="e.g. My blog" type="text"/>
+        </div>
+        <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
+            <label class="font-semibold mb-2">Subtitle (optional)</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.subtitle" placeholder="e.g. Read more about my adverntures in Peru!" type="text"/>
         </div>
         <div class="flex flex-col mb-8 justify-start w-full" v-if="intent!='view'">
             <label class="font-semibold mb-2">Link URL</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.url" placeholder="e.g. https://singlelink.co" type="url"/>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.url" placeholder="e.g. https://janedoe.com/blog" type="url"/>
         </div>
-        <!--<div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-6">
+        <!--<div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full mb-6">
             <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
                 <h2 class="text-gray-800 font-semibold text-lg">
                 Customization
@@ -24,7 +28,7 @@
             </div>
             <builder v-if="builderLoaded" v-model="builderCss"/>
         </div>-->
-        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
+        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full">
             <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
                 <h2 class="text-gray-800 font-semibold text-lg">
                 Custom CSS
@@ -44,9 +48,9 @@
         ></MonacoEditor>
         </div>
         <div class="flex flex-col lg:flex-row items-center justify-start w-full mt-4">
-            <div v-if="intent=='create'" @click="addNewLink" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Create link</div>
-            <div v-if="intent=='edit'" @click="saveLinkChanges" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
-            <div v-if="intent=='edit'" @click="deleteLink" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-red-500 bg-red-600 cursor-pointer">Delete link</div>
+            <div v-if="intent=='create'" @click="addNewLink" class="button cursor-pointer">Create link</div>
+            <div v-if="intent=='edit'" @click="saveLinkChanges" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-indigo-500 bg-gdp lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
+            <div v-if="intent=='edit'" @click="deleteLink" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-red-500 bg-red-600 cursor-pointer">Delete link</div>
         </div>
     </section>
 </template>
