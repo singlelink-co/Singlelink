@@ -18,6 +18,24 @@
 				<h2 class="font-bold text-black text-2xl w-full mb-4">
 					Your referrals to date
 				</h2>
+				<div class="grid grid-cols-2 border border-l-0 border-r-0 border-b-0 border-gray-200 w-full">
+					<div class="flex flex-col items-center justify-center p-6">
+						<h2 class="font-bold text-black opacity-70 text-lg w-full mb-1">
+							Total referrals
+						</h2>
+						<h4 class="text-indigo-600 text-4xl leading-tight font-bold">
+							198
+						</h4>
+					</div>
+					<div class="flex flex-col items-center justify-center p-6 border border-gray-200 border-r-0 border-t-0 border-b-0">
+						<h2 class="font-bold text-black opacity-70 text-lg w-full mb-1">
+							Total credit earned
+						</h2>
+						<h4 class="text-indigo-600 text-4xl leading-tight font-bold">
+							$288
+						</h4>
+					</div>
+				</div>
 				<div class="flex flex-col w-full">
 					<div v-for="referral in referrals" class="flex flex-row py-2 px-8 cursor-pointer w-full items-center justify-start hover:bg-opaqueBlack border border-gray-200 border-b-0 border-l-0 border-r-0">
 						<div class="w-12 h-12 rounded-full mr-6" style="background:linear-gradient(146deg, rgba(0,255,240,1) 00%, rgba(173,255,0,1) 100%);box-shadow: inset 0 0 0 4px rgba(0,0,0,.15);"></div>
