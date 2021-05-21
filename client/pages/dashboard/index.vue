@@ -31,16 +31,16 @@
         <n-link
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col flex-shrink-0 text-sm text-black p-4 bg-white text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
+          class="flex flex-col flex-shrink-0 text-sm text-black p-8 bg-white text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
           style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
           :to="'/dashboard/link/' + link.id"
         >
-          <span class="text-xl font-bold">{{ link.label }}
+          <span class="text-2xl font-bold">{{ link.label }}
             <span v-if="link.useDeepLink" class="ml-2 text-black text-lg">
               <i class="fas fa-mobile-alt"/>
             </span>
           </span>
-          <span v-if="link.subtitle" class="text-lg font-bold opacity-70 sl-subtitle mt-1">
+          <span v-if="link.subtitle" class="text-xl font-bold opacity-70 sl-subtitle mt-1">
             {{ link.subtitle }}
           </span>
         </n-link>
