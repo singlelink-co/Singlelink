@@ -7,9 +7,18 @@
 			</h1>
 		</div>
 			<p class="font-bold text-black opacity-70 text-2xl mb-4">Ready to upgrade Singlelink sites and experience?</p>
-
 		<!-- Billing information -->
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
+      <ul class="flex flex-col items-center justify-center text-center p-6 w-full bg-opaqueIndigo border-2 border-gdp font-bold mb-8 rounded-2xl text-gdp">
+         <h3 class="font-extrabold text-xl text-blackish mb-2">Get instant access to...</h3>
+         <div class="grid grid-cols-2 space-x-4">
+         <li class="flex flex-row items-center mb-1"><img src="/Check mark.svg" class="w-4 mr-1"/>No ads or Singlelink branding</li>
+         <li class="flex flex-row items-center mb-1"><img src="/Check mark.svg" class="w-4 mr-1"/>Enhanced analytics & graphs</li>
+         <li class="flex flex-row items-center mb-1"><img src="/Check mark.svg" class="w-4 mr-1"/>Enhanced business support</li>
+         <li class="flex flex-row items-center"><img src="/Check mark.svg" class="w-4 mr-1"/>Anonymous privacy mode</li>
+         </div>
+         <span class="opacity-70 mt-2">and so much more...</span> 
+      </ul>
       <h2 class="text-black font-bold opacity-90 text-center text-lg w-full">
           First, enter your billing information...
         </h2>
