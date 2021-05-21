@@ -6,7 +6,7 @@
         Site settings
       </h1>
     </div>
-    <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full mb-8">
+    <div class="flex flex-col p-6 bg-white shadow rounded-2xl w-full mb-8">
       <transition name="fade">
         <div
           v-if="error"
@@ -172,7 +172,7 @@
     </div>
 
     <!-- Delete site -->
-    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-2xl justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-black font-bold text-lg w-full">
           Delete this site
@@ -189,7 +189,7 @@
       </button>
     </div>
 
-    <div class="flex flex-col lg:flex-row p-6 bg-opaqueWhite shadow rounded-2xl justify-center items-center w-full mb-8">
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-7/12">
         <h2 class="text-black font-bold text-lg w-full">
           Account settings
@@ -212,7 +212,7 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setDeleteProfileModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full max-w-lg" @click.stop>
+        <div class="flex flex-col p-6 bg-white shadow rounded-2xl w-full max-w-lg" @click.stop>
           <h2 class="text-black font-semibold text-xl">
             Are you sure?
           </h2>
@@ -238,7 +238,7 @@
         style="background: rgba(0,0,0,.5); backdrop-filter: saturate(180%) blur(5px);"
         @click="setPasswordModalActive(false)"
       >
-        <div class="flex flex-col p-6 bg-opaqueWhite shadow rounded-2xl w-full max-w-lg" @click.stop>
+        <div class="flex flex-col p-6 bg-white shadow rounded-2xl w-full max-w-lg" @click.stop>
           <h2 class="text-black font-semibold text-xl">
             {{ passwordError ? "Error on password request!" : "Password reset requested" }}
           </h2>

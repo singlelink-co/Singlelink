@@ -31,7 +31,7 @@
         <n-link
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col flex-shrink-0 text-sm text-black p-4 bg-opaqueWhite text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
+          class="flex flex-col flex-shrink-0 text-sm text-black p-4 bg-white text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
           style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
           :to="'/dashboard/link/' + link.id"
         >

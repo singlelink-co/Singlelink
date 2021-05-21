@@ -33,7 +33,7 @@
                 <span class="mx-auto font-bold text-center opacity-50 text-sm">©{{ new Date().getFullYear() }} Neutron Creative Inc., All rights reserved.</span>
             </div>
         </section>
-		<section class="order-first lg:order-last right w-full lg:w-1/2 xl:w-7/12 flex flex-col lg:h-screen text-center items-center justify-center p-12 text-white">
+		<section class="hidden lg:flex order-first lg:order-last right w-full lg:w-1/2 xl:w-7/12 flex-col lg:h-screen text-center items-center justify-center p-12 text-white">
             <img src="/integrations.png" class="w-full max-w-sm"/>
             <h3 class="text-4xl font-bold max-w-sm mb-4">Integrations for all of your favorite apps</h3>
             <p class="text-2xl opacity-80 max-w-md">Connect your micro-site with your content from all your favorite platforms</p>

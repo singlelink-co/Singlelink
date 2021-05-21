@@ -1,7 +1,7 @@
 
 
 <template>
-    <div class="bg-whiteish flex flex-col items-center justify-center">
+    <div class="white-gradient flex flex-col items-center justify-center">
       <div class="flex flex-row w-full max-w-6xl py-6 justify-between relative" style="z-index:2;background:linear-gradient(180deg, #FFF 60%, rgba(255,255,255,.65) 80%, rgba(255,255,255,0) 100%);">
         <n-link to="/dashboard"><img src="/sl-icon.svg" class="w-10" style="filter: drop-shadow(0px 10px 25px #5353EC);"/></n-link>
         <div class="flex flex-row items-center justify-start bg-opaqueBlack px-4 py-1 rounded-full w-full max-w-md" style="border: solid 2px rgba(0,0,0,.15);">
@@ -733,6 +733,15 @@ html {
 
   .grow:hover {
     transform: scale(1.03);
+  }
+
+
+  .white-gradient {
+    background: #edf4fc;
+    background: -moz-linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    background: linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fefefe",endColorstr="#edf4fc",GradientType=1);
   }
     
 </style>

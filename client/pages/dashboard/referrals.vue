@@ -14,7 +14,7 @@
 				<div @click="copyUrl" title="Click to copy!" class="flex cursor-pointer flex-row items-center justify-center bg-opaqueIndigo font-bold px-4 py-2 text-center rounded-full w-full mt-2 text-gdp max-w-md border-2 border-gdp" type="text">https://singlel.ink/s/{{this.user.activeProfile.handle}}</div>
 				<p class="uppercase text-sm font-extrabold leading-relaxed text-black mt-2 opacity-70">Click the url above to copy</p>
 			</div>
-			<div class="flex flex-col pt-4 bg-opaqueWhite shadow items-center text-center rounded-2xl mb-8 w-full">
+			<div class="flex flex-col pt-4 bg-white shadow items-center text-center rounded-2xl mb-8 w-full">
 				<h2 class="font-bold text-black text-2xl w-full mb-4">
 					Your referrals to date
 				</h2>
