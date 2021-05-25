@@ -52,6 +52,7 @@
     "fastify-cors": "^4.1.0",
     "fastify-favicon": "^3.0.0",
     "fastify-rate-limit": "^4.0.3",
+    "fastify-raw-body": "^3.1.0",
     "googleapis": "^71.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",

@@ -4,7 +4,6 @@
  * It is a direct 1:1 of the tables and types within the database.
  */
 
-type subscription_t = 'free' | 'whale' | 'enterprise';
 type visibility_t = 'unpublished' | 'published' | 'published-18+';
 type visit_t = 'link' | 'page';
 type addon_t = 'theme' | 'preset' | 'plugin';
@@ -21,8 +20,6 @@ type linktype_t = 'link' | 'social' | 'image' | 'video'
  full_name         text,
  pass_hash         varchar(60)         not null,
  active_profile_id bigint,
- payment_id        text,                                        -- The associated payment account id (external) for this user
- subscription_tier subscription_t               default 'free', -- The subscription tier of this user
  inventory         jsonb                        default '{}',   -- All the stuff this account owns
  metadata          jsonb               not null default '{}',
  created_on        timestamp           not null default current_timestamp
@@ -34,7 +31,6 @@ interface DbUser {
   email_hash: string, // Used for gravatar, it could be better but this is how the service works
   full_name: string | null,
   active_profile_id: string | null,
-  subscription_tier: subscription_t | null,
   inventory: unknown | null,
 
   // The metadata tag will grow over time as functionality is added.
@@ -45,10 +41,11 @@ interface DbUser {
 
 interface DbSensitiveUser extends DbUser {
   email: string,
-  payment_id: string | null,
 
   private_metadata: {
     favorites: [],
+    googleId: null,
+    githubId: null,
     emailNotifications: {
       major: true,
       minor: true,

@@ -35,7 +35,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getUser(userId: string): Promise<User> {
-    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -49,7 +49,7 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getUserByEmail(email: string): Promise<User> {
-    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -63,7 +63,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getUserByGoogleId(googleId: string): Promise<User> {
-    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on from app.users where private_metadata->'google_id'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where private_metadata->'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -77,7 +77,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getSensitiveUser(userId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -91,7 +91,7 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where email=$1", [email]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -105,7 +105,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getSensitiveUserByGoogleId(googleId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, payment_id, subscription_tier, inventory, metadata, created_on from app.users where private_metadata->'google_id'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where private_metadata->'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -147,7 +147,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getSensitiveUserWithPasswordByGoogleId(googleId: string): Promise<SensitiveUserWithPassword> {
-    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where private_metadata->'google_id'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where private_metadata->'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -356,7 +356,7 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
 
-    let enableGoogleSignInQueryResult = await this.pool.query<{ google_id: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{google_id}', $1, true) where email=$2 returning private_metadata->'google_id' as google_id",
+    let enableGoogleSignInQueryResult = await this.pool.query<{ googleId: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{googleId}', $1, true) where email=$2 returning private_metadata->'googleId' as googleId",
       [
         googleId,
         email
@@ -379,7 +379,7 @@ export class UserService extends DatabaseService {
   }
 
   async deleteUser(userId: string): Promise<User> {
-    let queryResult = await this.pool.query<DbUser>("delete from app.users where id=$1 returning id, email_hash, full_name, active_profile_id, subscription_tier, inventory, metadata, created_on",
+    let queryResult = await this.pool.query<DbUser>("delete from app.users where id=$1 returning id, email_hash, full_name, active_profile_id, inventory, metadata, created_on",
       [userId]);
 
     if (queryResult.rowCount < 1) {

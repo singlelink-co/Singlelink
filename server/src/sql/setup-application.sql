@@ -15,14 +15,12 @@ create table if not exists app.users
     full_name         text,
     pass_hash         varchar(60)         not null,
     active_profile_id bigint,
-    payment_id        text,                                        -- The associated payment account id (external) for this user
-    subscription_tier subscription_t               default 'free', -- The subscription tier of this user
     inventory         jsonb                        default '{}',   -- All the stuff this account owns
     metadata          jsonb               not null default '{}',
     private_metadata  jsonb               not null default '{
       "favorites": [],
-      "google_id": null,
-      "github_id": null,
+      "googleId": null,
+      "githubId": null,
       "emailNotifications": {
         "major": true,
         "minor": true,
@@ -35,8 +33,8 @@ create table if not exists app.users
 
 create index if not exists accounts_email_index on app.users (email);
 create index if not exists accounts_private_metadata_favorites on app.users ((private_metadata -> 'favorites'));
-create index if not exists accounts_private_metadata_google_id on app.users ((private_metadata -> 'google_id'));
-create index if not exists accounts_private_metadata_github_id on app.users ((private_metadata -> 'github_id'));
+create index if not exists accounts_private_metadata_googleId on app.users ((private_metadata -> 'googleId'));
+create index if not exists accounts_private_metadata_github_id on app.users ((private_metadata -> 'githubId'));
 
 /*
  Creates a theme table that contains all user themes.
@@ -207,3 +205,10 @@ alter table app.profiles
 
 alter table app.links
     add column if not exists private_metadata jsonb not null default '{}';
+
+-- Update v3.0
+alter table app.users
+    drop column if exists subscription_tier;
+
+alter table app.users
+    drop column if exists payment_id;

@@ -522,7 +522,7 @@ export class Auth {
     if (queryResult.rowCount < 1)
       return false;
 
-    const googleEnabledQuery = await this.pool.query<{ google_id: string | null | undefined }>("select 1 from app.users where id=$1 and private_metadata->'google_id'=$2",
+    const googleEnabledQuery = await this.pool.query<{ googleId: string | null | undefined }>("select 1 from app.users where id=$1 and private_metadata->'googleId'=$2",
       [userId, googleId]);
 
     return googleEnabledQuery.rowCount >= 1;
