@@ -15,7 +15,7 @@ create table if not exists app.users
     full_name         text,
     pass_hash         varchar(60)         not null,
     active_profile_id bigint,
-    inventory         jsonb                        default '{}',   -- All the stuff this account owns
+    inventory         jsonb                        default '{}', -- All the stuff this account owns
     metadata          jsonb               not null default '{}',
     private_metadata  jsonb               not null default '{
       "favorites": [],
@@ -192,6 +192,8 @@ alter table app.links
 alter table app.users
     add column if not exists private_metadata jsonb not null default '{
       "favorites": [],
+      "googleId": null,
+      "githubId": null,
       "emailNotifications": {
         "major": true,
         "minor": true,
