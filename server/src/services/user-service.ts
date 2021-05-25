@@ -77,7 +77,7 @@ export class UserService extends DatabaseService {
    * @param userId
    */
   async getSensitiveUser(userId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where id=$1", [userId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on, private_metadata from app.users where id=$1", [userId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -91,7 +91,7 @@ export class UserService extends DatabaseService {
    * @param email
    */
   async getSensitiveUserByEmail(email: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where email=$1", [email]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on, private_metadata from app.users where email=$1", [email]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -105,7 +105,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getSensitiveUserByGoogleId(googleId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where private_metadata->'googleId'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on, private_metadata from app.users where private_metadata->'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
