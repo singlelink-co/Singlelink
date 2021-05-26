@@ -50,15 +50,15 @@ interface SensitiveUser extends User {
   email: string,
 
   privateMetadata: {
-    favorites: [],
-    googleId: null,
-    githubId: null,
+    favorites: string[],
+    googleId: string | null | undefined,
+    githubId: string | null | undefined,
     emailNotifications: {
-      major: true,
-      minor: true,
-      marketing: true,
-      leaderboard: true
-    }
+      major: boolean,
+      minor: boolean,
+      marketing: boolean,
+      leaderboard: boolean
+    },
   }
 }
 
