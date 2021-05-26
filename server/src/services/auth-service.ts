@@ -22,7 +22,7 @@ export class AuthService extends DatabaseService {
   async setGoogleId(userId: string, googleId: string | null) {
     let queryResult = await this.pool.query<{ googleId: string | null | undefined }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{googleId}', $1, true) where id=$2 returning private_metadata->'googleId' as googleId",
       [
-        googleId,
+        JSON.stringify(googleId),
         userId
       ]);
 
