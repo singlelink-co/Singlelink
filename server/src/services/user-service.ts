@@ -63,7 +63,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getUserByGoogleId(googleId: string): Promise<User> {
-    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where private_metadata->'googleId'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbUser>("select id, email_hash, full_name, active_profile_id, inventory, metadata, created_on from app.users where private_metadata->>'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -105,7 +105,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getSensitiveUserByGoogleId(googleId: string): Promise<SensitiveUser> {
-    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on, private_metadata from app.users where private_metadata->'googleId'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbSensitiveUser>("select id, email, email_hash, full_name, active_profile_id, inventory, metadata, created_on, private_metadata from app.users where private_metadata->>'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -147,7 +147,7 @@ export class UserService extends DatabaseService {
    * @param googleId
    */
   async getSensitiveUserWithPasswordByGoogleId(googleId: string): Promise<SensitiveUserWithPassword> {
-    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where private_metadata->'googleId'=$1", [googleId]);
+    let queryResult = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where private_metadata->>'googleId'=$1", [googleId]);
 
     if (queryResult.rowCount < 1)
       throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
@@ -356,7 +356,7 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.CONFLICT, "The user already exists.");
     }
 
-    let enableGoogleSignInQueryResult = await this.pool.query<{ googleId: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{googleId}', $1, true) where email=$2 returning private_metadata->'googleId' as googleId",
+    let enableGoogleSignInQueryResult = await this.pool.query<{ googleId: string }>("update app.users set private_metadata = jsonb_set(private_metadata::jsonb, '{googleId}', $1, true) where email=$2 returning private_metadata->>'googleId' as googleId",
       [
         JSON.stringify(googleId),
         email
