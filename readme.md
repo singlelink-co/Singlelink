@@ -1,18 +1,13 @@
-# Singlelink
-
-<h4>
-    <a href="https://singlelink.co">Singlelink</a> is the open-source Linktree alternative & micro-site platform.
-</h4>
-
-<p>
+<br><h1 align="center"><a target="_blank" href="https://singlelink.co">Singlelink</a>, the open-source Linktree alternative</h1>
+<p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/Public%20Beta-2.2.8-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/Stable-3.0.0-%235353ec" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
         <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
     </a>
     <a href="https://app.singlelink.co/analytics"/>
-        <img src="https://img.shields.io/badge/dynamic/json?color=FF4081&label=Hosted%20Users&query=users&url=https%3A%2F%2Fapi.singlelink.co%2Fanalytics" alt="Users"/>
+        <img src="https://img.shields.io/badge/dynamic/json?color=FF4081&label=Cloud-hosted%20users&query=users&url=https%3A%2F%2Fapi.singlelink.co%2Fanalytics" alt="Users"/>
     </a>
 	<a href="https://twitter.com/singlelink">
 		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/singlelink?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
@@ -22,51 +17,114 @@
 	</a>
 </p>
 
-<img src="client/static/gh-promo.png"/>
+<img src="client/static/gh-hero.png"/>
 
-## About Singlelink
-Singlelink is the open-source Linktree alternative & micro-site platform. Built with self-hosting, whitelabeling, and third-party developers in mind - Singlelink is the micro-site platform for sites that can't fit within the constraints Linktree provides.
+<div align="center">
+
+<h4>Try out <a href="https://singlelink.co" target="_blank">Singlelink</a> for free in seconds 👇</h4>
+
+<a title="Deploy to DigitalOcean" href="https://cloud.digitalocean.com/apps/new?repo=https://github.com/Neutron-Creative/Singlelink/tree/master" target="_blank"><img src="client/static/deploy-do.svg" height="45"/></a>
+<a title="Deploy to Heroku" href="https://app.singlelink.co/create-account" target="_blank"><img src="client/static/deploy-heroku.svg" height="45"/></a>
+<a title="Deploy to Singlelink Cloud" href="https://app.singlelink.co/create-account" target="_blank"><img src="client/static/deploy-sl.svg" height="45"/></a>
+
+</div>
+
+<br><br>
 
 ## Getting started
-To get a local instance of Singlelink running, follow these steps.
+To install <a target="_blank" href="https://singlelink.co">Singlelink</a> locally, follow our steps below or watch one of our available <a href="https://youtube.com/" target="_blank">video installation guides! 👉</a>
 
-### Prerequisites
-Here's what you need to be able to run Singlelink
+### Pre-requisites
+To install <a target="_blank" href="https://singlelink.co">Singlelink</a>, please ensure you have the following installed.
 
-- Node.Js
-- PostgreSQL
+- <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>
+- <a href="https://nodejs.org/en/" target="_blank">NPM/Node.JS</a>
+- <a href="https://www.docker.com/" target="_blank">Docker</a> (optional)
 
-Optionally, you'll can also include credentials for our third-party data providers to hook up the following.
+Optionally, you can also provide API credentials for the following providers to enable additional features.
 
-- Event tracking (Mixpanel)
-- User email notifications (Amazon SES)
-- Image uploads (Simple Image Upload)
+- <a href="https://mixpanel.com" target="_blank">Mixpanel</a> (Event tracking)
+- <a href="https://www.simplefileupload.com/" target="_blank">SimpleFileUpload</a> (Avatar upload/file storage)
+- <a href="https://capture.neutron.so" target="_blank">Neutron Capture</a> (Profile OG image screenshots)
 
-### Server setup
-1. Clone the Singlelink repository
-```
+### Setup with NPM
+1. Clone the repository
+```bash
 git clone https://github.com/Neutron-Creative/Singlelink.git
 ```
-2. Install packages with NPM
+2. Install the dependencies with NPM
+```bash
+cd client;npm install;cd ../server;npm install;cd ../;
 ```
-cd Singlelink/client;npm i;cd ../server;npm i;cd ../
+3. Run the setup script
+```bash
+npm run setup
 ```
-3. Setup your config file
-```
-npm run config-setup
-```
-4. Start your application!
-For development environments, start the dev instance to enable hot-reloading.
-```
-npm run dev
-```
-For production environments, start the production instance to disable hot-reloading and improve performance.
-```
+4. Build & launch <a target="_blank" href="https://singlelink.co">Singlelink</a>
+```bash
 npm run build;npm run start;
 ```
+
+### Development setup
+The development setup is similar to the vanilla NPM setup, however comes with <a href="https://vue-loader.vuejs.org/guide/hot-reload.html" target="_blank">hot-reloading</a> enabled.<br>**🚨 This should not be used in production 🚨**
+1. Clone the repository
+```bash
+git clone https://github.com/Neutron-Creative/Singlelink.git
+```
+2. Install the dependencies with NPM
+```bash
+cd client;npm install;cd ../server;npm install;cd ../;
+```
+3. Run the setup script
+```bash
+npm run setup
+```
+4. Launch <a target="_blank" href="https://singlelink.co">Singlelink</a> with hot-reloading enabled
+```bash
+npm run dev
+```
+
+## Screenshots
+<img src="client/static/screenshot-01.png"/>
+<img src="client/static/screenshot-02.png"/>
+<img src="client/static/screenshot-03.png"/>
+
 ## Roadmap
+See our <a href="https://github.com/Neutron-Creative/Singlelink/issues" target="_blank">open issues</a> to see what we're building next, alongside a list of known bugs and suggestions. <br>Don't see what you're looking for? <a href="https://github.com/Neutron-Creative/Singlelink/issues/new" target="_blank">Submit an issue!</a>
+
+## Support
+Need help? Our <a href="https://discord.com/invite/3pBM4Px" target="_blank">community support </a> is online 9AM-5PM EST M-F, and our <a href="mailto:support@neutroncreative.com">enterprise support team</a> is available 24/7/365 via (<a href="mailto:support@neutroncreative.com">email</a> or <a href="tel:+19196530790">phone</a>). Please don't hesitate to get in touch, we love to help and we're often able to resolve issues within the hour!
+
 ## Contributing
-## Plugin & extension development
+Being open-source, we welcome and encourage all contributions to our project.
+
+To make your first contribution, follow these steps:
+
+1. Fork the project
+2. Create your new feature's branch
+3. Make your changes
+4. Commit your changes & push
+5. Open a pull request
+
+**Bonus:** Make your first contribution to get added to the readme, and after three successful merges we'll send you a t-shirt! 🎉<br>*Promotion only valid while supplies last. <a href="https://discord.gg/BUbmgV4" target="_blank">Send us a message on Discord</a> to confirm availability!*
+
 ## License
-Distributed under the GPL License. See our license.md file for more information.
+Proudly distributed under the GNU GPL v3 License. See `LICENSE` for more information.
+
 ## Acknowledgements
+Special thanks to everyone who helps make <a target="_blank" href="https://singlelink.co">Singlelink</a> great!
+### Our partners & sponsors
+- <a href="https://www.browserstack.com/" target="_blank">BrowserStack</a> (cross-broswer UI/UX testing, sponsor)
+- <a href="https://digitalocean.com/" target="_blank">DigitalOcean</a> (cloud hosting for developers, partner)
+
+### Our team members
+<a href="https://twitter.com/jim_bisenius" title="Jim Bisenius, Co-founder & President of Singlelink" target="_blank"><img width="80" src="https://www.gravatar.com/avatar/106e7dda3325b238cc5845df807e9c2d"/></a>
+<a href="https://twitter.com/navidk0" title="Navid Kabir, Co-founder & CTO of Singlelink" target="_blank"><img width="80" src="https://www.gravatar.com/avatar/9e4f9cbfec8e363db6c16ad3f32043fb"/></a>
+<a href="https://twitter.com/drewbits" title="Drew Boyle, Co-founder & CMO of Singlelink" target="_blank"><img width="80" src="https://pbs.twimg.com/profile_images/1396177710532149256/mQm749Tm_400x400.jpg"/></a>
+
+<br><br>
+---------------
+<h3 align="center"><a href="https://singlelink.co" target="_blank">Singlelink</a>, the open-source Linktree alternative</h3>
+<h4 align="center">
+    Create your free micro-site in seconds at <a href="https://app.singlelink.co/create-account" target="_blank">singlelink.co 👉</a>
+</h4>

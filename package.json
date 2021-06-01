@@ -1,0 +1,13 @@
+{
+  "name": "singlelink",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd client;nuxt-ts build;cd ../server;tsc && npm run copy;",
+    "setup": "node setup.js"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "prompt": "^1.1.0"
+  }
+}

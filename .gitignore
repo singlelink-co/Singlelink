@@ -12,6 +12,9 @@ kubernetes/3_server-config.yaml
 
 dist
 
+# Global dependencies
+node_modules
+
 ### Node template
 # Logs
 logs/
