@@ -1,20 +1,26 @@
 <template>
-  <section class="flex flex-col items-center w-full h-full bg-gray-100 flex-shrink-0">
-    <div class="flex flex-col p-8 max-w-lg items-center justify-center w-full flex-shrink-0">
+  <section class="flex flex-col items-center h-full  flex-shrink-0">
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
+      <img class="w-8" src="/House.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        Site links
+      </h1>
+    </div>
+    <div class="flex flex-col max-w-2xl items-center justify-center w-full flex-shrink-0">
       <div
         v-if="!links || links.length === 0"
-        class="flex flex-row p-2 mt-4 mb-2 bg-orange-200 text-orange-600 rounded-lg justify-center items-center text-sm text-center w-full border border-orange-300 shadow-sm"
+        class="flex flex-row p-3 mt-4 mb-6 bg-orange-200 text-orange-600 rounded-2xl justify-center items-center text-sm text-center w-full border-3 text-lg font-semibold border-orange-300 shadow-sm"
       >
-        You don't have any links to display.<br>Click the button below to create one!
+        This micro-site doesn't have any links to display.<br>Click the button below to create one! 👇
       </div>
-      <button
+      <n-link
         type="button"
-        class="mt-2 mb-8 w-full p-4 text-center text-md text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold"
+        class="button"
         id="add-new-link-btn"
-        @click="openModal('create')"
+        to="/dashboard/link/"
       >
         Add new link
-      </button>
+      </n-link>
 
       <draggable
         v-if="links && links.length > 0"
@@ -22,21 +28,22 @@
         class="flex flex-col w-full flex-shrink-0"
         @change="updateLinkOrder"
       >
-        <div
+        <n-link
           v-for="link in sortedLinks"
           :key="link.id"
-          class="flex flex-col flex-shrink-0 text-sm text-gray-800 p-4 bg-white text-center font-medium items-center justify-center rounded-lg shadow w-full mb-4 hover:bg-gray-100 cursor-pointer"
-          @click="editLink(link)"
+          class="flex flex-col flex-shrink-0 text-sm text-black p-8 bg-white text-center font-medium items-center justify-center rounded-2xl w-full mb-4 opacity-90 hover:opacity-100 cursor-pointer"
+          style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
+          :to="'/dashboard/link/' + link.id"
         >
-          <span>{{ link.label }}
-            <span v-if="link.useDeepLink" class="ml-2 text-black text-xl">
+          <span class="text-2xl font-bold">{{ link.label }}
+            <span v-if="link.useDeepLink" class="ml-2 text-black text-lg">
               <i class="fas fa-mobile-alt"/>
             </span>
           </span>
-          <span v-if="link.subtitle" class="text-sm text-gray-700 sl-subtitle mt-1">
+          <span v-if="link.subtitle" class="text-xl font-bold opacity-70 sl-subtitle mt-1">
             {{ link.subtitle }}
           </span>
-        </div>
+        </n-link>
       </draggable>
     </div>
 
@@ -48,23 +55,23 @@
         @click="closeModal"
       >
 
-        <div class="flex flex-col bg-white shadow rounded-lg overflow-hidden w-full max-w-xl" @click.stop>
+        <div class="flex flex-col bg-blackish shadow rounded-lg overflow-hidden w-full max-w-xl" @click.stop>
 
-          <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
-            <h2 v-if="modalIntent === 'create'" class="text-gray-800 font-semibold text-xl">
+          <div class="p-6 border border-t-0 border-r-0 border-l-0 border-gray-700">
+            <h2 v-if="modalIntent === 'create'" class="text-black font-semibold text-xl">
               Create new link
             </h2>
-            <h2 v-if="modalIntent === 'edit'" class="text-gray-800 font-semibold text-xl">
+            <h2 v-if="modalIntent === 'edit'" class="text-black font-semibold text-xl">
               Edit link
             </h2>
-            <p v-if="modalIntent === 'create'" class="text-gray-600 text-sm">Fill out the form below to add a new link
+            <p v-if="modalIntent === 'create'" class="text-gray-800 text-sm">Fill out the form below to add a new link
               to
               your page.</p>
-            <p v-if="modalIntent === 'edit'" class="text-gray-600 text-sm">Fill out the form below to edit & save your
+            <p v-if="modalIntent === 'edit'" class="text-gray-800 text-sm">Fill out the form below to edit & save your
               link changes.</p>
           </div>
 
-          <form class="p-6 pt-4 bg-gray-100 w-full">
+          <form class="p-6 pt-4 bg-opaqueWhit w-full">
 
             <transition name="fade">
               <div
@@ -78,55 +85,55 @@
               </div>
             </transition>
 
-            <div class="flex flex-col mb-3">
-              <label class="font-medium text-sm text-gray-800" for="label">Label</label>
+            <div class="flex flex-col mb-4">
+              <label class="font-semibold text-base text-black" for="label">Label</label>
               <input
                 id="label"
                 v-model="pendingLink.label"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+                class="p-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. My Calendar"
               >
             </div>
 
-            <div class="flex flex-col mb-3">
-              <label class="font-medium text-sm text-gray-800" for="subtitle">Subtitle (optional)</label>
+            <div class="flex flex-col mb-4">
+              <label class="font-semibold text-base text-black" for="subtitle">Subtitle (optional)</label>
               <input
                 id="subtitle"
                 v-model="pendingLink.subtitle"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+                class="p-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. A list of all my events and available times"
               >
             </div>
 
-            <div class="flex flex-col mb-3">
-              <label class="font-medium text-sm text-gray-800" for="link">Link URL</label>
+            <div class="flex flex-col mb-4">
+              <label class="font-semibold text-base text-black" for="link">Link URL</label>
               <input
                 id="link"
                 v-model="pendingLink.url"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+                class="p-2 text-sm border-solid border-gray-300 rounded-lg border"
                 type="text"
                 placeholder="e.g. Jane Doe"
               >
             </div>
 
-            <div class="flex flex-col mb-3">
-              <label class="font-medium text-sm text-gray-800" for="custom_css">Custom CSS</label>
+            <div class="flex flex-col mb-4">
+              <label class="font-semibold text-base text-black" for="custom_css">Custom CSS</label>
               <textarea
                 id="custom_css"
                 v-model="pendingLink.customCss"
                 rows="3"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+                class="p-2 text-sm border-solid border-gray-300 rounded-lg border"
                 placeholder="e.g. background: #5353EC;"
               />
             </div>
 
-            <div class="flex flex-col mb-3">
-              <label class="font-medium text-sm text-gray-800" for="custom_css">
+            <div class="flex flex-row justify-between items-center mb-3">
+              <label class="font-semibold text-base text-black" for="custom_css">
                 Create Deep Link
                 <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
-                  <span class="ml-2 text-black text-xl">
+                  <span class="ml-2 text-xl">
                   <i class="fas fa-mobile-alt"/>
                 </span>
                 </a>
@@ -135,6 +142,7 @@
                 id="deep_link"
                 v-model="pendingLink.useDeepLink"
                 class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
+                style="outline:none !important;"
                 type="checkbox"
                 placeholder="e.g. background: #5353EC;"
                 aria-label="create deep link"
@@ -150,14 +158,14 @@
             <button
               type="button"
               id="save-and-add-link-btn"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-black text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveAndClose"
             >
               Save and add link
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-black text-center bg-gray-500 hover:bg-gray-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="saveAndContinue"
             >
               Save and continue
@@ -170,14 +178,14 @@
           >
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
+              class="inline-flex p-3 text-sm text-black text-center bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold w-auto max-w-xs justify-center align-center mr-2"
               @click="saveLinkChanges"
             >
               Save changes
             </button>
             <button
               type="button"
-              class="inline-flex p-3 text-sm text-white text-center bg-red-500 hover:bg-red-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
+              class="inline-flex p-3 text-sm text-black text-center bg-red-500 hover:bg-red-600 rounded-lg font-semibold w-auto max-w-xs justify-center align-center"
               @click="deleteLink"
             >
               Delete link
@@ -479,4 +487,23 @@ export default Vue.extend({
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+.button {
+            color: #FFF !important;
+        }
+    .button {
+        @apply mb-8 w-full font-bold rounded-full px-8 py-4 text-lg text-center;
+        background: #5353ec;
+        background: linear-gradient(to bottom, #5353ec, #1717ca);
+        box-shadow: inset 0 0 0 3px rgba(255,255,255,.2), 0 2px 25px rgba(83,83,267,.25);
+        transition: .1s ease-in;
+    }
+    .button:hover {
+        transform: scale(1.01);
+        box-shadow: inset 0 0 0 4px rgba(255,255,255,.4), 0 2px 15px rgba(83,83,267,.75);
+    }
+    .button:focus {
+        transform: scale(1);
+        box-shadow: inset 0 0 0 5px rgba(255,255,255,.5), 0 2px 20px rgba(83,83,267,.95);
+    }
 </style>

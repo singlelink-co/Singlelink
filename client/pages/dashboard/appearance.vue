@@ -1,9 +1,9 @@
 <template>
 	<section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
 		<div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
-			<img class="w-8" src="/High voltage.svg"/>
+			<img class="w-8" src="/Rainbow.svg"/>
 			<h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
-				Marketplace
+				Appearance
 			</h1>
 		</div>
 			<p class="font-bold text-black opacity-70 text-xl my-4">This page isn't ready yet. Check back soon for more updates!</p>
@@ -12,7 +12,7 @@
 
 <script>
 	export default {
-		name: 'DashboardMarketplace',
+		name: 'DashboardAppearance',
 		layout: 'dashboard',
 		middleware: 'authenticated',
 		data() {

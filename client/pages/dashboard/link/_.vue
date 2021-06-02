@@ -1,13 +1,25 @@
 <template>
-    <section class="flex flex-shrink-0 flex-col p-8 items-center bg-gray-100 flex-grow overflow-x-hidden overflow-y-scroll">
-        <div class="flex flex-col lg:flex-row justify-start lg:justify-between items-center mb-4 w-full">
-            <h1 class="text-gray-800 font-extrabold tracking-tight text-3xl"><span v-if="intent=='create'">Create</span><span v-if="intent=='edit'">Edit</span> link</h1>
-        </div>
+  <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
+    <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
+      <img class="w-8" src="/Pencil.svg"/>
+      <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
+        <span v-if="intent=='create'">Create link</span>
+        <span v-if="intent=='edit'">Edit link</span>
+      </h1>
+    </div>
         <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
             <label class="font-semibold mb-2">Label</label>
-            <input class="p-3 rounded-lg bg-white text-sm text-gray-700" v-model="pendingLink.label" placeholder="e.g. My beautiful theme" type="text"/>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label" placeholder="e.g. My blog" type="text"/>
         </div>
-        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full mb-6">
+        <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
+            <label class="font-semibold mb-2">Subtitle (optional)</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.subtitle" placeholder="e.g. Read more about my adverntures in Peru!" type="text"/>
+        </div>
+        <div class="flex flex-col mb-8 justify-start w-full" v-if="intent!='view'">
+            <label class="font-semibold mb-2">Link URL</label>
+            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.url" placeholder="e.g. https://janedoe.com/blog" type="url"/>
+        </div>
+        <!--<div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full mb-6">
             <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
                 <h2 class="text-gray-800 font-semibold text-lg">
                 Customization
@@ -15,8 +27,8 @@
                 <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
             </div>
             <builder v-if="builderLoaded" v-model="builderCss"/>
-        </div>
-        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-lg w-full">
+        </div>-->
+        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full">
             <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
                 <h2 class="text-gray-800 font-semibold text-lg">
                 Custom CSS
@@ -36,9 +48,9 @@
         ></MonacoEditor>
         </div>
         <div class="flex flex-col lg:flex-row items-center justify-start w-full mt-4">
-            <div v-if="intent=='create'" @click="saveCreateTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Create link</div>
-            <div v-if="intent=='edit'" @click="saveEditTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-indigo-500 bg-indigo-600 lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
-            <div v-if="intent=='edit'" @click="deleteTheme" class="px-6 py-3 font-semibold text-white rounded-lg hover:bg-red-500 bg-red-600 cursor-pointer">Delete link</div>
+            <div v-if="intent=='create'" @click="addNewLink" class="button cursor-pointer">Create link</div>
+            <div v-if="intent=='edit'" @click="saveLinkChanges" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-indigo-500 bg-gdp lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
+            <div v-if="intent=='edit'" @click="deleteLink" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-red-500 bg-red-600 cursor-pointer">Delete link</div>
         </div>
     </section>
 </template>
@@ -93,15 +105,17 @@ export default Vue.extend({
     };
 
     return {
+      id: '',
       links: new Array<Link>(),
       modalActive: false,
       modalIntent: 'create',
       pendingLink,
       user: '',
       error: '',
-      intent: 'create',
+      intent: '',
       builderLoaded: false,
-      builderCss: null,
+      builderCss: null as String | null,
+      editorCss: null as String | null,
       sortedLinks: new Array<Link>()
     };
   },
@@ -109,6 +123,20 @@ export default Vue.extend({
   async mounted() {
     await this.getUserData();
     await this.getLinks();
+    // Fetch selected link from links
+    this.id = this.$route.params.pathMatch;
+    if(this.id) {
+      this.intent = 'edit';
+    } else {
+      this.intent = 'create';
+    }
+    for(let i=0;i<this.links.length;i++) {
+      if(this.links[i].id == this.id) {
+        this.pendingLink = this.links[i];
+        this.editorCss = this.pendingLink.customCss;
+        break;
+      }
+    }
   },
 
   methods: {
@@ -146,7 +174,7 @@ export default Vue.extend({
 
         //this.closeModal();
 
-        this.$root.$emit('refreshUserProfileView');
+        return this.$router.push('/dashboard/');
       } catch (err) {
         console.log('Link destruction unsuccessful');
         console.log(err);
@@ -161,7 +189,7 @@ export default Vue.extend({
             label: this.pendingLink.label,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
-            customCss: this.pendingLink.customCss,
+            customCss: this.editorCss, // + this.builderCss
             useDeepLink: this.pendingLink.useDeepLink
           }
         });
@@ -170,7 +198,7 @@ export default Vue.extend({
         this.links[index] = this.pendingLink;
 
         //this.closeModal();
-        this.$root.$emit('refreshUserProfileView');
+        return this.$router.push('/dashboard/');
       } catch (err) {
         console.log('Link changes unsuccessful');
         console.log(err);

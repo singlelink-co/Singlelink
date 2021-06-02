@@ -5,15 +5,15 @@
         v-if="consentBannerActive"
         class="consent-banner"
       >
-        <p class="text-gray-600 text-sm">
-          By using {{ app_name }}, you agree to our <a class="text-indigo-600 hover:underline" href="/privacy-policy" target="_blank">Privacy
+        <p class="text-black font-bold">
+          <span class="opacity-70">By using {{ app_name }}, you agree to our </span><a class="text-gdp hover:underline" href="/privacy-policy" target="_blank">Privacy
           Policy</a>.
         </p>
         <br>
 
         <button
           type="button"
-          class="flex px-3 py-1 text-sm ml-auto text-white text-center bg-indigo-600 hover:bg-indigo-500 rounded font-semibold w-auto max-w-xs justify-center align-center"
+          class="flex px-3 py-1 text-sm ml-auto text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold w-auto max-w-xs justify-center align-center"
           @click="consentToPolicy"
         >
           I accept
@@ -67,7 +67,7 @@ export default Vue.extend({
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-  @apply p-2 px-4 rounded shadow-lg flex items-center justify-center bg-white w-11/12 max-w-lg;
+  @apply p-2 px-4 rounded-2xl shadow-lg flex items-center justify-center bg-white w-11/12 max-w-lg;
 }
 
 @media(max-width:1024px) {

@@ -1,47 +1,48 @@
+
+
 <template>
-  <div class="flex flex-col lg:flex-row w-screen h-screen">
+    <div class="white-gradient flex flex-col items-center justify-center">
+      <div class="flex flex-row w-full max-w-6xl py-6 justify-between relative" style="z-index:2;background:linear-gradient(180deg, #FFF 60%, rgba(255,255,255,.65) 80%, rgba(255,255,255,0) 100%);">
+        <n-link to="/dashboard"><img src="/sl-icon.svg" class="w-10" style="filter: drop-shadow(0px 10px 25px #5353EC);"/></n-link>
+        <div class="flex flex-row items-center justify-start bg-opaqueBlack px-4 py-1 rounded-full w-full max-w-md" style="border: solid 2px rgba(0,0,0,.15);">
+          <img src="/Compass.svg" style="width: 16px;height:auto;"/>
+          <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;" placeholder="Search pages, guides, and documentation..."/>
+        </div>
+        <!--<n-link to="/dashboard/referrals" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Refer a friend and get $10!</n-link>-->
+        <n-link to="/dashboard/upgrade" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Upgrade and go pro!</n-link>
+      </div>
+      <div class="flex flex-col lg:flex-row w-full max-w-6xl h-screen oveflow-x-hidden">
+        <div class="flex flex-col text-black font-semibold nav justify-start">
+            <div class="profile-bay p-4 flex flex-col items-start relative">
+                <div v-if="user.activeProfile.imageUrl || user.emailHash" style="width:70px;height:70px;box-shadow:inset 0 0 0 4px rgba(0,0,0,.25),0 5px 25px rgba(83,83,267,.25);" class="rounded-full" :style="'background-image:url(' + (user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash) + ');background-size:cover;background-position:center;'"></div>
+                <div v-if="!user.activeProfile.imageUrl && !user.emailHash" style="background:linear-gradient(146deg, rgba(0,255,240,1) 00%, rgba(173,255,0,1) 100%);width:70px;height:70px;box-shadow:inset 0 0 0 4px rgba(0,0,0,.25),0 5px 25px rgba(83,83,267,.25);" class="rounded-full" ></div>
 
-    <section
-      class="hidden lg:flex flex-col w-px items-center p-3 border border-t-0 border-b-0 border-l-0"
-      style="width: 70px; max-width: 70px;"
-    >
-      <a href="/dashboard">
-        <img :src="icon_url" style="width: 35px;" alt="icon">
-      </a>
+                <div class="flex flex-col justify-start">
+                    <span class="font-extrabold text-2xl leading-tight mt-4">{{ user.activeProfile.headline }}</span>
+                    <div class="flex flex-row items-center justify-start flex-wrap" style="max-width:300px;">
+                      <div class="mb-1">
+                        <span class="font-bold text-lg opacity-60" v-if="user.activeProfile.customDomain">{{ user.activeProfile.customDomain }}</span>
+                        <span class="font-bold text-lg opacity-60" v-if="!user.activeProfile.customDomain && user.activeProfile.handle">singlel.ink/u/{{ user.activeProfile.handle }}</span>
+                      </div>
+                      <div class="py-1 px-2 mb-1 rounded-full text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight mx-2 cursor-pointer grow" @click="copyUrl" v-if="user.activeProfile.handle">copy</div>
+                      <div class="py-1 px-2 mb-1 rounded-full text-sm font-extrabold leading-tight cursor-pointer grow" style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles</div>
 
-      <div class="mt-auto relative" style="margin-top: auto; width:100%; cursor: pointer;">
-        <img
-          v-if="user && profiles.length>=1"
-          style="width:45px; height:45px; border-radius: 100px;"
-          :src="user.activeProfile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash"
-          alt="avatar"
-          onerror="this.src='https://www.gravatar.com/avatar'"
-          @click="toggleProfileSelect"
-        >
+                    </div>
+                </div>
+                <ul
+                  v-if="selectingProfile"
+                  class="absolute bottom-0 rounded-2xl shadow bg-whiteish border border-gray-200 profile-list z-30"
+                  style="left:0;right:0; top: 170px; width:100%;height:fit-content;max-height:450px;"
+                >
 
-        <transition name="fade">
-          <div
-            v-if="error"
-            class="error"
-          >
-            {{ error }}
-          </div>
-        </transition>
-
-        <ul
-          v-if="selectingProfile"
-          class="absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
-          style="left: 60px; width: 245px;"
-        >
-
-          <li class="flex flex-row items-center justify-left profile-search">
+          <li class="flex flex-row items-center justify-left profile-search text-black">
             <!-- Create new profile-->
             <input
               type="text"
               placeholder="Filter profiles..."
               aria-label="Filter profiles"
-              class="text-sm p-2 mr-auto"
-              style="outline:none !important;"
+              class="text-sm p-2 mr-auto font-bold"
+              style="outline:none !important;background:transparent;"
               @input="onFilterProfilesInput"
             >
             <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
@@ -50,19 +51,16 @@
           <li
             v-for="profile in filteredProfiles"
             :key="profile.handle"
-            class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
+            class="p-2 pl-4 pr-4 hover:bg-opaqueIndigo cursor-pointer flex flex-row items-center justify-start"
             :style="!profile.handle ? 'max-height: 51px;' : ''"
             @click="selectProfile(profile.id)"
           >
-            <img
+            <div
               v-if="profile.handle"
-              class="mr-2 rounded-full"
-              onerror="this.src='https://www.gravatar.com/avatar'"
-              style="width: 35px; height:35px; margin-right: 10px;"
-              :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
-              alt="avatar"
-            >
-
+              class="w-8 h-8 rounded-full"
+              :style="'width: 35px;height:35px;background:linear-gradient(146deg, rgba(0,255,240,1) 00%, rgba(173,255,0,1) 100%);margin-right:.75rem;background-size:cover;background-repeat:no-repeat;background-position:center;background-image:url(' + (profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash) + ');'"
+              alt="avatar">
+            </div>
             <div
               v-if="!profile.handle"
               class="mr-2 rounded-full"
@@ -74,360 +72,72 @@
             </div>
 
             <div class="flex flex-col">
-              <span class="text-sm font-medium">{{ profile.handle }}</span>
-              <span class="text-xs text-gray-700">{{ profile.headline }}</span>
+              <span class="text-base text-black font-bold">{{ profile.handle }}</span>
+              <span class="text-sm text-black opacity-70 font-bold">{{ profile.headline }}</span>
             </div>
           </li>
 
           <li class="flex flex-row items-center justify-center button-controls">
             <!-- Create new profile-->
             <span
-              class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
+              class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pl-4 text-xs font-bold text-gray-700"
               @click="createNewProfile"
             >Create new</span>
 
             <!-- Logout-->
-            <a class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700" href="/logout">Logout</a>
+            <a class="text-center w-1/2 hover:bg-opaqueIndigo p-2 pr-4 text-xs font-bold text-gray-700" href="/logout">Logout</a>
           </li>
 
         </ul>
-      </div>
-    </section>
-
-    <!-- Mobile Navbar -->
-    <section
-      class="fixed shadow flex lg:hidden flex-row z-10 items-center justify-between w-full p-4 bg-white border border-gray-300 border-l-0 border-t-0 border-r-0"
-    >
-      <a href="/dashboard"><img :src="logo_url" style="width:7rem;" class="mr-4"></a>
-      <button
-        type="button"
-        class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-sm rounded-lg text-white font-semibold tracking-wide"
-        style="outline: none !important;"
-        @click="mobile_menu=!mobile_menu"
-      >
-        <span v-if="!mobile_menu" class="mr-2">Open</span>
-        <span v-if="mobile_menu" class="mr-2">Close</span>
-        menu
-      </button>
-      <nav
-        v-if="mobile_menu"
-        class="absolute z-20 shadow-lg flex flex-col items-center justify-center left-0 right-0 bg-white w-full"
-        style="top: 64px;"
-      >
-        <a href="/dashboard" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard')">
-            Links
-          </div>
-        </a>
-        <a href="/dashboard/analytics" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-analytics')">
-            Analytics
-          </div>
-        </a>
-        <a href="/dashboard/appearance" class="w-full">
-          <div
-            class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center"
-            :class="getActiveStyles('dashboard-appearance')"
-          >
-            Appearance
-          </div>
-        </a>
-        <a href="/dashboard/marketplace" class="w-full">
-          <div
-            class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center"
-            :class="getActiveStyles('dashboard-marketplace')"
-          >
-            Marketplace
-          </div>
-        </a>
-        <a href="/dashboard/settings" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-settings')">
-            Profile Settings
-          </div>
-        </a>
-        <a v-if="isAdmin" to="/dashboard/admin" class="w-full">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" :class="getActiveStyles('dashboard-admin')">
-            Admin
-          </div>
-        </a>
-        <div class="p-4 pl-6 pr-6 cursor-pointer text-sm text-center" @click="toggleProfileSelect();mobile_menu=false;">
-          Profiles
-        </div>
-      </nav>
-    </section>
-    <!-- End mobile navbar -->
-
-    <section class="middle flex flex-col flex-grow overflow-x-hidden overflow-y-hidden h-screen bg-gray-100">
-      <div class="hidden lg:flex flex-row border border-r-0 border-t-0 border-l-0 w-full bg-white">
-        <a href="/dashboard">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard')">
-            Links
-          </div>
-        </a>
-        <a href="/dashboard/analytics">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-analytics')">
-            Analytics
-          </div>
-        </a>
-        <a href="/dashboard/appearance">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-appearance')">
-            Appearance
-          </div>
-        </a>
-        <a id="marketplace-link" href="/dashboard/marketplace">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-marketplace')">
-            Marketplace
-          </div>
-        </a>
-        <a href="/dashboard/settings">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-settings')">
-            Settings
-          </div>
-        </a>
-        <a v-if="isAdmin" to="/dashboard/admin">
-          <div class="p-4 pl-6 pr-6 cursor-pointer text-sm" :class="getActiveStyles('dashboard-admin')">
-            Admin
-          </div>
-        </a>
-      </div>
-
-      <!-- Render Nuxt-->
-      <Nuxt class="overflow-y-scroll flex content-container flex-basis-auto content-nuxt"/>
-
-      <div
-        class="p-4 text-sm bg-white text-gray-600 hidden lg:flex items-center justify-start flex-row border border-gray-300 border-r-0 border-l-0 border-b-0"
-      >
-        <a
-          style="margin-right:.5rem !important;"
-          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-          href="/dashboard/account"
-        >
-          <img src="/Cog.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
-          Account</a>
-        <a
-          style="margin-right:.5rem !important;"
-          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-          href="/dashboard/tours"
-        >
-          <img src="/Tour.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
-          Tours</a>
-        <div
-          style="margin-right:.5rem !important;"
-          class="text-indigo-600 cursor-pointer flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-          @click="toggleProfileSelect"
-        >
-          <img src="/Person.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
-          Switch profiles
-        </div>
-        <a
-          style="margin-right:.5rem !important;"
-          class="text-indigo-600 flex flex-row items-center justify-center bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-3 font-medium"
-          href="https://discord.gg/3pBM4Px"
-        >
-          <img src="/Lifepreserver simple.svg" class="w-4 h-auto opacity-50" style="margin-right:.45rem !important;">
-          Get help</a>
-        <!-- TODO Make the CHANGELOG link automatically point to the correct branch instead of just the latest master branch-->
-        <span style="margin-left:auto !important;" class=" pr-4">{{ version }}</span>
-        <a
-          class="text-indigo-600 flex bg-indigo-100 hover:bg-indigo-200 rounded-full py-1 px-2 font-medium"
-          href="https://github.com/Neutron-Creative/Singlelink/blob/master/CHANGELOG.md"
-        >Changelog</a>
-      </div>
-    </section>
-
-    <!-- Mobile Preview Section -->
-    <section
-      class="bg-white lg:hidden flex flex-col items-center justify-center absolute z-10 bottom-0 left-0 right-0"
-      style="box-shadow: 0 1px 0 rgba(0,0,0,.1);max-height:100vh;"
-    >
-      <!--<button @click="mobile_preview=!mobile_preview" class="w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3" style="outline: none !important;">
-        <span v-if="!mobile_preview" class="mr-2">Open</span>
-        <span v-if="mobile_preview" class="mr-2">Close</span>
-        preview
-        </button>-->
-      <a
-        :href="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`"
-        class="text-center w-full text-sm bg-indigo-200 text-indigo-600 font-semibold px-6 py-3"
-        style="outline: none !important;"
-      >
-        <span class="mr-2">Open</span>
-        preview
-      </a>
-      <div
-        v-if="mobile_preview"
-        class="w-full overflow-y-scroll flex flex-col items-center justify-center"
-        style="max-height: calc(100vh - 100px);"
-      >
-        <iframe
-          :src="'https://' + hostname + `/u-preview/${user.activeProfile.handle}`"
-          style="height: 10000px;"
-          class="w-full"
-        />
-      </div>
-    </section>
-
-    <!-- Preview Section-->
-    <section
-      class="relative overflow-hidden height-screen hidden lg:flex flex-col w-4/12 items-center justify-center px-8 border border-t-0 border-b-0 border-r-0 bg-gray-100"
-    >
-
-      <!-- Preview Navbar-->
-      <div
-        class="absolute top-0 flex flex-row border border-r-0 border-t-0 border-l-0 w-full items-center justify-center mb-auto bg-white"
-        style="height: 57.5px;"
-      >
-        <p class="font-medium mr-2 text-gray-800 flex" style="margin-left:auto;">
-          Your {{ app_name }}:&nbsp;
-        </p>
-        <a class="text-indigo-600 hover:text-indigo-700 hover:underline flex" :href="profileUrl">{{ profileUrl }}</a>
-        <img
-          src="/Export.svg"
-          class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer w-8 h-auto opacity-75 flex"
-          style="margin-left:auto;margin-right:1.5rem;"
-          @click="share_modal=!share_modal"
-        >
-      </div>
-      <!-- Share modal -->
-      <div
-        v-if="share_modal"
-        class="absolute bg-white p-4 text-center rounded-lg shadow z-20 w-full flex flex-col items-center justify-start"
-        style="top: 63px; max-width: 265px;"
-      >
-        <p
-          class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200"
-        >QR code:</p>
-        <img v-if="qr_src" style="margin-bottom:.5rem;" :src="'https://qr.io/qr-svg/' + qr_src + '.svg'">
-        <p
-          class="font-bold text-lg tracking-tight w-full items-center justify-center text-center text-gray-800 flex leading-tight pb-1 border border-t-0 border-r-0 border-l-0 border-gray-200"
-        >Share on social media</p>
-        <p class="text-gray-500 font-medium text-sm py-2 tracking-wide">
-          Coming soon!
-        </p>
-      </div>
-      <!-- End modal -->
-      <div
-        class="flex flex-col items-center justify-start overflow-y-scroll absolute p-4"
-        style="height: calc(100vh - 57.5px);bottom:0;width:100%;left:0; right:0;"
-      >
-        <!-- Preview Mode selector -->
-        <div class="flex flex-col items-center justify-start space-y-2 w-full relative z-10">
-          <label for="user-profile-view-type" class="uppercase text-sm tracking-wider font-semibold text-indigo-600">Preview
-            Mode:&nbsp;</label>
-          <div class="flex flex-row items-center justify-center space-x-2 w-full">
-            <select
-              id="user-profile-view-type"
-              v-model="previewMode"
-              class="text-sm text-gray-600 p-3 rounded-lg font-medium flex border border-gray-200 w-40"
-            >
-              <option selected value="mobile">
-                Mobile
-              </option>
-              <option value="desktop">
-                Desktop
-              </option>
-            </select>
-            <i :class="getPreviewModeIcon()"/>
-          </div>
-        </div>
-
-        <div class="user-profile-preview-parent" style="transform:translateY(-130px);">
-          <div v-if="originalHandle" :class="checkPreviewMode()">
-            <div class="w-full h-full flex overflow-x-hidden overflow-y-scroll iframe-container relative">
-              <iframe id="preview-frame" class="w-full" :src="`/u-preview/${user.activeProfile.handle}`"/>
             </div>
-          </div>
+            <div class="flex flex-col">
+                <n-link to="/dashboard/" :class="getActiveStyles('dashboard')">
+                    <img src="/House.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Links</span>
+                </n-link>
+                <n-link to="/dashboard/analytics" :class="getActiveStyles('dashboard-analytics')">
+                    <img src="/Rocket.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Analytics</span>
+                </n-link>
+                <n-link to="/dashboard/appearance" :class="getActiveStyles('dashboard-appearance')">
+                    <img src="/Rainbow.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Appearance</span>
+                </n-link>
+                <n-link to="/dashboard/marketplace" :class="getActiveStyles('dashboard-marketplace')">
+                    <img src="/High voltage.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Marketplace</span>
+                </n-link>
+                <a href="https://singlelink.co/leaderboard" target="_blank" :class="getActiveStyles('dashboard-leaderboard')">
+                    <img src="/Fire.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Leaderboard</span>
+                </a>
+                <n-link to="/dashboard/discover" :class="getActiveStyles('dashboard-discover')">
+                    <img src="/Compass.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Search & discover</span>
+                </n-link>
+                <a href="https://discord.gg/wqjKmsRP39" target="_blank" :class="getActiveStyles('dashboard-support')">
+                    <img src="/Cowboy hat face.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Contact support</span>
+                </a>
+                <n-link to="/dashboard/referrals" :class="getActiveStyles('dashboard-referrals')">
+                    <img src="/Heart.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Referrals</span>
+                </n-link>
+                <n-link to="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
+                    <img src="/Settings.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Settings</span>
+                </n-link>
+                <n-link to="/logout" :class="getActiveStyles('logout')">
+                    <img src="/Waving hand.svg" style="width:24px;height:24px;"/>
+                    <span class="ml-4 font-extrabold">Logout</span>
+                </n-link>
+            </div>
         </div>
-
-        <!-- Visibility notification -->
-        <a
-          v-if="profile_visibility==='unpublished'"
-          href="/dashboard/settings"
-          class="absolute flex flex-row items-center text-sm text-center justify-center bg-indigo-600 text-white p-2 px-4 rounded-lg"
-          style="bottom: 20px; left:20px; width: calc(100% - 40px);"
-        >
-          <span class="font-semibold pr-1">Warning:</span>
-          <span>Your profile is currently hidden!</span>
-          <div
-            class="hidden visibility-alert bg-indigo-500 rounded-lg font-medium hover:bg-indigo-400 px-2 py-1"
-            style="margin-left:auto !important;"
-          >Go to settings
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Mobile profile selector -->
-    <ul
-      v-if="selectingProfile"
-      class="lg:hidden absolute bottom-0 rounded-lg shadow bg-white border border-gray-200 profile-list z-30"
-      style="left:0;bottom:0;right:0;width: 100%;"
-    >
-
-      <li class="flex flex-row items-center justify-left profile-search">
-        <!-- Create new profile-->
-        <input
-          type="text"
-          placeholder="Filter profiles..."
-          aria-label="Filter profiles"
-          class="text-sm p-2 mr-auto flex-grow lg:flex-auto"
-          style="outline:none !important;"
-          @input="onFilterProfilesInput"
-        >
-        <i class="search-icon fas fa-search text-sm p-2 opacity-50"/>
-      </li>
-
-      <li
-        v-for="profile in filteredProfiles"
-        :key="profile.handle"
-        class="p-2 pl-4 pr-4 hover:bg-gray-100 flex flex-row items-center justify-start"
-        :style="!profile.handle ? 'max-height: 51px;' : ''"
-        @click="selectProfile(profile.id)"
-      >
-        <img
-          v-if="profile.handle"
-          class="mr-2 rounded-full"
-          onerror="this.src='https://www.gravatar.com/avatar'"
-          style="width:35px; height:35px; margin-right: 10px;"
-          :src="(profile.imageUrl || 'https://www.gravatar.com/avatar/' + user.emailHash)"
-          alt="avatar"
-        >
-        c
-        <div
-          v-if="!profile.handle"
-          class="mr-2 rounded-full"
-          style="width: 100%; max-width: 35px; max-height: 58px; margin-right: 10px;"
-        >
-          &nbsp;
-          <br>
-          &nbsp;
+        <Nuxt id="child" style="top:-88px;padding-top:6.5rem !important;" class="relative p-16 flex-grow flex-1 w-auto lg:overflow-y-scroll lg:h-screen"/>
         </div>
-
-        <div class="flex flex-col">
-          <span class="text-sm font-medium">{{ profile.handle }}</span>
-          <span class="text-xs text-gray-700">{{ profile.headline }}</span>
-        </div>
-      </li>
-
-      <li class="flex flex-row items-center justify-center button-controls">
-        <!-- Create new profile-->
-        <span
-          class="text-center w-1/2 hover:bg-gray-100 p-2 pl-4 text-xs text-gray-700"
-          @click="createNewProfile"
-        >Create new</span>
-
-        <!-- Logout-->
-        <a href="/logout" class="text-center w-1/2 hover:bg-gray-100 p-2 pr-4 text-xs text-gray-700">Logout</a>
-      </li>
-
-    </ul>
-    <!-- End profile selector -->
-
-    <GDPRContentModal/>
-
-    <div v-html="usetiful_script"/>
-
-  </div>
+    </div>
 </template>
+
 
 <script lang="ts">
 import Vue from "vue";
@@ -447,7 +157,8 @@ export default Vue.extend({
         emailHash: '',
         activeProfile: {
           handle: '',
-          visibility: ''
+          visibility: '',
+          customDomain: '',
         },
       },
       share_modal: false,
@@ -468,6 +179,7 @@ export default Vue.extend({
       hostname: process.env.HOSTNAME,
       mobile_menu: false,
       mobile_preview: false,
+      previewVisible: true,
       usetiful_script: `
         <script>
           (function (w, d, s) {
@@ -620,11 +332,11 @@ export default Vue.extend({
       });
     },
 
-    getActiveStyles(page: any) {
+    getActiveStyles(page: String) {
       if (page === this.active) {
-        return "text-indigo-600 bg-indigo-100 font-semibold border border-r-0 border-t-0 border-l-0 border-b-2 border-indigo-600";
+        return "nav-link active";
       }
-      return "hover:bg-indigo-100 hover:text-indigo-600 text-gray-700 nc-item-link";
+      return "nav-link";
     },
 
     setActive() {
@@ -632,6 +344,9 @@ export default Vue.extend({
         switch (this.$route.name) {
           case "dashboard":
             this.active = "dashboard";
+            break;
+          case "dashboard-upgrade":
+            this.active = "dashboard-upgrade";
             break;
           case "dashboard-appearance":
             this.active = "dashboard-appearance";
@@ -641,6 +356,12 @@ export default Vue.extend({
             break;
           case "dashboard-analytics":
             this.active = "dashboard-analytics";
+            break;
+          case "dashboard-referrals":
+            this.active = "dashboard-referrals";
+            break;
+          case "dashboard-discover":
+            this.active = "dashboard-discover";
             break;
           case "dashboard-settings":
             this.active = "dashboard-settings";
@@ -672,6 +393,23 @@ export default Vue.extend({
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
+      }
+    },
+
+    async copyUrl() {
+      try {
+        let text = '';
+        if(this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
+        if(!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        console.log(text);
+        let url = new URL(text);
+        navigator.clipboard.writeText(url.toString());
+        alert('Url copied to clipboard!');
+      } catch (error) {
+        let text = '';
+        if(this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
+        if(!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        alert('Copy this url to the clipboard!\n' + text);
       }
     },
 
@@ -724,7 +462,8 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+
 @media(min-width: 1024px) {
   .middle {
     width: calc(66.66vw - 70px);
@@ -736,7 +475,7 @@ export default Vue.extend({
 
 @media(max-width: 1024px) {
   html, body {
-    overflow-y: hidden !important;
+    overflow: hidden !important;
     height: 100vh !important;
     max-height: 100vh !important;
   }
@@ -765,7 +504,9 @@ export default Vue.extend({
 }
 
 html {
-  font-family: 'Inter',
+  font-family: 
+  'Nunito',
+  'Inter',
   -apple-system,
   BlinkMacSystemFont,
   'Segoe UI',
@@ -787,7 +528,6 @@ html {
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
 }
 
 .user-profile-preview-parent {
@@ -893,16 +633,12 @@ html {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-</style>
 
-<style>
 .ace_editor, .ace_editor * {
   font-size: 14px impo !important;
   font-variant-ligatures: none !important;
   font-style: normal !important;
 }
-</style>
-<style>
 /* required class */
 .my-editor {
   /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
@@ -920,4 +656,92 @@ html {
 .prism-editor__textarea:focus {
   outline: none;
 }
+
+/* New Dashboard Styles */
+#child::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+    .white-05 {
+        background:rgba(255,255,255,.05);
+    }
+    .black-45 {
+        background:rgba(255,255,255,.05);
+    }
+    .nav {
+         background:rgba(255,255,255,.03);
+    }
+    .wordmark {
+            color: #FFF;
+        }
+    @media screen and (prefers-color-scheme: light) {
+        .white-05 {
+            background:rgba(0,0,0,.05);
+        }
+        .black-45 {
+            background:rgba(0,0,0,.05);
+        }
+        .nav {
+            background:#FFF;
+            box-shadow: 2px 0 5px rgba(0,0,0,.05);
+        }
+        .wordmark {
+            color: #000;
+        }
+    }
+    .phone-display {
+        display: flex;
+        margin: -60px auto auto;
+        border-radius: 65px;
+        overflow: hidden;
+        background: #000;
+        padding: 14px;
+        width: 375px;
+        height: 812px;
+        transform: scale(.8);
+    }
+    .nav-link {
+        @apply flex mb-1 flex-row p-3 px-4 rounded-2xl cursor-pointer items-center justify-start text-lg;
+        min-width: 300px;
+    }
+    .nav-link * {
+        opacity: .85;
+    }
+    .nav-link:hover {
+      @apply bg-opaqueIndigo text-gdp;
+    }
+    .nav-link.active {
+        background:linear-gradient(90deg, rgba(83,83,236,.25) 00%, rgba(83,83,236,0.05) 100%);
+        @apply text-gdp;
+    }
+    .nav-link.active * {
+        opacity: 1;
+    }
+    .nav-link:hover * {
+        opacity: 1;
+    }
+    .profile-bay {
+        border-top:solid 1px rgba(255,255,255,.1);
+        cursor: pointer;
+    }
+    .profile-bay:hover {
+        background:rgba(255,255,255,.02);
+    }
+
+    a.nav-link svg {
+      margin-right: .65rem !important;
+    }
+
+  .grow:hover {
+    transform: scale(1.03);
+  }
+
+
+  .white-gradient {
+    background: #edf4fc;
+    background: -moz-linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    background: linear-gradient(180deg, rgba(254,254,254,1) 0%, rgba(237,244,252,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fefefe",endColorstr="#edf4fc",GradientType=1);
+  }
+    
 </style>
