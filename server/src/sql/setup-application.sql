@@ -128,7 +128,7 @@ create table if not exists app.links
 (
     id               bigserial primary key unique,
     profile_id       bigint references app.profiles (id) on update cascade on delete cascade,
-    type             linktype_t         default 'link' not null,
+    type             text               default 'link' not null,
     url              text               default '#' not null,
     sort_order       int       not null,
     label            text      not null,
@@ -242,3 +242,6 @@ alter table app.users
 
 alter table app.users
     drop column if exists payment_id;
+
+alter table app.links
+    alter column type type text;

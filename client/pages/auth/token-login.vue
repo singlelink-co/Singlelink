@@ -1,5 +1,8 @@
 <template>
-  <div/>
+  <div>
+    Logging in... please wait. <br>
+    You will be redirected shortly.
+  </div>
 </template>
 
 <script lang="ts">

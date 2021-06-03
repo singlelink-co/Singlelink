@@ -7,7 +7,7 @@
 type visibility_t = 'unpublished' | 'published' | 'published-18+';
 type visit_t = 'link' | 'page';
 type addon_t = 'theme' | 'preset' | 'plugin';
-type linktype_t = 'link' | 'social' | 'image' | 'video'
+type linktype_t = 'link' | 'social' | 'image' | 'video' | string
 
 /**
  Tables will sometimes be mapped with the schema name in front of them to prevent collisions with resolved types.
