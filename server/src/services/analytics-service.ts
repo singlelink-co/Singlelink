@@ -1,8 +1,6 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
 import {DbTypeConverter} from "../utils/db-type-converter";
-import {HttpError} from "../utils/http-error";
-import {StatusCodes} from "http-status-codes";
 
 interface AnalyticsProfileData {
   totalProfileViews: number,
@@ -70,23 +68,40 @@ export class AnalyticsService extends DatabaseService {
    * @param dayRange The number of days to limit the range by, default is 30
    */
   async getProfileAnalyticsData(profileId: string, dayRange: number = 30): Promise<AnalyticsProfileData> {
-    let profileViewQuery = await this.pool.query<{ profile_views: number }>(`select count(*) filter (where type = 'page') as profile_views
-                                                                             from analytics.visits
-                                                                             where referral_id = $1
-                                                                               and created_on > current_date - interval '1 day' * $2`,
+    let profileViewQuery = await this.pool.query<{ profile_views: string | number }>(
+      `select count(*) filter (where type = 'page') as profile_views
+       from analytics.visits
+       where referral_id = $1
+         and created_on > current_date - interval '1 day' * $2`,
       [
         profileId,
         dayRange
       ]);
 
     if (profileViewQuery.rowCount < 1) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "The profile views could not be found.");
+      return {
+        totalProfileViews: 0,
+        linkVisits: [],
+        clickThroughRate: 0
+      };
     }
 
     let linksQuery = await this.pool.query<DbLink>("select * from app.links where profile_id=$1", [profileId]);
 
+    let profileViews: number;
+
+    if (typeof (profileViewQuery.rows[0].profile_views) === "string") {
+      profileViews = Number.parseFloat(profileViewQuery.rows[0].profile_views);
+    } else {
+      profileViews = profileViewQuery.rows[0].profile_views;
+    }
+
     if (linksQuery.rowCount < 1) {
-      throw new HttpError(StatusCodes.NOT_FOUND, "The links could not be found.");
+      return {
+        totalProfileViews: profileViews,
+        linkVisits: [],
+        clickThroughRate: 0
+      };
     }
 
     let linkVisits: { link: Link, views: number }[] = [];
@@ -94,10 +109,11 @@ export class AnalyticsService extends DatabaseService {
 
     for (let i = 0; i < linksQuery.rowCount; i++) {
       let link = linksQuery.rows[i];
-      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(`select *
-                                                                    from analytics.visits
-                                                                    where referral_id = $1
-                                                                      and created_on > current_date - interval '1 day' * $2`,
+      let linkVisitQuery = await this.pool.query<DbAnalyticsVisit>(
+        `select *
+         from analytics.visits
+         where referral_id = $1
+           and created_on > current_date - interval '1 day' * $2`,
         [
           link.id,
           dayRange
@@ -117,8 +133,8 @@ export class AnalyticsService extends DatabaseService {
       });
     }
 
-    let totalProfileViews = profileViewQuery.rows[0].profile_views;
-    let clickThroughRate = (totalLinks / totalProfileViews) * 100;
+    let totalProfileViews = profileViews;
+    let clickThroughRate = totalLinks / totalProfileViews * 100;
 
     return {
       totalProfileViews,

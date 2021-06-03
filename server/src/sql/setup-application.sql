@@ -181,7 +181,7 @@ create table if not exists security.nonces
 create table if not exists security.expired_tokens
 (
     user_id bigint references app.users (id) on update cascade on delete cascade,
-    token   text not null,
+    token   text not null unique,
 
     primary key (user_id, token)
 );

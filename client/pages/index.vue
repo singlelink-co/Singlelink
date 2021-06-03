@@ -177,7 +177,7 @@ export default Vue.extend({
     async attemptGoogleLogin() {
       this.$cookies.set("remember_auth", this.rememberMe);
 
-      const response = await this.$axios.post('/auth/google/login');
+      const response = await this.$axios.post('/auth/google/request-login');
 
       window.location.assign(response.data);
     },

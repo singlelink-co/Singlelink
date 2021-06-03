@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import {Pool} from "pg";
+import {PgErrorCodes} from "./pg-error-codes";
 
 export class SecurityUtils {
   /**
@@ -83,5 +84,37 @@ export class SecurityUtils {
     let queryResult = await this.pool.query<{ nonce: string }>("select * from security.nonces where nonce=$1 limit 1", [nonce]);
 
     return queryResult.rowCount > 0;
+  }
+
+  /**
+   * Returns true if a token is expired.
+   *
+   * @param token
+   */
+  static async isTokenExpired(token: string) {
+    let queryResult = await this.pool.query("select 1 from security.expired_tokens where token=$1", [token]);
+
+    return queryResult.rowCount > 0;
+  }
+
+  /**
+   * Expires a token.
+   *
+   * @param userId
+   * @param token
+   */
+  static async expireToken(userId: string, token: string): Promise<boolean> {
+    try {
+      let queryResult = await this.pool.query("insert into security.expired_tokens(user_id, token) values ($1, $2) returning *", [userId, token]);
+
+      return queryResult.rowCount > 0;
+    } catch (e) {
+      if (e.code === PgErrorCodes.UNIQUE_VIOLATION) {
+        return false;
+      }
+
+      // we can't deal with this error
+      throw e;
+    }
   }
 }

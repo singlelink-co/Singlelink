@@ -25,10 +25,6 @@ start().then(() => {
   // do nothing
 });
 
-setTimeout(async () => {
-  await database.pool.query<{ nonce: string }>("delete from security.nonces where expiry_date > now() returning *");
-}, 1000 * 60 * 5);
-
 async function start() {
   await database.initialize();
 

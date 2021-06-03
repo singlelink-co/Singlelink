@@ -57,7 +57,7 @@ export default Vue.extend({
 
       const profile = response.profile;
 
-      await ctx.$axios.$get('/analytics/profile/' + profile.id);
+      await ctx.$axios.$get('/analytics/profile/record/' + profile.id);
 
       return {
         profileHandle: ctx.route.path.replace('/u/', ''),

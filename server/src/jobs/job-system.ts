@@ -21,10 +21,10 @@ export class JobSystem {
 
   static async scheduleMaintenanceTasks() {
     // Refresh material view
-    cron.schedule("* * * * *", this.refreshMaterialView.bind(this));
+    cron.schedule("*/10 * * * *", this.refreshMaterialView.bind(this));
 
     // Delete expired nonces
-    cron.schedule("* * * * *", this.deleteExpiredNonces.bind(this));
+    cron.schedule("*/5 * * * *", this.deleteExpiredNonces.bind(this));
   }
 
   static async refreshMaterialView() {

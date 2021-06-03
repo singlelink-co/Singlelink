@@ -137,24 +137,24 @@ export class MarketplaceController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated
-    this.fastify.all<GetAddonStats>('/marketplace/addon/stats/:id', rateLimitStatsRequest, this.GetAddonStats.bind(this));
-    this.fastify.all<SearchAddonsRequest>('/marketplace/addons/search', rateLimitSearchRequest, this.SearchAddons.bind(this));
+    this.fastify.post<GetAddonStats>('/marketplace/addon/stats/:id', rateLimitStatsRequest, this.GetAddonStats.bind(this));
+    this.fastify.post<SearchAddonsRequest>('/marketplace/addons/search', rateLimitSearchRequest, this.SearchAddons.bind(this));
 
     // Authenticated
-    this.fastify.all<ListAddonsRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/marketplace/addons/authored', Auth.ValidateWithData, this.ListAuthoredAddons.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/marketplace/addons/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
+    this.fastify.post<ListAddonsRequest>('/marketplace/addons', Auth.ValidateWithData, this.ListAddons.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/marketplace/addons/authored', Auth.ValidateWithData, this.ListAuthoredAddons.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/marketplace/addons/installed', Auth.ValidateWithData, this.ListInstalledAddons.bind(this));
 
-    this.fastify.all<GetAddonRequest>('/marketplace/addon/:id', Auth.ValidateWithData, this.GetAddon.bind(this));
-    this.fastify.all<CreateAddonRequest>('/marketplace/addon/create', rateLimitMarketplaceCreation, this.CreateAddon.bind(this));
-    this.fastify.all<UpdateAddonRequest>('/marketplace/addon/update', Auth.ValidateWithData, this.UpdateAddon.bind(this));
-    this.fastify.all<DeleteAddonRequest>('/marketplace/addon/delete', Auth.ValidateWithData, this.DeleteAddon.bind(this));
+    this.fastify.post<GetAddonRequest>('/marketplace/addon/:id', Auth.ValidateWithData, this.GetAddon.bind(this));
+    this.fastify.post<CreateAddonRequest>('/marketplace/addon/create', rateLimitMarketplaceCreation, this.CreateAddon.bind(this));
+    this.fastify.post<UpdateAddonRequest>('/marketplace/addon/update', Auth.ValidateWithData, this.UpdateAddon.bind(this));
+    this.fastify.post<DeleteAddonRequest>('/marketplace/addon/delete', Auth.ValidateWithData, this.DeleteAddon.bind(this));
 
-    this.fastify.all<InstallAddonRequest>('/marketplace/addon/install/:id', Auth.ValidateWithData, this.InstallAddon.bind(this));
-    this.fastify.all<UninstallAddonRequest>('/marketplace/addon/uninstall/:id', Auth.ValidateWithData, this.UninstallAddon.bind(this));
+    this.fastify.post<InstallAddonRequest>('/marketplace/addon/install/:id', Auth.ValidateWithData, this.InstallAddon.bind(this));
+    this.fastify.post<UninstallAddonRequest>('/marketplace/addon/uninstall/:id', Auth.ValidateWithData, this.UninstallAddon.bind(this));
 
-    this.fastify.all<ToggleUserFavoriteAddonRequest>('/marketplace/user/favorite/:id', Auth.ValidateWithData, this.ToggleUserFavoriteAddon.bind(this));
-    this.fastify.all<ListUserFavoriteAddonsRequest>('/marketplace/user/favorites', Auth.ValidateWithData, this.ListUserFavoriteAddons.bind(this));
+    this.fastify.post<ToggleUserFavoriteAddonRequest>('/marketplace/user/favorite/:id', Auth.ValidateWithData, this.ToggleUserFavoriteAddon.bind(this));
+    this.fastify.post<ListUserFavoriteAddonsRequest>('/marketplace/user/favorites', Auth.ValidateWithData, this.ListUserFavoriteAddons.bind(this));
   }
 
   /**

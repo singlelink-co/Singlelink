@@ -253,7 +253,7 @@ export default Vue.extend({
       if (this.authenticated) {
         return link.url;
       } else {
-        return this.api_url + '/analytics/link/' + link.id;
+        return this.api_url + '/analytics/link/record/' + link.id;
       }
     }
   }

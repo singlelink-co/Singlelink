@@ -62,11 +62,11 @@ export class AnalyticsController extends Controller {
   registerRoutes(): void {
     // Unauthenticated
     this.fastify.get('/analytics', this.GetAnalytics.bind(this));
-    this.fastify.all('/analytics/link/:id', this.LinkAnalytics.bind(this));
-    this.fastify.all('/analytics/profile/:id', this.ProfileAnalytics.bind(this));
+    this.fastify.post('/analytics/link/record/:id', this.LinkAnalytics.bind(this));
+    this.fastify.post('/analytics/profile/record/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
-    this.fastify.all<GetProfileAnalyticsRequest>('/analytics/profile', rateLimitAnalytics, this.GetProfileAnalytics.bind(this));
+    this.fastify.post<GetProfileAnalyticsRequest>('/analytics/profile', rateLimitAnalytics, this.GetProfileAnalytics.bind(this));
   }
 
   /**
@@ -91,7 +91,7 @@ export class AnalyticsController extends Controller {
   }
 
   /**
-   * Route for /analytics/link/:id
+   * Route for /analytics/link/record/:id
    *
    * Used to redirect a request to the appropriate link.
    * Also records analytics on that specific link once called.
@@ -163,7 +163,7 @@ export class AnalyticsController extends Controller {
   }
 
   /**
-   * Route for /analytics/profile/:id
+   * Route for /analytics/profile/record/:id
    *
    * Records analytics on that specific profile once called.
    *

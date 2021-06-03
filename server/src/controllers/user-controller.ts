@@ -93,18 +93,18 @@ export class UserController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated
-    this.fastify.all<UserRequestResetPasswordRequest>('/user/request-reset-password', userRequestResetPasswordOpts, this.UserRequestResetPassword.bind(this));
-    this.fastify.all<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
+    this.fastify.post<UserRequestResetPasswordRequest>('/user/request-reset-password', userRequestResetPasswordOpts, this.UserRequestResetPassword.bind(this));
+    this.fastify.post<ResetUserPasswordRequest>('/user/reset-password', this.ResetUserPassword.bind(this));
 
     // Authenticated
-    this.fastify.all<AuthenticatedRequest>('/user', Auth.ValidateWithData, this.GetUser.bind(this));
-    this.fastify.all<AuthenticatedRequest>('/user/private-metadata', Auth.ValidateWithData, this.GetPrivateMetadata.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/user', Auth.ValidateWithData, this.GetUser.bind(this));
+    this.fastify.post<AuthenticatedRequest>('/user/private-metadata', Auth.ValidateWithData, this.GetPrivateMetadata.bind(this));
 
-    this.fastify.all<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
-    this.fastify.all<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
-    this.fastify.all<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
+    this.fastify.post<UpdateUserRequest>('/user/update', Auth.ValidateWithData, this.UpdateUser.bind(this));
+    this.fastify.post<DeleteUserRequest>('/user/delete', Auth.ValidateWithData, this.DeleteUser.bind(this));
+    this.fastify.post<SetActiveProfileRequest>('/user/set-active-profile', Auth.ValidateWithData, this.SetActiveProfile.bind(this));
 
-    this.fastify.all<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
+    this.fastify.post<GetUserDataPackageRequest>('/user/data-package', userDataPackageRateLimit, this.GetUserDataPackage.bind(this));
 
     this.fastify.post<SetEmailNotifications>('/user/set-email-notifications', Auth.ValidateWithData, this.SetEmailNotifications.bind(this));
   }

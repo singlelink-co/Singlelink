@@ -25,7 +25,7 @@ export class PermissionController extends Controller {
 
   registerRoutes(): void {
     // Authenticated
-    this.fastify.all<HasPermissionRequest>('/permission/has', Auth.ValidateWithData, this.HasPermission.bind(this));
+    this.fastify.post<HasPermissionRequest>('/permission/has', Auth.ValidateWithData, this.HasPermission.bind(this));
   }
 
   // TODO: Implement permissions

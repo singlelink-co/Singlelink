@@ -43,6 +43,8 @@ interface LinkVisit {
   views: any
 }
 
+type AddonType = 'theme' | 'preset' | 'plugin';
+
 interface Addon {
   id: string,
   userId: string,
@@ -59,8 +61,6 @@ interface Addon {
   createdOn: string,
   lastUpdated: string
 }
-
-type AddonType = 'theme' | 'preset' | 'plugin';
 
 interface AddonInstall {
   id: string,

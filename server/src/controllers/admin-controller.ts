@@ -22,7 +22,7 @@ export class AdminController extends Controller {
 
   registerRoutes(): void {
     // Authenticated
-    this.fastify.all<GetGroupRequest>('/admin/perm-group', Auth.ValidateWithData, this.GetPermGroup.bind(this));
+    this.fastify.post<GetGroupRequest>('/admin/perm-group', Auth.ValidateWithData, this.GetPermGroup.bind(this));
   }
 
   /**

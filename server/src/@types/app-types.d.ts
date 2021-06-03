@@ -6,4 +6,4 @@ type AddonSorting = "new" | "featured" | "allTimeInstalls" | "currentInstalls" |
 /**
  * Types of JWT tokens.
  */
-type TokenType = "auth" | "passwordReset" | "google_oauth";
+type TokenType = "auth" | "password_reset" | "google_oauth" | "access_request";

@@ -13,6 +13,7 @@ export const mutations = {
     const days = this.$cookies.get("remember_auth") ? 56 : 1;
 
     this.$cookies.set("auth_token", token, {
+      path: "/",
       maxAge: 60 * 60 * 24 * days
     });
 

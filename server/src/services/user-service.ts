@@ -13,13 +13,20 @@ import {Auth} from "../utils/auth";
 import {URLSearchParams} from "url";
 import {SecurityUtils} from "../utils/security-utils";
 
-interface LoginResultData {
+export interface LoginResultData {
   user: {
     id: string,
     email: string
   },
   activeProfile?: Profile,
   token: string
+}
+
+export interface AccessRequestToken {
+  userId: string,
+  type: TokenType,
+  service: string,
+  serviceUserId: string
 }
 
 /**
@@ -172,7 +179,7 @@ export class UserService extends DatabaseService {
       return false;
     }
 
-    if (decoded?.type !== "passwordReset") {
+    if (decoded?.type !== "password_reset") {
       return false;
     }
 
@@ -197,7 +204,7 @@ export class UserService extends DatabaseService {
     let token = jwt.sign(
       {
         userId: user.id,
-        type: "passwordReset"
+        type: <TokenType>"passwordReset"
       },
       config.secret,
       {expiresIn: '15m'}
@@ -259,7 +266,7 @@ export class UserService extends DatabaseService {
       throw new HttpError(StatusCodes.UNAUTHORIZED, "The password was incorrect.");
     }
 
-    let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
+    let token = jwt.sign({userId: user.id, type: <TokenType>"auth"}, config.secret, {expiresIn: '168h'});
 
     return {
       user: {
@@ -290,7 +297,7 @@ export class UserService extends DatabaseService {
       activeProfile = DbTypeConverter.toProfile(profileQuery.rows[0]);
     }
 
-    let token = jwt.sign({userId: user.id, type: "auth"}, config.secret, {expiresIn: '168h'});
+    let token = jwt.sign({userId: user.id, type: <TokenType>"auth"}, config.secret, {expiresIn: '168h'});
 
     return {
       user: {
@@ -300,6 +307,27 @@ export class UserService extends DatabaseService {
       activeProfile,
       token
     };
+  }
+
+  /**
+   * Creates a one-time use request token that is used to retrieve an access token.
+   *
+   * @param user
+   * @param googleId
+   */
+  async createAccessTokenRequest(user: User, googleId: string): Promise<string> {
+    if (!await Auth.checkGoogleAuthId(this, user.id, googleId)) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, "Invalid google authentication!");
+    }
+
+    let payload: AccessRequestToken = {
+      userId: user.id,
+      type: <TokenType>"access_request",
+      service: "Google",
+      serviceUserId: googleId
+    };
+
+    return jwt.sign(payload, config.secret, {expiresIn: '2m'});
   }
 
   /**
