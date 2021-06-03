@@ -12,7 +12,7 @@ import * as jwt from "jsonwebtoken";
 import {UserService} from "../services/user-service";
 import {ProfileService} from "../services/profile-service";
 import Mixpanel from "mixpanel";
-import {StringUtils} from "../utils/string-utils";
+import {SecurityUtils} from "../utils/security-utils";
 
 interface EmailLoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -31,7 +31,7 @@ interface EmailCreateUserRequest extends RequestGenericInterface {
 }
 
 interface GoogleOAuthRedirectRequest extends FastifyRequest {
-  Params: {
+  Querystring: {
     code: string,
     state: string
   }
@@ -41,22 +41,23 @@ interface AssignGoogleUserRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
 }
 
+// TODO Re-enable these!
 const googleRateLimit = {
-  config: {
-    rateLimit: {
-      max: 4,
-      timeWindow: '1 min'
-    }
-  }
+  // config: {
+  //   rateLimit: {
+  //     max: 4,
+  //     timeWindow: '1 min'
+  //   }
+  // }
 };
 
 const authGoogleRateLimit = {
-  config: {
-    rateLimit: {
-      max: 4,
-      timeWindow: '1 min'
-    }
-  },
+  // config: {
+  //   rateLimit: {
+  //     max: 4,
+  //     timeWindow: '1 min'
+  //   }
+  // },
   preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
@@ -80,7 +81,7 @@ export class AuthController extends Controller {
     this.googleAuth = new google.auth.OAuth2(
       config.google.clientId,
       config.google.clientSecret,
-      config.apiDomain + "/auth/google/redirect"
+      config.google.redirectDomain + "/auth/google/redirect"
     );
   }
 
@@ -101,6 +102,7 @@ export class AuthController extends Controller {
       // Authenticated
       this.fastify.all<AuthenticatedRequest>('/auth/google/assign', authGoogleRateLimit, this.GetGoogleAssignLink.bind(this));
 
+      // OAuth Redirect
       this.fastify.all<GoogleOAuthRedirectRequest>('/auth/google/redirect', googleRateLimit, this.GoogleOAuthRedirect.bind(this));
     }
   }
@@ -113,8 +115,10 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GetGoogleLoginLink(request: FastifyRequest, reply: FastifyReply) {
-    let nonce = StringUtils.generateNonce(16);
+    let nonce = SecurityUtils.generateNonce();
     let token = jwt.sign({nonce: nonce, type: "google_oauth"}, config.secret, {expiresIn: '15m'});
+
+    await SecurityUtils.recordNonce(nonce);
 
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
@@ -134,8 +138,10 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GetGoogleCreateLink(request: FastifyRequest, reply: FastifyReply) {
-    let nonce = StringUtils.generateNonce(16);
+    let nonce = SecurityUtils.generateNonce();
     let token = jwt.sign({nonce: nonce, type: "google_oauth"}, config.secret, {expiresIn: '15m'});
+
+    await SecurityUtils.recordNonce(nonce);
 
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
@@ -158,12 +164,14 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GetGoogleAssignLink(request: FastifyRequest<AuthenticatedRequest>, reply: FastifyReply) {
-    let nonce = StringUtils.generateNonce(16);
+    let nonce = SecurityUtils.generateNonce();
     let token = jwt.sign({
       nonce: nonce,
       userId: request.body.authUser.id,
-      type: "google_auth"
+      type: "google_oauth"
     }, config.secret, {expiresIn: '15m'});
+
+    await SecurityUtils.recordNonce(nonce);
 
     return this.googleAuth.generateAuthUrl({
       access_type: 'offline',
@@ -185,8 +193,9 @@ export class AuthController extends Controller {
    * @constructor
    */
   async GoogleOAuthRedirect(request: FastifyRequest<GoogleOAuthRedirectRequest>, reply: FastifyReply) {
-    let code = request.params.code;
-    let stateRaw = request.params.state;
+    let code = request.query.code;
+    let stateRaw = request.query.state;
+
     let state: {
       mode: "login" | "create" | "assign",
       token: string
@@ -203,6 +212,10 @@ export class AuthController extends Controller {
       return ReplyUtils.error("Invalid token.");
     }
 
+    if (!await SecurityUtils.expireNonce(decoded.nonce)) {
+      return ReplyUtils.error("Invalid token.");
+    }
+
     if (decoded?.type !== "google_oauth") {
       reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
       return;
@@ -215,7 +228,7 @@ export class AuthController extends Controller {
     let authInstance = new google.auth.OAuth2(
       config.google.clientId,
       config.google.clientSecret,
-      config.apiDomain + "/auth/google/redirect"
+      config.google.redirectDomain + "/auth/google/redirect"
     );
 
     authInstance.setCredentials(tokens);
@@ -255,8 +268,29 @@ export class AuthController extends Controller {
           return loginResultData;
         } catch (e) {
           if (e instanceof HttpError) {
-            reply.code(e.statusCode);
-            return ReplyUtils.error(e.message, e);
+            reply.type("text/html").code(e.statusCode);
+            let s = ReplyUtils.error(e.message, e);
+
+            // language=HTML
+            return `
+              <html lang="en">
+              <head>
+                <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
+                <title>Singlelink - Error!</title>
+              </head>
+              <body>
+              <p>
+                ${e.statusCode === 404 ?
+                  `You haven't linked your account to Google yet! You must do that in your settings first before logging in with Google.` :
+                  `Error: ${s}`} <br>
+                Redirecting in 5 seconds...<br>
+                <a href="${config.clientDomain}">Click here if you aren't automatically redirected.</a>
+              </p>
+              </body>
+              <script>
+
+              </script>
+              </html>`;
           }
 
           throw e;
@@ -295,8 +329,24 @@ export class AuthController extends Controller {
           };
         } catch (e) {
           if (e instanceof HttpError) {
-            reply.code(e.statusCode);
-            return ReplyUtils.error(e.message, e);
+            reply.type("text/html").code(e.statusCode);
+            let s = ReplyUtils.error(e.message, e);
+
+            // language=HTML
+            return `
+              <html lang="en">
+              <head>
+                <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
+                <title>Singlelink - Error!</title>
+              </head>
+              <body>
+              <p>
+                Error: ${s} <br>
+                Redirecting in 5 seconds...<br>
+                <a href="${config.clientDomain}">Click here if you aren't automatically redirected.</a>
+              </p>
+              </body>
+              </html>`;
           }
 
           throw e;
@@ -318,11 +368,45 @@ export class AuthController extends Controller {
               $ip: request.ip,
             });
 
-          return ReplyUtils.success(`Google enabled: ${result}`);
+          reply.type("text/html").code(StatusCodes.OK);
+
+          // language=HTML
+          return `
+            <html lang="en">
+            <head>
+              <meta http-equiv="refresh"
+                    content="0;url=${config.clientDomain}/dashboard/settings/?googleLinked=${result}"/>
+              <title>Singlelink - Redirecting...</title>
+            </head>
+            <body>
+            <p>
+              Google enabled: ${result} <br>
+              Redirecting...<br>
+              <a href="${config.clientDomain}">Click here if you aren't automatically redirected.</a>
+            </p>
+            </body>
+            </html>`;
+
         } catch (e) {
           if (e instanceof HttpError) {
-            reply.code(e.statusCode);
-            return ReplyUtils.error(e.message, e);
+            reply.type("text/html").code(e.statusCode);
+            let s = ReplyUtils.error(e.message, e);
+
+            // language=HTML
+            return `
+              <html lang="en">
+              <head>
+                <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
+                <title>Singlelink - Error!</title>
+              </head>
+              <body>
+              <p>
+                Error: ${s} <br>
+                Redirecting in 5 seconds...<br>
+                <a href="${config.clientDomain}">Click here if you aren't automatically redirected.</a>
+              </p>
+              </body>
+              </html>`;
           }
 
           throw e;

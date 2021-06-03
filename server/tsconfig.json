@@ -2,6 +2,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "incremental": true,
+    "lib": [
+      "ES2020"
+    ],
     "target": "ES2020",
     "module": "CommonJS",
     "outDir": "dist",

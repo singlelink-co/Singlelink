@@ -161,6 +161,34 @@ create table if not exists app.perm_groups
 
 create index if not exists perm_groups_group_name on app.perm_groups (group_name);
 
+-- Security
+
+create schema if not exists security;
+
+/*
+ Creates a table for nonce recording.
+ */
+create table if not exists security.nonces
+(
+    nonce   text primary key not null,
+    expires timestamp        not null default (now() + interval '5 minutes')
+);
+
+
+/*
+ Creates a table for recording tokens that should be expired.
+ */
+create table if not exists security.expired_tokens
+(
+    user_id bigint references app.users (id) on update cascade on delete cascade,
+    token   text not null,
+
+    primary key (user_id, token)
+);
+
+create index if not exists security_expired_tokens_user_id on security.expired_tokens (user_id);
+create index if not exists security_expired_tokens_user_id on security.expired_tokens (token);
+
 ------------
 -- Patches
 -- Over time, things need to be updated and patched. This section is all about that.

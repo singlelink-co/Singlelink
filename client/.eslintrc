@@ -27,6 +27,7 @@
     "dot-notation": "off",
     "no-trailing-spaces": "off",
     "no-useless-escape": "off",
+    "padded-blocks": "off",
     "semi": [
       2,
       "always"

@@ -158,8 +158,8 @@ if (process.env.GOOGLE_CLIENT_SECRET) {
   config.google.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 }
 
-if (process.env.GOOGLE_REDIRECT_URL) {
-  config.google.redirectUrl = process.env.GOOGLE_REDIRECT_URL;
+if (process.env.GOOGLE_REDIRECT_DOMAIN) {
+  config.google.redirectDomain = process.env.GOOGLE_REDIRECT_DOMAIN;
 }
 
 // Extra logic for debug messages

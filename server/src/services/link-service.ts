@@ -53,7 +53,7 @@ export class LinkService extends DatabaseService {
       ]);
 
     if (queryResult.rowCount < 1)
-      throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be found.");
+      throw new HttpError(StatusCodes.NOT_FOUND, "The link couldn't be created.");
 
     return DbTypeConverter.toLink(queryResult.rows[0]);
   }

@@ -12,6 +12,9 @@ import {AdminController} from "./controllers/admin-controller";
 import {PermissionController} from "./controllers/permission-controller";
 import {MarketplaceController} from "./controllers/marketplace-controller";
 import {AuthController} from "./controllers/auth-controller";
+import {SecurityUtils} from "./utils/security-utils";
+import {JobSystem} from "./jobs/job-system";
+import {DbLocks} from "./utils/db-locks";
 
 console.log("Initializing Singlelink");
 
@@ -22,11 +25,18 @@ start().then(() => {
   // do nothing
 });
 
+setTimeout(async () => {
+  await database.pool.query<{ nonce: string }>("delete from security.nonces where expiry_date > now() returning *");
+}, 1000 * 60 * 5);
+
 async function start() {
   await database.initialize();
 
+  await DbLocks.initialize(database.pool);
   Auth.initialize(database.pool);
+  SecurityUtils.initialize(database.pool);
   CustomDomainHandler.initialize(database.pool);
+  await JobSystem.initialize(database.pool);
 
   // SingleLink main controllers
   server.addController(new AnalyticsController(server.fastify, database));
@@ -45,6 +55,7 @@ async function start() {
 
   // Server utility controllers
   server.addController(new InfoController(server.fastify, database));
+
 
   server.startServer();
 }

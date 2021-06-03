@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col p-8 items-center overflow-x-hidden overflow-y-scroll">
     <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
-      <img class="w-8" src="/Settings.svg"/>
+      <img class="w-8" src="/Settings.svg">
       <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
         Site settings
       </h1>
@@ -82,34 +82,45 @@
           </div>
         </div>
         <div class="flex flex-row items-center justify-center space-x-4 mb-4">
-          <input type="hidden" name="avatar_url" id="avatar_url" class="simple-file-upload" v-model="user.activeProfile.imageUrl">
-          <div class="flex flex-col w-auto flex-grow flex-1">
-          <label class="font-bold opacity-70 text-sm text-black" for="image_url">Avatar Image URL</label>
           <input
-            id="image_url"
+            id="avatar_url"
             v-model="user.activeProfile.imageUrl"
-            class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
-            type="text"
-            placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
+            type="hidden"
+            name="avatar_url"
+            class="simple-file-upload"
           >
-          <div
-            v-if="!profile_valid"
-            class="py-3 px-4 rounded-2xl bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
-          >
-            <span class="font-semibold">Warning!</span>
-            <span class="text-xs font-semibold">Your site picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
-              href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba"
-              target="_blank"
-              class="ml-2 font-semibold underline hover:text-red-700"
-            >Learn more</a></span>
+          <div class="flex flex-col w-auto flex-grow flex-1">
+            <label class="font-bold opacity-70 text-sm text-black" for="image_url">Avatar Image URL</label>
+            <input
+              id="image_url"
+              v-model="user.activeProfile.imageUrl"
+              class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
+              type="text"
+              placeholder="e.g. https://uifaces.co/our-content/donated/rSuiu_Hr.jpg"
+            >
+            <div
+              v-if="!profileValid"
+              class="py-3 px-4 rounded-2xl bg-red-200 border border-red-400 text-red-500 flex flex-col items-start mt-2 text-sm"
+            >
+              <span class="font-semibold">Warning!</span>
+              <span class="text-xs font-semibold">Your site picture may be improperly formatted! Please ensure your image is loaded via an SSL and ends in .gif, .png, .jpg, .jpeg, or another supported file extension.<a
+                href="https://www.notion.so/neutroncreative/Troubleshooting-9a162db4a8ce482d89b3d3e1bc9825ba"
+                target="_blank"
+                class="ml-2 font-semibold underline hover:text-red-700"
+              >Learn more</a></span>
+            </div>
           </div>
-        </div>
         </div>
 
         <div class="flex flex-col w-full mb-6">
-          <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full">
-          <label class="font-bold text-sm text-black opacity-70" for="custom_domain">Custom domain</label>
-            <a href="https://www.notion.so/neutroncreative/Setting-up-your-custom-domain-907421b1ac3841dbbd8d9a7d41d17f9a" class="text-black font-bold opacity-50 text-xs hover:underline hover:opacity-80">Need help? Read our documentation</a>
+          <div
+            class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full"
+          >
+            <label class="font-bold text-sm text-black opacity-70" for="custom_domain">Custom domain</label>
+            <a
+              href="https://www.notion.so/neutroncreative/Setting-up-your-custom-domain-907421b1ac3841dbbd8d9a7d41d17f9a"
+              class="text-black font-bold opacity-50 text-xs hover:underline hover:opacity-80"
+            >Need help? Read our documentation</a>
           </div>
           <input
             id="custom_domain"
@@ -141,7 +152,9 @@
               v-show="showWatermarkNotice"
               class="mt-2 flex text-gdp p-1 px-4 rounded-full bg-opaqueIndigo font-bold text-xs lg:text-sm"
             >
-              This is completely optional, but it really helps us out! Would you help us spread the word about {{ app_name }}?
+              This is completely optional, but it really helps us out! Would you help us spread the word about {{
+                app_name
+              }}?
             </span>
           </label>
         </div>
@@ -171,14 +184,64 @@
       </form>
     </div>
 
+    <div
+      v-if="alerts.googleLinked !== null && alerts.googleLinked"
+      class="flex flex-col lg:flex-row justify-center items-center p-3 rounded-2xl bg-green-300 shadow w-full mb-8"
+    >
+      <p class="text-black opacity-70 font-semibold">
+        Successfully linked Google!
+      </p>
+    </div>
+    <div
+      v-else-if="alerts.googleLinked !== null && !alerts.googleLinked"
+      class="flex flex-col lg:flex-row justify-center items-center p-3 rounded-2xl bg-red-300 shadow w-full mb-8"
+    >
+      <p class="text-black opacity-70 font-semibold">
+        Failed to link Google!
+      </p>
+    </div>
+
+    <!-- Manage SSO -->
+    <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
+      <div class="flex flex-col mr-auto w-full lg:w-1/2">
+        <h2 class="text-black font-bold text-lg w-full">
+          Manage SSO
+        </h2>
+        <p class="text-black opacity-70 font-semibold">
+          Link up your social media accounts for easy single sign-on access.
+        </p>
+      </div>
+      <div>
+        <a
+          class="flex flex-row items-center font-bold justify-center rounded-full px-8 py-2 my-2 text-md border-gray-300 hover:border-gray-600"
+          style="border-width:3px;border-style:solid;"
+          @click="assignGoogleAccount()"
+        >
+          <img src="/google-icon.png" class="w-5 mr-4">
+          Link with Google
+        </a>
+        <!--        <a-->
+        <!--          class="flex flex-row items-center font-bold justify-center rounded-full px-8 py-2 my-2 text-md border-gray-300 hover:border-gray-600"-->
+        <!--          style="border-width:3px;border-style:solid;"-->
+        <!--          @click="assignGitHubAccount()"-->
+        <!--        >-->
+        <!--          <img src="/google-icon.png" class="w-5 mr-4">-->
+        <!--          Link with GitHub-->
+        <!--        </a>-->
+      </div>
+    </div>
+
     <!-- Delete site -->
     <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
         <h2 class="text-black font-bold text-lg w-full">
           Delete this site
         </h2>
-        <p class="text-black opacity-70 font-semibold">Done with this site? Click the button on your right to delete this
-          site and all related content.</p>
+        <p class="text-black opacity-70 font-semibold">
+          Done with this site? Click the button on your right to delete
+          this
+          site and all related content.
+        </p>
       </div>
       <button
         type="button"
@@ -194,13 +257,15 @@
         <h2 class="text-black font-bold text-lg w-full">
           Account settings
         </h2>
-        <p class="text-black opacity-70 font-semibold">Need to configure the account managing your micro-sites?</p>
+        <p class="text-black opacity-70 font-semibold">
+          Need to configure the account managing your micro-sites?
+        </p>
       </div>
       <n-link
         to="/dashboard/account"
         class="w-full lg:w-auto mt-4 lg:mt-0 ml-2 flex p-3 px-6 text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold w-1/3 justify-center align-center"
       >
-        Goto account settings
+        Go to account settings
       </n-link>
     </div>
 
@@ -273,6 +338,40 @@ export default Vue.extend({
   name: 'DashboardSettings',
   layout: 'dashboard',
   middleware: 'authenticated',
+  data() {
+    return {
+      loaded: false,
+      resetPasswordModalActive: false,
+      deleteProfileModalActive: false,
+      originalHandle: '',
+      user: {
+        name: '',
+        emailHash: '',
+        activeProfile: {
+          imageUrl: '',
+          headline: '',
+          subtitle: '',
+          handle: '',
+          customDomain: '',
+          visibility: '',
+          showWatermark: false,
+          metadata: {
+            privacyMode: false
+          },
+        }
+      },
+      error: '',
+      passwordError: '',
+      passwordEmail: '',
+      showWatermarkNotice: false,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL,
+      alerts: {
+        googleLinked: null as boolean | null
+      }
+    };
+  },
   head: {
     title: 'Site settings - ' + process.env.APP_NAME,
     meta: [
@@ -303,54 +402,21 @@ export default Vue.extend({
       },
     ],
   },
-  data() {
-    return {
-      loaded: false,
-      resetPasswordModalActive: false,
-      deleteProfileModalActive: false,
-      originalHandle: '',
-      user: {
-        name: '',
-        emailHash: '',
-        activeProfile: {
-          imageUrl: '',
-          headline: '',
-          subtitle: '',
-          handle: '',
-          customDomain: '',
-          visibility: '',
-          showWatermark: false,
-          metadata: {
-            privacyMode: false
-          },
-        }
-      },
-      error: '',
-      passwordError: '',
-      passwordEmail: '',
-      showWatermarkNotice: false,
-      hostname: process.env.HOSTNAME,
-      app_name: process.env.APP_NAME,
-      icon_url: process.env.ICON_URL
-    };
-  },
 
   computed: {
-    profile_valid() {
-      if (!this.user.activeProfile.imageUrl) {
+    profileValid() {
+      const imageUrl = this.$data.user.activeProfile.imageUrl;
+
+      if (!imageUrl) {
         return true;
       }
 
-      if (!this.user.activeProfile.imageUrl.includes('.jpg') && !this.user.activeProfile.imageUrl.includes('.jpeg') && !this.user.activeProfile.imageUrl.includes('.png') && !this.user.activeProfile.imageUrl.includes('gif')) {
+      if (!imageUrl.includes('.jpg') && !imageUrl.includes('.jpeg') && !imageUrl.includes('.png') && !imageUrl.includes('gif')) {
         return false;
       }
 
-      if (!this.user.activeProfile.imageUrl.includes('https://')) {
-        return false;
-      }
-
-      return true;
-    }
+      return imageUrl.includes('https://');
+    },
   },
 
   watch: {
@@ -363,6 +429,10 @@ export default Vue.extend({
 
   async mounted() {
     await this.getUserData();
+
+    if (this.$route.query.googleLinked) {
+      this.$data.alerts.googleLinked = this.$route.query.googleLinked === 'true';
+    }
 
     this.loaded = true;
   },
@@ -406,15 +476,16 @@ export default Vue.extend({
       // Update profile
       try {
 
-        let avatar_upload = (<HTMLInputElement>document.getElementById('avatar_url'));
-        let avatar_string = null;
-        if(avatar_upload && avatar_upload.value) {
-          avatar_string = avatar_upload.value;
+        const avatarUpload: HTMLInputElement = (document.getElementById('avatar_url')) as HTMLInputElement;
+        let avatarString = null;
+
+        if (avatarUpload && avatarUpload.value) {
+          avatarString = avatarUpload.value;
         }
 
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
-          imageUrl: avatar_string ?? this.user.activeProfile.imageUrl ?? null,
+          imageUrl: avatarString ?? this.user.activeProfile.imageUrl ?? null,
           headline: this.user.activeProfile.headline ?? null,
           subtitle: this.user.activeProfile.subtitle ?? null,
           handle: this.user.activeProfile.handle ?? null,
@@ -540,6 +611,14 @@ export default Vue.extend({
         throw err;
       }
     },
+
+    async assignGoogleAccount() {
+      const response = await this.$axios.post('/auth/google/assign', {
+        token: this.$store.getters['auth/getToken']
+      });
+
+      window.location.assign(response.data);
+    }
   }
 });
 </script>

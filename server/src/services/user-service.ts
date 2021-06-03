@@ -10,6 +10,8 @@ import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
 import crypto from "crypto";
 import {Auth} from "../utils/auth";
+import {URLSearchParams} from "url";
+import {SecurityUtils} from "../utils/security-utils";
 
 interface LoginResultData {
   user: {
@@ -162,7 +164,7 @@ export class UserService extends DatabaseService {
    * @param password
    */
   async setPasswordWithToken(token: string, password: string) {
-    let decoded = <{userId: string, type: TokenType}>jwt.verify(token, config.secret, {
+    let decoded = <{ userId: string, type: TokenType }>jwt.verify(token, config.secret, {
       maxAge: "15m"
     });
 
@@ -339,7 +341,7 @@ export class UserService extends DatabaseService {
    * @param name
    */
   async createUserWithGoogle(email: string, googleId: string, name?: string): Promise<SensitiveUser> {
-    let passHash = await bcrypt.hash(StringUtils.generateRandomPassword(), 10);
+    let passHash = await bcrypt.hash(SecurityUtils.generateRandomPassword(), 10);
 
     // Force lowercase
     email = email.toLowerCase();
