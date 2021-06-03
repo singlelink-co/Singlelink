@@ -24,6 +24,7 @@ export const mutations = {
     state.token = null;
 
     this.$cookies.set("auth_token", '', {
+      path: "/",
       maxAge: 0
     });
   },
