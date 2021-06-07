@@ -110,14 +110,6 @@ $$
     end;
 $$;
 
--- TODO Use this table to allow for multiple users per profile
-create table if not exists app.profile_members
-(
-    handle text not null,
-    member text not null,
-    unique (handle, member)
-);
-
 create index if not exists profile_members_handle_index on app.profile_members (handle);
 create index if not exists profile_members_member_index on app.profile_members (member);
 
