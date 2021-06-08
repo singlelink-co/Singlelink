@@ -110,9 +110,6 @@ $$
     end;
 $$;
 
-create index if not exists profile_members_handle_index on app.profile_members (handle);
-create index if not exists profile_members_member_index on app.profile_members (member);
-
 /*
  Creates a table for the individual links created.
  */
