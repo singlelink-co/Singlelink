@@ -14,7 +14,7 @@ const chalk = require('chalk');
 const port = process.env.PORT ?? 3001;
 
 // Define hostname for launch
-const hostname = process.env.HOSTNAME ?? '127.0.0.1';
+const host = process.env.HOST ?? '127.0.0.1';
 
 // Define app name
 const app_name = process.env.APP_NAME ?? 'Singlelink';
