@@ -3,7 +3,6 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import chalk from "chalk";
 import axios from "axios";
 import config from "./config/config";
-import {StatusCodes} from "http-status-codes";
 
 /**
  * Creates all the routes.
@@ -31,16 +30,6 @@ export class RouteHandler {
     });
 
     /*
-      Redirect to new link format
-     */
-    this.fastify.get("/u/*", async (request: FastifyRequest, reply: FastifyReply) => {
-      // Get requested profile handle from URL
-      const handle = request.url.replace('/u/', '');
-
-      reply.redirect(StatusCodes.PERMANENT_REDIRECT, `/${handle}`);
-    });
-
-    /*
      Declare site route
      Route /*
     */
@@ -49,7 +38,7 @@ export class RouteHandler {
       const handle = request.url.replace('/', '');
 
       // Log request
-      console.log(`${chalk.cyan.bold(config.appName)}: Request received at /${handle}`);
+      console.log(`${chalk.cyan.bold(config.appName)}: Request received at /${handle} from ${request.connection.address().toString()}`);
 
       let response;
 
@@ -64,51 +53,49 @@ export class RouteHandler {
 
         //language=HTML
         return reply.send(`
-          <html lang="">
-          <head>
-            <meta charset="UTF-8">
-            <title>Singlelink Web Client</title>
-            <link rel="icon" href="favicon.ico" type="image/png"/>
-          </head>
-          <body>
-          <div class="w-full h-full flex flex-col items-center justify-center">
-            <h1 class="text-4xl text-gray-900 mb-2 font-extrabold">500 - Server Error</h1>
-            <h3 class="text-lg text-gray-600 mb-4">Oops! Something went wrong. Try again?</h3>
-            <a class="bg-indigo-600 hover:bg-indigo-500 rounded shadow text-white py-3 px-6 text-sm font-medium"
-               href="${request.url}">Reload page</a>
-          </div>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
-          <style>
-            @import url('https://rsms.me/inter/inter.css');
-
-            html {
-              font-family: 'Inter', sans-serif;
-            }
-
-            @supports (font-variation-settings: normal) {
-              html {
-                font-family: 'Inter var', sans-serif;
-              }
-            }
-          </style>
-          </body>
-          </html>
-        `);
+                <html lang="">
+                    <head>
+                        <title>Singlelink Web Client</title>
+                        <meta charset="UTF-8">
+                    </head>
+                    <body>
+                        <div class="w-full h-full flex flex-col items-center justify-center">
+                            <h1 class="text-4xl text-gray-900 mb-2 font-extrabold">500 - Server Error</h1>
+                            <h3 class="text-lg text-gray-600 mb-4">Oops! Something went wrong. Try again?</h3>
+                            <a class="bg-indigo-600 hover:bg-indigo-500 rounded-2xl shadow text-white py-3 px-6 text-sm font-medium" href="` + request.url + `">Reload page</a>
+                        </div>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
+                        <style>
+                            @import url('https://rsms.me/inter/inter.css');
+                            html { font-family: 'Inter', sans-serif; }
+                            @supports (font-variation-settings: normal) {
+                            html { font-family: 'Inter var', sans-serif; }
+                            }
+                        </style>
+                    </body>
+                </html>
+            `);
       }
 
       // Define profile
       const profile = response.data.profile;
+      profile.headline = profile.headline ?? '';
+      profile.subtitle = profile.subtitle ?? '';
 
       // Define user
       const user = response.data.user;
 
       // Define theme = response.data.theme;
-      const theme = response.data.theme;
+      const theme = response.data.theme ?? {
+        customCss: '',
+        customHtml: '',
+      };
 
       // Define Avatar image
       const imageUrl = profile.imageUrl || `https://www.gravatar.com/avatar/${user.emailHash}`;
 
       // Define Link HTML Block
+      //language=HTML
       let linkHtml = '';
 
       // Define links & sort by order
@@ -118,30 +105,41 @@ export class RouteHandler {
 
       // Add link html to html block link-by-link
       for await (let link of links) {
-        let subtitleHtml = '';
-
-        //language=HTML
-        if (link.subtitle)
-          subtitleHtml = `<span class="text-sm text-gray-700 sl-link-subtitle mt-1">${link.subtitle}</span>`;
-
-        let css = link.customCss ?? '';
-
-        //language=HTML
-        linkHtml += `
-          <a
-            id="sl-item-${link.id}"
-            href="${config.apiUrl}/analytics/link/record/${link.id}"
-            class="w-full"
-            target="_blank"
-          >
-            <div
-              class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
-              style="${css}"
-            >
-              <span class="font-medium text-gray-900 sl-label">${link.label}</span>${subtitleHtml}
-            </div>
-          </a>
-        `;
+        switch (link.type) {
+          case 'link':
+            let subtitleHtml = '';
+            //language=HTML
+            if (link.subtitle) subtitleHtml = `<span
+              class="text-sm text-gray-700 sl-link-subtitle mt-1">${link.subtitle}</span>`;
+            let css = link.customCss ?? '';
+            //language=HTML
+            linkHtml += `
+              <a
+                id="sl-item-${link.id}"
+                href="${config.apiUrl}/analytics/link/record/${link.id}"
+                class="w-full sl-item-parent"
+                target="_blank"
+              >
+                <div
+                  class="rounded-2xl shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
+                  style="${css}"
+                >
+                  <span class="font-medium text-gray-900 sl-label">${link.label}</span>${subtitleHtml}
+                </div>
+              </a>
+            `;
+            break;
+          case 'image':
+            //language=HTML
+            linkHtml += `
+              <img id="sl-item-${link.id}" src="${link.url}" class="w-full h-auto" alt="link-img"/>
+            `;
+            break;
+          case 'divider':
+            //language=HTML
+            linkHtml += '<div class="w-full bg-black" style="opacity:.15;height:1px;"></div>';
+            break;
+        }
       }
 
       // Define headline HTML
@@ -157,7 +155,7 @@ export class RouteHandler {
       let themeColorsHtml = ``;
 
       //language=HTML
-      if (theme)
+      if (theme && theme.colors)
         themeColorsHtml = `
           <style>
             .sl-headline {
@@ -190,23 +188,24 @@ export class RouteHandler {
 
       // Build watermark string
       let watermarkHtml = '';
-      //language=HTML
-      watermarkHtml += `
-        <div id="sl-watermark">`;
-
-      if (theme) {
-        //language=HTML
+      watermarkHtml += `<div id="sl-watermark" class="flex flex-col items-center justify-center">`;
+      if (theme && theme.colors) {
         watermarkHtml += `
-          <p style="color: ${theme.colors?.text.primary ?? 'inherit'};" class="mt-4 text-sm">
-            Proudly built with ${config.appName} 🔗
-          </p>`;
+        <div style="color: ${theme.colors.text.primary};max-width:230px;" class="mt-4 mb-2 mx-auto text-sm" >
+          Proudly built with ${config.appName}, the open-source Linktree alternative
+        </div>`;
       } else {
-        //language=HTML
         watermarkHtml += `
-          <p style="color:rgba(0,0,0,1);" class="mt-4 text-sm">
-            Proudly built with ${config.appName} 🔗
-          </p>`;
+        <div v-else style="color:rgba(0,0,0,1);max-width:230px;" class="mt-4 mb-2 mx-auto text-sm">
+          Proudly built with ${config.appName}, the open-source Linktree alternative
+        </div>`;
       }
+      watermarkHtml += `
+            <a class="text-indigo-600 hover-underline text-sm" href="https://${config.hostname}/create-account" target="_blank">
+                Create your free micro-site in minutes!
+            </a>`;
+      watermarkHtml += `<base target="_blank">`;
+      watermarkHtml += `</div>`;
 
       if (config.freeSignup) {
         //language=HTML
@@ -233,9 +232,251 @@ export class RouteHandler {
       return reply.send(`
         <html lang="">
         <head>
+          <title>${profile.headline} - Singlelink</title>
           <meta charset="UTF-8">
-          <title>${profile.headline}</title>
-          <link rel="icon" href="favicon.ico" type="image/png"/>
+          <meta data-n-head="ssr" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+          <meta data-n-head="ssr" data-hid="title" name="title" content="${profile.headline} - Singlelink">
+          <meta data-n-head="ssr" data-hid="og:title" name="og:title" content="${profile.headline} - Singlelink">
+          <meta data-n-head="ssr" data-hid="twitter:title" name="twitter:title"
+                content="${profile.headline} - Singlelink">
+          <meta data-n-head="ssr" data-hid="description" name="description"
+                content="${profile.subtitle} | Powered by Singlelink, the open-source Linktree alternative.">
+          <meta data-n-head="ssr" data-hid="og:description" name="og:description"
+                content="${profile.subtitle} | Powered by Singlelink, the open-source Linktree alternative.">
+          <meta data-n-head="ssr" data-hid="twitter:description" name="twitter:description"
+                content="${profile.subtitle} | Powered by Singlelink, the open-source Linktree alternative.">
+          <meta data-n-head="ssr" data-hid="og:image" name="og:image"
+                content="https://api.singlelink.co/profile/thumbnail/${handle}">
+          <meta data-n-head="ssr" data-hid="twitter:image" name="twitter:image"
+                content="https://api.singlelink.co/profile/thumbnail/jim">
+          <meta data-n-head="ssr" data-hid="twitter:url" name="twitter:url"
+                content="https://app.singlelink.co/u/${handle}">
+          <meta data-n-head="ssr" data-hid="twitter:card" name="twitter:card" content="summary_large_image">
+          <link data-n-head="ssr" rel="icon" type="image/x-icon" href="https://singlelink.co/favicon.ico">
+
+          <!-- Tailwind CSS Embedded Styles -->
+          <!-- Theme style -->
+          <style>
+            ${theme.customCss}
+          </style>
+          <!-- Personal styles -->
+          <style>
+            ${profile.customCss}
+          </style>
+          <style>
+            html {
+              font-size: 16px;
+            }
+
+            .w-full {
+              width: 100%;
+            }
+
+            .w-screen {
+              width: 100vw;
+            }
+
+            .min-h-screen {
+              min-height: 100vh;
+            }
+
+            .bg-gray-100 {
+              background-color: rgba(243, 244, 246, 1);
+            }
+
+            .relative {
+              position: relative;
+            }
+
+            .flex {
+              display: flex;
+            }
+
+            .flex-col {
+              flex-direction: column;
+            }
+
+            .items-center {
+              align-items: center;
+            }
+
+            .justify-center {
+              justify-content: center;
+            }
+
+            .text-center {
+              text-align: center;
+            }
+
+            .mt-1 {
+              margin-top: .25rem;
+            }
+
+            .mb-2 {
+              margin-bottom: .5rem;
+            }
+
+            .mt-4 {
+              margin-top: 1rem;
+            }
+
+            .mb-4 {
+              margin-bottom: 1rem;
+            }
+
+            .p-4 {
+              padding: 1rem;
+            }
+
+            .p-6 {
+              padding: 1.5rem;
+            }
+
+            .pt-8 {
+              padding-top: 2rem;
+            }
+
+            .pb-8 {
+              padding-bottom: 2rem;
+            }
+
+            .max-w-sm {
+              max-width: 24rem;
+            }
+
+            .shadow {
+              0 1px 2px 0 rgba(0, 0, 0, 0.06);
+              box-shadow: var(--tw-ring-offset-shadow, (0 0 #0000)), var(--tw-ring-shadow, (0 0 #0000)), 0 1 px 3 px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            .text-black {
+              color: #000;
+            }
+
+            .font-medium {
+              font-weight: 500;
+            }
+
+            .font-semibold {
+              font-weight: 600;
+            }
+
+            .text-sm {
+              font-size: 0.875rem;
+              line-height: 1.25rem;
+            }
+
+            .text-2xl {
+              font-size: 1.5rem;
+              line-height: 2rem;
+            }
+
+            * {
+              font-size: 1rem;
+              line-height: 1.5rem;
+              font-weight: 400;
+            }
+
+            .rounded-2xl {
+              border-radius: 1rem;
+            }
+
+            .text-gray-600 {
+              color: rgba(75, 85, 99, 1);
+            }
+
+            .text-gray-700 {
+              color: rgba(55, 65, 81, 1);
+            }
+
+            .text-indigo-600 {
+              color: #5850ec;
+            }
+
+            .mx-auto {
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            .sl-item-parent {
+              text-decoration: none;
+            }
+
+            .hover-underline {
+              text-decoration: none;
+            }
+
+            .hover-underline:hover {
+              text-decoration: underline;
+            }
+          </style>
+          <style>
+            .nc-avatar {
+              width: 60px;
+              height: 60px;
+              border-radius: 1000px;
+            }
+
+            .nc-link {
+              background-color: #FFF;
+              padding: 1rem;
+              margin-bottom: .75rem;
+              width: 100%;
+              border-radius: .25rem;
+              box-shadow: 0 1px 3px 0 rgb(0 0 (0 / 10%)), 0 1 px 2 px 0 rgb(0 0 (0 / 6 %));
+              font-weight: 500;
+              cursor: pointer;
+              transition: transform .15s ease-in-out;
+            }
+
+            .nc-link:hover {
+              transform: scale(1.02);
+            }
+
+            .nc-link:active {
+              transform: scale(1);
+            }
+
+            body {
+              overflow-x: hidden;
+            }
+          </style>
+          <style>
+            html, * {
+              font-family: 'Inter',
+              -apple-system,
+              BlinkMacSystemFont,
+              'Segoe UI',
+              Roboto,
+              'Helvetica Neue',
+              Arial,
+              sans-serif;
+              font-size: 16px;
+              line-height: 1.65;
+              word-spacing: 1px;
+              -ms-text-size-adjust: 100%;
+              -webkit-text-size-adjust: 100%;
+              -moz-osx-font-smoothing: grayscale;
+              -webkit-font-smoothing: antialiased;
+              box-sizing: border-box;
+            }
+
+            h1.sl-headline, h3.sl-subtitle {
+              line-height: 1.65;
+              word-spacing: 1px;
+              -ms-text-size-adjust: 100%;
+              -webkit-text-size-adjust: 100%;
+              -moz-osx-font-smoothing: grayscale;
+              -webkit-font-smoothing: antialiased;
+            }
+
+            *,
+            *::before,
+            *::after {
+              box-sizing: border-box;
+              margin: 0;
+            }
+          </style>
         </head>
         <body>
         <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
@@ -244,7 +485,7 @@ export class RouteHandler {
             class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
           >
             <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-              <img class="nc-avatar mb-2" src="${imageUrl}" alt="avatar"/>
+              <img class="nc-avatar mb-2" src="${imageUrl}"/>
               ${headlineHtml}
               ${subtitleHtml}
               ${linkHtml}
@@ -258,88 +499,11 @@ export class RouteHandler {
               </div>
               <!-- Watermark -->
               ${watermarkHtml}
-              <!-- Tailwind CSS -->
-              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
-              <!-- Theme style -->
-              <style>
-                ${theme.customCss}
-              </style>
-              <!-- Personal styles -->
-              <style>
-                ${profile.customCss}
-              </style>
-              <style>
-                .nc-avatar {
-                  width: 60px;
-                  height: 60px;
-                  border-radius: 1000px;
-                }
-
-                .nc-link {
-                  background-color: #FFF;
-                  padding: 1rem;
-                  margin-bottom: .75rem;
-                  width: 100%;
-                  border-radius: .25rem;
-                  box-shadow: 0 1px 3px 0 rgb(0 0 (0 / 10%)), 0 1 px 2 px 0 rgb(0 0 (0 / 6 %));
-                  font-weight: 500;
-                  cursor: pointer;
-                  transition: transform .15s ease-in-out;
-                }
-
-                .nc-link:hover {
-                  transform: scale(1.02);
-                }
-
-                .nc-link:active {
-                  transform: scale(1);
-                }
-
-                body {
-                  overflow-x: hidden;
-                }
-              </style>
               ${themeColorsHtml}
 
             </section>
           </div>
         </div>
-        <style>
-          html, * {
-            font-family: 'Inter',
-            -apple-system,
-            BlinkMacSystemFont,
-            'Segoe UI',
-            Roboto,
-            'Helvetica Neue',
-            Arial,
-            sans-serif;
-            font-size: 16px;
-            line-height: 1.65;
-            word-spacing: 1px;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-font-smoothing: antialiased;
-            box-sizing: border-box;
-          }
-
-          h1.sl-headline, h3.sl-subtitle {
-            line-height: 1.65;
-            word-spacing: 1px;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-font-smoothing: antialiased;
-          }
-
-          *,
-          *::before,
-          *::after {
-            box-sizing: border-box;
-            margin: 0;
-          }
-        </style>
         </body>
         </html>
       `);
