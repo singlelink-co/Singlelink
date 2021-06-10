@@ -188,7 +188,9 @@ export class RouteHandler {
 
       // Build watermark string
       let watermarkHtml = '';
+
       watermarkHtml += `<div id="sl-watermark" class="flex flex-col items-center justify-center">`;
+
       if (theme && theme.colors) {
         watermarkHtml += `
         <div style="color: ${theme.colors.text.primary};max-width:230px;" class="mt-4 mb-2 mx-auto text-sm" >
@@ -200,19 +202,13 @@ export class RouteHandler {
           Proudly built with ${config.appName}, the open-source Linktree alternative
         </div>`;
       }
-      watermarkHtml += `
-            <a class="text-indigo-600 hover-underline text-sm" href="https://${config.hostname}/create-account" target="_blank">
-                Create your free micro-site in minutes!
-            </a>`;
-      watermarkHtml += `<base target="_blank">`;
-      watermarkHtml += `</div>`;
 
       if (config.freeSignup) {
         //language=HTML
         watermarkHtml += `
-          <a class="text-indigo-600 hover:underline text-sm" href="https://${config.hostname}/create-account"
+          <a class="text-indigo-600 hover-underline text-sm" href="https://${config.hostname}/create-account"
              target="_blank">
-            Create your free profile in minutes!
+            Create your free micro-site in minutes!
           </a>`;
       }
 
