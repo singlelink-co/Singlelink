@@ -237,6 +237,7 @@ export default Vue.extend({
           link: {
             label: this.pendingLink.label,
             subtitle: this.pendingLink.subtitle,
+            type: this.pendingLink.type,
             url: this.pendingLink.url,
             customCss: this.pendingLink.customCss || '',
             useDeepLink: this.pendingLink.useDeepLink
