@@ -35,7 +35,7 @@ if (process.env.CAPTURE_KEY) {
  * The port that the server will use.
  */
 if (process.env.HOST) {
-  config.port = process.env.HOST;
+  config.host = process.env.HOST;
 }
 
 /**
@@ -55,8 +55,8 @@ if (process.env.API_DOMAIN) {
 /**
  * The domain that the client is hosted at.
  */
-if (process.env.CLIENT_DOMAIN) {
-  config.clientDomain = process.env.CLIENT_DOMAIN;
+if (process.env.EDITOR_DOMAIN) {
+  config.editorDomain = process.env.EDITOR_DOMAIN;
 }
 
 /**

@@ -20,7 +20,7 @@ export default {
 
   server: {
     host: process.env.SERVER_HOST ?? '0.0.0.0',
-    port: process.env.PORT ?? 3333
+    port: process.env.PORT ?? 80
   },
 
   /*

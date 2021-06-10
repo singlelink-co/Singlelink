@@ -2,7 +2,7 @@ import fastifyInit, {FastifyReply, FastifyRequest} from "fastify";
 import AWS from 'aws-sdk';
 import {config} from "./config/config";
 import {Controller} from "./controllers/controller";
-import {CustomDomainHandler} from "./utils/custom-domains";
+import {CustomDomainHandler} from "./utils/custom-domain-handler";
 
 /**
  * The server contains a Fastify instance and a list of Controllers, which registers routes with Fastify.

@@ -7,7 +7,7 @@ import {ThemeController} from "./controllers/theme-controller";
 import {UserController} from "./controllers/user-controller";
 import {InfoController} from "./controllers/info-controller";
 import {Auth} from "./utils/auth";
-import {CustomDomainHandler} from "./utils/custom-domains";
+import {CustomDomainHandler} from "./utils/custom-domain-handler";
 import {AdminController} from "./controllers/admin-controller";
 import {PermissionController} from "./controllers/permission-controller";
 import {MarketplaceController} from "./controllers/marketplace-controller";

@@ -28,11 +28,11 @@ export class CustomDomainHandler {
    */
   public static async checkRoute(request: FastifyRequest, reply: FastifyReply) {
     let customDomain = request.hostname;
-    let clientDomain = config.clientDomain;
+    let clientDomain = config.editorDomain;
 
     // Disallow setting the domain as the client or api domain.
     // This is to prevent feedback loops.
-    if (customDomain === config.clientDomain || customDomain === config.apiDomain) {
+    if (customDomain === config.editorDomain || customDomain === config.apiDomain) {
       return;
     }
 

@@ -80,7 +80,7 @@ export class ProfileService extends DatabaseService {
     };
 
     try {
-      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${config.captureKey}&url=${config.clientDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
+      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${config.captureKey}&url=${config.editorDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
       thumbnail = await Axios.get<ArrayBuffer>(url, {
         responseType: "arraybuffer"
       });

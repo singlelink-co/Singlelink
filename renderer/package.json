@@ -1,6 +1,7 @@
 {
   "name": "singlelink-renderer",
   "version": "0.1.0",
+  "private": true,
   "description": "The light-weight site view for the Singlelink web client.",
   "main": "src/app.ts",
   "type": "commonjs",

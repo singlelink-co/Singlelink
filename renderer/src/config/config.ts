@@ -4,8 +4,11 @@ import {config as dotenvConfig} from "dotenv";
 dotenvConfig();
 
 let config = {
+  // Host IP
+  host: process.env.HOST ?? "0.0.0.0",
+
   // Define port for launch
-  port: process.env.PORT ?? 3000,
+  port: process.env.PORT ?? 80,
 
   // Define app name
   appName: process.env.APP_NAME ?? 'Singlelink',

@@ -1,5 +1,4 @@
 .idea
-.nuxt
+dist
 node_modules
 **/config.json
-.env

@@ -77,8 +77,9 @@ www/node_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
-*.env
+**/.env
+**/*.env
+!*.template.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

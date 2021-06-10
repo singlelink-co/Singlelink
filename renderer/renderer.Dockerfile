@@ -9,6 +9,8 @@ COPY ./ singlelink/
 
 WORKDIR singlelink
 
+RUN npm install typescript -g && npm install
+
 RUN npm run build
 
 CMD npm run start

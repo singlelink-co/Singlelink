@@ -15,7 +15,7 @@ async function start() {
     console.clear();
     console.log(`${chalk.cyan.bold(config.appName)}: Starting application...`);
 
-    await fastify.listen(config.port);
+    await fastify.listen(config.port, config.host);
 
     console.log(`${chalk.cyan.bold(config.appName)}: Application listening on port ${config.port}`);
   } catch (err) {
