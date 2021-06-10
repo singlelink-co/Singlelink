@@ -11,7 +11,7 @@ const axios = require('axios');
 const chalk = require('chalk');
 
 // Define port for launch
-const port = process.env.PORT ?? 3001;
+const port = process.env.PORT ?? 80;
 
 // Define hostname for launch
 const host = process.env.HOST ?? '127.0.0.1';
