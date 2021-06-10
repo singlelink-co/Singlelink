@@ -267,6 +267,7 @@ export class AuthController extends Controller {
             <html lang="en">
             <head>
               <meta http-equiv="refresh" content="0;url=${url}"/>
+              <meta charset="UTF-8">
               <title>Singlelink - Redirecting</title>
             </head>
             <body>
@@ -288,6 +289,7 @@ export class AuthController extends Controller {
             return `
               <html lang="en">
               <head>
+                <meta charset="UTF-8">
                 <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
                 <title>Singlelink - Error!</title>
               </head>
@@ -343,6 +345,7 @@ export class AuthController extends Controller {
           return `
             <html lang="en">
             <head>
+              <meta charset="UTF-8">
               <meta http-equiv="refresh" content="0;url=${url}"/>
               <title>Singlelink - Redirecting</title>
             </head>
@@ -365,6 +368,7 @@ export class AuthController extends Controller {
             return `
               <html lang="en">
               <head>
+                <meta charset="UTF-8">
                 <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
                 <title>Singlelink - Error!</title>
               </head>
@@ -403,6 +407,7 @@ export class AuthController extends Controller {
           return `
             <html lang="en">
             <head>
+              <meta charset="UTF-8">
               <meta http-equiv="refresh"
                     content="0;url=${config.clientDomain}/dashboard/settings/?googleLinked=${result}"/>
               <title>Singlelink - Redirecting...</title>
@@ -425,6 +430,7 @@ export class AuthController extends Controller {
             return `
               <html lang="en">
               <head>
+                <meta charset="UTF-8">
                 <meta http-equiv="refresh" content="5;url=${config.clientDomain}"/>
                 <title>Singlelink - Error!</title>
               </head>

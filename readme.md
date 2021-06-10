@@ -17,7 +17,7 @@
 	</a>
 </p>
 
-<img src="client/static/gh-hero.png"/>
+<img src="editor/static/gh-hero.png"/>
 
 <div align="center">
 
@@ -85,9 +85,9 @@ npm run dev
 ```
 
 ## Screenshots
-<img src="client/static/screenshot-01.png"/>
-<img src="client/static/screenshot-02.png"/>
-<img src="client/static/screenshot-03.png"/>
+<img src="editor/static/screenshot-01.png"/>
+<img src="editor/static/screenshot-02.png"/>
+<img src="editor/static/screenshot-03.png"/>
 
 ## Roadmap
 See our <a href="https://github.com/Neutron-Creative/Singlelink/issues" target="_blank">open issues</a> to see what we're building next, alongside a list of known bugs and suggestions. <br>Don't see what you're looking for? <a href="https://github.com/Neutron-Creative/Singlelink/issues/new" target="_blank">Submit an issue!</a>

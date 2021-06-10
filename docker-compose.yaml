@@ -1,11 +1,13 @@
 version: "3.1"
 
 services:
-  singlelink-server:
-    image: neutroncreative/singlelink-server:latest
+  singlelink-api:
+    image: neutroncreative/singlelink-api:latest
     build:
-      context: server
-      dockerfile: server.Dockerfile
+      context: api
+      dockerfile: api.Dockerfile
+    env_file:
+      -
     environment:
       - DATABASE
       - SECRET
@@ -13,7 +15,7 @@ services:
       - HOST
       - PORT
       - API_DOMAIN
-      - CLIENT_DOMAIN
+      - EDITOR_DOMAIN
       - CONTACT_EMAIL
       - AWS_SENDER_EMAIL_ADDRESS
       - AWS_REGION
@@ -28,16 +30,30 @@ services:
       - MIXPANEL_TOKEN
       - DELETE_ADDON_INSTALLS_THRESHOLD
     ports:
-      - "5566:5566"
+      - "80:5566"
     networks:
       - singlelink
   singlelink-editor:
     image: neutroncreative/singlelink-editor:latest
     build:
-      context: client
-      dockerfile: client.Dockerfile
+      context: editor
+      dockerfile: editor.Dockerfile
     depends_on:
-      - singlelink-server
+      - singlelink-api
+    environment:
+      - HOSTNAME
+      - API_URL
+    ports:
+      - "80:3000"
+    networks:
+      - singlelink
+  singlelink-renderer:
+    image: neutroncreative/singlelink-renderer:latest
+    build:
+      context: renderer
+      dockerfile: renderer.Dockerfile
+    depends_on:
+      - singlelink-api
     environment:
       - HOSTNAME
       - API_URL
@@ -45,6 +61,5 @@ services:
       - "80:80"
     networks:
       - singlelink
-
 networks:
   singlelink:

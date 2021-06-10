@@ -1,5 +1,5 @@
 {
-  "name": "singlelink",
+  "name": "singlelink-api",
   "version": "2.2.0",
   "description": "A single link for everything.",
   "main": "dist/app.js",
@@ -8,7 +8,7 @@
     "start": "node dist/app.js",
     "build": "tsc && npm run copy",
     "dev": "ts-node src/app.ts",
-    "postversion": "auto-changelog --output ../CHANGELOG.md && git add ../CHANGELOG.md && cd ../client && npm version patch",
+    "postversion": "auto-changelog --output ../CHANGELOG.md && git add ../CHANGELOG.md && cd ../editor && npm version patch",
     "test": "jest",
     "test-debug": "jest --runInBand --detectOpenHandles",
     "convert-database": "ts-node scripts/mongo-2-pg.ts",
@@ -42,10 +42,10 @@
   },
   "homepage": "https://github.com/Neutron-Creative/Singlelink#readme",
   "dependencies": {
-    "@types/mixpanel": "^2.14.2",
     "aws-sdk": "^2.796.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
+    "bufferutil": "^4.0.3",
     "casbin": "^5.4.0",
     "casbin-basic-adapter": "^0.1.0",
     "fastify": "^3.8.0",
@@ -55,9 +55,12 @@
     "googleapis": "^71.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
+    "minio": "^7.0.18",
     "mixpanel": "^0.13.0",
     "nc-deeplink": "^1.0.6",
     "node-cron": "^3.0.0",
+    "object-hash": "^2.2.0",
+    "pageres": "github:neutron-creative/pageres#master",
     "pg": "^8.5.1"
   },
   "devDependencies": {
@@ -67,7 +70,8 @@
     "@types/bcrypt": "^3.0.0",
     "@types/jest": "^26.0.15",
     "@types/jsonwebtoken": "^8.5.0",
-    "@types/mongoose": "^5.10.1",
+    "@types/minio": "^7.0.7",
+    "@types/mixpanel": "^2.14.2",
     "@types/node": "^14.14.8",
     "@types/node-cron": "^2.0.3",
     "@types/pg": "^7.14.7",
@@ -80,9 +84,8 @@
     "copyfiles": "^2.4.0",
     "eslint": "^7.13.0",
     "jest": "^26.6.3",
-    "mongoose": "^5.12.3",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.0.0",
+    "ts-node": "^10.0.0",
     "typescript": "^4.1.2"
   }
 }

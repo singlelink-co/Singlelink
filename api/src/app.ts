@@ -28,10 +28,15 @@ start().then(() => {
 async function start() {
   await database.initialize();
 
+  // Initialize Lock System
   await DbLocks.initialize(database.pool);
+
+  // Initialize Utilities
   Auth.initialize(database.pool);
   SecurityUtils.initialize(database.pool);
   CustomDomainHandler.initialize(database.pool);
+
+  // Initialize Job System
   await JobSystem.initialize(database.pool);
 
   // SingleLink main controllers

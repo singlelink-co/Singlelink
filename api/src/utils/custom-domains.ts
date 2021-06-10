@@ -54,6 +54,7 @@ export class CustomDomainHandler {
     let html = `<!DOCTYPE html>
     <html lang="en">
     <head>
+      <meta charset="UTF-8">
       <!-- SEO Title -->
       <title>${profile.headline || ''}</title>
       <!-- SEO/OG Description -->

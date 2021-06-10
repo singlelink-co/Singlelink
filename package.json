@@ -3,11 +3,17 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "build": "cd client;nuxt-ts build;cd ../server;tsc && npm run copy;",
+    "build": "cd editor;nuxt-ts build;cd ../server;tsc && npm run copy;",
     "setup": "node setup.js"
   },
   "dependencies": {
+    "bufferutil": "^4.0.3",
     "fs": "0.0.1-security",
+    "minio": "^7.0.18",
+    "pageres": "^6.2.2",
     "prompt": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/minio": "^7.0.7"
   }
 }

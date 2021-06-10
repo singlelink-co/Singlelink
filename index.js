@@ -1,7 +1,7 @@
 const Nuxt = require('nuxt-start');
 
-const clientConfig = require('./client/nuxt.config.js');
-const apiConfig = require('./server/nuxt.config.js');
+const clientConfig = require('./editor/nuxt.config.js');
+const apiConfig = require('./api/nuxt.config.js');
 
 const client = new Nuxt(clientConfig);
 const api = new Nuxt(apiConfig);

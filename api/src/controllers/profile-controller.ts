@@ -105,8 +105,8 @@ export class ProfileController extends Controller {
 
   registerRoutes(): void {
     // Unauthenticated controllers
-    this.fastify.post<ProfileHandleRequest>('/profile/:handle', this.GetProfile.bind(this));
-    this.fastify.post<ProfileHandleRequest>('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
+    this.fastify.all<ProfileHandleRequest>('/profile/:handle', this.GetProfile.bind(this));
+    this.fastify.all<ProfileHandleRequest>('/profile/thumbnail/:handle', this.GetProfileThumbnail.bind(this));
 
     this.fastify.post<GetTopProfilesRequest>('/profile/leaderboards/top/', getTopProfilesRequestRateLimit, this.GetTopProfiles.bind(this));
     this.fastify.post<GetTopProfilesRequest>('/profile/leaderboards/top/:limit', getTopProfilesRequestRateLimit, this.GetTopProfiles.bind(this));

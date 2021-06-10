@@ -18,36 +18,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: singlelink-server
+  name: singlelink-api
   namespace: singlelink
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
     service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
 spec:
   selector:
-    app: singlelink-server
+    app: singlelink-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
   type: LoadBalancer
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: singlelink-renderer
-#  namespace: singlelink
-#  annotations:
-#    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
-#    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
-#spec:
-#  selector:
-#    app: singlelink-renderer
-#  ports:
-#    - protocol: TCP
-#      port: 80
-#      targetPort: 80
-#  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: singlelink-renderer
+  namespace: singlelink
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
+spec:
+  selector:
+    app: singlelink-renderer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -79,28 +79,28 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: singlelink-server
+  name: singlelink-api
   labels:
-    app: singlelink-server
+    app: singlelink-api
   namespace: singlelink
 spec:
   selector:
     matchLabels:
-      app: singlelink-server
+      app: singlelink-api
   replicas: 16
   template:
     metadata:
       labels:
-        app: singlelink-server
+        app: singlelink-api
       namespace: singlelink
     spec:
       containers:
-        - name: singlelink-server
-          image: neutroncreative/singlelink-server:latest
+        - name: singlelink-api
+          image: neutroncreative/singlelink-api:latest
           ports:
             - containerPort: 80
           envFrom:
             - secretRef:
-                name: singlelink-server-secrets
+                name: singlelink-api-secrets
             - configMapRef:
-                name: singlelink-server-config
+                name: singlelink-api-config

@@ -1,0 +1,35 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "incremental": true,
+    "lib": [
+      "ES2020"
+    ],
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowJs": false,
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "ts-node": {
+    "files": true
+  }
+}
