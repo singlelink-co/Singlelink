@@ -12,6 +12,17 @@
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label" placeholder="e.g. My blog" type="text"/>
         </div>
         <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
+            <label class="font-semibold mb-2">Link type</label>
+            <select class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.type">
+              <option disabled selected>Select a link type</option>
+              <option value="link">Vanilla link (default)</option>
+              <option value="image">Image</option>
+              <option value="divider">Divider</option>
+              <option value="html">HTML snippet</option>
+              <option value="youtube">Youtube video</option>
+            </select>
+        </div>
+        <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
             <label class="font-semibold mb-2">Subtitle (optional)</label>
             <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.subtitle" placeholder="e.g. Read more about my adverntures in Peru!" type="text"/>
         </div>
@@ -98,6 +109,7 @@ export default Vue.extend({
       id: "",
       sortOrder: 0,
       label: "",
+      type: "",
       subtitle: "",
       customCss: "",
       url: "",
@@ -187,6 +199,7 @@ export default Vue.extend({
           link: {
             id: this.pendingLink.id,
             label: this.pendingLink.label,
+            type: this.pendingLink.type,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
             customCss: this.editorCss, // + this.builderCss
@@ -250,6 +263,7 @@ export default Vue.extend({
         id: link.id,
         sortOrder: link.sortOrder,
         label: link.label,
+        type: link.type,
         subtitle: link.subtitle,
         customCss: link.customCss,
         url: link.url,
