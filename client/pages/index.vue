@@ -1,5 +1,40 @@
 <template>
 	<div class="w-screen min-h-screen flex flex-col lg:flex-row text-black">
+		<section class="w-full flex flex-col lg:h-screen p-12 items-start justify-center">
+            <div class="flex flex-col max-w-lg w-full mx-auto">
+                <h1 class="text-5xl font-bold">Login</h1>
+                <p class="opacity-70 font-bold text-2xl mb-8">Manage and monitor your Singlelink sites.</p>
+                <a href="#" class="flex flex-row items-center font-bold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-300 hover:border-gray-600" style="border-width:3px;border-style:solid;">
+                    <img src="/google-icon.png" class="w-5 mr-4"/>
+                    Sign in with Google
+                </a>
+                <div class="w-full flex flex-row items-center justify-center opacity-60 my-4">
+                    <div class="line"></div>
+                    <p class="mx-4 font-bold">Or, sign in with email</p>
+                    <div class="line"></div>
+                </div>
+                <div class="input-group flex flex-col w-full mb-4">
+                    <label>Email address</label>
+                    <input v-model="email" type="text" placeholder="e.g. jane@singlelink.co"/>
+                </div>
+                <div class="input-group flex flex-col w-full mb-4">
+                    <label>Password</label>
+                    <input v-model="password" type="password" placeholder="Minimum 8 characters"/>
+                </div>
+                <div class="flex flex-row items-center justify-apart w-full my-4">
+                    <div class="flex flex-row justify-start items-center" style="width:150px;">
+                        <input id="remember-me" name="remember-me" type="checkbox" v-model="rememberMe" style="border-radius:3px;width:15px;height:15px;"/>
+                        <label for="remember-me" class="opacity-50 ml-3 font-bold" style="margin-bottom:0;width:105px;font-size: 14px;"><nobr>Remember me?</nobr></label>
+                    </div>
+                    <a href="#" class="text-indigo-500 hover:underline ml-auto font-bold">Forgot your password?</a>
+                </div>
+                <div @click="attemptLogin" class="button cursor-pointer">Login to your account</div>
+                <a href="/create-account" class="mx-auto text-center font-bold text-indigo-500 mb-4 text-sm hover:underline font-bold">Don't have an account? Get started free</a>
+				<a href="https://singlelink.co" target="_blank" class="mx-auto font-bold text-center opacity-50 text-sm hover:underline">Learn more about Singlelink</a>
+                <span class="mx-auto font-bold text-center opacity-50 text-sm">©{{ new Date().getFullYear() }} Neutron Creative Inc., All rights reserved.</span>
+            </div>
+        </section>
+		<!-- Add these for Singlelink Enterprise
 		<section class="w-full lg:w-1/2 xl:w-5/12 flex flex-col lg:h-screen p-12 items-start justify-center">
             <div class="flex flex-col max-w-lg w-full mx-auto">
                 <h1 class="text-5xl font-bold">Login</h1>
@@ -44,6 +79,7 @@
                 <div class="w-3 h-3 rounded-full shadow bg-white opacity-40"></div>
             </div>
         </section>
+		-->
 	</div>
 </template>
 
