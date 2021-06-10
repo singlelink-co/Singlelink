@@ -13,6 +13,9 @@ const chalk = require('chalk');
 // Define port for launch
 const port = process.env.PORT ?? 3001;
 
+// Define hostname for launch
+const hostname = process.env.HOSTNAME ?? '127.0.0.1';
+
 // Define app name
 const app_name = process.env.APP_NAME ?? 'Singlelink';
 
@@ -313,7 +316,7 @@ const start = async () => {
   try {
     console.clear();
     console.log(chalk.cyan.bold(app_name) + ': Starting application...')
-    await fastify.listen(port)
+    await fastify.listen(port, hostname)
     console.log(chalk.cyan.bold(app_name) + ': Application listening on port ' + port);
   } catch (err) {
     console.log(chalk.cyan.bold(app_name) + ': Error!');
