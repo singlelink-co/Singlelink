@@ -1,0 +1,23 @@
+{
+  "name": "renderer",
+  "version": "0.1.0",
+  "description": "The light-weight site view for the Singlelink web client.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Neutron Creative Inc.",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "fastify": "^3.14.0",
+    "node-emoji": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
