@@ -10,9 +10,6 @@ const axios = require('axios');
 // Make console logging output pretty
 const chalk = require('chalk');
 
-// Add emoji support
-const emoji = require('node-emoji');
-
 // Define port for launch
 const port = process.env.PORT ?? 3001;
 
@@ -110,7 +107,7 @@ fastify.route({
                         class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
                         style="`+css+`"
                     >
-                        <span class="font-medium text-gray-900 sl-label">` + emoji.emojify(link.label) + `</span>` + subtitleHtml + `
+                        <span class="font-medium text-gray-900 sl-label">` + link.label + `</span>` + subtitleHtml + `
                     </div>
                 </a>
             `;
