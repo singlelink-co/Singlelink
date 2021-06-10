@@ -61,7 +61,7 @@
     "node-cron": "^3.0.0",
     "object-hash": "^2.2.0",
     "pageres": "github:neutron-creative/pageres#master",
-    "pg": "^8.5.1"
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
