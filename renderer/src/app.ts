@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import fastifyConstructor from "fastify";
+import fastifyInit from "fastify";
 import config from "./config/config";
 import {RouteHandler} from "./route-handler";
 
-const fastify = fastifyConstructor({logger: false});
+const fastify = fastifyInit({logger: false});
 
 let routeHandler = new RouteHandler(fastify);
 
