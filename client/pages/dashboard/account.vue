@@ -8,6 +8,7 @@
     </div>
 
     <!-- Select billing tier -->
+    <!-- Add this for Singlelink Enterprise
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
       <h2 class="text-black font-bold text-lg w-full">
           Select billing tier
@@ -35,8 +36,10 @@
           </div>
         </div>
     </div>
+    -->
 
     <!-- Billing information -->
+    <!-- Add this for Singlelink Enterprise
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
       <h2 class="text-black font-bold text-lg w-full">
           Billing information
@@ -384,7 +387,7 @@
             Save changes
           </button>
     </div>
-    
+    -->
 
     <!-- Reset Password -->
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
@@ -417,6 +420,7 @@
     </div>
 
     <!-- Team/seats controls -->
+    <!-- Add this for Singlelink Enterprise
     <div class="flex flex-col py-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
       <h2 class="text-black font-bold text-lg w-full px-6 mb-6">
           Manage your team
@@ -449,7 +453,7 @@
             </button>
           </div>
         </div>
-    </div>
+    </div>-->
 
 
     <!-- Delete account -->
