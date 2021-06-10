@@ -62,8 +62,8 @@ export class AnalyticsController extends Controller {
   registerRoutes(): void {
     // Unauthenticated
     this.fastify.get('/analytics', this.GetAnalytics.bind(this));
-    this.fastify.post('/analytics/link/record/:id', this.LinkAnalytics.bind(this));
-    this.fastify.post('/analytics/profile/record/:id', this.ProfileAnalytics.bind(this));
+    this.fastify.all('/analytics/link/record/:id', this.LinkAnalytics.bind(this));
+    this.fastify.all('/analytics/profile/record/:id', this.ProfileAnalytics.bind(this));
 
     // Authenticated
     this.fastify.post<GetProfileAnalyticsRequest>('/analytics/profile', rateLimitAnalytics, this.GetProfileAnalytics.bind(this));
