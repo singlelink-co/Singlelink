@@ -93,24 +93,36 @@ fastify.route({
 
         // Add link html to html block link-by-link
         for await (let link of links) {
-            let subtitleHtml = '';
-            if(link.subtitle) subtitleHtml = `<span class="text-sm text-gray-700 sl-link-subtitle mt-1">` + link.subtitle + `</span>`;
-            let css = link.customCss ?? '';
-            linkHtml+= `
-                <a
-                    id="sl-item-`+link.id+`"
-                    href="` + api_url + '/analytics/link/' + link.id + `"
-                    class="w-full"
-                    target="_blank"
-                >
-                    <div
-                        class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
-                        style="`+css+`"
-                    >
-                        <span class="font-medium text-gray-900 sl-label">` + link.label + `</span>` + subtitleHtml + `
-                    </div>
-                </a>
-            `;
+            switch(link.type) {
+                case 'link':
+                    let subtitleHtml = '';
+                    if(link.subtitle) subtitleHtml = `<span class="text-sm text-gray-700 sl-link-subtitle mt-1">` + link.subtitle + `</span>`;
+                    let css = link.customCss ?? '';
+                    linkHtml+= `
+                        <a
+                            id="sl-item-`+link.id+`"
+                            href="` + api_url + '/analytics/link/' + link.id + `"
+                            class="w-full"
+                            target="_blank"
+                        >
+                            <div
+                                class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
+                                style="`+css+`"
+                            >
+                                <span class="font-medium text-gray-900 sl-label">` + link.label + `</span>` + subtitleHtml + `
+                            </div>
+                        </a>
+                    `;
+                    break;
+                case 'image':
+                    linkHtml += `
+                        <img id="sl-item-`+link.id+`" src="` + link.url + `" class="w-full h-auto"/>
+                    `
+                    break;
+                case 'divider':
+                    linkHtml += '<div class="w-full bg-black" style="opacity:.15;height:1px;"></div>'
+                    break;
+            }
         }
 
         // Define headline HTML
