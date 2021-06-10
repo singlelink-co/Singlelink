@@ -119,7 +119,7 @@ export class RouteHandler {
         linkHtml += `
           <a
             id="sl-item-${link.id}"
-            href="${config.apiUrl}/analytics/link/${link.id}"
+            href="${config.apiUrl}/analytics/link/record/${link.id}"
             class="w-full"
             target="_blank"
           >
