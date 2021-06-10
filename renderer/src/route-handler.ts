@@ -3,6 +3,7 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import chalk from "chalk";
 import axios from "axios";
 import config from "./config/config";
+import {StatusCodes} from "http-status-codes";
 
 /**
  * Creates all the routes.
@@ -27,6 +28,16 @@ export class RouteHandler {
     this.fastify.get("/favicon.*", async (request: FastifyRequest, reply: FastifyReply) => {
       reply.header('Content-Type', 'image/png');
       reply.send(this.icon);
+    });
+
+    /*
+      Redirect to new link format
+     */
+    this.fastify.get("/u/*", async (request: FastifyRequest, reply: FastifyReply) => {
+      // Get requested profile handle from URL
+      const handle = request.url.replace('/u/', '');
+
+      reply.redirect(StatusCodes.PERMANENT_REDIRECT, `/${handle}`);
     });
 
     /*

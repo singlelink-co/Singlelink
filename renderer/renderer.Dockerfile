@@ -4,7 +4,7 @@ COPY ./ singlelink/
 
 WORKDIR singlelink
 
-RUN npm install typescript -g && npm install && npm run build
+RUN npm i -g typescript && npm i && npm run build
 
 FROM node:16.3.0-slim
 
