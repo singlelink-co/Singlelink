@@ -77,11 +77,18 @@ fastify.route({
         // Define site
         const site = response.data.profile;
 
+        site.headline = site.headline ?? '';
+''
+        site.subtitle = site.subtitle ?? '';
+
         // Define user
         const user = response.data.user;
 
         // Define theme = response.data.theme;
-        const theme = response.data.theme;
+        const theme = response.data.theme ?? {
+            customCss: '',
+            customHtml: '',
+        };
 
         // Define Avatar image
         const imageUrl = site.imageUrl ?? user.avatarUrl ?? 'https://www.gravatar.com/avatar/' + user.emailHash;
@@ -129,7 +136,7 @@ fastify.route({
         }
 
         // Define headline HTML
-        const headlineHtml = `<h1 class="text-black font-semibold text-2xl sl-headline">` + site.headline ?? user.name + `</h1>`;
+        const headlineHtml = `<h1 class="text-black font-semibold text-2xl sl-headline">` + site.headline + `</h1>`;
 
         // Define subtitle HTML
         let subtitleHtml = ``;
@@ -137,7 +144,7 @@ fastify.route({
 
         // Define theme colors html
         let themeColorsHtml = ``;
-        if(theme) themeColorsHtml = `
+        if(theme && theme.colors) themeColorsHtml = `
         <style>
             .sl-headline {
                 color: ` + theme.colors.text.primary + `;
@@ -164,7 +171,7 @@ fastify.route({
         // Build watermark string
         let watermarkHtml = '';
         watermarkHtml += `<div id="sl-watermark" class="flex flex-col items-center justify-center">`;
-        if(theme) {
+        if(theme && theme.colors) {
         watermarkHtml += `
         <div style="color: ` + theme.colors.text.primary + `;max-width:230px;" class="mt-4 mb-2 mx-auto text-sm" >
           Proudly built with ` + app_name + `, the open-source Linktree alternative
@@ -189,6 +196,7 @@ fastify.route({
 
         // Send response content type to text/html
         reply.type('text/html');
+
         // Send response to client
         return reply.send(`
             <html>
@@ -225,7 +233,7 @@ fastify.route({
                                     .relative {position:relative;}
                                     .flex {display:flex;}
                                     .flex-col {flex-direction:column;}
-                                    .align-center {align-items:center;}
+                                    .items-center {align-items:center;}
                                     .justify-center {justify-content:center;}
                                     .text-center {text-align:center;}
                                     .mt-1 {margin-top:.25rem;}
