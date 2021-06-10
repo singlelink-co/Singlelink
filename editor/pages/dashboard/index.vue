@@ -203,8 +203,6 @@
 <script lang="ts">
 import Vue from "vue";
 
-type ModalIntent = "create" | "edit";
-
 export default Vue.extend({
   layout: 'dashboard',
   middleware: 'authenticated',
@@ -239,9 +237,10 @@ export default Vue.extend({
     ],
   },
   data() {
-    const pendingLink: Link = {
+    const pendingLink: EditorLink = {
       id: "",
       sortOrder: 0,
+      type: "link",
       label: "",
       subtitle: "",
       customCss: "",
@@ -250,13 +249,13 @@ export default Vue.extend({
     };
 
     return {
-      links: new Array<Link>(),
+      links: new Array<EditorLink>(),
       modalActive: false,
       modalIntent: 'create',
       pendingLink,
       user: '',
       error: '',
-      sortedLinks: new Array<Link>()
+      sortedLinks: new Array<EditorLink>()
     };
   },
 
@@ -418,7 +417,7 @@ export default Vue.extend({
       };
     },
 
-    editLink(link: Link) {
+    editLink(link: EditorLink) {
       this.clearPending();
 
       this.pendingLink = {
@@ -457,7 +456,7 @@ export default Vue.extend({
 
     resortLinks() {
       try {
-        this.sortedLinks = this.links.sort(function (a: Link, b: Link) {
+        this.sortedLinks = this.links.sort(function (a: EditorLink, b: EditorLink) {
           return a.sortOrder - b.sortOrder;
         });
 
@@ -489,21 +488,24 @@ export default Vue.extend({
 }
 
 .button {
-            color: #FFF !important;
-        }
-    .button {
-        @apply mb-8 w-full font-bold rounded-full px-8 py-4 text-lg text-center;
-        background: #5353ec;
-        background: linear-gradient(to bottom, #5353ec, #1717ca);
-        box-shadow: inset 0 0 0 3px rgba(255,255,255,.2), 0 2px 25px rgba(83,83,267,.25);
-        transition: .1s ease-in;
-    }
-    .button:hover {
-        transform: scale(1.01);
-        box-shadow: inset 0 0 0 4px rgba(255,255,255,.4), 0 2px 15px rgba(83,83,267,.75);
-    }
-    .button:focus {
-        transform: scale(1);
-        box-shadow: inset 0 0 0 5px rgba(255,255,255,.5), 0 2px 20px rgba(83,83,267,.95);
-    }
+  color: #FFF !important;
+}
+
+.button {
+  @apply mb-8 w-full font-bold rounded-full px-8 py-4 text-lg text-center;
+  background: #5353ec;
+  background: linear-gradient(to bottom, #5353ec, #1717ca);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .2), 0 2px 25px rgba(83, 83, 267, .25);
+  transition: .1s ease-in;
+}
+
+.button:hover {
+  transform: scale(1.01);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, .4), 0 2px 15px rgba(83, 83, 267, .75);
+}
+
+.button:focus {
+  transform: scale(1);
+  box-shadow: inset 0 0 0 5px rgba(255, 255, 255, .5), 0 2px 20px rgba(83, 83, 267, .95);
+}
 </style>

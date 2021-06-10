@@ -86,16 +86,16 @@ export default Vue.extend({
         imageUrl: '',
         headline: '',
         subtitle: '',
-        visibility: '',
+        visibility: "unpublished",
         showWatermark: true,
         handle: ''
-      },
+      } as EditorProfile,
       ageVerificationRequired: true
     };
   },
 
   head() {
-    const profile: Profile = this.profile;
+    const profile: EditorProfile = this.profile;
 
     return {
       title: profile.headline + ' - ' + process.env.APP_NAME ?? '',

@@ -55,10 +55,10 @@ export default Vue.extend({
         },
         customCss: undefined,
         customHtml: undefined,
-      } as Theme,
+      } as EditorTheme,
 
       themeError: '',
-      themes: new Array<Theme>(),
+      themes: new Array<EditorTheme>(),
       themeModalActive: false,
       themeModalIntent: 'create' as ThemeModalIntent,
 

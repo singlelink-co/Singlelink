@@ -1,14 +1,23 @@
-interface Link {
-  id: string,
-  sortOrder: number,
-  label: string,
-  subtitle: string,
-  customCss: string,
-  url: string,
-  useDeepLink: boolean
+type ModalIntent = "create" | "edit";
+
+interface LinkVisit {
+  link: any,
+  views: any
 }
 
-interface Theme {
+type EditorProfile = Partial<Profile> & {
+  themeId: string,
+  customHtml: string,
+  customCss: string,
+  imageUrl: string,
+  headline: string,
+  handle: string,
+  subtitle: string,
+  visibility: string,
+  showWatermark: boolean
+};
+
+type EditorTheme = Partial<Theme> & {
   id: string,
   label: string,
   global: boolean,
@@ -24,28 +33,19 @@ interface Theme {
   },
   customHtml: string | undefined,
   customCss: string | undefined
-}
+};
 
-interface Profile {
-  themeId: string,
-  customHtml: string,
-  customCss: string,
-  imageUrl: string,
-  headline: string,
-  handle: string,
+type EditorLink = Partial<Link> & {
+  id: string,
+  sortOrder: number,
+  label: string,
   subtitle: string,
-  visibility: string,
-  showWatermark: boolean
-}
+  customCss: string,
+  url: string,
+  useDeepLink: boolean
+};
 
-interface LinkVisit {
-  link: any,
-  views: any
-}
-
-type AddonType = 'theme' | 'preset' | 'plugin';
-
-interface Addon {
+type EditorAddon = Partial<Addon> & {
   id: string,
   userId: string,
   resourceId: string,
@@ -62,7 +62,7 @@ interface Addon {
   lastUpdated: string
 }
 
-interface AddonInstall {
+type EditorAddonInstall = Partial<Addon> & {
   id: string,
   profileId: string,
   addonId: string,

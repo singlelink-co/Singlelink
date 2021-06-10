@@ -1,78 +1,48 @@
 <template>
   <div class="w-screen min-h-screen flex flex-col lg:flex-row text-black">
-    <section class="w-full lg:w-1/2 xl:w-5/12 flex flex-col lg:h-screen p-12 items-start justify-center">
+
+    <section class="w-full flex flex-col lg:h-screen p-12 items-start justify-center">
       <div class="flex flex-col max-w-lg w-full mx-auto">
-        <h1 class="text-5xl font-bold">
-          Create an account
-        </h1>
-        <p class="opacity-70 font-bold text-2xl mb-8">
-          Create your first Singlelink site for free!
-        </p>
-        <a
-          href="#"
-          class="flex flex-row items-center font-bold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-300 hover:border-gray-600"
-          style="border-width:3px;border-style:solid;"
-          @click="attemptGoogleRegister()"
+        <h1 class="text-5xl font-bold">Create an account</h1>
+        <p class="opacity-70 font-bold text-2xl mb-8">Create your first Singlelink site in minutes!</p>
+        <a href="#"
+           class="flex flex-row items-center font-bold justify-center rounded-full w-full px-8 py-4 text-lg border-gray-300 hover:border-gray-600"
+           style="border-width:3px;border-style:solid;"
+           @click="attemptGoogleRegister"
         >
-          <img src="/google-icon.png" class="w-5 mr-4">
+          <img src="/google-icon.png" class="w-5 mr-4" alt="google-icon"/>
           Sign up with Google
         </a>
         <div class="w-full flex flex-row items-center justify-center opacity-60 my-4">
-          <div class="line"/>
-          <p class="mx-4 font-bold">
-            Or, sign up with email
-          </p>
-          <div class="line"/>
+          <div class="line"></div>
+          <p class="mx-4 font-bold">Or, sign up with email</p>
+          <div class="line"></div>
         </div>
         <div class="input-group flex flex-col w-full mb-4">
           <label>Email address</label>
-          <input v-model="email" type="text" placeholder="e.g. jane@singlelink.co">
+          <input v-model="email" type="text" placeholder="e.g. jane@singlelink.co"/>
         </div>
         <div class="input-group flex flex-col w-full mb-4">
           <label>Handle</label>
-          <input v-model="handle" type="text" placeholder="e.g. jim">
+          <input v-model="handle" type="text" placeholder="e.g. jim"/>
         </div>
         <div class="input-group flex flex-col w-full mb-4">
           <label>Password</label>
-          <input v-model="password" type="password" placeholder="Minimum 8 characters">
+          <input v-model="password" type="password" placeholder="Minimum 8 characters"/>
         </div>
         <div class="flex flex-row items-center justify-apart w-full my-4">
           <div class="flex flex-row justify-start items-center" style="width:150px;">
-            <input
-              id="remember-me"
-              v-model="rememberMe"
-              name="remember-me"
-              type="checkbox"
-              style="border-radius:3px;width:15px;height:15px;"
-            >
+            <input id="remember-me" name="remember-me" type="checkbox" v-model="rememberMe"
+                   style="border-radius:3px;width:15px;height:15px;"/>
             <label for="remember-me" class="opacity-50 ml-3" style="margin-bottom:0;width:105px;font-size: 14px;">
               <nobr>Remember me?</nobr>
             </label>
           </div>
         </div>
-        <div class="button cursor-pointer" @click="attemptRegister">
-          Get started free
-        </div>
+        <div @click="attemptEmailRegister" class="button cursor-pointer">Get started free</div>
         <a href="/" class="mx-auto text-center text-indigo-500 mb-4 text-sm hover:underline font-bold">Already have an
           account? Click here to login</a>
         <span class="mx-auto text-center opacity-50 font-bold text-sm">©{{ new Date().getFullYear() }} Neutron Creatixve Inc., All rights reserved.</span>
-      </div>
-    </section>
-    <section
-      class="order-first lg:order-last right w-full lg:w-1/2 xl:w-7/12 flex flex-col lg:h-screen text-center items-center justify-center p-12 text-white"
-    >
-      <img src="/integrations.png" class="w-full max-w-sm">
-      <h3 class="text-4xl font-bold max-w-sm mb-4">
-        Integrations for all of your favorite apps
-      </h3>
-      <p class="text-2xl opacity-80 max-w-md">
-        Connect your micro-site with your content from all your favorite platforms
-      </p>
-      <div class="flex flex-row items-center justify-center mt-8 space-x-3">
-        <div class="w-3 h-3 rounded-full shadow bg-white"/>
-        <div class="w-3 h-3 rounded-full shadow bg-white opacity-40"/>
-        <div class="w-3 h-3 rounded-full shadow bg-white opacity-40"/>
-        <div class="w-3 h-3 rounded-full shadow bg-white opacity-40"/>
       </div>
     </section>
   </div>
@@ -146,7 +116,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async attemptRegister() {
+    async attemptEmailRegister() {
       this.$nuxt.$loading.start();
       if (!this.email) {
         this.error = 'Email address is required to register.';

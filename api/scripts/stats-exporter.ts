@@ -8,7 +8,7 @@
  */
 
 import {Pool} from "pg";
-import fs from 'fs';
+import * as fs from "fs";
 
 class StatsExporter {
 
@@ -149,7 +149,8 @@ class StatsExporter {
   async averagePageVisitsPerProfile() {
     const queryResult = await this.pool.query(`select avg((select count(*)
                                                            from analytics.visits
-                                                           where type = 'page' and referral_id = app.profiles.id))
+                                                           where type = 'page'
+                                                             and referral_id = app.profiles.id))
                                                from app.profiles`);
 
     return {

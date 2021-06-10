@@ -3,62 +3,85 @@
     <div class="flex flex-row items-center justify-start mb-4 space-x-4 mb-4">
       <img class="w-8" src="/Pencil.svg"/>
       <h1 class="text-black font-extrabold tracking-tight text-3xl w-full flex flex-row items-start lg:items-center">
-        <span v-if="intent=='create'">Create link</span>
-        <span v-if="intent=='edit'">Edit link</span>
+        <span v-if="intent==='create'">Create link</span>
+        <span v-if="intent==='edit'">Edit link</span>
       </h1>
     </div>
-        <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
-            <label class="font-semibold mb-2">Label</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label" placeholder="e.g. My blog" type="text"/>
+    <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!=='view'">
+      <label class="font-semibold mb-2">Label</label>
+      <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.label"
+             placeholder="e.g. My blog" type="text"/>
+    </div>
+    <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!=='view'">
+      <label class="font-semibold mb-2">Link type</label>
+      <select class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border"
+              v-model="pendingLink.type">
+        <option disabled selected>Select a link type</option>
+        <option value="link">Vanilla link (default)</option>
+        <option value="image">Image</option>
+        <option value="divider">Divider</option>
+        <option value="html">HTML snippet</option>
+        <option value="youtube">Youtube video</option>
+      </select>
+    </div>
+    <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!=='view'">
+      <label class="font-semibold mb-2">Subtitle (optional)</label>
+      <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.subtitle"
+             placeholder="e.g. Read more about my adverntures in Peru!" type="text"/>
+    </div>
+    <div class="flex flex-col mb-8 justify-start w-full" v-if="intent!=='view'">
+      <label class="font-semibold mb-2">Link URL</label>
+      <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.url"
+             placeholder="e.g. https://janedoe.com/blog" type="url"/>
+    </div>
+    <!--<div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full mb-6">
+        <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+            <h2 class="text-gray-800 font-semibold text-lg">
+            Customization
+            </h2>
+            <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
         </div>
-        <div class="flex flex-col mb-4 justify-start w-full" v-if="intent!='view'">
-            <label class="font-semibold mb-2">Subtitle (optional)</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.subtitle" placeholder="e.g. Read more about my adverntures in Peru!" type="text"/>
-        </div>
-        <div class="flex flex-col mb-8 justify-start w-full" v-if="intent!='view'">
-            <label class="font-semibold mb-2">Link URL</label>
-            <input class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-2xl border" v-model="pendingLink.url" placeholder="e.g. https://janedoe.com/blog" type="url"/>
-        </div>
-        <!--<div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full mb-6">
-            <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
-                <h2 class="text-gray-800 font-semibold text-lg">
-                Customization
-                </h2>
-                <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
-            </div>
-            <builder v-if="builderLoaded" v-model="builderCss"/>
-        </div>-->
-        <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full">
-            <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
-                <h2 class="text-gray-800 font-semibold text-lg">
-                Custom CSS
-                </h2>
-                <a href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432" target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our documentation</a>
-            </div>
-        <MonacoEditor
-                height="350"
-                language="css"
-                theme="vs-dark"
-                :options="{
+        <builder v-if="builderLoaded" v-model="builderCss"/>
+    </div>-->
+    <div class="hidden lg:flex flex-col p-6 bg-white shadow rounded-2xl w-full">
+      <div
+        class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full mb-2">
+        <h2 class="text-gray-800 font-semibold text-lg">
+          Custom CSS
+        </h2>
+        <a
+          href="https://www.notion.so/neutroncreative/Customizing-your-Singlelink-profile-ab34c4a8e3174d66835fa460774e7432"
+          target="_blank" class="text-gray-500 text-xs hover:underline hover:text-gray-600">Need help? Read our
+          documentation</a>
+      </div>
+      <MonacoEditor
+        height="350"
+        language="css"
+        theme="vs-dark"
+        :options="{
                   extraEditorClassName: 'rounded overflow-hidden mb-2',
                   autoIndent: 'full',
                   autoClosingQuotes: true,
                 }"
-                v-model="editorCss"
-        ></MonacoEditor>
-        </div>
-        <div class="flex flex-col lg:flex-row items-center justify-start w-full mt-4">
-            <div v-if="intent=='create'" @click="addNewLink" class="button cursor-pointer">Create link</div>
-            <div v-if="intent=='edit'" @click="saveLinkChanges" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-indigo-500 bg-gdp lg:mr-4 mb-4 lg:mb-0 cursor-pointer">Save changes</div>
-            <div v-if="intent=='edit'" @click="deleteLink" class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-red-500 bg-red-600 cursor-pointer">Delete link</div>
-        </div>
-    </section>
+        v-model="editorCss"
+      ></MonacoEditor>
+    </div>
+    <div class="flex flex-col lg:flex-row items-center justify-start w-full mt-4">
+      <div v-if="intent==='create'" @click="addNewLink" class="button cursor-pointer">Create link</div>
+      <div v-if="intent==='edit'" @click="saveLinkChanges"
+           class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-indigo-500 bg-gdp lg:mr-4 mb-4 lg:mb-0 cursor-pointer">
+        Save changes
+      </div>
+      <div v-if="intent==='edit'" @click="deleteLink"
+           class="flex-grow text-center text-lg px-8 py-4 font-bold text-white rounded-2xl hover:bg-red-500 bg-red-600 cursor-pointer">
+        Delete link
+      </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-
-type ModalIntent = "create" | "edit";
 
 export default Vue.extend({
   layout: 'dashboard',
@@ -94,10 +117,11 @@ export default Vue.extend({
     ],
   },
   data() {
-    const pendingLink: Link = {
+    const pendingLink: EditorLink = {
       id: "",
       sortOrder: 0,
       label: "",
+      type: "link",
       subtitle: "",
       customCss: "",
       url: "",
@@ -106,7 +130,7 @@ export default Vue.extend({
 
     return {
       id: '',
-      links: new Array<Link>(),
+      links: new Array<EditorLink>(),
       modalActive: false,
       modalIntent: 'create',
       pendingLink,
@@ -114,9 +138,9 @@ export default Vue.extend({
       error: '',
       intent: '',
       builderLoaded: false,
-      builderCss: null as String | null,
-      editorCss: null as String | null,
-      sortedLinks: new Array<Link>()
+      builderCss: null as string | null | undefined,
+      editorCss: null as string | null | undefined,
+      sortedLinks: new Array<EditorLink>()
     };
   },
 
@@ -125,13 +149,13 @@ export default Vue.extend({
     await this.getLinks();
     // Fetch selected link from links
     this.id = this.$route.params.pathMatch;
-    if(this.id) {
+    if (this.id) {
       this.intent = 'edit';
     } else {
       this.intent = 'create';
     }
-    for(let i=0;i<this.links.length;i++) {
-      if(this.links[i].id == this.id) {
+    for (let i = 0; i < this.links.length; i++) {
+      if (this.links[i].id == this.id) {
         this.pendingLink = this.links[i];
         this.editorCss = this.pendingLink.customCss;
         break;
@@ -187,6 +211,7 @@ export default Vue.extend({
           link: {
             id: this.pendingLink.id,
             label: this.pendingLink.label,
+            type: this.pendingLink.type,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
             customCss: this.editorCss, // + this.builderCss
@@ -224,6 +249,7 @@ export default Vue.extend({
           link: {
             label: this.pendingLink.label,
             subtitle: this.pendingLink.subtitle,
+            type: this.pendingLink.type,
             url: this.pendingLink.url,
             customCss: this.pendingLink.customCss || '',
             useDeepLink: this.pendingLink.useDeepLink
@@ -243,13 +269,14 @@ export default Vue.extend({
         return true;
       }
     },
-    editLink(link: Link) {
+    editLink(link: EditorLink) {
       //this.clearPending();
 
       this.pendingLink = {
         id: link.id,
         sortOrder: link.sortOrder,
         label: link.label,
+        type: link.type,
         subtitle: link.subtitle,
         customCss: link.customCss,
         url: link.url,

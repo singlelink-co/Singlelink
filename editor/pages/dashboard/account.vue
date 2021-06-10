@@ -8,6 +8,7 @@
     </div>
 
     <!-- Select billing tier -->
+    <!-- Add this for Singlelink Enterprise
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
       <h2 class="text-black font-bold text-lg w-full">
           Select billing tier
@@ -35,8 +36,10 @@
           </div>
         </div>
     </div>
+    -->
 
     <!-- Billing information -->
+    <!-- Add this for Singlelink Enterprise
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
       <h2 class="text-black font-bold text-lg w-full">
           Billing information
@@ -384,7 +387,7 @@
             Save changes
           </button>
     </div>
-    
+    -->
 
     <!-- Reset Password -->
     <div class="flex flex-col p-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
@@ -415,6 +418,43 @@
           </div>
         </div>
     </div>
+
+    <!-- Team/seats controls -->
+    <!-- Add this for Singlelink Enterprise
+    <div class="flex flex-col py-6 bg-white shadow rounded-2xl justify-center items-start w-full mb-8">
+      <h2 class="text-black font-bold text-lg w-full px-6 mb-6">
+          Manage your team
+      </h2>
+      <div class="w-full bg-gray-200" style="height:1px;"></div>
+      <div v-for="member in team" class="flex flex-row py-2 px-8 cursor-pointer w-full items-center justify-start hover:bg-opaqueBlack border border-gray-200 border-t-0 border-l-0 border-r-0">
+						<div class="w-12 h-12 rounded-full mr-6" style="background:linear-gradient(146deg, rgba(0,255,240,1) 00%, rgba(173,255,0,1) 100%);box-shadow: inset 0 0 0 4px rgba(0,0,0,.15);"></div>
+						<p class="font-bold text-black text-lg mr-auto">{{ member.email }}</p>
+						<div class="py-1 px-2 mb-1 rounded-full text-gray-600 bg-opaqueBlack text-sm font-extrabold leading-tight cursor-pointer grow" v-if="member.status == 'pending'">pending</div>
+						<div class="py-1 px-2 mb-1 rounded-full text-green-500 bg-green-200 text-sm font-extrabold leading-tight cursor-pointer grow" v-if="member.status == 'accepted'">member</div>
+						<div class="py-1 px-2 mb-1 rounded-full flex-row flex items-center text-gdp bg-opaqueIndigo text-sm font-extrabold leading-tight cursor-pointer grow" v-if="member.status == 'upgraded'">admin</div>
+				</div>
+        <div class="flex flex-col mt-4 mb-2 w-full px-6 mt-6">
+          <label v-if="!team || team.length <=1" class="font-bold text-black opacity-70 mb-3">Ready to add your first team member? Provide an email to send the invite!</label>
+          <label v-else class="font-bold text-black opacity-70 mb-3">Want to add a new member? Provide an email to send the invite!</label>
+          <div class="flex flex-col items-center justify-start space-y-4 w-full">
+            <input
+              id="passwordResetEmail"
+              v-model="passwordEmail"
+              class="px-2 py-3 text-sm border-solid border-gray-300 rounded-2xl border w-full flex-grow"
+              type="text"
+              placeholder="e.g. jane@gmail.com"
+              aria-label="password reset email"
+            >
+            <button
+              type="button"
+              class="w-full flex py-3 px-6 text-sm text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold justify-center align-center"
+              @click="setPasswordModalActive(true)">
+              Send invitation email and add seat (+$8/mo)
+            </button>
+          </div>
+        </div>
+    </div>-->
+
 
     <!-- Delete account -->
     <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
@@ -509,6 +549,33 @@ export default Vue.extend({
   },
   data() {
     return {
+      team: [
+					{
+						email: 'jane@gmail.com',
+						sent: '4 days',
+						status: 'pending'
+					},
+					{
+						email: 'joe@gmail.com',
+						sent: '6 days',
+						status: 'accepted'
+					},
+					{
+						email: 'greg@gmail.com',
+						sent: '7 days',
+						status: 'accepted'
+					},
+					{
+						email: 'phil@gmail.com',
+						sent: '9 days',
+						status: 'pending'
+					},
+					{
+						email: 'drew@gmail.com',
+						sent: '11 days',
+						status: 'upgraded'
+					},
+				],
       loaded: false,
       resetPasswordModalActive: false,
       deleteProfileModalActive: false,

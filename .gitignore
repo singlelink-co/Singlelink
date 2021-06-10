@@ -11,6 +11,8 @@ kubernetes/3_server-config.yaml
 
 dist
 
+renderer/node_modules
+
 # Global dependencies
 node_modules
 
