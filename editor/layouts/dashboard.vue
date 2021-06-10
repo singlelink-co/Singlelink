@@ -10,14 +10,8 @@
         <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;"
                placeholder="Search pages, guides, and documentation..."/>
       </div>
-      <!--<n-link to="/dashboard/referrals" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Refer a friend and get $10!</n-link>-->
-      <!-- Remove these for Singlelink Core
-      <n-link to="/dashboard/upgrade" class="py-1 px-4 rounded-full text-gdp bg-opaqueIndigo text-sm font-bold leading-tight mx-8 cursor-pointer flex items-center justify-center hover:border-gdp border-2 border-opaqueIndigo">Upgrade and go pro!</n-link>
-      -->
-      <!-- Remove these for Singlelink Enterprise -->
       <a class="github-button" href="https://github.com/Neutron-Creative/Singlelink" data-icon="octicon-star"
          data-size="large" data-show-count="true" aria-label="Star Neutron-Creative/Singlelink on GitHub">Star</a>
-      <!-- Remove these for Singlelink Enterprise -->
     </div>
     <div class="flex flex-col lg:flex-row w-full max-w-6xl h-screen oveflow-x-hidden">
       <div class="flex flex-col text-black font-semibold nav justify-start">
@@ -126,28 +120,10 @@
             <img src="/Rainbow.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Appearance</span>
           </n-link>
-          <!-- Remove these for Singlelink Core
-          <n-link to="/dashboard/marketplace" :class="getActiveStyles('dashboard-marketplace')">
-              <img src="/High voltage.svg" style="width:24px;height:24px;"/>
-              <span class="ml-4 font-extrabold">Marketplace</span>
-          </n-link>
-          <a href="https://singlelink.co/leaderboard" target="_blank" :class="getActiveStyles('dashboard-leaderboard')">
-              <img src="/Fire.svg" style="width:24px;height:24px;"/>
-              <span class="ml-4 font-extrabold">Leaderboard</span>
-          </a>
-          <n-link to="/dashboard/discover" :class="getActiveStyles('dashboard-discover')">
-              <img src="/Compass.svg" style="width:24px;height:24px;"/>
-              <span class="ml-4 font-extrabold">Search & discover</span>
-          </n-link>-->
           <a href="https://discord.gg/wqjKmsRP39" target="_blank" :class="getActiveStyles('dashboard-support')">
             <img src="/Cowboy hat face.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Contact support</span>
           </a>
-          <!-- Remove these for Singlelink Core
-          <n-link to="/dashboard/referrals" :class="getActiveStyles('dashboard-referrals')">
-              <img src="/Heart.svg" style="width:24px;height:24px;"/>
-              <span class="ml-4 font-extrabold">Referrals</span>
-          </n-link>-->
           <n-link to="/dashboard/settings" :class="getActiveStyles('dashboard-settings')">
             <img src="/Settings.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Settings</span>

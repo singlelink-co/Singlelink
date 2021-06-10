@@ -44,27 +44,3 @@ type EditorLink = Partial<Link> & {
   url: string,
   useDeepLink: boolean
 };
-
-type EditorAddon = Partial<Addon> & {
-  id: string,
-  userId: string,
-  resourceId: string,
-  type: AddonType,
-  description: string,
-  author: string,
-  tags: string[],
-  featuredSorting: number,
-  price: number,
-  paymentFrequency: string,
-  global: boolean,
-  version: string,
-  createdOn: string,
-  lastUpdated: string
-}
-
-type EditorAddonInstall = Partial<Addon> & {
-  id: string,
-  profileId: string,
-  addonId: string,
-  createdOn: string
-}
