@@ -191,29 +191,8 @@ fastify.route({
                     <meta data-n-head="ssr" data-hid="twitter:url" name="twitter:url" content="https://app.singlelink.co/u/` + handle + `">
                     <meta data-n-head="ssr" data-hid="twitter:card" name="twitter:card" content="summary_large_image">
                     <link data-n-head="ssr" rel="icon" type="image/x-icon" href="https://singlelink.co/favicon.ico">
-                </head>
-                <body>
-                    <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
-                        <div
-                            id="user-site-view"
-                            class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
-                        >
-                            <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
-                                <img class="nc-avatar mb-2" src="` + imageUrl + `" />
-                                ` + headlineHtml + `
-                                ` + subtitleHtml + `
-                                ` + linkHtml + `
-                                <!-- Site html -->
-                                <div id="custom-html">
-                                ` + site.customHtml + `
-                                </div>
-                                <!-- Theme html -->
-                                <div id="theme-html">
-                                ` + theme.customHtml + `
-                                </div>
-                                <!-- Watermark -->
-                                ` + watermarkHtml + `
-                                <!-- Tailwind CSS -->
+                    
+                    <!-- Tailwind CSS -->
                                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
                                 <!-- Theme style -->
                                 <style type="text/css">
@@ -250,45 +229,67 @@ fastify.route({
                                         overflow-x: hidden;
                                     }
                                 </style>
+                                <style>
+                                html, * {
+                                    font-family: 'Inter',
+                                    -apple-system,
+                                    BlinkMacSystemFont,
+                                    'Segoe UI',
+                                    Roboto,
+                                    'Helvetica Neue',
+                                    Arial,
+                                    sans-serif;
+                                    font-size: 16px;
+                                    line-height: 1.65;
+                                    word-spacing: 1px;
+                                    -ms-text-size-adjust: 100%;
+                                    -webkit-text-size-adjust: 100%;
+                                    -moz-osx-font-smoothing: grayscale;
+                                    -webkit-font-smoothing: antialiased;
+                                    box-sizing: border-box;
+                                }
+                                h1.sl-headline, h3.sl-subtitle {
+                                    line-height: 1.65;
+                                    word-spacing: 1px;
+                                    -ms-text-size-adjust: 100%;
+                                    -webkit-text-size-adjust: 100%;
+                                    -moz-osx-font-smoothing: grayscale;
+                                    -webkit-font-smoothing: antialiased;
+                                }
+                                *,
+                                *::before,
+                                *::after {
+                                box-sizing: border-box;
+                                margin: 0;
+                                }
+                            </style>
+                </head>
+                <body>
+                    <div class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg">
+                        <div
+                            id="user-site-view"
+                            class="relative flex min-h-screen w-screen bg-gray-100 justify-center w-full sl-bg"
+                        >
+                            <section class="flex flex-col p-6 pt-8 pb-8 items-center text-center max-w-sm w-full">
+                                <img class="nc-avatar mb-2" src="` + imageUrl + `" />
+                                ` + headlineHtml + `
+                                ` + subtitleHtml + `
+                                ` + linkHtml + `
+                                <!-- Site html -->
+                                <div id="custom-html">
+                                ` + site.customHtml + `
+                                </div>
+                                <!-- Theme html -->
+                                <div id="theme-html">
+                                ` + theme.customHtml + `
+                                </div>
+                                <!-- Watermark -->
+                                ` + watermarkHtml + `
                                 ` + themeColorsHtml + `
                                 
                             </section>
                         </div>
                     </div>
-                    <style>
-                        html, * {
-                            font-family: 'Inter',
-                            -apple-system,
-                            BlinkMacSystemFont,
-                            'Segoe UI',
-                            Roboto,
-                            'Helvetica Neue',
-                            Arial,
-                            sans-serif;
-                            font-size: 16px;
-                            line-height: 1.65;
-                            word-spacing: 1px;
-                            -ms-text-size-adjust: 100%;
-                            -webkit-text-size-adjust: 100%;
-                            -moz-osx-font-smoothing: grayscale;
-                            -webkit-font-smoothing: antialiased;
-                            box-sizing: border-box;
-                        }
-                        h1.sl-headline, h3.sl-subtitle {
-                            line-height: 1.65;
-                            word-spacing: 1px;
-                            -ms-text-size-adjust: 100%;
-                            -webkit-text-size-adjust: 100%;
-                            -moz-osx-font-smoothing: grayscale;
-                            -webkit-font-smoothing: antialiased;
-                        }
-                        *,
-                        *::before,
-                        *::after {
-                        box-sizing: border-box;
-                        margin: 0;
-                        }
-                    </style>
                 </body>
             </html>
         `);
