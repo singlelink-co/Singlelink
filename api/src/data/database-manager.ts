@@ -33,7 +33,6 @@ export class DatabaseManager {
     await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-types.sql`).toString());
     await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-application.sql`).toString());
     await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-analytics.sql`).toString());
-    await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-marketplace.sql`).toString());
     await this.pool.query(fs.readFileSync(`${__dirname}/../sql/setup-jobs.sql`).toString());
   }
 

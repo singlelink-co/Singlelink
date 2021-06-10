@@ -10,7 +10,6 @@ import {Auth} from "./utils/auth";
 import {CustomDomainHandler} from "./utils/custom-domain-handler";
 import {AdminController} from "./controllers/admin-controller";
 import {PermissionController} from "./controllers/permission-controller";
-import {MarketplaceController} from "./controllers/marketplace-controller";
 import {AuthController} from "./controllers/auth-controller";
 import {SecurityUtils} from "./utils/security-utils";
 import {JobSystem} from "./jobs/job-system";
@@ -49,7 +48,6 @@ async function start() {
 
   // Management controllers
   server.addController(new PermissionController(server.fastify, database));
-  server.addController(new MarketplaceController(server.fastify, database));
 
   // Admin controllers
   server.addController(new AdminController(server.fastify, database));
