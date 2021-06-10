@@ -59,7 +59,7 @@ fastify.route({
                         <div class="w-full h-full flex flex-col items-center justify-center">
                             <h1 class="text-4xl text-gray-900 mb-2 font-extrabold">500 - Server Error</h1>
                             <h3 class="text-lg text-gray-600 mb-4">Oops! Something went wrong. Try again?</h3>
-                            <a class="bg-indigo-600 hover:bg-indigo-500 rounded shadow text-white py-3 px-6 text-sm font-medium" href="` + request.url + `">Reload page</a>
+                            <a class="bg-indigo-600 hover:bg-indigo-500 rounded-2xl shadow text-white py-3 px-6 text-sm font-medium" href="` + request.url + `">Reload page</a>
                         </div>
                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
                         <style>
@@ -105,11 +105,11 @@ fastify.route({
                         <a
                             id="sl-item-`+link.id+`"
                             href="` + api_url + '/analytics/link/' + link.id + `"
-                            class="w-full"
+                            class="w-full sl-item-parent"
                             target="_blank"
                         >
                             <div
-                                class="rounded shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
+                                class="rounded-2xl shadow bg-white p-4 w-full font-medium mb-3 nc-link sl-item  flex items-center justify-center flex-col"
                                 style="`+css+`"
                             >
                                 <span class="font-medium text-gray-900 sl-label">` + link.label + `</span>` + subtitleHtml + `
@@ -176,7 +176,7 @@ fastify.route({
         </div>`;
         }
             watermarkHtml += `
-            <a class="text-indigo-600 hover:underline text-sm" href="https://` + hostname + `/create-account" target="_blank">
+            <a class="text-indigo-600 hover-underline text-sm" href="https://` + hostname + `/create-account" target="_blank">
                 Create your free micro-site in minutes!
             </a>`;
         watermarkHtml += `<base target="_blank">`;
@@ -208,7 +208,6 @@ fastify.route({
                     <link data-n-head="ssr" rel="icon" type="image/x-icon" href="https://singlelink.co/favicon.ico">
                     
                     <!-- Tailwind CSS -->
-                                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>
                                 <!-- Theme style -->
                                 <style type="text/css">
                                 ` + theme.customCss + `
@@ -216,6 +215,45 @@ fastify.route({
                                 <!-- Personal styles -->
                                 <style type="text/css">
                                 ` + site.customCss + `
+                                </style>
+                                <style>
+                                    html {font-size:16px;}
+                                    .w-full {width:100%;}
+                                    .w-screen {width:100vw;}
+                                    .min-h-screen {min-height:100vh;}
+                                    .bg-gray-100 {background-color:rgba(243,244,246,1);}
+                                    .relative {position:relative;}
+                                    .flex {display:flex;}
+                                    .flex-col {flex-direction:column;}
+                                    .align-center {align-items:center;}
+                                    .justify-center {justify-content:center;}
+                                    .text-center {text-align:center;}
+                                    .mt-1 {margin-top:.25rem;}
+                                    .mb-2 {margin-bottom:.5rem;}
+                                    .mt-4 {margin-top:1rem;}
+                                    .mb-4 {margin-bottom:1rem;}
+                                    .p-4 {padding:1rem;}
+                                    .p-6 {padding:1.5rem;}
+                                    .pt-8 {padding-top:2rem;}
+                                    .pb-8 {padding-bottom:2rem;}
+                                    .max-w-sm {max-width:24rem;}
+                                    .shadow {--tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);}
+                                    .text-black {color:#000;}
+                                    .font-medium {font-weight:500;}
+                                    .font-semibold {font-weight:600;}
+                                    .text-sm {font-size:0.875rem;line-height:1.25rem;}
+                                    .text-2xl {font-size: 1.5rem;line-height: 2rem;}
+                                    * {font-size: 1rem;line-height: 1.5rem;font-weight:400;}
+                                    .rounded-2xl {border-radius: 1rem;}
+                                    .text-gray-600 {--tw-text-opacity:1;color:rgba(75, 85, 99, var(--tw-text-opacity));}
+                                    .text-gray-700 {--tw-text-opacity:1;color:rgba(55, 65, 81, var(--tw-text-opacity));}
+                                    .text-indigo-600 {color:#5850ec;}
+                                    .mx-auto {margin-left:auto;margin-right:auto;}
+                                    .sl-item-parent {
+                                        text-decoration:none;
+                                    }
+                                    .hover-underline {text-decoration:none;}
+                                    .hover-underline:hover {text-decoration: underline;}
                                 </style>
                                 <style>
                                     .nc-avatar {
