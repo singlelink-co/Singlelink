@@ -316,7 +316,7 @@ const start = async () => {
   try {
     console.clear();
     console.log(chalk.cyan.bold(app_name) + ': Starting application...')
-    await fastify.listen(port, hostname)
+    await fastify.listen(port, host)
     console.log(chalk.cyan.bold(app_name) + ': Application listening on port ' + port);
   } catch (err) {
     console.log(chalk.cyan.bold(app_name) + ': Error!');
