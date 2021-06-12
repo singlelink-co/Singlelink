@@ -56,7 +56,7 @@ if (process.env.EDITOR_DOMAIN) {
  * The domain that the renderer is hosted at.
  */
 if (process.env.RENDERER_DOMAIN) {
-  config.editorDomain = process.env.RENDERER_DOMAIN;
+  config.rendererDomain = process.env.RENDERER_DOMAIN;
 }
 
 /**
