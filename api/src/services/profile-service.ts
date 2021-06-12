@@ -1,6 +1,5 @@
 import {DatabaseManager} from "../data/database-manager";
 import {DatabaseService} from "./database-service";
-import Axios, {AxiosResponse} from "axios";
 import {config} from "../config/config";
 import {DbTypeConverter} from "../utils/db-type-converter";
 import {HttpError} from "../utils/http-error";
@@ -8,6 +7,7 @@ import {StatusCodes} from "http-status-codes";
 import {StringUtils} from "../utils/string-utils";
 import {QueryResult} from "pg";
 import {DatabaseError} from 'pg-protocol/dist/messages';
+import {ScreenshotOptions, ScreenshotUtils} from "../utils/screenshot-utils";
 
 /**
  * This service takes care of transactional tasks related to Profiles.
@@ -64,9 +64,7 @@ export class ProfileService extends DatabaseService {
    *
    * @param handle
    */
-  async getThumbnailByHandle(handle: string): Promise<AxiosResponse<ArrayBuffer>> {
-    let url: string;
-    let thumbnail: AxiosResponse<ArrayBuffer>;
+  async getThumbnailByHandle(handle: string): Promise<Buffer> {
     let scale = 3;
 
     let final_size = {
@@ -80,12 +78,17 @@ export class ProfileService extends DatabaseService {
     };
 
     try {
-      url = `https://capture.neutroncreative.com/api/v1/capture?apiKey=${config.captureKey}&url=${config.editorDomain}/u/${handle}&size=${resolution.x}x${resolution.y}&crop=true&scale=${scale}`;
-      thumbnail = await Axios.get<ArrayBuffer>(url, {
-        responseType: "arraybuffer"
-      });
+      let screenshotOptions = new ScreenshotOptions();
+      screenshotOptions.scale = scale;
+      screenshotOptions.crop = true;
 
-      return thumbnail;
+      return await ScreenshotUtils.getOrCreateScreenshot(
+        `${config.rendererDomain}/${handle}`,
+        [`${resolution.x}x${resolution.y}`],
+        ScreenshotUtils.DEFAULT_TTL,
+        false,
+        screenshotOptions
+      );
     } catch (err) {
       console.error(err);
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "An internal error occurred while fetching the thumbnail.");

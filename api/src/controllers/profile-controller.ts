@@ -203,10 +203,10 @@ export class ProfileController extends Controller {
 
       reply.code(StatusCodes.OK).headers({
         "Content-Type": "image/png",
-        "Content-Length": thumbnail.data.byteLength
+        "Content-Length": thumbnail.byteLength
       });
 
-      reply.send(thumbnail.data);
+      reply.send(thumbnail);
       return;
     } catch (e) {
       if (e instanceof HttpError) {

@@ -25,13 +25,6 @@ if (process.env.SECRET) {
 }
 
 /**
- * Optional. Capture Key from Neutron's Capture product for site screenshots.
- */
-if (process.env.CAPTURE_KEY) {
-  config.captureKey = process.env.CAPTURE_KEY;
-}
-
-/**
  * The port that the server will use.
  */
 if (process.env.HOST) {
@@ -46,17 +39,24 @@ if (process.env.PORT) {
 }
 
 /**
- * The domain that this server will be hosted on.
+ * The domain that the api will be hosted on.
  */
 if (process.env.API_DOMAIN) {
   config.apiDomain = process.env.API_DOMAIN;
 }
 
 /**
- * The domain that the client is hosted at.
+ * The domain that the editor is hosted at.
  */
 if (process.env.EDITOR_DOMAIN) {
   config.editorDomain = process.env.EDITOR_DOMAIN;
+}
+
+/**
+ * The domain that the renderer is hosted at.
+ */
+if (process.env.RENDERER_DOMAIN) {
+  config.editorDomain = process.env.RENDERER_DOMAIN;
 }
 
 /**
@@ -160,10 +160,4 @@ if (process.env.GOOGLE_CLIENT_SECRET) {
 
 if (process.env.GOOGLE_REDIRECT_DOMAIN) {
   config.google.redirectDomain = process.env.GOOGLE_REDIRECT_DOMAIN;
-}
-
-// Extra logic for debug messages
-
-if (config.s3Bucket.endPoint) {
-  console.log("S3 Bucket caching is enabled!");
 }

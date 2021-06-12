@@ -32,7 +32,7 @@ export class CustomDomainHandler {
 
     // Disallow setting the domain as the client or api domain.
     // This is to prevent feedback loops.
-    if (customDomain === config.editorDomain || customDomain === config.apiDomain) {
+    if (customDomain === config.editorDomain || customDomain === config.apiDomain || customDomain === config.rendererDomain) {
       return;
     }
 

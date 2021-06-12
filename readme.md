@@ -45,7 +45,6 @@ Optionally, you can also provide API credentials for the following providers to 
 
 - <a href="https://mixpanel.com" target="_blank">Mixpanel</a> (Event tracking)
 - <a href="https://www.simplefileupload.com/" target="_blank">SimpleFileUpload</a> (Avatar upload/file storage)
-- <a href="https://capture.neutron.so" target="_blank">Neutron Capture</a> (Profile OG image screenshots)
 
 ### Setup with NPM
 1. Clone the repository

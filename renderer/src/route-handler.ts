@@ -57,8 +57,8 @@ export class RouteHandler {
                     <head>
                         <title>${config.appName} Web Client</title>
                         <meta charset="UTF-8">
-                        <link data-n-head="ssr" rel="icon" type="image/x-icon" href="favicon.ico"/>
-                        <link data-n-head="ssr" rel="icon" type="image/png" href="favicon.ico"/>
+                        <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+                        <link rel="icon" type="image/png" href="favicon.ico"/>
                     </head>
                     <body>
                         <div class="w-full h-full flex flex-col items-center justify-center">
@@ -225,8 +225,6 @@ export class RouteHandler {
       // Send response content type to text/html
       reply.type('text/html');
 
-      const resolvedTwitterUrl = `${request.hostname}/${handle}`;
-
       // Send response to client
       // language=HTML
       return reply.send(`
@@ -234,26 +232,29 @@ export class RouteHandler {
         <head>
           <title>${profile.headline} - ${config.appName}</title>
           <meta charset="UTF-8">
-          <meta data-n-head="ssr" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-          <meta data-n-head="ssr" data-hid="title" name="title" content="${profile.headline} - ${config.appName}">
-          <meta data-n-head="ssr" data-hid="og:title" name="og:title" content="${profile.headline} - ${config.appName}">
-          <meta data-n-head="ssr" data-hid="twitter:title" name="twitter:title"
-                content="${profile.headline} - ${config.appName}">
-          <meta data-n-head="ssr" data-hid="description" name="description"
+          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+          <!-- Meta -->
+          <meta name="title" content="${profile.headline} - ${config.appName}">
+          <meta name="description"
                 content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
-          <meta data-n-head="ssr" data-hid="og:description" name="og:description"
+
+          <!-- Open Graph-->
+          <meta property="og:title" content="${profile.headline} - ${config.appName}">
+          <meta property="og:description"
                 content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
-          <meta data-n-head="ssr" data-hid="twitter:description" name="twitter:description"
+          <meta property="og:image" content="${config.apiUrl}/profile/thumbnail/${handle}">
+          <meta property="og:type" content="website">
+
+          <!-- Twitter Cards -->
+          <meta name="twitter:title" content="${profile.headline} - ${config.appName}">
+          <meta name="twitter:description"
                 content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
-          <meta data-n-head="ssr" data-hid="og:image" name="og:image"
-                content="${config.apiUrl}/profile/thumbnail/${handle}">
-          <meta data-n-head="ssr" data-hid="twitter:image" name="twitter:image"
-                content="${config.apiUrl}/profile/thumbnail/jim">
-          <meta data-n-head="ssr" data-hid="twitter:url" name="twitter:url"
-                content="${resolvedTwitterUrl}">
-          <meta data-n-head="ssr" data-hid="twitter:card" name="twitter:card" content="summary_large_image">
-          <link data-n-head="ssr" rel="icon" type="image/x-icon" href="favicon.ico"/>
-          <link data-n-head="ssr" rel="icon" type="image/png" href="favicon.ico"/>
+          <meta name="twitter:image" content="${config.apiUrl}/profile/thumbnail/${handle}">
+          <meta name="twitter:card" content="summary_large_image">
+
+          <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+          <link rel="icon" type="image/png" href="favicon.ico"/>
 
           <!-- Tailwind CSS Embedded Styles -->
           <!-- Theme style -->

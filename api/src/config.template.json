@@ -6,6 +6,7 @@
   "port": 80,
   "apiDomain": "",
   "editorDomain": "",
+  "rendererDomain": "",
   "contactEmail": "",
   "aws": {
     "senderEmailAddress": "",
