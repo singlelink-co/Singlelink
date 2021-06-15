@@ -21,21 +21,22 @@ export class DbLocks {
 
   /**
    * Creates a lock created in the DB. If there are no locks available, returns null.
-   * @param name
+   * @param id - 64 bit class id
    *
    * @return The requested lock
    */
-  static async requestLock(name: string) {
+  static async requestLock(id: number) {
     try {
-      let queryResult = await this.pool.query<{ id: string, name: string, created_on: string, expires: string }>(
-        "insert into jobs.locks(name) values ($1) returning *", [name]
+      let queryResult = await this.pool.query<{ success: boolean }>(
+        //language=PostgreSQL
+        "select pg_try_advisory_lock($1) as success", [id]
       );
 
       if (queryResult.rowCount <= 0) {
         return null;
       }
 
-      return queryResult.rows[0];
+      return queryResult.rows[0].success;
     } catch (e) {
       if (e.code === PgErrorCodes.UNIQUE_VIOLATION) {
         // lock already exists
@@ -49,12 +50,13 @@ export class DbLocks {
 
   /**
    * Releases a lock and allows it to be used again.
-   * @param name
+   * @param id
    *
-   * @return The number of locks released. Should be 1, but sometimes may be more depending on network conditions.
+   * @return The number of locks released. Should be 1 or greater (in some weird case).
    */
-  static async releaseLock(name: string): Promise<number> {
-    let queryResult = await this.pool.query("delete from jobs.locks where name=$1", [name]);
+  static async releaseLock(id: number): Promise<number> {
+    //language=PostgreSQL
+    let queryResult = await this.pool.query("select pg_advisory_unlock($1)", [id]);
 
     if (queryResult.rowCount <= 0) {
       return 0;

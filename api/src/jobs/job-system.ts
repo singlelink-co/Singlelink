@@ -3,6 +3,9 @@ import cron from "node-cron";
 import {DbLocks} from "../utils/db-locks";
 
 export class JobSystem {
+  static LOCK_REFRESH_MATERIAL_VIEW: number = 1;
+  static LOCK_DELETE_EXPIRED_NONCES: number = 2;
+
   /**
    * Private pool instance for Job Manager.
    * @private
@@ -28,7 +31,7 @@ export class JobSystem {
   }
 
   static async refreshMaterialView() {
-    let lock = await DbLocks.requestLock("refresh_material_view");
+    let lock = await DbLocks.requestLock(JobSystem.LOCK_REFRESH_MATERIAL_VIEW);
 
     if (!lock)
       return;
@@ -36,11 +39,11 @@ export class JobSystem {
     //language=PostgreSQL
     await this.pool.query("refresh materialized view analytics.global_stats");
 
-    await DbLocks.releaseLock("refresh_material_view");
+    await DbLocks.releaseLock(JobSystem.LOCK_REFRESH_MATERIAL_VIEW);
   }
 
   static async deleteExpiredNonces() {
-    let lock = await DbLocks.requestLock("delete_expired_nonces");
+    let lock = await DbLocks.requestLock(JobSystem.LOCK_DELETE_EXPIRED_NONCES);
 
     if (!lock)
       return;
@@ -48,6 +51,6 @@ export class JobSystem {
     //language=PostgreSQL
     await this.pool.query("delete from security.nonces where expires < now()");
 
-    await DbLocks.releaseLock("delete_expired_nonces");
+    await DbLocks.releaseLock(JobSystem.LOCK_DELETE_EXPIRED_NONCES);
   }
 }
