@@ -14,7 +14,7 @@ type linktype_t = 'link' | 'social' | 'image' | 'video' | string
  */
 
 /**
- id                bigserial primary key unique,
+ id                bigserial primary key,
  email             varchar(340) unique not null,
  email_hash        text,
  full_name         text,
@@ -60,7 +60,7 @@ interface DbSensitiveUserWithPassword extends DbSensitiveUser {
 }
 
 /**
- id          bigserial primary key unique,
+ id          bigserial primary key,
  label       text      not null,
  global      bool               default false not null,
  colors      jsonb              default '{}',
@@ -93,7 +93,7 @@ interface DbTheme {
 }
 
 /**
- id             bigserial primary key unique,
+ id             bigserial primary key,
  handle         text unique not null,                                                        -- The name of the profile in the url
  user_id        bigint,
  image_url      text,
@@ -162,7 +162,7 @@ interface DbProfileMember {
 }
 
 /**
- id            bigserial primary key unique,
+ id            bigserial primary key,
  profile_id    bigint references app.profiles (id) on update cascade on delete cascade,
  url           text               default '#' not null,
  sort_order    int       not null,
@@ -197,7 +197,7 @@ interface DbSensitiveLink extends DbLink {
 }
 
 /**
- id          bigserial primary key unique,
+ id          bigserial primary key,
  user_id     bigint references app.users (id) on update cascade on delete cascade,
  group_name  text not null,
  permissions text
@@ -247,7 +247,7 @@ interface DbAnalyticsGlobalStats {
 }
 
 /**
- id                bigserial primary key unique,
+ id                bigserial primary key,
  user_id           bigint references app.users (id) on update cascade,
  resource_id       bigint unique,      -- The id of the resource this addon is related to
  type              addon_t   not null, -- The type of resource this is

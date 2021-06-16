@@ -9,7 +9,7 @@ create schema if not exists app;
  */
 create table if not exists app.users
 (
-    id                bigserial primary key unique,
+    id                bigserial primary key,
     email             varchar(340) unique not null,
     email_hash        text,
     full_name         text,
@@ -41,7 +41,7 @@ create index if not exists accounts_private_metadata_github_id on app.users ((pr
  */
 create table if not exists app.themes
 (
-    id          bigserial primary key unique,
+    id          bigserial primary key,
     label       text      not null,
     global      bool               default false not null,
     colors      jsonb              default '{}',
@@ -63,7 +63,7 @@ alter table app.themes
  */
 create table if not exists app.profiles
 (
-    id               bigserial primary key unique,
+    id               bigserial primary key,
     handle           text unique not null,                                                        -- The name of the profile in the url
     user_id          bigint,
     image_url        text,
@@ -115,7 +115,7 @@ $$;
  */
 create table if not exists app.links
 (
-    id               bigserial primary key unique,
+    id               bigserial primary key,
     profile_id       bigint references app.profiles (id) on update cascade on delete cascade,
     type             text               default 'link' not null,
     url              text               default '#' not null,
@@ -142,7 +142,7 @@ create index if not exists links_url_index on app.links (url);
  */
 create table if not exists app.perm_groups
 (
-    id          bigserial primary key unique,
+    id          bigserial primary key,
     user_id     bigint references app.users (id) on update cascade on delete cascade,
     group_name  text not null,
     permissions text
