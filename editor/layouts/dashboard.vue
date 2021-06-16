@@ -413,15 +413,13 @@ export default Vue.extend({
         let text = '';
         if (this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
         if (!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
-        console.log(text);
-        let url = new URL(text);
-        navigator.clipboard.writeText(url.toString());
-        alert('Url copied to clipboard!');
+        await window.navigator.clipboard.writeText(text);
+        alert(`Url copied to clipboard!\n${text}`);
       } catch (error) {
         let text = '';
         if (this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
         if (!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
-        alert('Copy this url to the clipboard!\n' + text);
+        prompt('Copy this url to the clipboard: Ctrl+C, Enter\n', text);
       }
     },
 
