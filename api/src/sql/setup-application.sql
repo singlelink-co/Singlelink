@@ -204,7 +204,7 @@ alter table app.links
     alter column metadata set not null;
 
 alter table app.links
-    add column if not exists type linktype_t default 'link' not null;
+    add column if not exists type text default 'link' not null;
 
 alter table app.users
     add column if not exists private_metadata jsonb not null default '{
