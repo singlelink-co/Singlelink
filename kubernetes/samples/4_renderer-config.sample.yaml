@@ -1,0 +1,20 @@
+# Copy this file and edit the values. Make sure to uncomment all the lines.
+# Remove the .sample. part from the filename.
+# Make sure to put it into the /kubernetes folder with the other kubernetes scripts.
+
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: singlelink-renderer-secrets
+#  namespace: singlelink
+#type: Opaque
+#stringData:
+#---
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: singlelink-renderer-config
+#  namespace: singlelink
+#data:
+#  API_URL: ""
+#
