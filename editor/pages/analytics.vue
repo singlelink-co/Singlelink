@@ -1,18 +1,18 @@
 <template>
-<div></div>
+  <div></div>
 </template>
 <script>
 export default {
-  head () {
+  head() {
     return {
       title: 'Analytics - ' + process.env.APP_NAME,
       meta: [
-        { hid: 'robots', name: 'robots', content: 'noindex' }
+        {hid: 'robots', name: 'robots', content: 'noindex'}
       ]
     }
   },
   mounted() {
-    location.href='https://singlelink.co/analytics';
+    location.href = 'https://singlelink.co/analytics';
   }
 }
 </script>

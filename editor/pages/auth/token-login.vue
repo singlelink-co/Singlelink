@@ -31,8 +31,6 @@ export default Vue.extend({
 
           const message = response.data;
 
-          console.log(message);
-
           this.$store.commit('auth/login', message.token);
 
           await this.$router.push('/dashboard');

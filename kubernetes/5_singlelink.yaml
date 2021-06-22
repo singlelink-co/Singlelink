@@ -60,7 +60,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-editor
-  replicas: 8
+  replicas: 2
   template:
     metadata:
       labels:
@@ -87,7 +87,7 @@ spec:
   selector:
     matchLabels:
       app: singlelink-api
-  replicas: 16
+  replicas: 4
   template:
     metadata:
       labels:
@@ -104,3 +104,33 @@ spec:
                 name: singlelink-api-secrets
             - configMapRef:
                 name: singlelink-api-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: singlelink-renderer
+  labels:
+    app: singlelink-renderer
+  namespace: singlelink
+spec:
+  selector:
+    matchLabels:
+      app: singlelink-renderer
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: singlelink-renderer
+      namespace: singlelink
+    spec:
+      containers:
+        - name: singlelink-renderer
+          image: neutroncreative/singlelink-renderer:latest
+          ports:
+            - containerPort: 80
+          envFrom:
+            - secretRef:
+                name: singlelink-renderer-secrets
+            - configMapRef:
+                name: singlelink-renderer-config
+

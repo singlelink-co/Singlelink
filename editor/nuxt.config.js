@@ -175,7 +175,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.API_URL ?? 'https://api.singlelink.co' /* REMOVE BEFORE PRODUCTION */
+    baseURL: 'https://api.singlelink.co' /* fallback */
   },
 
   env: {
@@ -190,6 +190,18 @@ export default {
     ORGANIZATION: process.env.ORGANIZATION ?? 'Neutron Creative Inc.',
     FREE_SIGNUP: process.env.FREE_SIGNUP || true,
     QR_API: process.env.QR_API || null,
+  },
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.API_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.API_URL
+    }
   },
 
   sitemap: {
