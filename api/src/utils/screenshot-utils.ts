@@ -54,7 +54,7 @@ export class ScreenshotUtils {
     let hash = ObjectHash.sha1(options);
 
     if (!url.startsWith("http")) {
-      throw new HttpError(StatusCodes.BAD_REQUEST, "Only http protocol is supported when creating screenshots.");
+      throw new HttpError(StatusCodes.BAD_REQUEST, `Only http protocol is supported when creating screenshots. URL received: ${url}`);
     }
 
     if (!noCache && this.bucketEnabled && this.minio) {

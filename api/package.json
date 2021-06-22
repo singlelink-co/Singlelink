@@ -1,6 +1,6 @@
 {
   "name": "singlelink-api",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "private": true,
   "description": "A single link for everything.",
   "main": "dist/app.js",
