@@ -113,6 +113,7 @@
         </div>
 
         <div class="flex flex-col w-full mb-6">
+          <!-- Custom domain-->
           <div
             class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 items-start lg:justify-between lg:items-center w-full"
           >
@@ -122,6 +123,7 @@
               class="text-black font-bold opacity-50 text-xs hover:underline hover:opacity-80"
             >Need help? Read our documentation</a>
           </div>
+
           <input
             id="custom_domain"
             v-model="user.activeProfile.customDomain"
@@ -129,6 +131,15 @@
             type="text"
             placeholder="e.g. neutroncreative.com (no http/https)"
           >
+
+          <div
+            class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 p-4 items-start lg:justify-between lg:items-center w-full"
+          >
+            <label class="font-bold text-sm text-black opacity-70" for="custom_domain">
+              Make sure you set this TXT Record in your DNS options.<br>
+              <span class="bg-blue-200">{{ getTXTRecord }}</span>
+            </label>
+          </div>
         </div>
 
         <!-- Watermark Toggle -->
@@ -338,40 +349,7 @@ export default Vue.extend({
   name: 'DashboardSettings',
   layout: 'dashboard',
   middleware: 'authenticated',
-  data() {
-    return {
-      loaded: false,
-      resetPasswordModalActive: false,
-      deleteProfileModalActive: false,
-      originalHandle: '',
-      user: {
-        name: '',
-        emailHash: '',
-        activeProfile: {
-          imageUrl: '',
-          headline: '',
-          subtitle: '',
-          handle: '',
-          customDomain: '',
-          visibility: '',
-          showWatermark: false,
-          metadata: {
-            privacyMode: false
-          },
-        }
-      },
-      error: '',
-      passwordError: '',
-      passwordEmail: '',
-      showWatermarkNotice: false,
-      hostname: process.env.HOSTNAME,
-      app_name: process.env.APP_NAME,
-      icon_url: process.env.ICON_URL,
-      alerts: {
-        googleLinked: null as boolean | null
-      }
-    };
-  },
+
   head: {
     title: 'Site settings - ' + process.env.APP_NAME,
     meta: [
@@ -403,6 +381,42 @@ export default Vue.extend({
     ],
   },
 
+  data() {
+    return {
+      loaded: false,
+      resetPasswordModalActive: false,
+      deleteProfileModalActive: false,
+      originalHandle: '',
+      user: {
+        name: '',
+        emailHash: '',
+        activeProfile: {
+          id: '',
+          imageUrl: '',
+          headline: '',
+          subtitle: '',
+          handle: '',
+          customDomain: '',
+          visibility: '',
+          showWatermark: false,
+          metadata: {
+            privacyMode: false
+          },
+        }
+      },
+      error: '',
+      passwordError: '',
+      passwordEmail: '',
+      showWatermarkNotice: false,
+      hostname: process.env.HOSTNAME,
+      app_name: process.env.APP_NAME,
+      icon_url: process.env.ICON_URL,
+      alerts: {
+        googleLinked: null as boolean | null
+      }
+    };
+  },
+
   computed: {
     profileValid() {
       const imageUrl = this.$data.user.activeProfile.imageUrl;
@@ -417,6 +431,12 @@ export default Vue.extend({
 
       return imageUrl.includes('https://');
     },
+
+    getTXTRecord() {
+      const profileId = this.$data.user.activeProfile.id;
+
+      return "sl-verification-id=" + profileId;
+    }
   },
 
   watch: {
@@ -453,6 +473,7 @@ export default Vue.extend({
         this.user.name = userResponse.name;
         this.user.emailHash = userResponse.emailHash;
 
+        this.user.activeProfile.id = profileResponse.id;
         this.user.activeProfile.imageUrl = profileResponse.imageUrl;
         this.user.activeProfile.headline = profileResponse.headline;
         this.user.activeProfile.subtitle = profileResponse.subtitle;

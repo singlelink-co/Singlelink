@@ -11,6 +11,7 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import Mixpanel from "mixpanel";
 import {config} from "../config/config";
+import dns from "dns";
 
 interface ProfileHandleRequest extends RequestGenericInterface {
   Params: {
@@ -382,6 +383,39 @@ export class ProfileController extends Controller {
         return;
       }
 
+      // Check custom domain and see if the profile owns it
+      let hasCustomDomain = !!body.customDomain;
+
+      try {
+        if (hasCustomDomain) {
+          // Check if the custom domain is changing
+          if (body.customDomain !== body.authProfile.customDomain) {
+            let records = await dns.promises.resolveTxt(body.customDomain);
+
+            const slVerificationTag = "sl-verification-id=";
+
+            let txtRecord = records[0].find(x => {
+              return x.startsWith(slVerificationTag);
+            });
+
+            if (!txtRecord) {
+              reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Failed to set custom domain! Make sure your TXT and CNAME records are setup correctly!"));
+              return;
+            }
+
+            let profileId = txtRecord.substring(slVerificationTag.length);
+
+            if (profileId !== body.authProfile.id) {
+              reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Failed to set custom domain! Make sure your TXT and CNAME records are setup correctly!"));
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("Failed to set custom domain! Make sure your TXT and CNAME records are setup correctly!"));
+        return;
+      }
+
       let prevWatermarkStatus = body.authProfile.showWatermark;
 
       let newProfile = await this.profileService.updateProfile(
@@ -394,7 +428,7 @@ export class ProfileController extends Controller {
         body.showWatermark,
         body.customCss,
         body.customHtml,
-        body.customDomain
+        hasCustomDomain ? body.customDomain : null
       );
 
       if (this.mixpanel) {

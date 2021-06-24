@@ -73,7 +73,7 @@ create table if not exists app.profiles
     show_watermark   bool                 default true,                                           -- The "Proudly built with Singlelink" underneath people's profiles
     custom_css       text,
     custom_html      text,
-    custom_domain    text unique,
+    custom_domain    text,
     theme_id         bigint      references app.themes (id) on update cascade on delete set null, -- The profile's currently selected theme
     visibility       visibility_t         default 'unpublished',
     metadata         jsonb       not null default '{
@@ -234,3 +234,6 @@ alter table app.users
 
 alter table app.links
     alter column type type text;
+
+alter table app.profiles
+    drop constraint if exists profiles_custom_domain_key;
