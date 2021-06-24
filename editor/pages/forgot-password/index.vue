@@ -59,7 +59,6 @@ import {StatusCodes} from "http-status-codes";
 
 export default Vue.extend({
   name: 'ForgotPassword',
-  middleware: 'unauthenticated',
 
   head: {
     title: 'Forgot your password? - ' + process.env.APP_NAME,

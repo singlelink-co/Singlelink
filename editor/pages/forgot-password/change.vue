@@ -66,7 +66,16 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: 'ChangeForgotPassword',
-  middleware: 'unauthenticated',
+
+  data: () => {
+    return {
+      password: '',
+      passwordConfirmation: '',
+      error: '',
+      message: '',
+    };
+  },
+
   head: {
     title: 'Password reset - ' + process.env.APP_NAME,
     meta: [
@@ -96,14 +105,6 @@ export default Vue.extend({
         content: 'Reset the password of your ' + process.env.APP_NAME + ' account.'
       },
     ],
-  },
-  data: () => {
-    return {
-      password: '',
-      passwordConfirmation: '',
-      error: '',
-      message: '',
-    };
   },
 
   mounted() {
