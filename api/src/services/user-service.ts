@@ -210,9 +210,12 @@ export class UserService extends DatabaseService {
       {expiresIn: '15m'}
     );
 
-    let url = config.editorDomain + "/forgot-password/change?";
+    let urlString = config.editorDomain + "/forgot-password/change?";
     const params = new URLSearchParams({token});
-    url += params.toString();
+    urlString += params.toString();
+
+    let parsedMessage = StringUtils.parseTemplate(config.messages.passwordResetEmail.message, {url: urlString});
+    let parsedSubject = StringUtils.parseTemplate(config.messages.passwordResetEmail.subject, {url: urlString});
 
     try {
       let emailParams = {
@@ -225,12 +228,12 @@ export class UserService extends DatabaseService {
           Body: {
             Text: {
               Charset: config.messages.passwordResetEmail.messageCharset,
-              Data: StringUtils.parseTemplate(config.messages.passwordResetEmail.message, {url})
+              Data: parsedMessage
             }
           },
           Subject: {
             Charset: config.messages.passwordResetEmail.subjectCharset,
-            Data: StringUtils.parseTemplate(config.messages.passwordResetEmail.subject, {url})
+            Data: parsedSubject
           }
         },
         Source: config.aws.senderEmailAddress

@@ -10,16 +10,13 @@ export class StringUtils {
   /**
    * Replaces expressions within a string based on the valueObject.
    *
-   * Ex: parseTemplate("Hello {{world}}!", {world: "yo"}) == "Hello yo!"
+   * Ex: parseTemplate("Hello ${world}!", {world: "yo"}) == "Hello yo!"
    *
-   * @param expression The string containing the expressions
-   * @param valueObject an object that contains the values to replace
+   * @param templateString The string containing the expressions
+   * @param templateVariables an object that contains the values to replace
    */
-  static parseTemplate(expression: string, valueObject: any) {
-    return expression.replace(/{{\s?([^{}\s]*)\s?}}/g, (substring, value, index) => {
-      value = valueObject[value];
-      return value;
-    });
+  static parseTemplate(templateString: string, templateVariables: any) {
+    return templateString.replace(/\${(.*?)}/g, (_, g) => templateVariables[g]);
   }
 
 }
