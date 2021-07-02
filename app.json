@@ -1,0 +1,15 @@
+{
+  "name": "Singlelink",
+  "description": "The open-source micro-site framework.",
+  "keywords": [
+    "microsite",
+    "micro-site",
+    "framework",
+    "wordpress",
+    "cms",
+    "embeddable"
+  ],
+  "website": "https://singlelink.co/",
+  "repository": "https://github.com/Neutron-Creative/Singlelink/tree/master",
+  "logo": "https://singlelink.co/singlelink-brandmark-shadow.png"
+}

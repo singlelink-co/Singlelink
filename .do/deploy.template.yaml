@@ -1,0 +1,29 @@
+spec:
+  name: singlelink
+  services:
+    - name: api
+      git:
+        branch: beta-v3
+        repo_clone_url: https://github.com/Neutron-Creative/Singlelink.git
+      source_dir: api
+      dockerfile_path: "api/api.Dockerfile"
+      routes:
+        - path: "/api"
+
+    - name: editor
+      git:
+        branch: beta-v3
+        repo_clone_url: https://github.com/Neutron-Creative/Singlelink.git
+      source_dir: editor
+      dockerfile_path: "editor/editor.Dockerfile"
+      routes:
+        - path: "/editor"
+
+    - name: renderer
+      git:
+        branch: beta-v3
+        repo_clone_url: https://github.com/Neutron-Creative/Singlelink.git
+      source_dir: renderer
+      dockerfile_path: "renderer/renderer.Dockerfile"
+      routes:
+        - path: "/renderer"
