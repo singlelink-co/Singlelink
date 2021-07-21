@@ -5,12 +5,13 @@ import {config} from "../config/config";
 /**
  * The DatabaseManager manages a connection to the PostgreSQL database.
  */
+console.log(config.database);
 export class DatabaseManager {
   pool = new Pool({
     connectionString: config.database,
-    ssl: {
+    ssl: config.database.indexOf('@localhost') === -1 ? {
       rejectUnauthorized: false
-    }
+    } : false
   });
 
   /**

@@ -41,7 +41,7 @@ prompt.get(schema, function(err, result) {
         return;
     }
     log('');
-    log('About to write to ./server/src/config.json:');
+    log('About to write to ./api/src/config.json:');
     log('');
     log(result);
     log('');
@@ -98,7 +98,7 @@ prompt.get(schema, function(err, result) {
         result['clientDomain'] = result.host + ':80';
 
         try {
-            fs.writeFileSync('./server/src/config.json', JSON.stringify(result))
+            fs.writeFileSync('./api/src/config.json', JSON.stringify(result))
         } catch(err) {
             log(err);
             log('');

@@ -212,16 +212,16 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-    plugins: [
-      new MonacoWebpackPlugin({
-        features: [
-          '!goToDefinitionCommands',
-          '!goToDefinitionMouse',
-          '!referenceSearch'
-        ],
-        languages: ['css', 'html'],
-      })
-    ],
+    // plugins: [
+    //   new MonacoWebpackPlugin({
+    //     features: [
+    //       '!goToDefinitionCommands',
+    //       '!goToDefinitionMouse',
+    //       '!referenceSearch'
+    //     ],
+    //     languages: ['css', 'html'],
+    //   })
+    // ],
     extend(config, ctx) {
       // const vue = ctx.loaders.vue;
 
