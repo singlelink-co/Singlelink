@@ -8,9 +8,9 @@ import {config} from "../config/config";
 export class DatabaseManager {
   pool = new Pool({
     connectionString: config.database,
-    ssl: {
+    ssl: config.database.indexOf('@localhost') === -1 ? {
       rejectUnauthorized: false
-    }
+    } : false
   });
 
   /**

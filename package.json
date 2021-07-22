@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "build": "cd editor;nuxt-ts build;cd ../server;tsc && npm run copy;",
+    "build": "cd editor && npm run build && cd ../api && npm run build && cd ../renderer && npm run build",
     "setup": "node setup.js"
   },
   "dependencies": {

@@ -11,6 +11,8 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import Mixpanel from "mixpanel";
 import {config} from "../config/config";
+import Scraper from 'linktree-scraper';
+
 import dns from "dns";
 
 interface ProfileHandleRequest extends RequestGenericInterface {
@@ -52,6 +54,19 @@ interface UpdateProfileRequest extends AuthenticatedRequest {
     customHtml: string,
     customDomain: string
   } & AuthenticatedRequest["Body"]
+}
+
+interface LinktreeRequest extends AuthenticatedRequest {
+  Body: {
+    handle: string,
+  } & AuthenticatedRequest["Body"]
+}
+
+interface ILinktreeLink {
+  id: string,
+  title: string,
+  url: string,
+  position: number
 }
 
 interface SetPrivacyModeRequest extends AuthenticatedRequest {
@@ -120,6 +135,7 @@ export class ProfileController extends Controller {
     this.fastify.post<CreateProfileRequest>('/profile/create', createProfileRequestOpts, this.CreateProfile.bind(this));
     this.fastify.post<UpdateProfileRequest>('/profile/update', Auth.ValidateWithData, this.UpdateProfile.bind(this));
     this.fastify.post<AuthenticatedRequest>('/profile/delete', Auth.ValidateWithData, this.DeleteProfile.bind(this));
+    this.fastify.post<LinktreeRequest>('/profile/linktree_import', Auth.ValidateWithData, this.LinktreeImport.bind(this));
 
     this.fastify.post<AuthenticatedRequest>('/profile/active-profile', Auth.ValidateWithData, this.GetActiveProfile.bind(this));
     this.fastify.post<ActivateProfileThemeRequest>('/profile/activate-theme', Auth.ValidateWithData, this.ActivateProfileTheme.bind(this));
@@ -451,6 +467,39 @@ export class ProfileController extends Controller {
 
 
       return newProfile;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+  async LinktreeImport(request: FastifyRequest<LinktreeRequest>, reply: FastifyReply) {
+    try {
+      const profile = await Scraper(request.body.handle);
+      const links = await this.linkService.listLinks(request.body.authProfile.id);
+      const deleteLink = async (link: Link) => {
+        if (!await Auth.checkLinkOwnership(this.linkService, link.id, request.body.authProfile)) {
+          return Promise.resolve();
+        }
+        return this.linkService.deleteLink(link.id);
+      };
+      await Promise.all(links.map(deleteLink));
+      const createLink = (link: ILinktreeLink) => {
+        return this.linkService.createLink({
+          id: link.id,
+          profileId: request.body.authProfile.id,
+          type: 'link',
+          url: link.url,
+          sortOrder: link.position,
+          label: link.title,
+        });
+      };
+      await Promise.all(profile.props.pageProps.links.map(createLink));
+      return ReplyUtils.success('New links added');
     } catch (e) {
       if (e instanceof HttpError) {
         reply.code(e.statusCode);
