@@ -242,6 +242,48 @@
       </div>
     </div>
 
+    <!-- Import from Linktree -->
+    <div class="flex flex-col lg:flex-col p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
+      <div class="flex flex-col w-full">
+        <h2 class="text-black font-bold text-lg w-full">
+          Import from Linktree
+        </h2>
+        <p class="text-black opacity-70 font-semibold">
+          Replace all of your profile links with links from your linktree profile.
+        </p>
+      </div>
+      <div class="flex flex-col w-full">
+        <div class="flex flex-row rounded-2xl border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
+          <span
+            class="flex p-2 bg-gray-100 border text-gray-900 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
+          >https://linktr.ee/</span>
+          <input
+            id="linktreeUrl"
+            class="p-2 flex-grow"
+            type="text"
+            placeholder="e.g. janedoe"
+            autocomplete="off"
+          >
+        </div>
+        <button
+          v-if="alerts.linktreeImported === null"
+          type="button"
+          class="mt-4 inline-flex p-3 text-white text-center bg-gdp hover:bg-indigo-500 rounded-2xl font-bold w-auto max-w-xs justify-center align-center"
+          @click="importLinktree"
+        >
+          Import
+        </button>
+        <div
+          v-if="alerts.linktreeImported !== null && alerts.linktreeImported"
+          class="flex flex-col lg:flex-row justify-center items-center p-3 rounded-2xl bg-green-300 shadow max-w-xs mt-4"
+        >
+          <p class="text-black opacity-70 font-semibold">
+            Successfully imported Linktree links
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- Delete site -->
     <div class="flex flex-col lg:flex-row p-6 bg-white shadow rounded-2xl justify-center items-center w-full mb-8">
       <div class="flex flex-col mr-auto w-full lg:w-1/2">
@@ -412,7 +454,8 @@ export default Vue.extend({
       app_name: process.env.APP_NAME,
       icon_url: process.env.ICON_URL,
       alerts: {
-        googleLinked: null as boolean | null
+        googleLinked: null as boolean | null,
+        linktreeImported: null as boolean | null,
       }
     };
   },
@@ -491,6 +534,17 @@ export default Vue.extend({
         console.log('Error getting user data');
         console.log(err);
       }
+    },
+
+    async importLinktree() {
+      const linktreeInput: HTMLInputElement = (document.getElementById('linktreeUrl')) as HTMLInputElement;
+      const linktreeHandle: string = linktreeInput.value;
+      const result = await this.$axios.$post('/profile/linktree_import', {
+        token: this.$store.getters['auth/getToken'],
+        handle: linktreeHandle
+      });
+      linktreeInput.value = '';
+      this.$data.alerts.linktreeImported = true;
     },
 
     async saveChanges() {
