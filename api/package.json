@@ -73,6 +73,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/minio": "^7.0.7",
     "@types/mixpanel": "^2.14.2",
+    "@types/node": "^14.14.8",
     "@types/node-cron": "^2.0.3",
     "@types/object-hash": "^2.1.0",
     "@types/pg": "^7.14.7",
