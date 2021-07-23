@@ -55,6 +55,7 @@
     "googleapis": "^71.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
+    "linktree-scraper": "^0.2.2",
     "minio": "^7.0.18",
     "mixpanel": "^0.13.0",
     "nc-deeplink": "^1.0.6",

@@ -62,7 +62,7 @@ git clone https://github.com/Neutron-Creative/Singlelink.git
 2. Install the dependencies with NPM
 
 ```bash
-cd client;npm install;cd ../server;npm install;cd ../;
+cd api;npm install;cd ../editor;npm install;cd ../renderer;npm install;cd ../
 ```
 
 3. Run the setup script
@@ -73,8 +73,28 @@ npm run setup
 
 4. Build & launch <a target="_blank" href="https://singlelink.co">Singlelink</a>
 
+Build all the modules
+
 ```bash
-npm run build;npm run start;
+npm run build
+```
+
+Start the API in one terminal:
+
+```bash
+cd api; npm run start;
+```
+
+Start the editor in another terminal:
+
+```bash
+cd editor; PORT=8080 API_URL=http://localhost:5566 npm run start
+```
+
+Start the renderer in another terminal:
+
+```bash
+cd renderer; PORT=8081 API_URL=http://localhost:5566 npm run start
 ```
 
 ### Development setup
@@ -92,7 +112,7 @@ git clone https://github.com/Neutron-Creative/Singlelink.git
 2. Install the dependencies with NPM
 
 ```bash
-cd client;npm install;cd ../server;npm install;cd ../;
+cd api;npm install;cd ../editor;npm install;cd ../renderer;npm install;cd ../
 ```
 
 3. Run the setup script
@@ -103,8 +123,22 @@ npm run setup
 
 4. Launch <a target="_blank" href="https://singlelink.co">Singlelink</a> with hot-reloading enabled
 
+Start the API in one terminal:
+
 ```bash
-npm run dev
+cd api; npm run dev;
+```
+
+Start the editor in another terminal:
+
+```bash
+cd editor; PORT=8080 API_URL=http://localhost:5566 npm run dev
+```
+
+Start the renderer in another terminal:
+
+```bash
+cd renderer; PORT=8081 API_URL=http://localhost:5566 npm run dev
 ```
 
 ## Screenshots
