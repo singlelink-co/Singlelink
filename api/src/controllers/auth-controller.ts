@@ -326,7 +326,9 @@ export class AuthController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('user created with google', {
               distinct_id: user.id,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
               profile: profile.id,
             });
 
@@ -398,7 +400,9 @@ export class AuthController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('user changed google account', {
               distinct_id: userId,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
             });
 
           reply.type("text/html").code(StatusCodes.OK);
@@ -482,7 +486,9 @@ export class AuthController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user logged in with google', {
           distinct_id: loginResultData.user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: loginResultData.activeProfile?.id
         });
 
@@ -521,7 +527,9 @@ export class AuthController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user logged in', {
           distinct_id: loginResultData.user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: loginResultData.activeProfile?.id
         });
 
@@ -580,7 +588,9 @@ export class AuthController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user created', {
           distinct_id: user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: profile.id,
         });
 

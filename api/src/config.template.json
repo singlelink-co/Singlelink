@@ -33,6 +33,7 @@
     "clientSecret": "",
     "redirectUrl": ""
   },
+  "allowXForwardHeader": false,
   "messages": {
     "passwordResetEmail": {
       "subjectCharset": "UTF-8",

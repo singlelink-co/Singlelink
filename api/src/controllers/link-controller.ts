@@ -85,7 +85,9 @@ export class LinkController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('profile link created', {
           distinct_id: profile.userId,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
@@ -127,7 +129,9 @@ export class LinkController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('profile link updated', {
           distinct_id: request.body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
@@ -165,7 +169,9 @@ export class LinkController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('profile link deleted', {
           distinct_id: body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: body.authProfile.id,
           link: body.id
         });
@@ -203,7 +209,9 @@ export class LinkController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('profile links reordered', {
           distinct_id: body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: body.authProfile.id,
         });
 

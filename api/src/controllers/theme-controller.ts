@@ -130,7 +130,9 @@ export class ThemeController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('new theme created', {
           distinct_id: request.body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           theme: theme.id,
           themeObject: theme
         });
@@ -165,7 +167,9 @@ export class ThemeController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('theme updated', {
           distinct_id: request.body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           theme: theme.id,
           themeObject: theme
         });
@@ -205,7 +209,9 @@ export class ThemeController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('theme deleted', {
           distinct_id: request.body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           theme: deletedTheme.id,
           themeObject: deletedTheme
         });

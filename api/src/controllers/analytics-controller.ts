@@ -121,7 +121,9 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('clicked profile link', {
               distinct_id: profile.userId,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
               profile: profileId,
               link: link.id,
               url: link.url
@@ -132,7 +134,9 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('clicked profile link', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
               profile: profileId,
               link: link.id,
               url: link.url
@@ -190,7 +194,9 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('viewed profile', {
               distinct_id: profile.userId,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
               profile: profile.id,
               handle: profile.handle
             });
@@ -200,7 +206,9 @@ export class AnalyticsController extends Controller {
           if (this.mixpanel)
             this.mixpanel.track('viewed profile', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: request.ip,
+              $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
               profile: profile.id,
               handle: profile.handle
             });

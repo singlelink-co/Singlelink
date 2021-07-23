@@ -128,7 +128,9 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user requested password reset', {
           distinct_id: user.id,
-          $ip: request.ip
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress)
         });
 
       return ReplyUtils.success("Successfully sent password reset email.");
@@ -215,7 +217,9 @@ export class UserController extends Controller {
 
       // this.mixpanel.track('user updated', {
       //   distinct_id: request.body.id,
-      //   $ip: request.ip,
+      //   $ip: (config.allowXForwardHeader ?
+      //       request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+      //       request.connection.remoteAddress),
       // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
@@ -244,7 +248,9 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user deleted', {
           distinct_id: user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
         });
 
       return deletedUser;
@@ -272,7 +278,9 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user requested GDPR data', {
           distinct_id: request.body.authUser.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
         });
 
 
@@ -322,7 +330,9 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('user set active profile', {
           distinct_id: user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           profile: newProfileId
         });
 
@@ -350,7 +360,9 @@ export class UserController extends Controller {
       if (this.mixpanel)
         this.mixpanel.track('toggle email notifications', {
           distinct_id: user.id,
-          $ip: request.ip,
+          $ip: (config.allowXForwardHeader ?
+            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+            request.connection.remoteAddress),
           emailNotifications: request.body.emailNotifications
         });
 
