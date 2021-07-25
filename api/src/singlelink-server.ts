@@ -13,6 +13,7 @@ export class SingleLinkServer {
   fastify = fastifyInit({
     logger: true,
     ignoreTrailingSlash: true,
+    trustProxy: config.allowXForwardHeader
   });
 
   /**
