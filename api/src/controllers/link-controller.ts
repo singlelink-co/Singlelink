@@ -84,11 +84,11 @@ export class LinkController extends Controller {
       let newLink = await this.linkService.createLink(link);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile link created', {
           distinct_id: profile.userId,
-          $ip: ips,
+          $ip: ip,
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
@@ -129,11 +129,11 @@ export class LinkController extends Controller {
       let newLink = await this.linkService.updateLink(link);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile link updated', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
@@ -170,11 +170,11 @@ export class LinkController extends Controller {
       let link = await this.linkService.deleteLink(body.id);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile link deleted', {
           distinct_id: body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           profile: body.authProfile.id,
           link: body.id
         });
@@ -211,11 +211,11 @@ export class LinkController extends Controller {
       let links = await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile links reordered', {
           distinct_id: body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           profile: body.authProfile.id,
         });
       }

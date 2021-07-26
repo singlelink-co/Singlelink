@@ -43,6 +43,10 @@
                    style="color:#6c6c6c;background:rgba(108,108,108,.1);" @click="toggleProfileSelect">switch profiles
               </div>
 
+              <div v-if="error" class="error">
+                {{ error }}
+              </div>
+
             </div>
           </div>
           <ul
@@ -592,18 +596,6 @@ html {
   border-bottom: solid 2px rgba(235, 244, 255, var(--bg-opacity));
 }
 
-.error {
-  @apply bottom-0 rounded-lg shadow border border-gray-200;
-  position: absolute;
-  width: 30em;
-  bottom: 5px;
-  left: 70px;
-  color: mintcream;
-  background-color: red;
-  padding: 7px;
-  z-index: 25;
-}
-
 .profile-list {
   max-height: 400px !important;
   overflow-y: scroll;
@@ -766,6 +758,14 @@ a.nav-link svg {
   background: -webkit-linear-gradient(180deg, rgba(254, 254, 254, 1) 0%, rgba(237, 244, 252, 1) 100%);
   background: linear-gradient(180deg, rgba(254, 254, 254, 1) 0%, rgba(237, 244, 252, 1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fefefe", endColorstr="#edf4fc", GradientType=1);
+}
+
+.error {
+  @apply bottom-0 rounded-lg shadow border border-gray-200;
+  color: mintcream;
+  background-color: #ff4a4a;
+  padding: 7px;
+  z-index: 25;
 }
 
 </style>

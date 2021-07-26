@@ -12,6 +12,7 @@ import {LinkService} from "../services/link-service";
 import Mixpanel from "mixpanel";
 import {config} from "../config/config";
 import {Constants} from "../config/constants";
+import {IpUtils} from "../utils/ip-utils";
 
 interface LinkAnalyticsRequest extends RequestGenericInterface {
   Params: {
@@ -119,13 +120,11 @@ export class AnalyticsController extends Controller {
           await this.analyticsService.createVisit(id, "link");
 
           if (this.mixpanel) {
-            let ips = config.allowXForwardHeader ?
-              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-              request.connection.remoteAddress;
+            let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
             this.mixpanel.track('clicked profile link', {
               distinct_id: profile.userId,
-              $ip: ips,
+              $ip: ip,
               profile: profileId,
               link: link.id,
               url: link.url
@@ -135,13 +134,11 @@ export class AnalyticsController extends Controller {
           await this.analyticsService.createAnonymousVisit("link");
 
           if (this.mixpanel) {
-            let ips = config.allowXForwardHeader ?
-              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-              request.connection.remoteAddress;
+            let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
             this.mixpanel.track('clicked profile link', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: ips,
+              $ip: ip,
               profile: profileId,
               link: link.id,
               url: link.url
@@ -198,13 +195,11 @@ export class AnalyticsController extends Controller {
           await this.analyticsService.createVisit(id, "page");
 
           if (this.mixpanel) {
-            let ips = config.allowXForwardHeader ?
-              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-              request.connection.remoteAddress;
+            let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
             this.mixpanel.track('viewed profile', {
               distinct_id: profile.userId,
-              $ip: ips,
+              $ip: ip,
               profile: profile.id,
               handle: profile.handle
             });
@@ -213,13 +208,11 @@ export class AnalyticsController extends Controller {
           await this.analyticsService.createAnonymousVisit("page");
 
           if (this.mixpanel) {
-            let ips = config.allowXForwardHeader ?
-              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-              request.connection.remoteAddress;
+            let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
             this.mixpanel.track('viewed profile', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: ips,
+              $ip: ip,
               profile: profile.id,
               handle: profile.handle
             });

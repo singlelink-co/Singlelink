@@ -36,6 +36,7 @@ export class AdminController extends Controller {
     this.fastify.post<GetGroupRequest>('/admin/perm-group', Auth.ValidateWithData, this.GetPermGroup.bind(this));
 
     this.fastify.post<SetBannedRequest>('/admin/set-banned', Auth.ValidateAdminWithData, this.SetBanned.bind(this));
+    this.fastify.post<AdminRequest>('/admin/bans', Auth.ValidateAdminWithData, this.ListBans.bind(this));
   }
 
   /**
@@ -51,14 +52,19 @@ export class AdminController extends Controller {
 
   async SetBanned(request: FastifyRequest<SetBannedRequest>, reply: FastifyReply) {
     try {
+      if (request.body.authUser.id === request.body.userId) {
+        reply.code(StatusCodes.FORBIDDEN);
+        return ReplyUtils.error("You cannot ban yourself!");
+      }
+
+      if ((await this.adminService.getPermGroup(request.body.userId)).groupName === "admin") {
+        reply.code(StatusCodes.FORBIDDEN);
+        return ReplyUtils.error("You cannot ban users with admin privileges!");
+      }
+
       if (!request.body.userId) {
         reply.code(StatusCodes.BAD_REQUEST);
         return ReplyUtils.error("The 'userId' field was not set.");
-      }
-
-      if (!request.body.banned) {
-        reply.code(StatusCodes.BAD_REQUEST);
-        return ReplyUtils.error("The 'banned' field was not set.");
       }
 
       return this.adminService.setBanned(request.body.userId, request.body.banned, request.body.reason);
@@ -72,5 +78,14 @@ export class AdminController extends Controller {
     }
   }
 
-
+  /**
+   * List all the banned users.
+   *
+   * @param request
+   * @param reply
+   * @constructor
+   */
+  async ListBans(request: FastifyRequest<AdminRequest>, reply: FastifyReply) {
+    return this.adminService.listBanned();
+  }
 }

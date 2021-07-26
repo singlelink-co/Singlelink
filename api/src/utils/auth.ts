@@ -12,6 +12,7 @@ import {ReplyUtils} from "./reply-utils";
 import {StatusCodes} from "http-status-codes";
 import {DbTypeConverter} from "./db-type-converter";
 import {DatabaseService} from "../services/database-service";
+import {SecurityUtils} from "./security-utils";
 
 /**
  * A Fastify request that has been properly authenticated via a JWT token.
@@ -213,6 +214,10 @@ export class Auth {
 
           let user = accountQuery.rows[0];
 
+          if (await SecurityUtils.isBanned(user.id)) {
+            return reply.status(StatusCodes.FORBIDDEN).send(ReplyUtils.error("This user is banned. Please contact support if you believe this is in error or need assistance."));
+          }
+
           let authRequest = request;
           authRequest.body.authUser = DbTypeConverter.toUser(user);
 
@@ -327,6 +332,10 @@ export class Auth {
           }
 
           let user = accountQuery.rows[0];
+
+          if (await SecurityUtils.isBanned(user.id)) {
+            return reply.status(StatusCodes.FORBIDDEN).send(ReplyUtils.error("This user is banned. Please contact support if you believe this is in error or need assistance."));
+          }
 
           let authRequest = request;
           authRequest.body.authUser = DbTypeConverter.toSensitiveUser(user);

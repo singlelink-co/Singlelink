@@ -367,11 +367,11 @@ export class ProfileController extends Controller {
       let newProfile = await this.profileService.createProfile(body.authUser.id, body.handle, body.imageUrl, body.headline, body.subtitle);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('new profile created', {
           distinct_id: newProfile.userId,
-          $ip: ips,
+          $ip: ip,
           profile: newProfile.id,
           profileObject: newProfile
         });
@@ -452,11 +452,11 @@ export class ProfileController extends Controller {
       );
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile updated', {
           distinct_id: newProfile.userId,
-          $ip: ips,
+          $ip: ip,
           profile: newProfile.id,
           profileObject: newProfile
         });
@@ -464,7 +464,7 @@ export class ProfileController extends Controller {
         if (prevWatermarkStatus !== newProfile.showWatermark) {
           this.mixpanel.track('watermark status toggled', {
             distinct_id: newProfile.userId,
-            $ip: ips,
+            $ip: ip,
             profile: newProfile.id,
             showWatermark: newProfile.showWatermark
           });
@@ -532,11 +532,11 @@ export class ProfileController extends Controller {
       let deletedProfile = await this.profileService.deleteProfile(request.body.authUser.id, request.body.authProfile.id);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('profile deleted', {
           distinct_id: deletedProfile.userId,
-          $ip: ips,
+          $ip: ip,
           profile: deletedProfile.id,
           profileObject: deletedProfile
         });
@@ -601,11 +601,11 @@ export class ProfileController extends Controller {
       let theme = await this.profileService.setActiveTheme(body.authProfile.id, body.id);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('set profile active theme', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           profile: request.body.authProfile.id,
           theme: theme
         });
@@ -642,13 +642,11 @@ export class ProfileController extends Controller {
         let profile = await this.profileService.setPrivacyMode(request.body.authProfile.id, request.body.privacyMode);
 
         if (this.mixpanel) {
-          let ips = config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress;
+          let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
           this.mixpanel.track('toggle privacy mode', {
             distinct_id: profile.userId,
-            $ip: ips,
+            $ip: ip,
             profile: profile.id,
             privacyMode: request.body.privacyMode
           });
@@ -687,13 +685,11 @@ export class ProfileController extends Controller {
         let profile = await this.profileService.setUnlisted(request.body.authProfile.id, request.body.unlisted);
 
         if (this.mixpanel) {
-          let ips = config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress;
+          let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
           this.mixpanel.track('toggle unlisted mode', {
             distinct_id: profile.userId,
-            $ip: ips,
+            $ip: ip,
             profile: profile.id,
             unlisted: request.body.unlisted
           });

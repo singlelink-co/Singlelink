@@ -11,6 +11,7 @@ import {Auth, AuthenticatedRequest} from "../utils/auth";
 import Mixpanel from "mixpanel";
 import {Readable} from "stream";
 import {IpUtils} from "../utils/ip-utils";
+import {SecurityUtils} from "../utils/security-utils";
 
 interface UserRequestResetPasswordRequest extends RequestGenericInterface {
   Body: {
@@ -127,11 +128,11 @@ export class UserController extends Controller {
       let user = await this.userService.sendPasswordResetEmail(body.email);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('user requested password reset', {
           distinct_id: user.id,
-          $ip: ips
+          $ip: ip
         });
 
       }
@@ -249,11 +250,11 @@ export class UserController extends Controller {
       let deletedUser = await this.userService.deleteUser(user.id);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('user deleted', {
           distinct_id: user.id,
-          $ip: ips,
+          $ip: ip,
         });
       }
 
@@ -281,11 +282,11 @@ export class UserController extends Controller {
       let data = await this.userService.generateDataPackage(user);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('user requested GDPR data', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
         });
 
       }
@@ -334,11 +335,11 @@ export class UserController extends Controller {
       }
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('user set active profile', {
           distinct_id: user.id,
-          $ip: ips,
+          $ip: ip,
           profile: newProfileId
         });
 
@@ -366,11 +367,11 @@ export class UserController extends Controller {
       let user = await this.userService.setEmailNotifications(request.body.authUser.id, request.body.emailNotifications);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('toggle email notifications', {
           distinct_id: user.id,
-          $ip: ips,
+          $ip: ip,
           emailNotifications: request.body.emailNotifications
         });
       }

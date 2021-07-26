@@ -15,6 +15,7 @@ import {SecurityUtils} from "./utils/security-utils";
 import {JobSystem} from "./jobs/job-system";
 import {DbLocks} from "./utils/db-locks";
 import {ScreenshotUtils} from "./utils/screenshot-utils";
+import {LogUtils} from "./utils/log-utils";
 
 console.log("Initializing Singlelink");
 
@@ -35,6 +36,9 @@ async function start() {
   Auth.initialize(database.pool);
   SecurityUtils.initialize(database.pool);
   CustomDomainHandler.initialize(database.pool);
+  LogUtils.initialize(database.pool);
+
+  // Initialize screenshot API
   await ScreenshotUtils.initialize();
 
   // Initialize Job System

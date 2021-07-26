@@ -129,11 +129,11 @@ export class ThemeController extends Controller {
       let theme = await this.themeService.createTheme(body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('new theme created', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           theme: theme.id,
           themeObject: theme
         });
@@ -167,11 +167,11 @@ export class ThemeController extends Controller {
       let theme = await this.themeService.updateUserTheme(body.id, body.authUser.id, body.label, body.colors, body.customCss, body.customHtml);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('theme updated', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           theme: theme.id,
           themeObject: theme
         });
@@ -210,11 +210,11 @@ export class ThemeController extends Controller {
       let deletedTheme = await this.themeService.deleteUserTheme(id, user.id);
 
       if (this.mixpanel) {
-        let ips = IpUtils.GrabIps(request);
+        let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
         this.mixpanel.track('theme deleted', {
           distinct_id: request.body.authUser.id,
-          $ip: ips,
+          $ip: ip,
           theme: deletedTheme.id,
           themeObject: deletedTheme
         });

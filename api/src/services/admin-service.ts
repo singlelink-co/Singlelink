@@ -41,9 +41,9 @@ export class AdminService extends DatabaseService {
    * @param banned
    * @param reason
    */
-  async setBanned(userId: string, banned: boolean, reason?: string): Promise<DbBanned | null> {
+  async setBanned(userId: string, banned: boolean, reason?: string): Promise<DbBanned | { user_id: string; banned: boolean, message: string }> {
     if (banned) {
-      let queryResult = await this.pool.query<DbBanned>("insert into security.banned(user_id, reason) values ($1, $2) on conflict(user_id) do update set reason=$2",
+      let queryResult = await this.pool.query<DbBanned>("insert into security.banned(user_id, reason) values ($1, $2) on conflict(user_id) do update set reason=$2 returning *",
         [
           userId,
           reason ?? null
@@ -56,7 +56,7 @@ export class AdminService extends DatabaseService {
     } else {
       await this.pool.query("delete from security.banned where user_id=$1", [userId]);
 
-      return null;
+      return {user_id: userId, banned: false, message: "User unbanned."};
     }
   }
 
@@ -65,7 +65,6 @@ export class AdminService extends DatabaseService {
    */
   async listBanned(): Promise<DbBanned[]> {
     let queryResult = await this.pool.query<DbBanned>("select * from security.banned");
-
     return queryResult.rows;
   }
 }

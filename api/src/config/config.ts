@@ -10,6 +10,23 @@ if (!fs.existsSync(__dirname + "/../config.json")) {
 
 export let config = require("../config.json");
 
+// Set defaults if missing
+if (config.host === undefined) {
+  config.host = "0.0.0.0";
+}
+if (config.port === undefined) {
+  config.port = "80";
+}
+
+if (config.validateEmails === undefined) {
+  config.validateEmails = true;
+}
+
+if (config.settings?.marketplaceDeleteAddonThreshold === undefined) {
+  config.settings.marketplaceDeleteAddonThreshold = 10;
+}
+
+
 /**
  * The name of your database.
  */
@@ -146,8 +163,6 @@ if (process.env.MIXPANEL_TOKEN) {
 
 if (process.env.DELETE_ADDON_INSTALLS_THRESHOLD) {
   config.settings.marketplaceDeleteAddonThreshold = process.env.DELETE_ADDON_INSTALLS_THRESHOLD;
-} else if (!config.settings?.marketplaceDeleteAddonThreshold) {
-  config.settings.marketplaceDeleteAddonThreshold = 10;
 }
 
 if (process.env.GOOGLE_CLIENT_ID) {
@@ -164,4 +179,8 @@ if (process.env.GOOGLE_REDIRECT_DOMAIN) {
 
 if (process.env.ALLOW_X_FORWARD_HEADER) {
   config.allowXForwardHeader = process.env.ALLOW_X_FORWARD_HEADER == "true";
+}
+
+if (process.env.VALIDATE_EMAILS) {
+  config.validateEmails = process.env.VALIDATE_EMAILS == "true";
 }

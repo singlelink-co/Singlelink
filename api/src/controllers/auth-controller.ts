@@ -325,15 +325,15 @@ export class AuthController extends Controller {
           let profile = await this.profileService.createProfile(user.id);
           await this.userService.setActiveProfile(user.id, profile.id);
 
-          let ips = IpUtils.GrabIps(request);
+          let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
-          if (ips)
-            await LogUtils.logIpEvent(user.id, ips, 'googleUserCreated');
+          if (ip)
+            await LogUtils.logIpEvent(user.id, ip, 'googleUserCreated');
 
           if (this.mixpanel) {
             this.mixpanel.track('user created with google', {
               distinct_id: user.id,
-              $ip: ips,
+              $ip: ip,
               profile: profile.id,
             });
           }
@@ -401,19 +401,22 @@ export class AuthController extends Controller {
 
           let userId = decoded.userId;
 
+          if (await SecurityUtils.isBanned(userId)) {
+            return reply.status(StatusCodes.FORBIDDEN).send(ReplyUtils.error("This user is banned. Please contact support if you believe this is in error or need assistance."));
+          }
+
           let result = await this.authService.setGoogleId(userId, googleId);
 
-          let ips = IpUtils.GrabIps(request);
+          let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
-          if (ips)
-            await LogUtils.logIpEvent(userId, ips, 'googleUserAssigned');
+          if (ip)
+            await LogUtils.logIpEvent(userId, ip, 'googleUserAssigned');
 
           if (this.mixpanel) {
             this.mixpanel.track('user changed google account', {
               distinct_id: userId,
-              $ip: ips,
+              $ip: ip,
             });
-
           }
 
           reply.type("text/html").code(StatusCodes.OK);
@@ -490,19 +493,23 @@ export class AuthController extends Controller {
 
       await SecurityUtils.expireToken(decoded.userId, requestToken);
 
+      if (await SecurityUtils.isBanned(decoded.userId)) {
+        return reply.status(StatusCodes.FORBIDDEN).send(ReplyUtils.error("This user is banned. Please contact support if you believe this is in error or need assistance."));
+      }
+
       // Make sure the user has google sign in enabled for security purposes
       // then log them in normally
       let loginResultData = await this.userService.loginWithGoogle(decoded.userId, decoded.serviceUserId);
 
-      let ips = IpUtils.GrabIps(request);
+      let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
-      if (ips)
-        await LogUtils.logIpEvent(loginResultData.user.id, ips, 'googleUserLogin');
+      if (ip)
+        await LogUtils.logIpEvent(loginResultData.user.id, ip, 'googleUserLogin');
 
       if (this.mixpanel) {
         this.mixpanel.track('user logged in with google', {
           distinct_id: loginResultData.user.id,
-          $ip: ips,
+          $ip: ip,
           profile: loginResultData.activeProfile?.id
         });
 
@@ -540,15 +547,19 @@ export class AuthController extends Controller {
 
       let loginResultData = await this.userService.loginWithEmail(body.email, body.password);
 
-      let ips = IpUtils.GrabIps(request);
+      if (await SecurityUtils.isBanned(loginResultData.user.id)) {
+        return reply.status(StatusCodes.FORBIDDEN).send(ReplyUtils.error("This user is banned. Please contact support if you believe this is in error or need assistance."));
+      }
 
-      if (ips)
-        await LogUtils.logIpEvent(loginResultData.user.id, ips, 'emailUserLogin');
+      let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
+
+      if (ip)
+        await LogUtils.logIpEvent(loginResultData.user.id, ip, 'emailUserLogin');
 
       if (this.mixpanel) {
         this.mixpanel.track('user logged in', {
           distinct_id: loginResultData.user.id,
-          $ip: ips,
+          $ip: ip,
           profile: loginResultData.activeProfile?.id
         });
       }
@@ -605,15 +616,15 @@ export class AuthController extends Controller {
 
       let token = jwt.sign({userId: user.id, type: <TokenType>"auth"}, config.secret, {expiresIn: '168h'});
 
-      let ips = IpUtils.GrabIps(request);
+      let ip = IpUtils.GetFirstIp(IpUtils.GrabIps(request));
 
-      if (ips)
-        await LogUtils.logIpEvent(user.id, ips, 'emailUserCreated');
+      if (ip)
+        await LogUtils.logIpEvent(user.id, ip, 'emailUserCreated');
 
       if (this.mixpanel)
         this.mixpanel.track('user created', {
           distinct_id: user.id,
-          $ip: ips,
+          $ip: ip,
           profile: profile.id,
         });
 
