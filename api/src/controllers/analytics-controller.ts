@@ -118,29 +118,35 @@ export class AnalyticsController extends Controller {
         if (!profile.metadata?.privacyMode) {
           await this.analyticsService.createVisit(id, "link");
 
-          if (this.mixpanel)
+          if (this.mixpanel) {
+            let ips = config.allowXForwardHeader ?
+              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+              request.connection.remoteAddress;
+
             this.mixpanel.track('clicked profile link', {
               distinct_id: profile.userId,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
               profile: profileId,
               link: link.id,
               url: link.url
             });
+          }
         } else {
           await this.analyticsService.createAnonymousVisit("link");
 
-          if (this.mixpanel)
+          if (this.mixpanel) {
+            let ips = config.allowXForwardHeader ?
+              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+              request.connection.remoteAddress;
+
             this.mixpanel.track('clicked profile link', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
               profile: profileId,
               link: link.id,
               url: link.url
             });
+          }
         }
       }
 
@@ -191,27 +197,33 @@ export class AnalyticsController extends Controller {
         if (!profile.metadata?.privacyMode) {
           await this.analyticsService.createVisit(id, "page");
 
-          if (this.mixpanel)
+          if (this.mixpanel) {
+            let ips = config.allowXForwardHeader ?
+              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+              request.connection.remoteAddress;
+
             this.mixpanel.track('viewed profile', {
               distinct_id: profile.userId,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
               profile: profile.id,
               handle: profile.handle
             });
+          }
         } else {
           await this.analyticsService.createAnonymousVisit("page");
 
-          if (this.mixpanel)
+          if (this.mixpanel) {
+            let ips = config.allowXForwardHeader ?
+              request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
+              request.connection.remoteAddress;
+
             this.mixpanel.track('viewed profile', {
               distinct_id: Constants.ANONYMOUS_USER_ID,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
               profile: profile.id,
               handle: profile.handle
             });
+          }
         }
       }
 

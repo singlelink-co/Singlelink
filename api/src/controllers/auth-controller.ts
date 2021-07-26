@@ -13,6 +13,8 @@ import {AccessRequestToken, UserService} from "../services/user-service";
 import {ProfileService} from "../services/profile-service";
 import Mixpanel from "mixpanel";
 import {SecurityUtils} from "../utils/security-utils";
+import {LogUtils} from "../utils/log-utils";
+import {IpUtils} from "../utils/ip-utils";
 
 interface EmailLoginUserRequest extends RequestGenericInterface {
   Body: {
@@ -323,14 +325,18 @@ export class AuthController extends Controller {
           let profile = await this.profileService.createProfile(user.id);
           await this.userService.setActiveProfile(user.id, profile.id);
 
-          if (this.mixpanel)
+          let ips = IpUtils.GrabIps(request);
+
+          if (ips)
+            await LogUtils.logIpEvent(user.id, ips, 'googleUserCreated');
+
+          if (this.mixpanel) {
             this.mixpanel.track('user created with google', {
               distinct_id: user.id,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
               profile: profile.id,
             });
+          }
 
           if (this.mixpanel)
             this.mixpanel.people.set(user.id, {
@@ -397,13 +403,18 @@ export class AuthController extends Controller {
 
           let result = await this.authService.setGoogleId(userId, googleId);
 
-          if (this.mixpanel)
+          let ips = IpUtils.GrabIps(request);
+
+          if (ips)
+            await LogUtils.logIpEvent(userId, ips, 'googleUserAssigned');
+
+          if (this.mixpanel) {
             this.mixpanel.track('user changed google account', {
               distinct_id: userId,
-              $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+              $ip: ips,
             });
+
+          }
 
           reply.type("text/html").code(StatusCodes.OK);
 
@@ -483,14 +494,19 @@ export class AuthController extends Controller {
       // then log them in normally
       let loginResultData = await this.userService.loginWithGoogle(decoded.userId, decoded.serviceUserId);
 
-      if (this.mixpanel)
+      let ips = IpUtils.GrabIps(request);
+
+      if (ips)
+        await LogUtils.logIpEvent(loginResultData.user.id, ips, 'googleUserLogin');
+
+      if (this.mixpanel) {
         this.mixpanel.track('user logged in with google', {
           distinct_id: loginResultData.user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: loginResultData.activeProfile?.id
         });
+
+      }
 
       return loginResultData;
     } catch (e) {
@@ -524,14 +540,18 @@ export class AuthController extends Controller {
 
       let loginResultData = await this.userService.loginWithEmail(body.email, body.password);
 
-      if (this.mixpanel)
+      let ips = IpUtils.GrabIps(request);
+
+      if (ips)
+        await LogUtils.logIpEvent(loginResultData.user.id, ips, 'emailUserLogin');
+
+      if (this.mixpanel) {
         this.mixpanel.track('user logged in', {
           distinct_id: loginResultData.user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: loginResultData.activeProfile?.id
         });
+      }
 
       return loginResultData;
     } catch (e) {
@@ -585,12 +605,15 @@ export class AuthController extends Controller {
 
       let token = jwt.sign({userId: user.id, type: <TokenType>"auth"}, config.secret, {expiresIn: '168h'});
 
+      let ips = IpUtils.GrabIps(request);
+
+      if (ips)
+        await LogUtils.logIpEvent(user.id, ips, 'emailUserCreated');
+
       if (this.mixpanel)
         this.mixpanel.track('user created', {
           distinct_id: user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: profile.id,
         });
 

@@ -293,3 +293,17 @@ interface DbAddonInstall {
   addon_id: string,
   created_on: string
 }
+
+interface DbBanned {
+  id: string,
+  user_id: string,
+  reason: string
+  created_on: string
+}
+
+interface DbIpLog {
+  id: string,
+  user_id: string,
+  ip: string,
+  created_on: string
+}

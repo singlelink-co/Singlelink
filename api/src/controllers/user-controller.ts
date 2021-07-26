@@ -10,6 +10,7 @@ import {config} from "../config/config";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
 import Mixpanel from "mixpanel";
 import {Readable} from "stream";
+import {IpUtils} from "../utils/ip-utils";
 
 interface UserRequestResetPasswordRequest extends RequestGenericInterface {
   Body: {
@@ -125,13 +126,15 @@ export class UserController extends Controller {
 
       let user = await this.userService.sendPasswordResetEmail(body.email);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('user requested password reset', {
           distinct_id: user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress)
+          $ip: ips
         });
+
+      }
 
       return ReplyUtils.success("Successfully sent password reset email.");
     } catch (e) {
@@ -245,13 +248,15 @@ export class UserController extends Controller {
 
       let deletedUser = await this.userService.deleteUser(user.id);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('user deleted', {
           distinct_id: user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
         });
+      }
+
 
       return deletedUser;
     } catch (e) {
@@ -275,14 +280,15 @@ export class UserController extends Controller {
 
       let data = await this.userService.generateDataPackage(user);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('user requested GDPR data', {
           distinct_id: request.body.authUser.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
         });
 
+      }
 
       let filename = user.id + '-data-package.json';
 
@@ -327,14 +333,16 @@ export class UserController extends Controller {
         return;
       }
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('user set active profile', {
           distinct_id: user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: newProfileId
         });
+
+      }
 
       return this.userService.setActiveProfile(user.id, newProfileId);
     } catch (e) {
@@ -357,14 +365,15 @@ export class UserController extends Controller {
     try {
       let user = await this.userService.setEmailNotifications(request.body.authUser.id, request.body.emailNotifications);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('toggle email notifications', {
           distinct_id: user.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           emailNotifications: request.body.emailNotifications
         });
+      }
 
       return user;
     } catch (e) {

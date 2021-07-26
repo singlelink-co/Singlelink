@@ -51,6 +51,19 @@ export class SecurityUtils {
   }
 
   /**
+   * Checks if a user is banned. If it is, return a DbBanned object. Otherwise, return null.
+   * @param userId
+   */
+  static async isBanned(userId: string): Promise<DbBanned | null> {
+    let queryResult = await this.pool.query<DbBanned>("select * from security.banned where user_id=$1", [userId]);
+
+    if (queryResult.rowCount < 1)
+      return null;
+
+    return queryResult.rows[0];
+  }
+
+  /**
    * Records a nonce for tracking.
    * @param nonce
    *

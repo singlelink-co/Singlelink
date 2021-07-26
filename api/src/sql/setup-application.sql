@@ -178,6 +178,35 @@ create table if not exists security.expired_tokens
 create index if not exists security_expired_tokens_user_id on security.expired_tokens (user_id);
 create index if not exists security_expired_tokens_user_id on security.expired_tokens (token);
 
+/*
+ Creates a table for storing user state.
+ */
+create table if not exists security.banned
+(
+    id         bigserial primary key,
+    user_id    bigint unique references app.users (id) on update cascade,
+    reason     text,
+    created_on timestamp not null default current_timestamp
+);
+
+create index if not exists security_banned_user_id on security.banned (user_id);
+
+/*
+ Creates a table for recording connections and sessions.
+ */
+create table if not exists security.ip_log
+(
+    id         bigserial primary key,
+    user_id    bigint references app.users (id) on update cascade,
+    ips        inet[]    not null,
+    event      text,
+    created_on timestamp not null default current_timestamp
+);
+
+create index if not exists security_ip_log_user_id on security.ip_log (user_id);
+create index if not exists security_ip_log_ips on security.ip_log (ips);
+create index if not exists security_ip_log_time on security.ip_log (created_on);
+
 ------------
 -- Patches
 -- Over time, things need to be updated and patched. This section is all about that.

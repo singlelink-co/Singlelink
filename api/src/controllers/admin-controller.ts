@@ -1,11 +1,22 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {DatabaseManager} from "../data/database-manager";
 import {Controller} from "./controller";
-import {Auth, AuthenticatedRequest} from "../utils/auth";
+import {AdminRequest, Auth, AuthenticatedRequest} from "../utils/auth";
 import {AdminService} from "../services/admin-service";
+import {StatusCodes} from "http-status-codes";
+import {ReplyUtils} from "../utils/reply-utils";
+import {HttpError} from "../utils/http-error";
 
 interface GetGroupRequest extends AuthenticatedRequest {
   Body: {} & AuthenticatedRequest["Body"]
+}
+
+interface SetBannedRequest extends AuthenticatedRequest {
+  Body: {
+    userId: string,
+    banned: boolean,
+    reason?: string
+  } & AdminRequest["Body"]
 }
 
 /**
@@ -23,6 +34,8 @@ export class AdminController extends Controller {
   registerRoutes(): void {
     // Authenticated
     this.fastify.post<GetGroupRequest>('/admin/perm-group', Auth.ValidateWithData, this.GetPermGroup.bind(this));
+
+    this.fastify.post<SetBannedRequest>('/admin/set-banned', Auth.ValidateAdminWithData, this.SetBanned.bind(this));
   }
 
   /**
@@ -35,4 +48,29 @@ export class AdminController extends Controller {
   async GetPermGroup(request: FastifyRequest<GetGroupRequest>, reply: FastifyReply) {
     return this.adminService.getPermGroup(request.body.authUser.id);
   }
+
+  async SetBanned(request: FastifyRequest<SetBannedRequest>, reply: FastifyReply) {
+    try {
+      if (!request.body.userId) {
+        reply.code(StatusCodes.BAD_REQUEST);
+        return ReplyUtils.error("The 'userId' field was not set.");
+      }
+
+      if (!request.body.banned) {
+        reply.code(StatusCodes.BAD_REQUEST);
+        return ReplyUtils.error("The 'banned' field was not set.");
+      }
+
+      return this.adminService.setBanned(request.body.userId, request.body.banned, request.body.reason);
+    } catch (e) {
+      if (e instanceof HttpError) {
+        reply.code(e.statusCode);
+        return ReplyUtils.error(e.message, e);
+      }
+
+      throw e;
+    }
+  }
+
+
 }

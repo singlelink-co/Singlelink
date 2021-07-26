@@ -8,6 +8,7 @@ import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import Mixpanel from "mixpanel";
 import {config} from "../config/config";
+import {IpUtils} from "../utils/ip-utils";
 
 interface CreateLinkRequest extends AuthenticatedRequest {
   Body: {
@@ -82,16 +83,17 @@ export class LinkController extends Controller {
 
       let newLink = await this.linkService.createLink(link);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('profile link created', {
           distinct_id: profile.userId,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
         });
+      }
 
       return newLink;
     } catch (e) {
@@ -126,16 +128,17 @@ export class LinkController extends Controller {
 
       let newLink = await this.linkService.updateLink(link);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('profile link updated', {
           distinct_id: request.body.authUser.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: profile.id,
           link: newLink.id,
           url: newLink.url
         });
+      }
 
       return newLink;
     } catch (e) {
@@ -166,15 +169,16 @@ export class LinkController extends Controller {
 
       let link = await this.linkService.deleteLink(body.id);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('profile link deleted', {
           distinct_id: body.authUser.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: body.authProfile.id,
           link: body.id
         });
+      }
 
       return link;
     } catch (e) {
@@ -206,14 +210,15 @@ export class LinkController extends Controller {
 
       let links = await this.linkService.reorderLinks(body.authProfile.id, body.oldIndex, body.newIndex);
 
-      if (this.mixpanel)
+      if (this.mixpanel) {
+        let ips = IpUtils.GrabIps(request);
+
         this.mixpanel.track('profile links reordered', {
           distinct_id: body.authUser.id,
-          $ip: (config.allowXForwardHeader ?
-            request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-            request.connection.remoteAddress),
+          $ip: ips,
           profile: body.authProfile.id,
         });
+      }
 
       return links;
     } catch (e) {
