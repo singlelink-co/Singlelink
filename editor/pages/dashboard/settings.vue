@@ -448,7 +448,7 @@ export default Vue.extend({
       },
       error: '',
       passwordError: '',
-      passwordEmail: '',
+      passwordEmail: '' as string | null | undefined,
       showWatermarkNotice: false,
       hostname: process.env.HOSTNAME,
       app_name: process.env.APP_NAME,

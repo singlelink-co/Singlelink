@@ -146,6 +146,8 @@ export default Vue.extend({
         });
 
         this.$store.commit('auth/login', response.data.token);
+        localStorage.setItem("email", this.email);
+
         this.$nuxt.$loading.finish();
         await this.$router.push('/dashboard');
       } catch (err) {

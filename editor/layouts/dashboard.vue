@@ -132,6 +132,10 @@
             <img src="/Settings.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Settings</span>
           </n-link>
+          <n-link v-if="isAdmin" to="/dashboard/admin" :class="getActiveStyles('dashboard-settings')">
+            <img src="/Person.svg" style="width:24px;height:24px;"/>
+            <span class="ml-4 font-extrabold">Admin Settings</span>
+          </n-link>
           <n-link to="/logout" :class="getActiveStyles('logout')">
             <img src="/Waving hand.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Logout</span>

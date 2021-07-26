@@ -177,7 +177,7 @@ export default Vue.extend({
       },
       error: '',
       passwordError: '',
-      passwordEmail: '',
+      passwordEmail: '' as string | null | undefined,
       showWatermarkNotice: false,
       hostname: process.env.HOSTNAME,
       app_name: process.env.APP_NAME,
@@ -225,6 +225,8 @@ export default Vue.extend({
         this.$set(this.user.activeProfile, 'user.activeProfile', profileResponse);
 
         this.originalHandle = this.user.activeProfile.handle;
+
+        this.passwordEmail = localStorage.getItem("email");
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);
