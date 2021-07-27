@@ -422,7 +422,6 @@ export class UserService extends DatabaseService {
     return DbTypeConverter.toUser(queryResult.rows[0]);
   }
 
-  //TODO Implement data package download
   /**
    * Allows a user to download a data package containing all their collected personal information within SL's databases,
    * excluding password hashes. This is intended to be GDPR compliant.

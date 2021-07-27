@@ -15,12 +15,13 @@ import Mixpanel from "mixpanel";
 import {SecurityUtils} from "../utils/security-utils";
 import {LogUtils} from "../utils/log-utils";
 import {IpUtils} from "../utils/ip-utils";
+import {validate as validateEmail} from 'deep-email-validator';
 
 interface EmailLoginUserRequest extends RequestGenericInterface {
   Body: {
     email?: string,
     password?: string
-  }
+  };
 }
 
 interface EmailCreateUserRequest extends RequestGenericInterface {
@@ -29,39 +30,38 @@ interface EmailCreateUserRequest extends RequestGenericInterface {
     password?: string,
     name: string,
     handle: string
-  }
+  };
 }
 
 interface GoogleOAuthRedirectRequest extends FastifyRequest {
   Querystring: {
     code: string,
     state: string
-  }
+  };
 }
 
 interface GoogleLoginRequest extends FastifyRequest {
   Body: {
     requestToken: string
-  }
+  };
 }
 
-// TODO Re-enable these!
 const googleRateLimit = {
-  // config: {
-  //   rateLimit: {
-  //     max: 4,
-  //     timeWindow: '1 min'
-  //   }
-  // }
+  config: {
+    rateLimit: {
+      max: 4,
+      timeWindow: '1 min'
+    }
+  }
 };
 
 const authGoogleRateLimit = {
-  // config: {
-  //   rateLimit: {
-  //     max: 4,
-  //     timeWindow: '1 min'
-  //   }
-  // },
+  config: {
+    rateLimit: {
+      max: 4,
+      timeWindow: '1 min'
+    }
+  },
   preHandler: <preHandlerHookHandler>Auth.validateAuthWithData
 };
 
@@ -592,6 +592,39 @@ export class AuthController extends Controller {
       if (!body.password) {
         reply.status(StatusCodes.BAD_REQUEST).send(ReplyUtils.error("No password was provided."));
         return;
+      }
+
+      if (config.validateEmails) {
+        let result = await validateEmail({
+          email: body.email,
+          validateRegex: true,
+          validateMx: true,
+          validateDisposable: true,
+          validateSMTP: true
+        });
+
+        if (!result.valid) {
+          let errString = "An invalid email was provided. \n";
+
+          if (result.validators.regex && !result.validators.regex.valid) {
+            errString += `Invalid format: ${result.validators.regex.reason} \n`;
+          }
+
+          if (result.validators.mx && !result.validators.mx.valid) {
+            errString += `Email is not a valid domain. \n`;
+          }
+
+          if (result.validators.disposable && !result.validators.disposable.valid) {
+            errString += `Email cannot be a disposable email. \n`;
+          }
+
+          if (result.validators.smtp && !result.validators.smtp.valid) {
+            errString += `Email mailbox was not found.`;
+          }
+
+          reply.status(StatusCodes.BAD_REQUEST);
+          return ReplyUtils.error(errString);
+        }
       }
 
       try {

@@ -48,6 +48,7 @@
     "bufferutil": "^4.0.3",
     "casbin": "^5.4.0",
     "casbin-basic-adapter": "^0.1.0",
+    "deep-email-validator": "^0.1.18",
     "fastify": "^3.8.0",
     "fastify-cors": "^4.1.0",
     "fastify-favicon": "^3.0.0",

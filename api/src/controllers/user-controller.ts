@@ -11,19 +11,18 @@ import {Auth, AuthenticatedRequest} from "../utils/auth";
 import Mixpanel from "mixpanel";
 import {Readable} from "stream";
 import {IpUtils} from "../utils/ip-utils";
-import {SecurityUtils} from "../utils/security-utils";
 
 interface UserRequestResetPasswordRequest extends RequestGenericInterface {
   Body: {
     email?: string
-  }
+  };
 }
 
 interface ResetUserPasswordRequest extends RequestGenericInterface {
   Body: {
     token?: string,
     password?: string
-  }
+  };
 }
 
 interface UpdateUserRequest extends AuthenticatedRequest {
@@ -31,21 +30,21 @@ interface UpdateUserRequest extends AuthenticatedRequest {
     id: string,
     email: string,
     fullName?: string
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface DeleteUserRequest extends AuthenticatedRequest {
-  Body: {} & AuthenticatedRequest["Body"]
+  Body: {} & AuthenticatedRequest["Body"];
 }
 
 interface SetActiveProfileRequest extends AuthenticatedRequest {
   Body: {
     newProfileId?: string
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface GetUserDataPackageRequest extends AuthenticatedRequest {
-  Body: {} & AuthenticatedRequest["Body"]
+  Body: {} & AuthenticatedRequest["Body"];
 }
 
 interface SetEmailNotifications extends AuthenticatedRequest {
@@ -56,7 +55,7 @@ interface SetEmailNotifications extends AuthenticatedRequest {
       marketing: true,
       leaderboard: true
     }
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 const userRequestResetPasswordOpts = {
@@ -222,8 +221,8 @@ export class UserController extends Controller {
       // this.mixpanel.track('user updated', {
       //   distinct_id: request.body.id,
       //   $ip: (config.allowXForwardHeader ?
-      //       request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-      //       request.connection.remoteAddress),
+      //       request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.socket.remoteAddress :
+      //       request.socket.remoteAddress),
       // });
 
       return ReplyUtils.error("Sorry, this is not implemented yet.");
@@ -237,7 +236,6 @@ export class UserController extends Controller {
     }
   }
 
-  //TODO Implement DeleteUser
   /**
    * Route for /user/delete
    * @param request
@@ -257,7 +255,6 @@ export class UserController extends Controller {
           $ip: ip,
         });
       }
-
 
       return deletedUser;
     } catch (e) {

@@ -40,6 +40,9 @@
           </div>
         </div>
         <div @click="attemptEmailRegister" class="button cursor-pointer">Get started free</div>
+        <div v-if="error" class="error">
+          {{ error }}
+        </div>
         <a href="/" class="mx-auto text-center text-indigo-500 mb-4 text-sm hover:underline font-bold">Already have an
           account? Click here to login</a>
         <span class="mx-auto text-center opacity-50 font-bold text-sm">©{{ new Date().getFullYear() }} Neutron Creatixve Inc., All rights reserved.</span>
@@ -149,6 +152,8 @@ export default Vue.extend({
         if (err.response) {
           if (err.response.status === StatusCodes.CONFLICT) {
             this.error = 'Email or handle already in use. Try again with a different email address or handle.';
+          } else if (err.response.status === StatusCodes.BAD_REQUEST) {
+            this.error = `Error: ${err.response.data.error}`;
           } else {
             this.error = 'The server was unable to create your account. Please try again later.';
           }
@@ -240,4 +245,13 @@ label {
   transform: scale(1);
   box-shadow: inset 0 0 0 5px rgba(255, 255, 255, .5), 0 2px 20px rgba(83, 83, 267, .95);
 }
+
+.error {
+  @apply bottom-0 rounded-lg shadow border border-gray-200;
+  color: mintcream;
+  background-color: #ff4a4a;
+  padding: 7px;
+  z-index: 25;
+}
+
 </style>

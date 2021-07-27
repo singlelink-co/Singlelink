@@ -10,8 +10,8 @@ export class IpUtils {
    */
   public static GrabIps(request: FastifyRequest) {
     return config.allowXForwardHeader ?
-      request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.connection.remoteAddress :
-      request.connection.remoteAddress;
+      request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.socket.remoteAddress :
+      request.socket.remoteAddress;
   }
 
   /**
