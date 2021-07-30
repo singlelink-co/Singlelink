@@ -10,7 +10,7 @@ export const getters = {
 
 export const mutations = {
   login(state, token) {
-    const days = this.$cookies.get("remember_auth") ? 56 : 1;
+    const days = this.$cookies.get("remember_auth") ? 90 : 1;
 
     this.$cookies.set("auth_token", token, {
       path: "/",

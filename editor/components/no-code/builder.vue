@@ -1709,10 +1709,6 @@ export default Vue.extend({
   },
 
   mounted(): void {
-    console.log('Input');
-    console.log(this.importedCSS);
-    console.log('to JSON');
-
     if (this.importedCSS) {
       console.log(this.$transform.toJSON(this.importedCSS));
     }

@@ -285,7 +285,6 @@ export class UserController extends Controller {
           distinct_id: request.body.authUser.id,
           $ip: ip,
         });
-
       }
 
       let filename = user.id + '-data-package.json';

@@ -79,8 +79,6 @@ export default Vue.extend({
 
   computed: {
     active_styles() {
-      console.log('Active ' + this.id);
-      console.log(this.active);
       if (!this.active) {
         return '';
       }

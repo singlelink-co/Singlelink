@@ -64,7 +64,6 @@ export default Vue.extend({
       password: '',
       handle: '',
       error: '',
-      hostname: process.env.HOSTNAME,
       app_name: process.env.APP_NAME,
       logo_url: process.env.LOGO_URL,
       organization: process.env.ORGANIZATION,

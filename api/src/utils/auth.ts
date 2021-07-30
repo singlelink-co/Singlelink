@@ -23,7 +23,7 @@ export interface AuthenticatedRequest extends RequestGenericInterface {
     token: string,
     authUser: User,
     authProfile: Profile
-  }
+  };
 }
 
 /**
@@ -35,7 +35,7 @@ export interface SensitiveAuthenticatedRequest extends RequestGenericInterface {
     token: string,
     authUser: SensitiveUser,
     authProfile: SensitiveProfile
-  }
+  };
 }
 
 /**
@@ -47,7 +47,7 @@ export interface AdminRequest extends RequestGenericInterface {
     authUser: User,
     authProfile: Profile
     permGroup: PermissionGroup
-  }
+  };
 }
 
 /**
@@ -120,6 +120,9 @@ export class Auth {
     jwt.verify(
       token,
       config.secret,
+      {
+        maxAge: '90d'
+      },
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -173,6 +176,9 @@ export class Auth {
     jwt.verify(
       token,
       config.secret,
+      {
+        maxAge: '90d'
+      },
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -292,6 +298,9 @@ export class Auth {
     jwt.verify(
       token,
       config.secret,
+      {
+        maxAge: '90d'
+      },
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -411,6 +420,9 @@ export class Auth {
     jwt.verify(
       token,
       config.secret,
+      {
+        maxAge: '90d'
+      },
       async function (err: VerifyErrors | null, decoded: object | undefined) {
         if (err) {
           reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Error while validating token.", err));
@@ -535,6 +547,17 @@ export class Auth {
       [userId, googleId]);
 
     return googleEnabledQuery.rowCount >= 1;
+  }
+
+  /**
+   * Validates ownership of the requested resource.
+   */
+  static async checkProfileOwnership(service: DatabaseService, userId: string, profile: Profile): Promise<boolean> {
+    const pool = service.pool;
+
+    let queryResult = await pool.query<{ count: number }>("select count(*) from app.profiles where id=$1 and user_id=$2", [profile.id, userId]);
+
+    return queryResult.rows[0].count > 0;
   }
 
   /**

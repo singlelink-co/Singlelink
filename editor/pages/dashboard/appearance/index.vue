@@ -253,8 +253,8 @@ export default Vue.extend({
     },
     async saveChanges() {
       try {
-        console.log('Builder CSS');
-        console.log(this.builderCss);
+        // console.log('Builder CSS');
+        // console.log(this.builderCss);
         await this.$axios.$post('/profile/update', {
           token: this.$store.getters['auth/getToken'],
           customCss: this.editorCss + '/* SL-NO-CODE */' + this.builderCss,

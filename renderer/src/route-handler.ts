@@ -1,8 +1,14 @@
 import fs from "fs";
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import chalk from "chalk";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import config from "./config/config";
+
+interface MicrositeRequest extends FastifyRequest {
+  Querystring: {
+    token?: string;
+  };
+}
 
 /**
  * Creates all the routes.
@@ -33,22 +39,33 @@ export class RouteHandler {
      Declare site route
      Route /*
     */
-    this.fastify.get("*", async (request: FastifyRequest, reply: FastifyReply) => {
+    this.fastify.get("*", async (request: FastifyRequest<MicrositeRequest>, reply: FastifyReply) => {
       // Get requested profile handle from URL
       const handle = request.url.replace('/', '');
 
-      // Log request
+      // Log MicrositeRequest
       console.log(`${chalk.cyan.bold(config.appName)}: Request received at /${handle} from ${request.ip}`);
 
-      let response;
+      let response: AxiosResponse<{ profile: Profile, links: Link[], user: User, theme: Theme }> | undefined;
 
       try {
         // Fetch profile from API
-        response = await axios.get<{ profile: Profile, links: Link[], user: User, theme: Theme }>(`${config.apiUrl}/profile/${handle}`);
+
+        if (request.query.token) {
+          response = await axios.post<{ profile: Profile, links: Link[], user: User, theme: Theme }>(`${config.apiUrl}/profile/${handle}`, {
+            token: request.query.token
+          });
+        } else {
+          response = await axios.get<{ profile: Profile, links: Link[], user: User, theme: Theme }>(`${config.apiUrl}/profile/${handle}`);
+        }
+
       } catch (err) {
         // Log error
         console.log(`${chalk.cyan.bold(config.appName)}: Error when processing request`);
         console.log(`${chalk.cyan.bold(config.appName)}: ${err}`);
+      }
+
+      if (!response) {
         reply.type('text/html');
 
         //language=HTML
@@ -62,8 +79,8 @@ export class RouteHandler {
                     </head>
                     <body>
                         <div class="w-full h-full flex flex-col items-center justify-center">
-                            <h1 class="text-4xl text-gray-900 mb-2 font-extrabold">500 - Server Error</h1>
-                            <h3 class="text-lg text-gray-600 mb-4">Oops! Something went wrong. Try again?</h3>
+                            <h1 class="text-4xl text-gray-900 mb-2 font-extrabold">404 - Not Found</h1>
+                            <h3 class="text-lg text-gray-600 mb-4">We couldn't find what you were looking for, sorry!</h3>
                             <a class="bg-indigo-600 hover:bg-indigo-500 rounded-2xl shadow text-white py-3 px-6 text-sm font-medium" href="` + request.url + `">Reload page</a>
                         </div>
                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css"/>

@@ -167,8 +167,6 @@ export default Vue.extend({
         this.analytics = await this.$axios.$post('/analytics/profile', {
           token: this.$store.getters['auth/getToken']
         });
-        console.log('analytics');
-        console.log(this.analytics);
       } catch (err) {
         console.log('Error getting user data');
         console.log(err);

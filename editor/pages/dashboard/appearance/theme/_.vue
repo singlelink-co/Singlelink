@@ -190,7 +190,8 @@ export default {
             }
           }
         }
-        console.log(this.themes);
+
+        // console.log(this.themes);
       } catch (error) {
         console.log('Failed to get themes');
         console.log(error);
@@ -218,8 +219,8 @@ export default {
             this.closeModal();
             return;
         } */
-        console.log('Created');
-        console.log(response);
+        // console.log('Created');
+        // console.log(response);
         window.location.href = '/dashboard/appearance/theme/' + response.id;
       } catch (error) {
         this.error = 'Failed to create theme';

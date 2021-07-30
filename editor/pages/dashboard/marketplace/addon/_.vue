@@ -404,17 +404,12 @@ export default Vue.extend({
       for (let i = 0; i < installed.length; i++) {
         this.installed.push(Number(installed[i].addonId));
       }
-      console.log('Installed');
-      console.log(this.installed);
     },
 
     async getFavoritedAddons() {
       this.favorites = await this.$axios.$post('/marketplace/user/favorites', {
         token: this.$store.getters['auth/getToken'],
       });
-      console.log('favorites');
-      console.log(this.favorites);
-      console.log('Addon id');
       /* console.log(this.addon.id);
       console.log(this.favorites.indexOf(Number(this.addon.id))); */
     },

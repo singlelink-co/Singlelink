@@ -67,7 +67,8 @@ export class SingleLinkServer {
 
     // Allow anyone
     this.fastify.register(require('fastify-cors'), {
-      origin: '*'
+      origin: '*',
+      exposedHeaders: ['Content-Disposition']
     });
 
     /*

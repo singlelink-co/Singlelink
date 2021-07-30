@@ -15,17 +15,21 @@ import Scraper from 'linktree-scraper';
 
 import dns from "dns";
 import {IpUtils} from "../utils/ip-utils";
+import jwt from "jsonwebtoken";
 
 interface ProfileHandleRequest extends RequestGenericInterface {
   Params: {
     handle?: string
+  },
+  Body: {
+    token?: string
   }
 }
 
 interface GetTopProfilesRequest extends RequestGenericInterface {
   Params: {
     limit?: number
-  }
+  };
 }
 
 interface CreateProfileRequest extends AuthenticatedRequest {
@@ -34,13 +38,13 @@ interface CreateProfileRequest extends AuthenticatedRequest {
     imageUrl: string,
     headline: string,
     subtitle: string
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface ActivateProfileThemeRequest extends AuthenticatedRequest {
   Body: {
     id: string
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface UpdateProfileRequest extends AuthenticatedRequest {
@@ -54,13 +58,13 @@ interface UpdateProfileRequest extends AuthenticatedRequest {
     customCss: string,
     customHtml: string,
     customDomain: string
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface LinktreeRequest extends AuthenticatedRequest {
   Body: {
     handle: string,
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface ILinktreeLink {
@@ -73,13 +77,13 @@ interface ILinktreeLink {
 interface SetPrivacyModeRequest extends AuthenticatedRequest {
   Body: {
     privacyMode: boolean
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 interface SetUnlistedRequest extends AuthenticatedRequest {
   Body: {
     unlisted: boolean
-  } & AuthenticatedRequest["Body"]
+  } & AuthenticatedRequest["Body"];
 }
 
 const getTopProfilesRequestRateLimit = {
@@ -163,7 +167,43 @@ export class ProfileController extends Controller {
         return;
       }
 
-      let profile = await this.profileService.getProfileByHandle(params.handle, true);
+      let profile: Profile | undefined;
+
+      if (request.body?.token) {
+        let decoded = jwt.verify(
+          request.body.token,
+          config.secret,
+          {
+            maxAge: '90d'
+          });
+
+        if (!decoded) {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        let dAuthToken = <{ userId: string, type: TokenType }>decoded;
+
+        if (!dAuthToken?.userId) {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Unable to verify user, invalid token."));
+          return;
+        }
+
+        if (dAuthToken?.type !== "auth") {
+          reply.status(StatusCodes.UNAUTHORIZED).send(ReplyUtils.error("Invalid token type."));
+          return;
+        }
+
+        let toCheck = await this.profileService.getProfileByHandle(params.handle, false);
+
+        if (await Auth.checkProfileOwnership(this.profileService, dAuthToken.userId, toCheck)) {
+          profile = toCheck;
+        }
+      }
+
+      if (!profile)
+        profile = await this.profileService.getProfileByHandle(params.handle, true);
+
       let links;
       let user;
       let theme;
