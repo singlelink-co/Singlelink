@@ -33,7 +33,7 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: process.env.META_TITLE ?? 'Singlelink - The open-source Linktree alternative & micro-site platform',
+    title: process.env.META_TITLE ?? 'Singlelink - The open-source micro-site platform',
     meta: [
       {charset: 'utf-8'},
       {

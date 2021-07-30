@@ -17,10 +17,13 @@ let config = {
   freeSignup: process.env.FREE_SIGNUP ?? true,
 
   // Define hostname
-  hostname: process.env.HOSTNAME ?? 'api.singlelink.co',
+  hostname: process.env.HOSTNAME ?? 'singlel.ink',
 
   // Define API URL
-  apiUrl: process.env.API_URL ?? 'https://api.singlelink.co'
+  apiUrl: process.env.API_URL ?? 'https://api.singlelink.co',
+
+  // Define API URL
+  editorUrl: process.env.EDITOR_URL ?? 'https://app.singlelink.co'
 };
 
 export default config;

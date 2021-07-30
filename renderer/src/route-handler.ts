@@ -222,31 +222,33 @@ export class RouteHandler {
       // Build watermark string
       let watermarkHtml = '';
 
-      watermarkHtml += `<div id="sl-watermark" class="flex flex-col items-center justify-center">`;
+      if (profile.showWatermark) {
+        watermarkHtml += `<div id="sl-watermark" class="flex flex-col items-center justify-center">`;
 
-      if (theme && theme.colors) {
-        watermarkHtml += `
+        if (theme && theme.colors) {
+          watermarkHtml += `
         <div style="color: ${theme.colors.text.primary};max-width:230px;" class="mt-4 mb-2 mx-auto text-sm" >
-          Proudly built with ${config.appName}, the open-source Linktree alternative
+          Proudly built with ${config.appName}, the open-source micro-site platform
         </div>`;
-      } else {
-        watermarkHtml += `
+        } else {
+          watermarkHtml += `
         <div v-else style="color:rgba(0,0,0,1);max-width:230px;" class="mt-4 mb-2 mx-auto text-sm">
-          Proudly built with ${config.appName}, the open-source Linktree alternative
+          Proudly built with ${config.appName}, the open-source micro-site platform
         </div>`;
-      }
+        }
 
-      if (config.freeSignup) {
-        //language=HTML
-        watermarkHtml += `
-          <a class="text-indigo-600 hover-underline text-sm" href="/create-account"
-             target="_blank">
-            Create your free micro-site in minutes!
-          </a>`;
-      }
+        if (config.freeSignup) {
+          //language=HTML
+          watermarkHtml += `
+            <a class="text-indigo-600 hover-underline text-sm" href="${config.editorUrl}/create-account"
+               target="_blank">
+              Create your free micro-site in minutes!
+            </a>`;
+        }
 
-      watermarkHtml += `<base target="_blank">`;
-      watermarkHtml += `</div>`;
+        watermarkHtml += `<base target="_blank">`;
+        watermarkHtml += `</div>`;
+      }
 
       if (profile.customCss === null) profile.customCss = '';
       if (profile.customHtml === null) profile.customHtml = '';
@@ -268,19 +270,19 @@ export class RouteHandler {
           <!-- Meta -->
           <meta name="title" content="${profile.headline} - ${config.appName}">
           <meta name="description"
-                content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
+                content="${profile.subtitle} | Powered by ${config.appName}, the open-source micro-site platform.">
 
           <!-- Open Graph-->
           <meta property="og:title" content="${profile.headline} - ${config.appName}">
           <meta property="og:description"
-                content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
+                content="${profile.subtitle} | Powered by ${config.appName}, the open-source micro-site platform.">
           <meta property="og:image" content="${config.apiUrl}/profile/thumbnail/${handle}">
           <meta property="og:type" content="website">
 
           <!-- Twitter Cards -->
           <meta name="twitter:title" content="${profile.headline} - ${config.appName}">
           <meta name="twitter:description"
-                content="${profile.subtitle} | Powered by ${config.appName}, the open-source Linktree alternative.">
+                content="${profile.subtitle} | Powered by ${config.appName}, the open-source micro-site platform.">
           <meta name="twitter:image" content="${config.apiUrl}/profile/thumbnail/${handle}">
           <meta name="twitter:card" content="summary_large_image">
 

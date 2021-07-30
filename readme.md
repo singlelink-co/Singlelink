@@ -1,5 +1,4 @@
-<br><h1 align="center"><a target="_blank" href="https://singlelink.co">Singlelink</a>, the open-source Linktree
-alternative</h1>
+<br><h1 align="center"><a target="_blank" href="https://singlelink.co">Singlelink</a>, the open-source micro-site platform</h1>
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
         <img src="https://img.shields.io/badge/Stable-3.0.0-%235353ec" alt="Version">
@@ -193,12 +192,11 @@ Special thanks to everyone who helps make <a target="_blank" href="https://singl
 
 <a href="https://twitter.com/jim_bisenius" title="Jim Bisenius, Co-founder & President of Singlelink" target="_blank"><img width="80" src="https://www.gravatar.com/avatar/106e7dda3325b238cc5845df807e9c2d"/></a>
 <a href="https://twitter.com/navidk0" title="Navid Kabir, Co-founder & CTO of Singlelink" target="_blank"><img width="80" src="https://www.gravatar.com/avatar/9e4f9cbfec8e363db6c16ad3f32043fb"/></a>
-<a href="https://twitter.com/drewbits" title="Drew Boyle, Co-founder & CMO of Singlelink" target="_blank"><img width="80" src="https://pbs.twimg.com/profile_images/1396177710532149256/mQm749Tm_400x400.jpg"/></a>
+<a href="https://twitter.com/drewbits" title="Drew Boyle, Co-founder & CMO of Singlelink" target="_blank"><img width="80" src="https://pbs.twimg.com/profile_images/1407168359729352706/cLCu_-OF_400x400.png"/></a>
 
 <br><br>
 ---------------
-<h3 align="center"><a href="https://singlelink.co" target="_blank">Singlelink</a>, the open-source Linktree
-alternative</h3>
+<h3 align="center"><a href="https://singlelink.co" target="_blank">Singlelink</a>, the open-source micro-site platform</h3>
 <h4 align="center">
 Create your free micro-site in seconds at <a href="https://app.singlelink.co/create-account" target="_blank">
 singlelink.co 👉</a>

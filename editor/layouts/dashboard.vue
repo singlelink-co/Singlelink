@@ -192,7 +192,7 @@
               id="preview-frame"
               title="Profile Preview"
               scrolling="yes"
-              style="z-index:2;pointer-events: none;width: 376px;height: 813px;transform: scale(0.7) translate(-82px, -175px);top:0;left:0;position:absolute;"
+              style="z-index:2;width: 376px;height: 813px;transform: scale(0.7) translate(-82px, -175px);top:0;left:0;position:absolute;"
               :src="getProfilePreviewUrl()"
             />
           </div>
@@ -336,11 +336,7 @@ export default Vue.extend({
       const iFrame = document.getElementById('preview-frame') as HTMLIFrameElement;
 
       if (iFrame) {
-        const contentWindow = iFrame.contentWindow;
-
-        if (contentWindow) {
-          contentWindow?.location.reload();
-        }
+        iFrame.src = this.getProfilePreviewUrl();
       }
     });
   },
@@ -388,7 +384,8 @@ export default Vue.extend({
       let token = this.$store.getters['auth/getToken'];
 
       let queryParams = new URLSearchParams({
-        token
+        token: token as string,
+        uid: new Date().toISOString() // necessary to reload the URL...
       });
 
       return `${this.rendererUrl}/${this.user.activeProfile.handle}?${queryParams}`;
