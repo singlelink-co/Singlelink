@@ -63,8 +63,32 @@ export class AdminService extends DatabaseService {
   /**
    * Returns a list of all banned users.
    */
-  async listBanned(): Promise<DbBanned[]> {
+  async listBanned(): Promise<{ ban: DbBanned, userData: SensitiveUser | undefined }[]> {
     let queryResult = await this.pool.query<DbBanned>("select * from security.banned");
-    return queryResult.rows;
+
+    let bannedRows = queryResult.rows;
+    let userRows: DbSensitiveUserWithPassword[] = [];
+
+    if (queryResult.rowCount > 0) {
+      let userData = await this.pool.query<DbSensitiveUserWithPassword>("select * from app.users where id = any($1)",
+        [
+          queryResult.rows.map(x => x.user_id)
+        ]);
+
+      userRows = userData.rows;
+    }
+
+    let final: { ban: DbBanned, userData: SensitiveUser | undefined }[] = [];
+
+    for (let bannedRow of bannedRows) {
+      let find = userRows.find(x => x.id === bannedRow.user_id);
+
+      final.push({
+        ban: bannedRow,
+        userData: find ? DbTypeConverter.toSensitiveUser(find) : undefined
+      });
+    }
+
+    return final;
   }
 }

@@ -152,7 +152,6 @@ export default Vue.extend({
         await this.$router.push('/dashboard');
       } catch (err) {
         console.log('Login failed');
-        console.log(JSON.stringify(err));
 
         if (err.response.status === StatusCodes.FORBIDDEN) {
           this.error = err.response.data.error;
