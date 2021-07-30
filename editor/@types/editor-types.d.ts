@@ -41,6 +41,5 @@ type EditorLink = Partial<Link> & {
   label: string,
   subtitle: string,
   customCss: string,
-  url: string,
-  useDeepLink: boolean
+  url: string
 };

@@ -35,11 +35,7 @@
           style="box-shadow: inset 0 0 0 3px rgba(0,0,0,.05), 0 10px 25px rgba(83,83,267,.1);"
           :to="'/dashboard/link/' + link.id"
         >
-          <span class="text-2xl font-bold">{{ link.label }}
-            <span v-if="link.useDeepLink" class="ml-2 text-black text-lg">
-              <i class="fas fa-mobile-alt"/>
-            </span>
-          </span>
+          <span class="text-2xl font-bold">{{ link.label }}</span>
           <span v-if="link.subtitle" class="text-xl font-bold opacity-70 sl-subtitle mt-1">
             {{ link.subtitle }}
           </span>
@@ -127,26 +123,6 @@
                 class="p-2 text-sm border-solid border-gray-300 rounded-lg border"
                 placeholder="e.g. background: #5353EC;"
               />
-            </div>
-
-            <div class="flex flex-row justify-between items-center mb-3">
-              <label class="font-semibold text-base text-black" for="custom_css">
-                Create Deep Link
-                <a href="https://en.wikipedia.org/wiki/Deep_linking">(?)
-                  <span class="ml-2 text-xl">
-                  <i class="fas fa-mobile-alt"/>
-                </span>
-                </a>
-              </label>
-              <input
-                id="deep_link"
-                v-model="pendingLink.useDeepLink"
-                class="p-2 mt-2 text-sm border-solid border-gray-300 rounded-lg border"
-                style="outline:none !important;"
-                type="checkbox"
-                placeholder="e.g. background: #5353EC;"
-                aria-label="create deep link"
-              >
             </div>
 
           </form>
@@ -244,8 +220,7 @@ export default Vue.extend({
       label: "",
       subtitle: "",
       customCss: "",
-      url: "",
-      useDeepLink: false
+      url: ""
     };
 
     return {
@@ -346,8 +321,7 @@ export default Vue.extend({
             label: this.pendingLink.label,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
-            customCss: this.pendingLink.customCss,
-            useDeepLink: this.pendingLink.useDeepLink
+            customCss: this.pendingLink.customCss
           }
         });
 
@@ -384,8 +358,7 @@ export default Vue.extend({
             label: this.pendingLink.label,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
-            customCss: this.pendingLink.customCss || '',
-            useDeepLink: this.pendingLink.useDeepLink
+            customCss: this.pendingLink.customCss || ''
           }
         });
 
@@ -412,8 +385,7 @@ export default Vue.extend({
         label: '',
         subtitle: '',
         url: '',
-        customCss: '',
-        useDeepLink: false
+        customCss: ''
       };
     },
 
@@ -426,8 +398,7 @@ export default Vue.extend({
         label: link.label,
         subtitle: link.subtitle,
         customCss: link.customCss,
-        url: link.url,
-        useDeepLink: link.useDeepLink
+        url: link.url
       };
 
       this.openModal('edit');

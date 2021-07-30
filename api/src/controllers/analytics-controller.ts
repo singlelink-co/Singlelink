@@ -2,7 +2,6 @@ import {FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandler, Re
 import {DatabaseManager} from "../data/database-manager";
 import {AnalyticsService} from "../services/analytics-service";
 import {StatusCodes} from "http-status-codes";
-import {DeepLinker} from "nc-deeplink";
 import {Controller} from "./controller";
 import {HttpError} from "../utils/http-error";
 import {Auth, AuthenticatedRequest} from "../utils/auth";
@@ -144,17 +143,6 @@ export class AnalyticsController extends Controller {
               url: link.url
             });
           }
-        }
-      }
-
-      if (link.useDeepLink) {
-        const userAgent = request.headers["user-agent"];
-
-        if (userAgent) {
-          const deepLink = DeepLinker.parseDeepLink(link.url, userAgent);
-
-          reply.redirect(deepLink);
-          return;
         }
       }
 

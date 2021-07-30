@@ -35,9 +35,9 @@ export class LinkService extends DatabaseService {
    */
   async createLink(link: Partial<Link>): Promise<Link> {
     let queryResult = await this.pool.query<DbLink>(`insert into app.links (profile_id, label, type, url, sort_order,
-                                                                            subtitle, style, custom_css, use_deep_link,
+                                                                            subtitle, style, custom_css,
                                                                             metadata)
-                                                     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                                                     values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                                                      returning *;`,
       [
         link.profileId,
@@ -48,7 +48,6 @@ export class LinkService extends DatabaseService {
         link.subtitle,
         link.style,
         link.customCss,
-        link.useDeepLink ?? false,
         link.metadata ?? "{}"
       ]);
 
@@ -64,7 +63,7 @@ export class LinkService extends DatabaseService {
    * @param link The link that should be updated
    */
   async updateLink(link: Partial<Link>): Promise<Link> {
-    let queryResult = await this.pool.query<DbLink>("update app.links set type=coalesce($1, type), url=coalesce($2, url), sort_order=coalesce($3, sort_order), label=coalesce($4, label), subtitle=coalesce($5, subtitle), style=coalesce($6, style), custom_css=coalesce($7, custom_css), use_deep_link=coalesce($8, use_deep_link), metadata=coalesce($9, metadata) where id=$10 returning *;",
+    let queryResult = await this.pool.query<DbLink>("update app.links set type=coalesce($1, type), url=coalesce($2, url), sort_order=coalesce($3, sort_order), label=coalesce($4, label), subtitle=coalesce($5, subtitle), style=coalesce($6, style), custom_css=coalesce($7, custom_css), metadata=coalesce($8, metadata) where id=$9 returning *;",
       [
         link.type,
         link.url,
@@ -73,7 +72,6 @@ export class LinkService extends DatabaseService {
         link.subtitle,
         link.style,
         link.customCss,
-        link.useDeepLink,
         link.metadata ?? "{}",
         link.id
       ]);

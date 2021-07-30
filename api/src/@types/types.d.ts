@@ -130,8 +130,7 @@ interface Link {
   label: string,
   subtitle: string | null,
   style: string | null,
-  customCss: string | null,
-  useDeepLink: boolean,
+  customCss: string | null
   metadata: unknown,
   createdOn: string
 }

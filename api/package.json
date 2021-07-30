@@ -59,7 +59,6 @@
     "linktree-scraper": "^0.2.2",
     "minio": "^7.0.18",
     "mixpanel": "^0.13.0",
-    "nc-deeplink": "^1.0.6",
     "node-cron": "^3.0.0",
     "object-hash": "^2.2.0",
     "pageres": "github:neutron-creative/pageres#master",

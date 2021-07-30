@@ -124,8 +124,7 @@ export default Vue.extend({
       type: "link",
       subtitle: "",
       customCss: "",
-      url: "",
-      useDeepLink: false
+      url: ""
     };
 
     return {
@@ -214,8 +213,7 @@ export default Vue.extend({
             type: this.pendingLink.type,
             subtitle: this.pendingLink.subtitle,
             url: this.pendingLink.url,
-            customCss: this.editorCss, // + this.builderCss
-            useDeepLink: this.pendingLink.useDeepLink
+            customCss: this.editorCss // + this.builderCss
           }
         });
 
@@ -251,8 +249,7 @@ export default Vue.extend({
             subtitle: this.pendingLink.subtitle,
             type: this.pendingLink.type,
             url: this.pendingLink.url,
-            customCss: this.pendingLink.customCss || '',
-            useDeepLink: this.pendingLink.useDeepLink
+            customCss: this.pendingLink.customCss || ''
           }
         });
 
@@ -279,8 +276,7 @@ export default Vue.extend({
         type: link.type,
         subtitle: link.subtitle,
         customCss: link.customCss,
-        url: link.url,
-        useDeepLink: link.useDeepLink
+        url: link.url
       };
 
       //this.openModal('edit');

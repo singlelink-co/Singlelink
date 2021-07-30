@@ -131,7 +131,6 @@ interface Link {
   subtitle: string | null,
   style: string | null,
   customCss: string | null,
-  useDeepLink: boolean,
   metadata: unknown,
   createdOn: string
 }
