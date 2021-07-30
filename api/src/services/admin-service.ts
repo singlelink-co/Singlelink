@@ -50,7 +50,7 @@ export class AdminService extends DatabaseService {
         ]);
 
       if (queryResult.rowCount < 1)
-        throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to insert a banned user due to an internal DB server error.");
+        throw new HttpError(StatusCodes.NOT_FOUND, "The user couldn't be found.");
 
       return queryResult.rows[0];
     } else {
