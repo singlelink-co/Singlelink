@@ -197,7 +197,7 @@ export default Vue.extend({
         if (this.errorIntervalHandler !== undefined)
           clearInterval(this.errorIntervalHandler);
 
-        this.errorIntervalHandler = setInterval(() => this.error = '', 2000);
+        this.errorIntervalHandler = setInterval(() => this.error = '', 5000);
       }
     },
 

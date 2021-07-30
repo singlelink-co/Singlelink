@@ -119,7 +119,7 @@ export default Vue.extend({
         if (this.errorIntervalHandler !== undefined)
           clearInterval(this.errorIntervalHandler);
 
-        this.errorIntervalHandler = setInterval(this.clearErrors, 2000);
+        this.errorIntervalHandler = setInterval(this.clearErrors, 5000);
 
         this.$nuxt.$loading.finish();
         return;
@@ -131,7 +131,7 @@ export default Vue.extend({
         if (this.errorIntervalHandler !== undefined)
           clearInterval(this.errorIntervalHandler);
 
-        this.errorIntervalHandler = setInterval(this.clearErrors, 2000);
+        this.errorIntervalHandler = setInterval(this.clearErrors, 5000);
 
         this.$nuxt.$loading.finish();
         return;
@@ -159,7 +159,7 @@ export default Vue.extend({
           if (this.errorIntervalHandler !== undefined)
             clearInterval(this.errorIntervalHandler);
 
-          this.errorIntervalHandler = setInterval(this.clearErrors, 2000);
+          this.errorIntervalHandler = setInterval(this.clearErrors, 5000);
 
           await this.$nuxt.$loading.finish();
           return;
@@ -169,7 +169,7 @@ export default Vue.extend({
           if (this.errorIntervalHandler !== undefined)
             clearInterval(this.errorIntervalHandler);
 
-          this.errorIntervalHandler = setInterval(this.clearErrors, 2000);
+          this.errorIntervalHandler = setInterval(this.clearErrors, 5000);
 
           await this.$nuxt.$loading.finish();
           return;

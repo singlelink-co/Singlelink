@@ -22,7 +22,7 @@
       <h2 class="text-black font-bold text-xl w-full mb-2">
         Site details
       </h2>
-      <form class="flex flex-col">
+      <form class="flex flex-col w-full">
         <div class="flex flex-col lg:flex-row mb-3">
           <div class="flex flex-col w-full lg:w-1/2 mr-4 mb-3 lg:mb-0">
             <label class="font-bold opacity-70 text-sm text-black" for="name">Headline</label>
