@@ -25,8 +25,8 @@
 #data:
 #  HOST: "0.0.0.0"
 #  PORT: "5566"
-#  API_DOMAIN: ""
-#  EDITOR_DOMAIN: ""
+#  API_URL: ""
+#  EDITOR_URL: ""
 #  CONTACT_EMAIL: ""
 #  AWS_SENDER_EMAIL_ADDRESS: ""
 #  AWS_REGION: ""

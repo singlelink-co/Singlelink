@@ -210,7 +210,7 @@ export class UserService extends DatabaseService {
       {expiresIn: '15m'}
     );
 
-    let urlString = config.editorDomain + "/forgot-password/change?";
+    let urlString = config.editorUrl + "/forgot-password/change?";
     const params = new URLSearchParams({token});
     urlString += params.toString();
 

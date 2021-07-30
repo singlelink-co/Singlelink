@@ -262,7 +262,7 @@ export class AuthController extends Controller {
           let requestToken = await this.userService.createAccessTokenRequest(user, googleId);
 
           reply.type("text/html").code(StatusCodes.OK);
-          let url = `${config.editorDomain}/auth/token-login?requestToken=${requestToken}&service=Google`;
+          let url = `${config.editorUrl}/auth/token-login?requestToken=${requestToken}&service=Google`;
 
           // language=HTML
           return `
@@ -275,7 +275,7 @@ export class AuthController extends Controller {
             <body>
             <p>
               Redirecting...<br>
-              <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+              <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
             </p>
             </body>
             <script>
@@ -292,7 +292,7 @@ export class AuthController extends Controller {
               <html lang="en">
               <head>
                 <meta charset="UTF-8">
-                <meta http-equiv="refresh" content="5;url=${config.editorDomain}"/>
+                <meta http-equiv="refresh" content="5;url=${config.editorUrl}"/>
                 <title>Singlelink - Error!</title>
               </head>
               <body>
@@ -301,7 +301,7 @@ export class AuthController extends Controller {
                   `You haven't linked your account to Google yet! You must do that in your settings first before logging in with Google.` :
                   `Error: ${s}`} <br>
                 Redirecting in 5 seconds...<br>
-                <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+                <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
               </p>
               </body>
               <script>
@@ -347,7 +347,7 @@ export class AuthController extends Controller {
           let requestToken = await this.userService.createAccessTokenRequest(user, googleId);
 
           reply.type("text/html").code(StatusCodes.OK);
-          let url = `${config.editorDomain}/auth/token-login?requestToken=${requestToken}&service=Google`;
+          let url = `${config.editorUrl}/auth/token-login?requestToken=${requestToken}&service=Google`;
 
           // language=HTML
           return `
@@ -360,7 +360,7 @@ export class AuthController extends Controller {
             <body>
             <p>
               Redirecting...<br>
-              <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+              <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
             </p>
             </body>
             <script>
@@ -377,14 +377,14 @@ export class AuthController extends Controller {
               <html lang="en">
               <head>
                 <meta charset="UTF-8">
-                <meta http-equiv="refresh" content="5;url=${config.editorDomain}"/>
+                <meta http-equiv="refresh" content="5;url=${config.editorUrl}"/>
                 <title>Singlelink - Error!</title>
               </head>
               <body>
               <p>
                 Error: ${s} <br>
                 Redirecting in 5 seconds...<br>
-                <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+                <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
               </p>
               </body>
               </html>`;
@@ -427,14 +427,14 @@ export class AuthController extends Controller {
             <head>
               <meta charset="UTF-8">
               <meta http-equiv="refresh"
-                    content="0;url=${config.editorDomain}/dashboard/settings/?googleLinked=${result}"/>
+                    content="0;url=${config.editorUrl}/dashboard/settings/?googleLinked=${result}"/>
               <title>Singlelink - Redirecting...</title>
             </head>
             <body>
             <p>
               Google enabled: ${result} <br>
               Redirecting...<br>
-              <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+              <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
             </p>
             </body>
             </html>`;
@@ -449,14 +449,14 @@ export class AuthController extends Controller {
               <html lang="en">
               <head>
                 <meta charset="UTF-8">
-                <meta http-equiv="refresh" content="5;url=${config.editorDomain}"/>
+                <meta http-equiv="refresh" content="5;url=${config.editorUrl}"/>
                 <title>Singlelink - Error!</title>
               </head>
               <body>
               <p>
                 Error: ${s} <br>
                 Redirecting in 5 seconds...<br>
-                <a href="${config.editorDomain}">Click here if you aren't automatically redirected.</a>
+                <a href="${config.editorUrl}">Click here if you aren't automatically redirected.</a>
               </p>
               </body>
               </html>`;

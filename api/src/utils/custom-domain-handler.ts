@@ -28,11 +28,11 @@ export class CustomDomainHandler {
    */
   public static async checkRoute(request: FastifyRequest, reply: FastifyReply) {
     let customDomain = request.hostname;
-    let editorDomain = config.editorDomain;
+    let rendererUrl = config.rendererUrl;
 
     // Disallow setting the domain as the client or api domain.
     // This is to prevent feedback loops.
-    if (customDomain === config.editorDomain || customDomain === config.apiDomain || customDomain === config.rendererDomain) {
+    if (customDomain === config.editorUrl || customDomain === config.apiUrl || customDomain === config.rendererUrl) {
       return;
     }
 
@@ -48,7 +48,7 @@ export class CustomDomainHandler {
       return;
     }
 
-    let url = `${editorDomain}/u/${profile.handle}`;
+    let url = `${rendererUrl}/${profile.handle}`;
 
     // language=HTML
     let html = `<!DOCTYPE html>

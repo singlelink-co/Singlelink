@@ -4,9 +4,9 @@
   "captureKey": "",
   "host": "0.0.0.0",
   "port": 80,
-  "apiDomain": "",
-  "editorDomain": "",
-  "rendererDomain": "",
+  "apiUrl": "",
+  "editorUrl": "",
+  "rendererUrl": "",
   "contactEmail": "",
   "aws": {
     "senderEmailAddress": "",

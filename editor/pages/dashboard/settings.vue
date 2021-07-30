@@ -51,7 +51,7 @@
             <div class="flex flex-row rounded-2xl border border-solid border-gray-300 text-sm mt-2 overflow-hidden">
               <span
                 class="flex p-2 bg-gray-100 border text-gray-900 border-solid border-gray-300 border-t-0 border-l-0 border-b-0"
-              >{{ hostname }}/u/</span>
+              >{{ hostname }}/</span>
               <input
                 id="handle"
                 v-model="user.activeProfile.handle"

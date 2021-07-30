@@ -94,7 +94,7 @@ prompt.get(schema, function(err, result) {
             }
         };
 
-        result['apiDomain'] = result.host + ':5566';
+        result['apiUrl'] = result.host + ':5566';
         result['clientDomain'] = result.host + ':80';
 
         try {

@@ -4,12 +4,12 @@
          style="z-index:2;background:linear-gradient(180deg, #FFF 60%, rgba(255,255,255,.65) 80%, rgba(255,255,255,0) 100%);">
       <n-link to="/dashboard"><img src="/sl-icon.svg" class="w-10" style="filter: drop-shadow(0px 10px 25px #5353EC);"/>
       </n-link>
-      <div class="flex flex-row items-center justify-start bg-opaqueBlack px-4 py-1 rounded-full w-full max-w-md"
-           style="border: solid 2px rgba(0,0,0,.15);">
-        <img src="/Compass.svg" style="width: 16px;height:auto;"/>
-        <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;"
-               placeholder="Search pages, guides, and documentation..."/>
-      </div>
+      <!--      <div class="flex flex-row items-center justify-start bg-opaqueBlack px-4 py-1 rounded-full w-full max-w-md"-->
+      <!--           style="border: solid 2px rgba(0,0,0,.15);">-->
+      <!--        <img src="/Compass.svg" style="width: 16px;height:auto;"/>-->
+      <!--        <input type="text" class="font-bold flex-grow flex-1 text-sm ml-2" style="background:transparent;"-->
+      <!--               placeholder="Search pages, guides, and documentation..."/>-->
+      <!--      </div>-->
       <a class="github-button" href="https://github.com/Neutron-Creative/Singlelink" data-icon="octicon-star"
          data-size="large" data-show-count="true" aria-label="Star Neutron-Creative/Singlelink on GitHub">Star</a>
     </div>
@@ -245,7 +245,7 @@ export default Vue.extend({
     await this.listProfiles();
 
     try {
-      this.profileUrl = window.location.origin + '/u/' + this.user.activeProfile.handle;
+      this.profileUrl = process.env.RENDERER_URL + this.user.activeProfile.handle;
       this.profile_visibility = this.user.activeProfile.visibility;
     } catch (err) {
       console.log(err);
@@ -263,7 +263,7 @@ export default Vue.extend({
       try {
         const qrRequest = await this.$axios.post('https://api.qr.io/v1/create', {
           apikey: process.env.QR_API,
-          data: "https://singlel.ink/u/" + this.user.activeProfile.handle,
+          data: process.env.RENDERER_URL + this.user.activeProfile.handle,
           transparent: "on",
           frontcolor: "#5353EC",
           marker_out_color: "#09FDFD",
@@ -423,14 +423,27 @@ export default Vue.extend({
     async copyUrl() {
       try {
         let text = '';
-        if (this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
-        if (!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+        if (this.user.activeProfile.customDomain) {
+          text = this.user.activeProfile.customDomain;
+        }
+
+        if (!text || text === 'https://null') {
+          text = 'https://singlel.ink/' + this.user.activeProfile.handle;
+        }
+
         await window.navigator.clipboard.writeText(text);
         alert(`Url copied to clipboard!\n${text}`);
       } catch (error) {
         let text = '';
-        if (this.user.activeProfile.customDomain) text = this.user.activeProfile.customDomain;
-        if (!text || text == 'https://null') text = 'https://singlel.ink/u/' + this.user.activeProfile.handle;
+
+        if (this.user.activeProfile.customDomain) {
+          text = this.user.activeProfile.customDomain;
+        }
+
+        if (!text || text === 'https://null') {
+          text = 'https://singlel.ink/' + this.user.activeProfile.handle;
+        }
+
         prompt('Copy this url to the clipboard: Ctrl+C, Enter\n', text);
       }
     },

@@ -58,22 +58,22 @@ if (process.env.PORT) {
 /**
  * The domain that the api will be hosted on.
  */
-if (process.env.API_DOMAIN) {
-  config.apiDomain = process.env.API_DOMAIN;
+if (process.env.API_URL) {
+  config.apiUrl = process.env.API_URL;
 }
 
 /**
  * The domain that the editor is hosted at.
  */
-if (process.env.EDITOR_DOMAIN) {
-  config.editorDomain = process.env.EDITOR_DOMAIN;
+if (process.env.EDITOR_URL) {
+  config.editorUrl = process.env.EDITOR_URL;
 }
 
 /**
  * The domain that the renderer is hosted at.
  */
-if (process.env.RENDERER_DOMAIN) {
-  config.rendererDomain = process.env.RENDERER_DOMAIN;
+if (process.env.RENDERER_URL) {
+  config.rendererUrl = process.env.RENDERER_URL;
 }
 
 /**
@@ -173,8 +173,8 @@ if (process.env.GOOGLE_CLIENT_SECRET) {
   config.google.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 }
 
-if (process.env.GOOGLE_REDIRECT_DOMAIN) {
-  config.google.redirectDomain = process.env.GOOGLE_REDIRECT_DOMAIN;
+if (process.env.GOOGLE_REDIRECT_URL) {
+  config.google.redirectDomain = process.env.GOOGLE_REDIRECT_URL;
 }
 
 if (process.env.ALLOW_X_FORWARD_HEADER) {

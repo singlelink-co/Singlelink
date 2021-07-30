@@ -19,7 +19,7 @@ export default {
   },
 
   loading: {
-    color: '#4C51BF',
+    color: '#5353ec',
     height: '3px'
   },
 
@@ -186,6 +186,7 @@ export default {
   env: {
     API_URL: process.env.API_URL ?? 'https://api.singlelink.co',
     HOSTNAME: process.env.HOSTNAME ?? 'app.singlelink.co',
+    RENDERER_URL: process.env.RENDERER_URL ?? 'https://singlel.ink',
     PORT: process.env.PORT ?? 3000,
     APP_NAME: process.env.APP_NAME ?? 'Singlelink',
     LOGO_URL: process.env.LOGO_URL ?? '/logo.svg',

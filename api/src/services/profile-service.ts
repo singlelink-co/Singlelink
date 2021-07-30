@@ -83,7 +83,7 @@ export class ProfileService extends DatabaseService {
       screenshotOptions.crop = true;
 
       return await ScreenshotUtils.getOrCreateScreenshot(
-        `${config.rendererDomain}/${handle}`,
+        `${config.rendererUrl}/${handle}`,
         [`${resolution.x}x${resolution.y}`],
         ScreenshotUtils.DEFAULT_TTL,
         false,
@@ -99,7 +99,7 @@ export class ProfileService extends DatabaseService {
    * Creates a new profile.
    *
    * @param userId The userId that owns this profile.
-   * @param handle The handle that is given to the newly created profile for this account Ex: singlelink.co/u/neutroncreative
+   * @param handle The handle that is given to the newly created profile for this account Ex: singlel.ink/neutroncreative
    * @param imageUrl
    * @param headline
    * @param subtitle
