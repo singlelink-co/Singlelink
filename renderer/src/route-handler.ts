@@ -134,12 +134,26 @@ export class RouteHandler {
           case 'image':
             //language=HTML
             linkHtml += `
-              <img id="sl-item-${link.id}" src="${link.url}" class="w-full h-auto" alt="link-img"/>
+              <img id="sl-item-${link.id}" src="${link.url}" class="w-full h-auto"
+                   style="margin-bottom:.75rem;border-radius:4px;" alt="link image"/>
             `;
+            break;
+          case 'youtube':
+            let watchId = link.url.match(/v=([^&]*)/);
+            if (watchId && watchId.length > 0 && watchId[1]) {
+              linkHtml += `
+                            <style>.embed-container { border-radius:4px; width:100%; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+                            <div class='embed-container' style="margin-bottom:.75rem;"><iframe src='https://www.youtube.com/embed/${watchId[1]}' frameborder='0' allowfullscreen></iframe></div>
+                            `;
+            }
             break;
           case 'divider':
             //language=HTML
-            linkHtml += '<div class="w-full bg-black" style="opacity:.15;height:1px;"></div>';
+            linkHtml += '<div class="flex flex-row items-center justify-center w-full" style="margin-bottom:.75rem">';
+            linkHtml += '<div style="flex-grow:1;background:rgba(0,0,0,.15);height:1px;"></div>';
+            linkHtml += '<div style="margin:0 8px; text-transform:uppercase;font-weight:600;color:rgba(0,0,0,.5);letter-spacing:1px;font-size:12px;">' + link.label + '</div>';
+            linkHtml += '<div style="flex-grow:1;background:rgba(0,0,0,.15);height:1px;"></div>';
+            linkHtml += '</div>';
             break;
         }
       }
