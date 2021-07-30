@@ -124,6 +124,10 @@
             <img src="/Rainbow.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Appearance</span>
           </n-link>
+          <n-link to="/dashboard/marketplace" :class="getActiveStyles('dashboard-marketplace')">
+            <img src="/High voltage.svg" style="width:24px;height:24px;">
+            <span class="ml-4 font-extrabold">Marketplace</span>
+          </n-link>
           <a href="https://discord.gg/wqjKmsRP39" target="_blank" :class="getActiveStyles('dashboard-support')">
             <img src="/Cowboy hat face.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Contact support</span>
@@ -132,7 +136,7 @@
             <img src="/Settings.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Settings</span>
           </n-link>
-          <n-link v-if="isAdmin" to="/dashboard/admin" :class="getActiveStyles('dashboard-settings')">
+          <n-link v-if="isAdmin" to="/dashboard/admin" :class="getActiveStyles('dashboard-admin')">
             <img src="/Person.svg" style="width:24px;height:24px;"/>
             <span class="ml-4 font-extrabold">Admin Settings</span>
           </n-link>

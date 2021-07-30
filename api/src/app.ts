@@ -16,6 +16,7 @@ import {JobSystem} from "./jobs/job-system";
 import {DbLocks} from "./utils/db-locks";
 import {ScreenshotUtils} from "./utils/screenshot-utils";
 import {LogUtils} from "./utils/log-utils";
+import {MarketplaceController} from "./controllers/marketplace-controller";
 
 console.log("Initializing Singlelink");
 
@@ -54,6 +55,7 @@ async function start() {
 
   // Management controllers
   server.addController(new PermissionController(server.fastify, database));
+  server.addController(new MarketplaceController(server.fastify, database));
 
   // Admin controllers
   server.addController(new AdminController(server.fastify, database));

@@ -33,7 +33,7 @@ export default Vue.extend({
   data() {
     return {
       consentBannerActive: false,
-      app_name: process.env.APP_NAME,
+      app_name: 'Singlelink'
     };
   },
 

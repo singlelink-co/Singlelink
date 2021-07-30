@@ -151,8 +151,7 @@ export default Vue.extend({
       links: null as any,
       hostname: process.env.HOSTNAME,
       api_url: process.env.API_URL,
-      app_name: process.env.APP_NAME,
-      icon_url: process.env.ICON_URL,
+      app_name: 'Singlelink',
       free_signup: process.env.FREE_SIGNUP
     };
   },
@@ -160,31 +159,29 @@ export default Vue.extend({
   async fetch() {
     if (this.authenticated) {
       await this.getAuthenticatedProfile();
+    } else if (!this.preview) {
+      await this.getProfile();
     } else {
-      if(!this.preview) {
-        await this.getProfile();
-      } else {
-        // do nothing
-        await this.getAuthenticatedProfile();
-        this.profile.customCss = this.profileData.customCss;
-        this.profile.customHtml = this.profileData.customHtml;
-        this.theme = this.profileData;
-        /*this.user = {
-          name: null,
-          emailHash: 'something',
-          avatarUrl: null,
-        };
-        this.links = [
-          {
-            id: 0,
-            label: 'Example link',
-            subtitle: null,
-            url: '#',
-            customCss: ''
-          }
-        ];*/
-        this.loaded = true;
-      }
+      // do nothing
+      await this.getAuthenticatedProfile();
+      this.profile.customCss = this.profileData.customCss;
+      this.profile.customHtml = this.profileData.customHtml;
+      this.theme = this.profileData;
+      /* this.user = {
+        name: null,
+        emailHash: 'something',
+        avatarUrl: null,
+      };
+      this.links = [
+        {
+          id: 0,
+          label: 'Example link',
+          subtitle: null,
+          url: '#',
+          customCss: ''
+        }
+      ]; */
+      this.loaded = true;
     }
   },
 
@@ -222,9 +219,9 @@ export default Vue.extend({
       this.loaded = true;
     },
 
-    async getTheme() {
-      //if(!this.themeData) this.themeData = {}; // fetch theme
-      //this.theme = this.themeData;
+    getTheme() {
+      // if(!this.themeData) this.themeData = {}; // fetch theme
+      // this.theme = this.themeData;
       this.profile.customCss = this.theme?.customCss;
       this.profile.customHtml = this.theme?.customHtml;
     },

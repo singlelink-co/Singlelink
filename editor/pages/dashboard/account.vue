@@ -281,9 +281,6 @@ export default Vue.extend({
 
         const md5 = crypto.createHash('md5').update(this.passwordEmail).digest('hex');
 
-        console.log(md5);
-        console.log(this.user.emailHash);
-
         if (md5 !== this.user.emailHash) {
           this.passwordError = "Please enter the same email you used for this account.";
           return;

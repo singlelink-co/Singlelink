@@ -136,7 +136,7 @@ export default {
       ssr: true
     },
     {
-      src: '~plugins/cssjson.js',
+      src: '~plugins/cssjson.ts',
       srr: true,
     },
     {
