@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-shrink-0 flex-col p-8 items-center flex-grow overflow-x-hidden overflow-y-scroll">
+  <section class="flex flex-col p-8 items-center flex-grow overflow-x-hidden overflow-y-scroll">
     <div class="flex flex-col lg:flex-row justify-start lg:justify-between items-center mb-4 w-full">
       <h1 v-if="intent!=='view'" class="text-gray-800 font-extrabold tracking-tight text-3xl">
         Submission details
