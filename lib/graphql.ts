@@ -26,6 +26,7 @@ const httpLink = new HttpLink({
 })
 
 export const client = new ApolloClient({
+  ssrMode: true,
   cache: new InMemoryCache(),
   link: concat(authLink, httpLink),
 })
