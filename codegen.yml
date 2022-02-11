@@ -1,0 +1,18 @@
+schema: 'pages/api/graphql/type-defs/*.ts' # you can also point to a GraphQL endpoint!
+require:
+  - ts-node/register
+generates:
+  ./pages/api/src/generated-types.ts:
+    config:
+      withHooks: false
+    plugins:
+      - 'typescript'
+      - 'typescript-react-apollo'
+  ./hooks-generated/index.ts:
+    documents: "./hooks/*.graphql"
+    config:
+      withHooks: true
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
