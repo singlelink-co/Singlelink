@@ -34,6 +34,24 @@ const Home: NextPage = () => {
       </div>
     )
   return (
+    <>
+    <Head>
+      <title>Singlelink - The open-source micro-site platform</title>
+      <meta name="title" content={process.env.META_TITLE} />
+      <meta name="description" content={process.env.META_DESC} />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://singlelink.co/" />
+      <meta property="og:title" content={process.env.META_TITLE} />
+      <meta property="og:description" content={process.env.META_DESC} />
+      <meta property="og:image" content={process.env.META_IMG} />
+
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content="https://singlelink.co/" />
+      <meta property="twitter:title" content={process.env.META_TITLE} />
+      <meta property="twitter:description" content={process.env.META_DESC} />
+      <meta property="twitter:image" content={process.env.META_IMG} />
+    </Head>
     <div className='flex flex-col items-center justify-center w-full max-w-lg mx-auto py-16 px-4'>
       {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
         if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
@@ -54,6 +72,7 @@ const Home: NextPage = () => {
       })}
       <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>
     </div>
+    </>
   )
 }
 
