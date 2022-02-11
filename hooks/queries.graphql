@@ -1,3 +1,13 @@
 query hello {
     hello
 }
+
+query listLinks {
+    listLinks {
+        id
+        label
+        content
+        type
+        position
+    }
+}

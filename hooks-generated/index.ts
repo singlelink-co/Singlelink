@@ -14,9 +14,19 @@ export type Scalars = {
   Float: number;
 };
 
+export type Link = {
+  __typename?: 'Link';
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  position: Scalars['Int'];
+  type: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello?: Maybe<Scalars['String']>;
+  listLinks?: Maybe<Array<Maybe<Link>>>;
 };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
@@ -25,6 +35,17 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 export type HelloQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'hello'>
+);
+
+export type ListLinksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListLinksQuery = (
+  { __typename?: 'Query' }
+  & { listLinks?: Maybe<Array<Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
+  )>>> }
 );
 
 
@@ -60,3 +81,41 @@ export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Hell
 export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
 export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
 export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;
+export const ListLinksDocument = gql`
+    query listLinks {
+  listLinks {
+    id
+    label
+    content
+    type
+    position
+  }
+}
+    `;
+
+/**
+ * __useListLinksQuery__
+ *
+ * To run a query within a React component, call `useListLinksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListLinksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListLinksQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListLinksQuery(baseOptions?: Apollo.QueryHookOptions<ListLinksQuery, ListLinksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListLinksQuery, ListLinksQueryVariables>(ListLinksDocument, options);
+      }
+export function useListLinksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListLinksQuery, ListLinksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListLinksQuery, ListLinksQueryVariables>(ListLinksDocument, options);
+        }
+export type ListLinksQueryHookResult = ReturnType<typeof useListLinksQuery>;
+export type ListLinksLazyQueryHookResult = ReturnType<typeof useListLinksLazyQuery>;
+export type ListLinksQueryResult = Apollo.QueryResult<ListLinksQuery, ListLinksQueryVariables>;

@@ -12,7 +12,17 @@ export type Scalars = {
   Float: number;
 };
 
+export type Link = {
+  __typename?: 'Link';
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  position: Scalars['Int'];
+  type: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello?: Maybe<Scalars['String']>;
+  listLinks?: Maybe<Array<Maybe<Link>>>;
 };
