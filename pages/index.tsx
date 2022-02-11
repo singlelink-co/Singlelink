@@ -3,16 +3,11 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import Logo from '../components/logo'
-import { useListLinksQuery } from '../hooks-generated'
+import { Link as LinkType }  from '../hooks-generated'
 
-const Home: NextPage = () => {
-  const listLinks = useListLinksQuery()
-  if(listLinks.loading) return (
-    <div className='flex flex-col items-center justify-center w-full min-h-screen text-center bg-gray-100'>
-      <p className='text-gray-600 text-xl'>Loading...</p>
-    </div>
-  )
-  if((listLinks.data?.listLinks ?? []).length<1)
+const Home = ({ links }: { links: LinkType[]}) => {
+
+  if(!links)
     return (
       <div className='flex flex-col items-center justify-center w-full min-h-screen bg-gray-100'>
         <Head>
@@ -53,7 +48,7 @@ const Home: NextPage = () => {
       <meta property="twitter:image" content={process.env.META_IMG} />
     </Head>
     <div className='flex flex-col items-center justify-center w-full max-w-lg mx-auto py-16 px-4'>
-      {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
+      {[...links].sort((a,b) => {
         if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
         if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
         return 0
@@ -74,6 +69,22 @@ const Home: NextPage = () => {
     </div>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  if (!process.env.GRAPHQL_URL) throw Error('Singlelink: GraphQL URL not found!')
+  const res = await fetch(process.env.GRAPHQL_URL, {
+     "headers": {
+        "accept": "application/json",
+        "content-type": "application/json",
+      },
+    "body": "{\"operationName\":\"listLinks\",\"variables\":{},\"query\":\"query listLinks {\\n  listLinks {\\n    id\\n    label\\n    content\\n    type\\n    position\\n    __typename\\n  }\\n}\\n\"}",
+    "method": "POST"
+  })
+  const data = await res.json()
+  const links: LinkType[] = data.data.listLinks
+  return { props: { links } }
+
 }
 
 export default Home
