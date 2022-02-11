@@ -69,7 +69,7 @@ const Home = ({ links }: { links: LinkType[]}) => {
             <iframe src={link.content ?? '#'} frameBorder='0' allowFullScreen></iframe>
           </div>)
       })}
-      <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>
+      {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>}
     </div>
     </>
   )
