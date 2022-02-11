@@ -9,6 +9,7 @@
     "generate": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.8",
     "apollo-server-micro": "^3.6.3",
     "graphql": "^15.7.2",
     "micro": "^9.3.4",
