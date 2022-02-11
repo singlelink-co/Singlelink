@@ -11,5 +11,5 @@ export const typeDefs = [
     /*inputs, */
     /*mutations,*/
     /*scalars,*/
-    /*types,*/
+    types,
 ]
