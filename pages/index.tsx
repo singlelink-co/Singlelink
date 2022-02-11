@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       <div className='flex flex-col items-center justify-center w-full max-w-md p-8 rounded-xl text-center'>
       <div className='mb-6' style={{width: 44}}><Logo/></div>
         <h1 className='font-semibold text-2xl mb-4'>Under construction</h1>
-        <p className=' mb-6 text-gray-600'>This <a href='https://singlelink.co' target="_blank" className='font-semibold text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a> page is currently under construction. Be sure to check back soon!</p>
+        <p className=' mb-6 text-gray-600'>This <a href='https://singlelink.co' target="_blank" className='font-semibold text-indigo-600 hover:underline hover:text-indigo-700' rel="noreferrer">Singlelink</a> page is currently under construction. Be sure to check back soon!</p>
         <Link passHref href="/login">
           <button className='px-8 py-4 w-full bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Log in to my Singlelink dashboard</button>
         </Link>
