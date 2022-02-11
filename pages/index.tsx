@@ -42,17 +42,17 @@ const Home: NextPage = () => {
       }).map(link => {
         if(link?.type === 'text')
           return (<div className='text-center flex flex-col items-center justify-center mb-8' key={link?.id}>
-            <h1 className="text-3xl mb-4">{link?.label}</h1>
-            <h2 className='text-xl text-gray-600 font-medium'>{link?.content}</h2>
+            <h1 className="text-3xl mb-4 font-semibold">{link?.label}</h1>
+            <h2 className='text-xl text-gray-600'>{link?.content}</h2>
           </div>)
         if(link?.type === 'vanilla')
           return (<a href={link.content ?? '#'} className='hover:bg-indigo-700 flex flex-col w-full text-center px-3 py-6 mb-3 bg-indigo-600 text-white font-medium rounded-xl text-lg' key={link?.id}>{link?.label}</a>)
         if(link?.type === 'avatar')
-          return (<div className='flex items-center justify-center overflow-hidden w-32 h-32 rounded-full mb-6'>
+          return (<div className='flex items-center justify-center overflow-hidden w-32 h-32 rounded-full mb-6' key={link?.id}>
             <img alt="User" src={link.content ?? '#'} width='100%' height='auto' />
           </div>)
       })}
-      <div className='text-gray-600 mt-auto mt-10'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>
+      <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>
     </div>
   )
 }
