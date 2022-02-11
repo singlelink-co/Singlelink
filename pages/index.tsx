@@ -36,7 +36,7 @@ const Home: NextPage = () => {
   return (
     <>
     <Head>
-      <title>Singlelink - The open-source micro-site platform</title>
+      <title>{process.env.META_TITLE}</title>
       <meta name="title" content={process.env.META_TITLE} />
       <meta name="description" content={process.env.META_DESC} />
 
