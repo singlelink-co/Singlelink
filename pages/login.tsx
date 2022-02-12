@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt')
-    if(jwt) return router.push('/dashboard')
+    if(jwt) router.push('/dashboard')
   })
 
   return (
