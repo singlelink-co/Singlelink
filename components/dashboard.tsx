@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LogoLong from "./logo-long";
 
-const Dashboard = ({ children }) => (
+const Dashboard = ({ children }: { children: any}) => (
     <div className='flex flex-row min-h-screen w-screen'>
             <div className='flex flex-col h-screen fixed top-0 left-0' style={{backgroundColor: '#1F2937', width: 350}}>
                 <div className='flex flex-col py-12 px-8'>
