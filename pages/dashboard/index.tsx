@@ -22,12 +22,15 @@ const Dashboard = () => {
     })
 
     useEffect(() => {
-        if(!localStorage.getItem('jwt')) return router.push('/login')
-        verify[0]({
-            variables: {
-                jwt: localStorage.getItem('jwt') ?? ''
-            }
-        })
+        if(!localStorage.getItem('jwt')) {
+            router.push('/login')
+        } else {
+            verify[0]({
+                variables: {
+                    jwt: localStorage.getItem('jwt') ?? ''
+                }
+            })
+        }
     },[])
 
     return (
@@ -41,7 +44,7 @@ const Dashboard = () => {
         <div className='flex flex-col items-center justify-center w-full max-w-md p-8 rounded-xl text-center'>
         <div className='mb-6' style={{width: 44}}><Logo/></div>
           <h1 className='font-semibold text-2xl mb-4'>Logged in</h1>
-          <p className=' mb-6 text-gray-600'>Hurray, you're logged in!</p>
+          <p className=' mb-6 text-gray-600'>Hurray, you`&apos;`re logged in!</p>
         </div>
       </div>
     )
