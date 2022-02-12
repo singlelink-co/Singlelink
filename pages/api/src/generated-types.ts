@@ -24,11 +24,17 @@ export type Link = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<Scalars['String']>;
+  verify?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationLoginArgs = {
   password?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationVerifyArgs = {
+  jwt?: Maybe<Scalars['String']>;
 };
 
 export type Query = {

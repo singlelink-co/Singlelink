@@ -1,0 +1,15 @@
+mutation login(
+    $password: String!
+) {
+    login(
+        password: $password
+    )
+}
+
+mutation verify(
+    $jwt: String!
+) {
+    verify(
+        jwt: $jwt
+    )
+}
