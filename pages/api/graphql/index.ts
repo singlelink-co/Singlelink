@@ -11,6 +11,7 @@ import { Mutation } from './mutations'
 import { Query } from './queries'
 import { Resolvers } from './resolvers'
 import { typeDefs } from './type-defs'
+const jwt = require('jsonwebtoken')
 
 export const resolvers = {
     Mutation,
@@ -20,7 +21,16 @@ export const resolvers = {
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({ req }) => {
+        const token = req.headers.authorization.substr(7, req.headers.authorization.length-7) || ''
+        try {
+            const decoded = jwt.verify(token, process.env.SECRET)
+        } catch {
+            return { isAuthorized: false}
+        }
+        return { isAuthorized: true }
+    }
 })
 
 const startServer = server.start()
