@@ -23,13 +23,15 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req }) => {
-        const token = req.headers.authorization.substr(7, req.headers.authorization.length-7) || ''
-        try {
-            const decoded = jwt.verify(token, process.env.SECRET)
-        } catch {
-            return { isAuthorized: false}
-        }
-        return { isAuthorized: true }
+        if(req.headers.authorization) {
+            const token = req.headers.authorization.substr(7, req.headers.authorization.length-7) || ''
+            try {
+                const decoded = jwt.verify(token, process.env.SECRET)
+            } catch {
+                return { isAuthorized: false}
+            }
+            return { isAuthorized: true }
+        } else return {}
     }
 })
 
