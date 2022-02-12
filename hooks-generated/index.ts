@@ -23,6 +23,16 @@ export type Link = {
   type: Scalars['String'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  login?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationLoginArgs = {
+  password?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   hello?: Maybe<Scalars['String']>;

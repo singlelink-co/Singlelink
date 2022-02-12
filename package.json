@@ -12,6 +12,7 @@
     "@apollo/client": "^3.5.8",
     "apollo-server-micro": "^3.6.3",
     "graphql": "15.7.2",
+    "jsonwebtoken": "^8.5.1",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "mysql-await": "^2.1.8",

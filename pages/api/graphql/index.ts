@@ -13,7 +13,7 @@ import { Resolvers } from './resolvers'
 import { typeDefs } from './type-defs'
 
 export const resolvers = {
-    // Mutation,
+    Mutation,
     Query,
     //...Resolvers
 }

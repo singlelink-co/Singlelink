@@ -9,7 +9,7 @@ import {gql} from 'apollo-server-micro'
 export const typeDefs = [
     queries,
     /*inputs, */
-    /*mutations,*/
+    mutations,
     /*scalars,*/
     types,
 ]
