@@ -29,12 +29,6 @@ const DashboardLinks = () => {
     useEffect(() => {
         if(!localStorage.getItem('jwt')) {
             router.push('/login')
-        } else {
-            verify[0]({
-                variables: {
-                    jwt: localStorage.getItem('jwt') ?? ''
-                }
-            })
         }
     },[])
 
