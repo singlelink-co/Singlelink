@@ -45,7 +45,7 @@ The easiest way to self-host your own [Singlelink](https://singlelink.co) site i
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink%2Ftree%2Fjb%2Fv4-renderer&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
 
 If you don't wanto to host with Railway, you can host Singlelink with any host, provided you can install and run both Node.JS & PostgreSQL. Singlelink will need one PostgreSQL database, and one NodeJS instance capable of running Next.JS at run-time/SSR.<br><br>
-Looking for a hands-off experience with premium support? Consider checking out [Singlelink Cloud](https://singlelink.co), with plans starting at just $5/month.
+Looking for a hands-off experience with premium support?<br>Consider checking out [Singlelink Cloud](https://singlelink.co), with plans starting at just $5/month.
 
 
 <h2 id="local-development">Local development</h2>
