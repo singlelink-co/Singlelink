@@ -56,9 +56,9 @@ If you haven't already, you'll need to install NodeJS and PostgreSQL before bein
 - [NodeJS installation guide](https://nodejs.dev/learn/how-to-install-nodejs)
 - [PostgreSQL installation guide](https://www.postgresql.org/download/)
 
-Once you've installed NodeJS & PostgreSQL, you can download and install Singlelink locally with:
+Once you've installed NodeJS & PostgreSQL, you can download Singlelink locally with:
 ```bash
-git clone https://github.com/Neutron-Creative/Singlelink.git;cd Singlelink;npm i;
+git clone https://github.com/Neutron-Creative/Singlelink.git;cd Singlelink;
 ```
 
 Before you start, you'll need to configure your environment by copying the .env template:
@@ -80,6 +80,11 @@ Optionally, set the following variables to customize your site:
 - `META_DESC`: The description for your site, seen in Google Search results
 - `META_IMG`: The OG image for your site, seen when sharing your site on social media.
 - `BRANDING`: A boolean that enables/disables Singlelink branding on your site & dashboard
+
+Next, install your dependencies, which will also run your first-time database migration after:
+```bash
+npm i
+```
 
 Finally, you can start your development environment by running:
 ```bash
