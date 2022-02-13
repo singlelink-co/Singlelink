@@ -30,6 +30,9 @@ const LinkDetail = () => {
     const updateLinkById = useUpdateLinkByIdMutation({
         onCompleted: (data) => {
             setLoading(false)
+            if(!document.getElementById('singlelink-preview')) return
+            let iframe: HTMLIFrameElement = document.getElementById('singlelink-preview') as HTMLIFrameElement
+            iframe.src = iframe.src
         }
     })
 

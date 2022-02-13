@@ -52,7 +52,7 @@ const Dashboard = ({ children }: { children: any}) => (
                 </div>
                 <div className='flex items-center justify-center' style={{width:375, height:812, transform: 'scale(.8)', borderRadius: 65, backgroundColor: '#000'}}>
                     <div style={{width:347, height: 767, borderRadius: 50, overflow: 'hidden'}}>
-                        <iframe width={347} height={767} src='https://beta.singlelink.co'></iframe>
+                        <iframe id="singlelink-preview" width={347} height={767} src='https://beta.singlelink.co'></iframe>
                     </div>
                 </div>
                 <div className='flex flex-row items-center justify-center w-full text-center p-4' style={{borderTop: 'solid 1px rgba(0,0,0,.15)'}}>
