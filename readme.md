@@ -53,9 +53,9 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql), and are hosted with Apollo Server.
 
-<h2 id="deploy-your-singlelink">Deploy your <a href="https://singlelink.co">Singlelink</a></h2>
+<h2 id="deploy-your-singlelink">Deploy your Singlelink</h2>
 
-The easiest way to self-host your own Singlelink site is with [Railway](https://railway.app). There, you can set up a Singlelink page with a custom domain, with no tracking, no ads, and run up to three sites 100% free, since Railway provides a $5/monthly quota and each Singlelink instance costs $1.54/mo.
+The easiest way to self-host your own [Singlelink](https://singlelink.co) site is with [Railway](https://railway.app).<br>With Railway, you can set up a Singlelink page with a custom domain, with no tracking, no ads, and run up to three sites 100% free, since Railway provides a $5/monthly quota and each Singlelink instance costs ~$1.54/mo.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink%2Ftree%2Fjb%2Fv4-renderer&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
 
