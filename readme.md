@@ -1,9 +1,12 @@
-<p align="center">
-  <a href="https://gofiber.io">
+<h1 align="center">
+  <a href="https://singlelink.io">
     <img alt="Singlelink logo" height="150" src="https://uploads-ssl.webflow.com/61adc63433f2df05fde531f0/6208a997bb1f010bd2fc014f_singlelink-badge-padded.svg">
   </a>
-  <br>
-</p>
+</h1>
+
+<h3 align="center">
+    <a href="https://singlelink.co">Singlelink</a> is the open-source Linktree alternative.
+</h3>
 
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
@@ -31,31 +34,35 @@
 
 <p align="center">
   <a href="#local-development">Local development</a> •
-  <a href="#deploy-your-singlelink">Deploy your Singlelink</a> •
-  <a href="#deployment">Deploy your Singlelink</a>
+  <a href="#deploy-your-singlelink">Deploy a Singlelink page</a> •
+  <a href="#credits">Credits</a>
 </p>
 
 
 
 <h2 id="local-development">Local development</h2>
 
-First, run the development server:
+Singlelink is a [NodeJS](#) project built on [Next.js](https://nodejs.org/en/), [GraphQL](https://graphql.org/) (served via [Apollo Server](https://www.apollographql.com/)), and [PostgreSQL](https://www.postgresql.org/).
 
+If you haven't already, you'll need to install NodeJS and PostgreSQL before being able to host or work on Singelink.
+- [NodeJS installation guide](https://nodejs.dev/learn/how-to-install-nodejs)
+- [PostgreSQL installation guide](https://www.postgresql.org/download/)
+
+Once you've installed NodeJS & PostgreSQL, you can download and install Singlelink locally with:
+```bash
+git clone https://github.com/Neutron-Creative/Singlelink.git;cd Singlelink;npm i;
+```
+
+Next, you can start your development environment by running:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+<h2 id="deploy-your-singlelink">Deploy a Singlelink page</h2>
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql), and are hosted with Apollo Server.
-
-<h2 id="deploy-your-singlelink">Deploy your Singlelink</h2>
-
-The easiest way to self-host your own [Singlelink](https://singlelink.co) site is with [Railway](https://railway.app).<br>With Railway, you can set up a Singlelink page with a custom domain, with no tracking, no ads, and run up to three sites 100% free, since Railway provides a $5/monthly quota and each Singlelink instance costs ~$1.54/mo.
+The easiest way to self-host your own [Singlelink](https://singlelink.co) site is with [Railway](https://railway.app).<br>With Railway, you can set up a Singlelink page with a custom domain, with no tracking, no ads, and run up to three sites 100% free, since Railway provides $5 in free monthly credits and each Singlelink instance costs ~$1.54/mo.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink%2Ftree%2Fjb%2Fv4-renderer&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
 
