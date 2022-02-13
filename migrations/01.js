@@ -9,7 +9,7 @@ const client = new Pool({
 })
 
 // Test DB Connection
-client.connect((err) => {
+await client.connect((err) => {
     if (err) {
         console.log('Singlelink: Database connection error!')
         throw err;
@@ -17,7 +17,7 @@ client.connect((err) => {
 });
 
 console.log('Singlelink: Running migration 01.js')
-client.query(`
+await client.query(`
     CREATE TABLE IF NOT EXISTS links (
         id SERIAL,
         label TEXT,
@@ -26,3 +26,5 @@ client.query(`
         position INT UNIQUE NOT NULL
     );
 `)
+console.log('Singlelink: Initial migration completed!')
+process.exit(0)
