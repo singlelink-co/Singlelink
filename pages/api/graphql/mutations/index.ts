@@ -1,3 +1,4 @@
+import Link from "../../../../lib/models/Link";
 import { MutationLoginArgs } from "../../src/generated-types";
 
 const jwt = require("jsonwebtoken");
@@ -18,5 +19,11 @@ export const Mutation = {
         _context: any) => {
             const decoded = jwt.verify(params.jwt, process.env.SECRET)
             return params.jwt
+    },
+    updateLinkById: async(_: any,
+        params: { label: string, content: string, id: number, position: number, type: string}, { isAuthorized }: { isAuthorized: boolean }) => {
+            if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
+            const updatedLink = Link.updateById(params)
+            return updatedLink
         }
 }

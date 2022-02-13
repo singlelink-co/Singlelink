@@ -26,6 +26,7 @@ export type Link = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<Scalars['String']>;
+  updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
 };
 
@@ -35,14 +36,29 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationUpdateLinkByIdArgs = {
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  position: Scalars['Int'];
+  type: Scalars['String'];
+};
+
+
 export type MutationVerifyArgs = {
   jwt?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  findLinkById?: Maybe<Link>;
   hello?: Maybe<Scalars['String']>;
   listLinks?: Maybe<Array<Maybe<Link>>>;
+};
+
+
+export type QueryFindLinkByIdArgs = {
+  id: Scalars['Int'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -65,6 +81,23 @@ export type VerifyMutation = (
   & Pick<Mutation, 'verify'>
 );
 
+export type UpdateLinkByIdMutationVariables = Exact<{
+  label?: Maybe<Scalars['String']>;
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  position: Scalars['Int'];
+  type: Scalars['String'];
+}>;
+
+
+export type UpdateLinkByIdMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLinkById?: Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
+  )> }
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -82,6 +115,19 @@ export type ListLinksQuery = (
     { __typename?: 'Link' }
     & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
   )>>> }
+);
+
+export type FindLinkByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindLinkByIdQuery = (
+  { __typename?: 'Query' }
+  & { findLinkById?: Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
+  )> }
 );
 
 
@@ -147,6 +193,53 @@ export function useVerifyMutation(baseOptions?: Apollo.MutationHookOptions<Verif
 export type VerifyMutationHookResult = ReturnType<typeof useVerifyMutation>;
 export type VerifyMutationResult = Apollo.MutationResult<VerifyMutation>;
 export type VerifyMutationOptions = Apollo.BaseMutationOptions<VerifyMutation, VerifyMutationVariables>;
+export const UpdateLinkByIdDocument = gql`
+    mutation updateLinkById($label: String, $content: String, $id: Int!, $position: Int!, $type: String!) {
+  updateLinkById(
+    label: $label
+    content: $content
+    id: $id
+    position: $position
+    type: $type
+  ) {
+    id
+    label
+    content
+    type
+    position
+  }
+}
+    `;
+export type UpdateLinkByIdMutationFn = Apollo.MutationFunction<UpdateLinkByIdMutation, UpdateLinkByIdMutationVariables>;
+
+/**
+ * __useUpdateLinkByIdMutation__
+ *
+ * To run a mutation, you first call `useUpdateLinkByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLinkByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLinkByIdMutation, { data, loading, error }] = useUpdateLinkByIdMutation({
+ *   variables: {
+ *      label: // value for 'label'
+ *      content: // value for 'content'
+ *      id: // value for 'id'
+ *      position: // value for 'position'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useUpdateLinkByIdMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLinkByIdMutation, UpdateLinkByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateLinkByIdMutation, UpdateLinkByIdMutationVariables>(UpdateLinkByIdDocument, options);
+      }
+export type UpdateLinkByIdMutationHookResult = ReturnType<typeof useUpdateLinkByIdMutation>;
+export type UpdateLinkByIdMutationResult = Apollo.MutationResult<UpdateLinkByIdMutation>;
+export type UpdateLinkByIdMutationOptions = Apollo.BaseMutationOptions<UpdateLinkByIdMutation, UpdateLinkByIdMutationVariables>;
 export const HelloDocument = gql`
     query hello {
   hello
@@ -217,3 +310,42 @@ export function useListLinksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type ListLinksQueryHookResult = ReturnType<typeof useListLinksQuery>;
 export type ListLinksLazyQueryHookResult = ReturnType<typeof useListLinksLazyQuery>;
 export type ListLinksQueryResult = Apollo.QueryResult<ListLinksQuery, ListLinksQueryVariables>;
+export const FindLinkByIdDocument = gql`
+    query findLinkById($id: Int!) {
+  findLinkById(id: $id) {
+    id
+    label
+    content
+    type
+    position
+  }
+}
+    `;
+
+/**
+ * __useFindLinkByIdQuery__
+ *
+ * To run a query within a React component, call `useFindLinkByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindLinkByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindLinkByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindLinkByIdQuery(baseOptions: Apollo.QueryHookOptions<FindLinkByIdQuery, FindLinkByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindLinkByIdQuery, FindLinkByIdQueryVariables>(FindLinkByIdDocument, options);
+      }
+export function useFindLinkByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindLinkByIdQuery, FindLinkByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindLinkByIdQuery, FindLinkByIdQueryVariables>(FindLinkByIdDocument, options);
+        }
+export type FindLinkByIdQueryHookResult = ReturnType<typeof useFindLinkByIdQuery>;
+export type FindLinkByIdLazyQueryHookResult = ReturnType<typeof useFindLinkByIdLazyQuery>;
+export type FindLinkByIdQueryResult = Apollo.QueryResult<FindLinkByIdQuery, FindLinkByIdQueryVariables>;

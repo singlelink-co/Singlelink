@@ -24,6 +24,7 @@ export type Link = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<Scalars['String']>;
+  updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
 };
 
@@ -33,12 +34,27 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationUpdateLinkByIdArgs = {
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  position: Scalars['Int'];
+  type: Scalars['String'];
+};
+
+
 export type MutationVerifyArgs = {
   jwt?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  findLinkById?: Maybe<Link>;
   hello?: Maybe<Scalars['String']>;
   listLinks?: Maybe<Array<Maybe<Link>>>;
+};
+
+
+export type QueryFindLinkByIdArgs = {
+  id: Scalars['Int'];
 };

@@ -34,20 +34,22 @@ const DashboardLinks = () => {
 
     return (
         <Dashboard>
-            <h1 className='text-3xl font-semibold mb-8'>Links</h1>
+            <h1 className='h1'>Links</h1>
             {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
                 if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
                 if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
                 return 0
             }).map(link => (
-                <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-grab max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}} key={link?.id}>
-                    {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
-                    <div className='flex flex-row items-center justify-start space-x-4'>
-                        <span className='capitalize'>{link?.type}</span>
-                        <span>|</span>
-                        <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
+                <Link key={link.id} href={`/dashboard/link/${link.id}`}>
+                    <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-grab max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
+                        {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
+                        <div className='flex flex-row items-center justify-start space-x-4'>
+                            <span className='capitalize'>{link?.type}</span>
+                            <span>|</span>
+                            <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
+                        </div>
                     </div>
-                </div>
+                </Link>
             ))}
         </Dashboard>
     )

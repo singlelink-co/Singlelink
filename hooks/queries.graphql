@@ -11,3 +11,13 @@ query listLinks {
         position
     }
 }
+
+query findLinkById($id: Int!) {
+    findLinkById(id: $id) {
+        id
+        label
+        content
+        type
+        position
+    }
+}
