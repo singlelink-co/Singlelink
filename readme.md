@@ -53,7 +53,27 @@ Once you've installed NodeJS & PostgreSQL, you can download and install Singleli
 git clone https://github.com/Neutron-Creative/Singlelink.git;cd Singlelink;npm i;
 ```
 
-Next, you can start your development environment by running:
+Before you start, you'll need to configure your environment by copying the .env template:
+```
+cp .env.template .env
+```
+
+Then, set the following **mandatory** environment variables to your preferences:
+- `PGDATABASE`: The name of the postgres database you'll connect to (ex: railway)
+- `PGPORT`: The port for the postgres database you'll connect to (ex: 7612)
+- `PGHOST`: The host url for your postgres database (ex: containers-us-east-13.railway.app)
+- `PGUSER`: The username for your postgres user (ex: postgres)
+- `PGPASSWORD`: The password for your postgres user
+- `SECRET`: The secret used to sign and validate JWTs during authentication
+- `PASSWORD`: The password you'll use to login and manage your Singlelink
+
+Optionally, set the following variables to customize your site:
+- `META_TITLE`: The title for your site, seen in Google Search results
+- `META_DESC`: The description for your site, seen in Google Search results
+- `META_IMG`: The OG image for your site, seen when sharing your site on social media.
+- `BRANDING`: A boolean that enables/disables Singlelink branding on your site & dashboard
+
+Finally, you can start your development environment by running:
 ```bash
 npm run dev
 ```
@@ -66,7 +86,8 @@ The easiest way to self-host your own [Singlelink](https://singlelink.co) site i
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink%2Ftree%2Fjb%2Fv4-renderer&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
 
-If you're looking for a white-glove experience with a few more features, consider checking out [Singlelink Cloud](https://singlelink.co), with plans starting at just $5/month.
+If you don't wanto to host with Railway, you can host Singlelink with any host, provided you can install and run both Node.JS & PostgreSQL. Singlelink will need one PostgreSQL database, and one NodeJS instance capable of running Next.JS at run-time/SSR.<br><br>
+Looking for a hands-off experience with premium support? Consider checking out [Singlelink Cloud](https://singlelink.co), with plans starting at just $5/month.
 
 <h2 id="credits">Credits</h2>
 
