@@ -24,8 +24,8 @@
 </p>
 
 <p align="center">
-	<a href="https://twitter.com/neutroncreative">
-		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/neutroncreative?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
+	<a href="https://twitter.com/singlelink">
+		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/singlelink?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
 	</a
 	<a href="https://discord.gg/BUbmgV4">
 		<img src="https://img.shields.io/discord/739822478276165675?color=%237289da&label=Join%20our%20community%20on%20Discord"/>
