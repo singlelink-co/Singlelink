@@ -39,8 +39,8 @@ const DashboardLinks = () => {
                 if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
                 if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
                 return 0
-            }).map(link => (
-                <Link key={link.id} href={`/dashboard/link/${link.id}`}>
+            }).map((link, i) => (
+                <Link key={i} href={`/dashboard/link/${link?.id}`} passHref>
                     <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-pointer max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
                         {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
                         <div className='flex flex-row items-center justify-start space-x-4'>
