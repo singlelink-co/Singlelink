@@ -5,9 +5,9 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Logo from '../components/logo'
 import { Link as LinkType }  from '../hooks-generated'
+const parse = require('html-react-parser')
 
 const Home = ({ links }: { links: LinkType[]}) => {
-
   if(!links)
     return (
       <div className='flex flex-col items-center justify-center w-full min-h-screen bg-gray-100'>
@@ -71,6 +71,8 @@ const Home = ({ links }: { links: LinkType[]}) => {
           </div>)
         if(link?.type === 'image')
           return (<img key={link.id} src={link.content ?? '#'} alt={link.label ?? ''} style={{width: '100%', height: 'auto'}} />)
+        if(link?.type === 'html')
+          return (<div key={link.id}>{parse(link.content)}</div>)
       })}
       {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>}
     </div>

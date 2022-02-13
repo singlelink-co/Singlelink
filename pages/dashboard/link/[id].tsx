@@ -80,6 +80,7 @@ const LinkDetail = () => {
                             <option value="youtube">Youtube</option>
                             <option value="text">Text</option>
                             <option value="avatar">Avatar</option>
+                            <option value="html">HTML/Code embed</option>
                         </select>
                     </div><div className='flex flex-col space-y-2 mb-6'>
                         <label className='font-semibold text-lg text-gray-800'>Content URL</label>
