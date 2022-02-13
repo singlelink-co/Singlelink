@@ -1,0 +1,65 @@
+mutation login(
+    $password: String!
+) {
+    login(
+        password: $password
+    )
+}
+
+mutation verify(
+    $jwt: String!
+) {
+    verify(
+        jwt: $jwt
+    )
+}
+
+mutation createLink(
+            $label: String
+            $content: String
+            $type: String!
+        ) {
+            createLink(
+                label: $label,
+                content: $content,
+                type: $type
+            ) {
+                id
+                label
+                content
+                type
+                position
+            }
+        }
+
+mutation updateLinkById(
+            $label: String
+            $content: String
+            $id: Int!
+            $position: Int!
+            $type: String!
+        ) {
+            updateLinkById(
+                label: $label,
+                content: $content,
+                id: $id,
+                position: $position,
+                type: $type
+            ) {
+                id
+                label
+                content
+                type
+                position
+            }
+        }
+
+mutation deleteLinkById($id: Int!) {
+    deleteLinkById(id: $id) {
+        id
+        label
+        content
+        type
+        position
+    }
+}

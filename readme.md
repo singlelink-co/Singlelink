@@ -1,20 +1,16 @@
 <h1 align="center">
-    <br>
-    <br>
-    <a href="https://singlelink.co"><img src="www/static/GH-Header.png" width="100%"/></a>
-    <br>
-    <br>
+  <a href="https://singlelink.io">
+    <img alt="Singlelink logo" height="150" src="https://uploads-ssl.webflow.com/61adc63433f2df05fde531f0/6208a997bb1f010bd2fc014f_singlelink-badge-padded.svg">
+  </a>
 </h1>
 
 <h3 align="center">
-    <a href="https://singlelink.co">Singlelink</a> is the open-source micro-site platform & Linktree alternative.
+    <a href="https://singlelink.co">Singlelink</a> is the open-source Linktree alternative.
 </h3>
-
-<br>
 
 <p align="center">
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/Public%20Beta-2.2.8-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/%20Beta-4.0.0-%2303d2d4" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
         <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
@@ -28,8 +24,8 @@
 </p>
 
 <p align="center">
-	<a href="https://twitter.com/neutroncreative">
-		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/neutroncreative?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
+	<a href="https://twitter.com/singlelink">
+		<img alt="Twitter Follow" height=20 src="https://img.shields.io/twitter/follow/singlelink?color=%2300acee&label=Follow%20us%20on%20Twitter&style=plastic">
 	</a
 	<a href="https://discord.gg/BUbmgV4">
 		<img src="https://img.shields.io/discord/739822478276165675?color=%237289da&label=Join%20our%20community%20on%20Discord"/>
@@ -37,210 +33,74 @@
 </p>
 
 <p align="center">
-  <a href="#get-started">Get started</a> •
-  <a href="#development">Development</a> •
-  <a href="#deployment">Deployment</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#support">Support</a> •
-  <a href="#related">Related</a> •
-  <a href="#license">License</a>
+  <a href="#deploy-your-singlelink">Deploy a Singlelink page</a> •
+    <a href="#local-development">Local development</a> •
+  <a href="#credits">Credits</a>
 </p>
-<br>
 
-<!--<img src="www/static/sl-hero-min.gif" alt="Singlelink promotional graphic"/>-->
-<img src="www/static/GH-Body.png" alt="Singlelink promotional graphic"/>
+<h2 id="deploy-your-singlelink">Deploy a Singlelink page</h2>
 
-<br>
+The easiest way to self-host your own [Singlelink](https://singlelink.co) site is with [Railway](https://railway.app).<br>With Railway, you can set up a Singlelink page with a custom domain, with no tracking, no ads, and run up to three sites 100% free, since Railway provides $5 in free monthly credits and each Singlelink instance costs ~$1.54/mo.
 
-<h2 id="get-started">Get started</h2>
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink%2Ftree%2Fv4&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
 
-<p>There are a few pre-requisites you need to have before hosting <a href="https://singlelink.co">Singlelink</a>, seen below.</p>
+If you don't wanto to host with Railway, you can host Singlelink with any host, provided you can install and run both Node.JS & PostgreSQL. Singlelink will need one PostgreSQL database, and one NodeJS instance capable of running Next.JS at run-time/SSR.<br><br>
+Looking for a hands-off experience with premium support?<br>Consider checking out [Singlelink Cloud](https://singlelink.co), with plans starting at just $5/month.
 
-<ul>
-    <li>Two NodeJS servers (ex: $5/mo DigitalOcean Droplet)</li>
-    <li>A PostgreSQL database (ex: Free Heroku DBaaS)</li>
-</ul>
 
-<p>Once you have the following established, it's time to begin installing & configuring your installation.</p>
+<h2 id="local-development">Local development</h2>
 
-<h3>Client</h3>
+Singlelink is a [NodeJS](#) project built on [Next.js](https://nodejs.org/en/), [GraphQL](https://graphql.org/) (served via [Apollo Server](https://www.apollographql.com/)), and [PostgreSQL](https://www.postgresql.org/).
 
-```Bash
-# Clone repostiory to local device
-git clone https://github.com/Neutron-Creative/Singlelink.git
+If you haven't already, you'll need to install NodeJS and PostgreSQL before being able to host or work on Singelink.
+- [NodeJS installation guide](https://nodejs.dev/learn/how-to-install-nodejs)
+- [PostgreSQL installation guide](https://www.postgresql.org/download/)
 
-# Enter client of new project
-cd Singlelink/client
-
-# Install necessary dependencies
-npm install
-
-# Set API Url
-export API_URL=<your-api-url>
-
-# Optionally, customize your instance.
-# You can also set these permanently via the .env file
-export META_TITLE=<your-seo-meta-title>
-export META_DESCRIPTION=<your-seo-meta-description>
-export META_IMAGE=<your-meta-image>
-export FAVICON=<your-favicon-url>
-export HOSTNAME=<your-installation-hostname>
-export APP_NAME=<your-app-name>
-export ICON_URL=<your-icon-url>
-export ICON_WIDTH=<your-icon-width>
-export ORGANIZATION=<your-organization>
-export FREE_SIGNUP=<is-freesignup-enabled>
-
-# Run first build
-npm run build
-
-# Start your server
-npm run start
-
+Once you've installed NodeJS & PostgreSQL, you can download Singlelink locally with:
+```bash
+git clone https://github.com/Neutron-Creative/Singlelink.git;cd Singlelink;
 ```
 
-<h3>Server</h3>
-
-```Bash
-# Clone repostiory to local device (don't need to repeat if performed previously for client)
-git clone https://github.com/Neutron-Creative/Singlelink.git
-
-# Enter client of new project
-cd Singlelink/server
-
-# Install necessary dependencies
-npm install
-
-# Generate config from example
-cp src/config.example.js src/config.js
-
-# Modify config.js (set API domain to localhost & client domain as neccessary)
-vim config.js
-
-# Build server
-npm run build
-
-# Start your server
-npm run start
+Before you start, you'll need to configure your environment by copying the .env template:
+```
+cp .env.template .env
 ```
 
-<br>
+Then, set the following **mandatory** environment variables to your preferences:
+- `PGDATABASE`: The name of the postgres database you'll connect to (ex: railway)
+- `PGPORT`: The port for the postgres database you'll connect to (ex: 7612)
+- `PGHOST`: The host url for your postgres database (ex: containers-us-east-13.railway.app)
+- `PGUSER`: The username for your postgres user (ex: postgres)
+- `PGPASSWORD`: The password for your postgres user
+- `SECRET`: The secret used to sign and validate JWTs during authentication
+- `PASSWORD`: The password you'll use to login and manage your Singlelink
 
-<h2 id="development">Development</h2>
-<h3>Client</h3>
-<p>Develop on the client if you're looking to make changes to the interface or styles of the application.<br>Note, pay attention to the notice below. You'll need to build & start the client before each usage to have your changes reflect properly in the application.</p>
+Optionally, set the following variables to customize your site:
+- `META_TITLE`: The title for your site, seen in Google Search results
+- `META_DESC`: The description for your site, seen in Google Search results
+- `META_IMG`: The OG image for your site, seen when sharing your site on social media.
+- `BRANDING`: A boolean that enables/disables Singlelink branding on your site & dashboard
 
-```Bash
-## CD into Client
-cd Singlelink/client
-
-# Run developer client
-npm run dev
-
+Next, install your dependencies, which will also run your first-time database migration after:
+```bash
+npm i
 ```
 
-<h4>Server</h4>
-<p>Develop on the server if you're looking to make changes to the logic of the application.<br>Developing on the server is a bit simpler, in that there is no "rebuild" process. With nodemon, changes are reloaded live instantaneously.</p>
-
-```Bash
-## CD into Server
-cd Singlelink/server
-
-# Run developer server
+Finally, you can start your development environment by running:
+```bash
 npm run dev
 ```
 
-<br>
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-<h2 id="deployment">Deployment</h2>
-<p>Use the following instructions for deploying changes made locally to your production servers.<br>Note, before following the next steps - ensure you have pushed all changes to the git master branch!</p>
-<h3>Client</h3>
-
-```Bash
-
-# SSH into server
-ssh root@<your-server-ip>
-
-# Enter tmux session (if first time then tmux && cd Singlelink)
-tmux attach
-
-# Pull latest changes from git, install dependencies, rebuild, and restart the server
-git pull;npm i;npm run build;npm run start;
-
-# Exit tmux session
-# Not to be typed, press both keys simultaneously
-# Ctrl + b
-# Afterwhich, press the following key
-# d
-
-# Exit server, changes are deployed!
-
-
-```
-
-<h3>Server</h3>
-
-``` Bash
-
-# SSH into server
-ssh root@<your-server-ip>
-
-# Enter correct directory
-cd ~/Singlelink/server/
-
-# Pull latest changes from git, install dependencies, rebuild, and restart the server
-git pull;npm i;npm run build;npm run start;
-
-# Exit server, changes are deployed!
-
-```
-
-<br>
 <h2 id="credits">Credits</h2>
-Singlelink was built by the following individuals.<br><br>
+
+Singlelink was built by the following team full-time from August 2020-2021 our mission to to *open-source the world* at [Neutron Creative](https://neutroncreative.com).
+<br><br>
 <ul>
-    <li>Jim Bisenius (<a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
-    <li>Andrew Boyle (<a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
-    <li>Navid Kabir (<a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
-    <li>Manuhe Abebe (<a target="_blank" href="https://twitter.com/manuhegabebe">@manuhegabebe</a>)</li>
-</ul>
-Currently, Singlelink lacks contributors outside its founders at Neutron Creative, but, you can help.
-Visit the <a target="_blank" href="https://github.com/Neutron-Creative/Singlelink/issues">issues page</a> today and create your first pull request to get featured here!
+    <li>Jim Bisenius (Co-founder & former CEO, <a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
+    <li>Navid Kabir (Co-founder  & former CTO, <a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
+    <li>Andrew Boyle (Co-founder & former CMO)</li>
+</ul><br>
 
-<br><br>
-<h2 id="support">Support</h2>
-Need help? Our <a href="https://discord.com/invite/3pBM4Px" target="_blank">community support </a> is online 9AM-5PM EST M-F, and our <a href="mailto:support@neutroncreative.com">enterprise support team</a> is available 24/7/365 via (<a href="mailto:support@neutroncreative.com">email</a> or <a href="tel:+19196530790">phone</a>). Don't hesitate to get in touch, we love to help and we're often able to resolve issues within the hour!
-<br><br>
-Additionally, we've listed a few frequently asked questions below.
-
-##### Help, my API isn't working!
-
-Often, this is caused by an incomplete config.js file in Singlelink/server/config.js, be sure this is complete!
-
-##### My client isn't working properly!
-
-This is most often caused by an incomplete/incorrect build, with missing environment variables or something of the like. To fix, ensure that the $API_URL environment variable is properly set on your client server, and run npm run build inside your client directory to manually rebuild the project.
-
-##### How can I host this on Netlify?
-
-Unfortunately, we discontinued static platform support in late 2020 when moving to v2.0 to gain features such as dynamic open-graph images, search engine optimization, alongside custom meta data.
-
-##### When will you have *x* feature?
-
-Check our <a href="https://github.com/Neutron-Creative/Singlelink/projects">roadmap</a>! We're regularly adding new features, and list our most up-to-date plans on Github.
-
-##### I'm having trouble installing Singlelink. Can I pay you to install & it for me?
-
-Yes! As of January 2020, you can reach out to support@neutroncreative.com and we'll be glad to help you get set up (incurs $100 install + $35/mo hosting fees). We offer full installation, management, and maintenance services for Enterprise clients starting at just $35/mo.
-
-##### How can I suggest a feature/report a bug?
-
-The <a href="https://github.com/Neutron-Creative/Singlelink/issues" target="_blank">Github issue tracker</a> is the best place to do that! No matter your experience & ability creating Github issues, this is the best way for us to see & respond quickly to your requests.
-
-##### Do you have a community I can join?
-
-Yes! We're actively daily on <a href="https://discord.com/invite/3pBM4Px" target="_blank">Discord</a> and would love to have you!
-
-
-<br><br>
-<img src="www/static/GH-Footer.png"/>
+Today, Singlelink is maintained soley by me, Jim Bisenius on nights & weekends. If you'd like to assist in my development efforts, I'd love your help. Please [join our Discord](https://discord.gg/DDGnXCcgsu) or [create a pull request](https://github.com/Neutron-Creative/Singlelink/pulls)!
