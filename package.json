@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen --config codegen.yml --watch"
+    "generate": "graphql-codegen --config codegen.yml --watch",
+    "postinstall": "node migrations/01.js"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
@@ -39,7 +40,6 @@
     "graphql-codegen": "^0.4.0",
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.21",
-    "ts-node": "^10.4.0",
     "typescript": "4.5.5"
   },
   "repository": {
