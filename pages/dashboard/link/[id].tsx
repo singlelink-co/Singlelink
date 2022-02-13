@@ -37,7 +37,7 @@ const LinkDetail = () => {
     })
 
     const attemptSave = async () => {
-        if(!position || !type || !id) throw Error('Cannot save without position, type, or id.')
+        if(position === undefined || position < 0 || !type || !id) throw Error('Cannot save without position, type, or id.')
         updateLinkById[0]({
             variables: {
                 label,
