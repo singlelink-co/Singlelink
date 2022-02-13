@@ -35,3 +35,13 @@ mutation updateLinkById(
                 position
             }
         }
+
+mutation deleteLinkById($id: Int!) {
+    deleteLinkById(id: $id) {
+        id
+        label
+        content
+        type
+        position
+    }
+}

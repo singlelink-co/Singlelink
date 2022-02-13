@@ -25,5 +25,11 @@ export const Mutation = {
             if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
             const updatedLink = Link.updateById(params)
             return updatedLink
-        }
+    },
+    deleteLinkById: async(_: any,
+        { id}: { id: number }, { isAuthorized }: { isAuthorized: boolean }) => {
+            if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
+            const link = Link.deleteById(id)
+            return link
+    },
 }

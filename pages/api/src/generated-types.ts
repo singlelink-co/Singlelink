@@ -23,9 +23,15 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteLinkByIdArgs = {
+  id: Scalars['Int'];
 };
 
 

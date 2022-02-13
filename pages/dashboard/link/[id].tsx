@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Dashboard from '../../../components/dashboard'
-import { useFindLinkByIdQuery, useUpdateLinkByIdMutation } from '../../../hooks-generated'
+import { useDeleteLinkByIdMutation, useFindLinkByIdQuery, useUpdateLinkByIdMutation } from '../../../hooks-generated'
 import { Link } from '../../api/src/generated-types'
 
 const LinkDetail = () => {
@@ -36,8 +36,15 @@ const LinkDetail = () => {
         }
     })
 
+    const deleteLinkById = useDeleteLinkByIdMutation({
+        onCompleted: (data) => {
+            router.push('/dashboard/')
+        }
+    })
+
     const attemptSave = async () => {
         if(position === undefined || position < 0 || !type || !id) throw Error('Cannot save without position, type, or id.')
+        setLoading(true)
         updateLinkById[0]({
             variables: {
                 label,
@@ -48,7 +55,16 @@ const LinkDetail = () => {
             }
         })
     }
-    
+
+    const attemptDelete = async () => {
+        setLoading(true)
+        deleteLinkById[0]({
+            variables: {
+                id: Number.parseInt(id as string)
+            }
+        })
+    }    
+
     return (
         <Dashboard>
             <h1 className='h1'>Edit link</h1>
@@ -71,7 +87,10 @@ const LinkDetail = () => {
                     </div><div className='flex flex-col space-y-2 mb-8'>
                         <label className='font-semibold text-lg text-gray-800'>Position</label>
                         <input onChange={(e) => setPosition(Number.parseInt(e.target.value))} value={position} className='px-5 py-3 rounded-lg border border-gray-200 w-full bg-white focus:ring-4 focus:ring-opacity-50 focus:ring-indigo-600 outline-0 ring-offset-2 focus:border-gray-1' type='number' placeholder='e.g. 2' />
-                    </div><button onClick={() => attemptSave()} className='px-8 py-4 bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Save changes</button></>
+                    </div>
+                    <button onClick={() => attemptSave()} className='px-8 py-4 bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700 mb-4'>Save changes</button>
+                    <button onClick={() => attemptDelete()} className='px-8 py-4 bg-red-100 w-full text-red-600 border border-red-600 font-semibold rounded-xl hover:bg-red-600 hover:text-white'>Delete link</button>
+                    </>
             }
         </Dashboard>
     )

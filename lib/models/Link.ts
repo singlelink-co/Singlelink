@@ -12,8 +12,13 @@ const Link = {
         return link.rows[0]
     },
     updateById: async(params: {label: string, content: string, id: number, position: number, type: string}) => {
-        const link = await client.query(`update links set label=$1, content=$2, position=$3, type=$4 where id=$5`, [params.label, params.content, params.position, params.type, params.id])
-        if(!link || !link.rows) throw Error('Failed to fetch link')
+        const link = await client.query(`update links set label=$1, content=$2, position=$3, type=$4 where id=$5 returning *;`, [params.label, params.content, params.position, params.type, params.id])
+        if(!link || !link.rows) throw Error('Failed to update link')
+        return link.rows[0]
+    },
+    deleteById: async(id: number) => {
+        const link = await client.query(`delete from links where id=$1 returning *;`, [id])
+        if(!link || !link.rows) throw Error('Failed to delete link')
         return link.rows[0]
     }
 }

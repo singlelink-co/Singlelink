@@ -25,9 +25,15 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteLinkByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -93,6 +99,19 @@ export type UpdateLinkByIdMutationVariables = Exact<{
 export type UpdateLinkByIdMutation = (
   { __typename?: 'Mutation' }
   & { updateLinkById?: Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
+  )> }
+);
+
+export type DeleteLinkByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteLinkByIdMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteLinkById?: Maybe<(
     { __typename?: 'Link' }
     & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
   )> }
@@ -240,6 +259,43 @@ export function useUpdateLinkByIdMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateLinkByIdMutationHookResult = ReturnType<typeof useUpdateLinkByIdMutation>;
 export type UpdateLinkByIdMutationResult = Apollo.MutationResult<UpdateLinkByIdMutation>;
 export type UpdateLinkByIdMutationOptions = Apollo.BaseMutationOptions<UpdateLinkByIdMutation, UpdateLinkByIdMutationVariables>;
+export const DeleteLinkByIdDocument = gql`
+    mutation deleteLinkById($id: Int!) {
+  deleteLinkById(id: $id) {
+    id
+    label
+    content
+    type
+    position
+  }
+}
+    `;
+export type DeleteLinkByIdMutationFn = Apollo.MutationFunction<DeleteLinkByIdMutation, DeleteLinkByIdMutationVariables>;
+
+/**
+ * __useDeleteLinkByIdMutation__
+ *
+ * To run a mutation, you first call `useDeleteLinkByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLinkByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLinkByIdMutation, { data, loading, error }] = useDeleteLinkByIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteLinkByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLinkByIdMutation, DeleteLinkByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteLinkByIdMutation, DeleteLinkByIdMutationVariables>(DeleteLinkByIdDocument, options);
+      }
+export type DeleteLinkByIdMutationHookResult = ReturnType<typeof useDeleteLinkByIdMutation>;
+export type DeleteLinkByIdMutationResult = Apollo.MutationResult<DeleteLinkByIdMutation>;
+export type DeleteLinkByIdMutationOptions = Apollo.BaseMutationOptions<DeleteLinkByIdMutation, DeleteLinkByIdMutationVariables>;
 export const HelloDocument = gql`
     query hello {
   hello

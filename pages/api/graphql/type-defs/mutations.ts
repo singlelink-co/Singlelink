@@ -11,5 +11,6 @@ export const mutations = gql`
             position: Int!
             type: String!
         ): Link
+        deleteLinkById(id: Int!): Link
     }
 `
