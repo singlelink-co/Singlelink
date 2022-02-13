@@ -41,7 +41,6 @@
     "ts-node": "^10.4.0",
     "typescript": "4.5.5"
   },
-  "proxy": "http://localhost:3000",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Neutron-Creative/Singlelink.git"
