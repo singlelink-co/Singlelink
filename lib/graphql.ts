@@ -21,8 +21,7 @@ const authLink = setContext(async (_ : any, { headers } : { headers: any}) => {
 
 const httpLink = new HttpLink({
   credentials: 'include', // Additional fetch() options like `credentials` or `headers`
-  // TODO: Implement PROD API when NODE_ENV === 'production'
-  uri: process.env.GRAPHQL_URL,
+  uri: '/api/graphql',
 })
 
 export const client = new ApolloClient({

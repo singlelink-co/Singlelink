@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from 'next'
+import absoluteUrl from 'next-absolute-url'
 import Head from 'next/head'
 import Link from 'next/link'
 import Logo from '../components/logo'
@@ -77,9 +78,9 @@ const Home = ({ links }: { links: LinkType[]}) => {
   )
 }
 
-export async function getServerSideProps() {
-  if (!process.env.GRAPHQL_URL) throw Error('Singlelink: GraphQL URL not found!')
-  const res = await fetch(process.env.GRAPHQL_URL, {
+export async function getServerSideProps({ req }: { req: any}) {
+  const { origin } = absoluteUrl(req)
+  const res = await fetch(`${origin}/api/graphql`, {
      "headers": {
         "accept": "application/json",
         "content-type": "application/json",
