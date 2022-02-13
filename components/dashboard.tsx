@@ -12,7 +12,7 @@ const Dashboard = ({ children }: { children: any}) => {
 
     useEffect(() => {
         if(location.hostname === 'localhost') return setDomain(`http://${window.location.host}`)
-        setDomain(`http://${window.location.host}`)
+        setDomain(`https://${window.location.host}`)
     }, [])
 
     return (
