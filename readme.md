@@ -74,8 +74,8 @@ Singlelink was built by the following team full-time from August 2020-2021 our m
 <br><br>
 <ul>
     <li>Jim Bisenius (Co-founder & former CEO, <a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
-    <li>Andrew Boyle (Co-founder & former CMO, <a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
     <li>Navid Kabir (Co-founder  & former CTO, <a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
+    <li>Andrew Boyle (Co-founder & former CMO)</li>
 </ul><br>
 
 Today, Singlelink is maintained soley by me, Jim Bisenius on nights & weekends. If you'd like to assist in my development efforts, I'd love your help. Please [join our Discord](https://discord.gg/DDGnXCcgsu) or [create a pull request](https://github.com/Neutron-Creative/Singlelink/pulls)!
