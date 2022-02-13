@@ -68,6 +68,8 @@ const Home = ({ links }: { links: LinkType[]}) => {
           return (<div key={link.id} className='embed-container rounded-lg'>
             <iframe src={link.content ?? '#'} frameBorder='0' allowFullScreen></iframe>
           </div>)
+        if(link?.type === 'image')
+          return (<img key={link.id} src={link.content ?? '#'} alt={link.label ?? ''} style={{width: '100%', height: 'auto'}} />)
       })}
       {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>}
     </div>
