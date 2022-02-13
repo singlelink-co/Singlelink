@@ -41,7 +41,7 @@ const DashboardLinks = () => {
                 return 0
             }).map(link => (
                 <Link key={link.id} href={`/dashboard/link/${link.id}`}>
-                    <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-grab max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
+                    <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-pointer max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
                         {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
                         <div className='flex flex-row items-center justify-start space-x-4'>
                             <span className='capitalize'>{link?.type}</span>
