@@ -66,9 +66,9 @@ If you're looking for a white-glove experience with a few more features, conside
 Singlelink was originally built by the following individuals in August 2020.
 <br><br>
 <ul>
-    <li>Jim Bisenius (Co-founder & CEO, <a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
-    <li>Andrew Boyle (Co-founder & CMO, <a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
-    <li>Navid Kabir (Co-founder  & CTO, <a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
+    <li>Jim Bisenius (Co-founder & former CEO, <a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
+    <li>Andrew Boyle (Co-founder & former CMO, <a target="_blank" href="https://twitter.com/fahlomi">@fahlomi</a>)</li>
+    <li>Navid Kabir (Co-founder  & former CTO, <a target="_blank" href="https://twitter.com/navidk0">@navidk0</a>)</li>
 </ul><br>
 
 Today, Singlelink is maintained soley by me, Jim Bisenius on nights & weekends. If you'd like to assist in my development efforts, I'd love to have you. Please [join our Discord](https://discord.gg/DDGnXCcgsu) or [create a pull request](https://github.com/Neutron-Creative/Singlelink/pulls)!
