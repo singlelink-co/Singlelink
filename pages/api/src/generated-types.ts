@@ -23,10 +23,18 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateLinkArgs = {
+  content?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  type: Scalars['String'];
 };
 
 

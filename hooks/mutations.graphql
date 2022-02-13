@@ -14,6 +14,24 @@ mutation verify(
     )
 }
 
+mutation createLink(
+            $label: String
+            $content: String
+            $type: String!
+        ) {
+            createLink(
+                label: $label,
+                content: $content,
+                type: $type
+            ) {
+                id
+                label
+                content
+                type
+                position
+            }
+        }
+
 mutation updateLinkById(
             $label: String
             $content: String

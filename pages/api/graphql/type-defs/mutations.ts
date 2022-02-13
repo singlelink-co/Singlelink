@@ -4,6 +4,11 @@ export const mutations = gql`
     type Mutation {
         login(password: String): String
         verify(jwt: String): String
+        createLink(
+            label: String
+            content: String
+            type: String!
+        ): Link
         updateLinkById(
             label: String
             content: String

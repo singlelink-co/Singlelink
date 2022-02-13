@@ -20,6 +20,12 @@ export const Mutation = {
             const decoded = jwt.verify(params.jwt, process.env.SECRET)
             return params.jwt
     },
+    createLink: async(_: any,
+        params: { label: string, content: string, type: string}, { isAuthorized }: { isAuthorized: boolean }) => {
+            if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
+            const link = Link.create(params)
+            return link
+    },
     updateLinkById: async(_: any,
         params: { label: string, content: string, id: number, position: number, type: string}, { isAuthorized }: { isAuthorized: boolean }) => {
             if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')

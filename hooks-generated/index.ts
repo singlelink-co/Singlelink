@@ -25,10 +25,18 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateLinkArgs = {
+  content?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  type: Scalars['String'];
 };
 
 
@@ -85,6 +93,21 @@ export type VerifyMutationVariables = Exact<{
 export type VerifyMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'verify'>
+);
+
+export type CreateLinkMutationVariables = Exact<{
+  label?: Maybe<Scalars['String']>;
+  content?: Maybe<Scalars['String']>;
+  type: Scalars['String'];
+}>;
+
+
+export type CreateLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { createLink?: Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
+  )> }
 );
 
 export type UpdateLinkByIdMutationVariables = Exact<{
@@ -212,6 +235,45 @@ export function useVerifyMutation(baseOptions?: Apollo.MutationHookOptions<Verif
 export type VerifyMutationHookResult = ReturnType<typeof useVerifyMutation>;
 export type VerifyMutationResult = Apollo.MutationResult<VerifyMutation>;
 export type VerifyMutationOptions = Apollo.BaseMutationOptions<VerifyMutation, VerifyMutationVariables>;
+export const CreateLinkDocument = gql`
+    mutation createLink($label: String, $content: String, $type: String!) {
+  createLink(label: $label, content: $content, type: $type) {
+    id
+    label
+    content
+    type
+    position
+  }
+}
+    `;
+export type CreateLinkMutationFn = Apollo.MutationFunction<CreateLinkMutation, CreateLinkMutationVariables>;
+
+/**
+ * __useCreateLinkMutation__
+ *
+ * To run a mutation, you first call `useCreateLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLinkMutation, { data, loading, error }] = useCreateLinkMutation({
+ *   variables: {
+ *      label: // value for 'label'
+ *      content: // value for 'content'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useCreateLinkMutation(baseOptions?: Apollo.MutationHookOptions<CreateLinkMutation, CreateLinkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLinkMutation, CreateLinkMutationVariables>(CreateLinkDocument, options);
+      }
+export type CreateLinkMutationHookResult = ReturnType<typeof useCreateLinkMutation>;
+export type CreateLinkMutationResult = Apollo.MutationResult<CreateLinkMutation>;
+export type CreateLinkMutationOptions = Apollo.BaseMutationOptions<CreateLinkMutation, CreateLinkMutationVariables>;
 export const UpdateLinkByIdDocument = gql`
     mutation updateLinkById($label: String, $content: String, $id: Int!, $position: Int!, $type: String!) {
   updateLinkById(

@@ -13,7 +13,9 @@ import { useListLinksQuery } from '../../hooks-generated'
 const DashboardLinks = () => {
     const router = useRouter()
 
-    const listLinks = useListLinksQuery()
+    const listLinks = useListLinksQuery({
+        fetchPolicy: 'no-cache'
+    })
 
     const verify = useVerifyMutation({
         onCompleted: (data) => {
@@ -34,7 +36,15 @@ const DashboardLinks = () => {
 
     return (
         <Dashboard>
-            <h1 className='h1'>Links</h1>
+            <div className='flex flex-row items-center justify-between w-full mb-8 h1-row'>
+                <h1 className='h1'>Links</h1>
+                <Link href="/dashboard/link/create" passHref>
+                    <button className='flex flex-row items-center justify-center px-4 py-2 bg-indigo-600 text-sm font-semibold text-white rounded-lg hover:bg-indigo-700 cursor-pointer'>
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="rgba(255,255,255,1)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        Add new
+                    </button>
+                </Link>
+            </div>
             {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
                 if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
                 if ((a?.position ?? 0) < (b?.position ?? 0)) return -1

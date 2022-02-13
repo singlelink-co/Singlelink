@@ -20,7 +20,22 @@ const Link = {
         const link = await client.query(`delete from links where id=$1 returning *;`, [id])
         if(!link || !link.rows) throw Error('Failed to delete link')
         return link.rows[0]
-    }
+    },
+    findNextPosition: async () => {
+        const links = await Link.list()
+        let highestPosition = 0;
+        for(let i=0;i<links.length;i++) {
+            if(links[i].position > highestPosition) highestPosition = links[i].position
+        }
+        return highestPosition+1
+    },
+    create: async(params: {label: string, content: string, type: string}) => {
+        const nextPosition = await Link.findNextPosition()
+        console.log(`Inserting new link at position ${nextPosition}`)
+        const link = await client.query(`insert into links (label, content, type, position) values($1, $2, $3, $4)`, [params.label, params.content, params.type,nextPosition])
+        if(!link || !link.rows) throw Error('Failed to create link')
+        return link.rows[0]
+    },
 }
 
 export default Link
