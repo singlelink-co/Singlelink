@@ -25,7 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Installing dependencies
-      run: npm i
+      run: npm i --ignore-scripts
     - name: Performing lint
       run: npm run lint
     - name: Generating build
