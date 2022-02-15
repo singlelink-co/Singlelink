@@ -4,6 +4,9 @@
 name: Build & lint
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
     types: ['opened', 'edited', 'reopened', 'synchronize']
   workflow_dispatch:
