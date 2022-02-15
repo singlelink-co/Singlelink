@@ -35,7 +35,6 @@
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> •
   <a href="#getting-started">Getting started</a> •
   <a href="#local-development">Local development</a> •
   <a href="#production-deployment">Production deployment</a> •
