@@ -81,10 +81,16 @@ Optionally, set the following variables to customize your site:
 - `META_IMG`: The OG image for your site, seen when sharing your site on social media.
 - `BRANDING`: A boolean that enables/disables Singlelink branding on your site & dashboard
 
-Next, install your dependencies, which will also run your first-time database migration after:
+Next, install your NPM dependencies using `--ignore-scripts`:
 ```bash
-npm i
+npm i --ignore-scripts
 ```
+
+After, you can run the DB migration script to initialize your DB:
+```bash
+npm run db:migrate
+```
+*You'll need to run `npm run db:migrate` again everytime you pull changes. It can't hurt to run a migration, but it can break things if you don't.*<br><br>
 
 Finally, you can start your development environment by running:
 ```bash
