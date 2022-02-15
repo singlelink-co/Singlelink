@@ -33,23 +33,18 @@
 </p>
 
 <p align="center">
-  <a href="#deploy-your-singlelink">Deploy a Singlelink page</a> •
-    <a href="#local-development">Local development</a> •
+  <a href="#features">Features</a> •
+  <a href="#getting-started">Getting started</a> •
+  <a href="#local-development">Local development</a> •
+  <a href="#production-deployment">Production deployment</a> •
   <a href="#credits">Credits</a>
 </p>
 
-<h2 id="deploy-your-singlelink">Deploy a Singlelink page</h2>
+<h2 id="getting-started">Getting started</h2>
 
-The easiest way to self-host your own [Singlelink](https://singlelink.co) site is with [Railway](https://railway.app). You can deploy with one-click using the button below, and build up to three Singlelink pages 100% free, no credit card required, thanks to their $5/mo credit system.
+The easiest way to get started is to deploy your [Singlelink](https://singlelink.co) site with [Railway](https://railway.app). You can get started with one-click using the button below and build up to three Singlelink pages, each with custom domains, 100% free & no credit card required, thanks to their $5/mo credit system.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
-
-**Need to host elsewhere?** <br>We don't offer official support yet, but you can host Singlelink with any VPS, provided you can install and run both Node.JS & PostgreSQL. Singlelink will need one PostgreSQL database, and one NodeJS instance capable of running Next.JS at run-time/SSR.
-<br><br>
-Looking for a hands-off experience with premium support?
-<br>
-Consider checking out [Singlelink Cloud](https://singlelink.co), with plans available soon starting at $8/month.
-
 
 <h2 id="local-development">Local development</h2>
 
@@ -95,6 +90,21 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to view your new Singlelink, and [http://localhost:3000/login](http://localhost:3000/login) to login and add your first link.
+
+<h2 id="production-deployment">Production deployment</h2>
+
+You can [deploy Singlelink in one-click here with Railway](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink&plugins=postgresql&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink). At this time, they are the only provider we maintain & gurantee support for.
+
+### Need to host elsewhere?
+#### Platform as a service hosts are recommended due to ease of installation (ex: Heroku, DigitalOcean App Platform , etc.)
+We don't offer official support yet, but you can host Singlelink with any VPS, provided you can install and run both Node.JS & PostgreSQL. Singlelink will need one PostgreSQL database, and one NodeJS instance capable of running Next.JS at run-time/SSR.
+<br><br>
+<p align="center">
+<b>Looking for cloud hosting with premium support?
+<br>
+Consider checking out <a href="https://singlelink.co">Singlelink Cloud</a>, with plans available soon starting at just $8/month.</b>
+</p>
+
 <h2 id="credits">Credits</h2>
 
 Singlelink was built by the following team full-time from August 2020-2021 our mission to to *open-source the world* at [Neutron Creative](https://neutroncreative.com).
