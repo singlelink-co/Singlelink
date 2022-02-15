@@ -7,8 +7,10 @@
 <h3 align="center">
     <a href="https://singlelink.co">Singlelink</a> is the open-source Linktree alternative.
 </h3>
-
 <p align="center">
+  <a href="https://github.com/Neutron-Creative/Singlelink/actions/workflows/build-lint.yml">
+    <img src="https://github.com/Neutron-Creative/Singlelink/actions/workflows/build-lint.yml/badge.svg" alt="Build & lint">
+  </a>
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
         <img src="https://img.shields.io/badge/%20Beta-4.0.0-%2303d2d4" alt="Version">
     </a>
