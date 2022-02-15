@@ -12,7 +12,7 @@
     "generate": "graphql-codegen --config codegen.yml --watch",
     "db:migrate": "npx dotenv-run-script no_dotenv_db:migrate",
     "no_dotenv_db:migrate": "npx ts-node lib/migrate-db.mjs",
-    "postinstall": "npx dotenv-run-script no_dotenv_db:migrate"
+    "postinstall": "npx ts-node lib/migrate-db.mjs"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
