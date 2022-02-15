@@ -48,7 +48,7 @@ const Home: NextPage = () => {
           }
         })} className='px-8 py-4 text-xl bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Log in</button>
       </div>
-      <div className='text-gray-600 mt-12'>Forgot your password?<a className='ml-2 text-indigo-600 font-semibold hover:underline hover:text-indigo-700 cursor-pointer'>Reset password</a></div>
+      <div onClick={() => {alert('To reset your password, change the environment variable for PASSWORD in your SSH or terminal and restart your application.')}} className='text-gray-600 mt-12'>Forgot your password?<a className='ml-2 text-indigo-600 font-semibold hover:underline hover:text-indigo-700 cursor-pointer'>Reset password</a></div>
       <div className='text-gray-600 mt-4 text-xs'>Copyright ©{new Date().getFullYear()} Neutron Creative Inc. All rights reserved.</div>
 
     </div>
