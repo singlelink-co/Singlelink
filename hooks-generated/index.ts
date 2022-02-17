@@ -14,6 +14,19 @@ export type Scalars = {
   Float: number;
 };
 
+export enum Event_Type {
+  Click = 'click',
+  View = 'view'
+}
+
+export type Event = {
+  __typename?: 'Event';
+  created_at: Scalars['String'];
+  id: Scalars['Int'];
+  link_id: Scalars['Int'];
+  type: Event_Type;
+};
+
 export type Link = {
   __typename?: 'Link';
   content?: Maybe<Scalars['String']>;
@@ -25,12 +38,18 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createEvent?: Maybe<Event>;
   createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   reorderLink?: Maybe<Array<Maybe<Link>>>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateEventArgs = {
+  type?: Maybe<Event_Type>;
 };
 
 
@@ -71,8 +90,16 @@ export type MutationVerifyArgs = {
   jwt?: Maybe<Scalars['String']>;
 };
 
+export type Overview = {
+  __typename?: 'Overview';
+  clicks: Scalars['Int'];
+  date: Scalars['String'];
+  views: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  fetchOverview?: Maybe<Array<Maybe<Overview>>>;
   findLinkById?: Maybe<Link>;
   hello?: Maybe<Scalars['String']>;
   listLinks?: Maybe<Array<Maybe<Link>>>;
@@ -163,6 +190,19 @@ export type ReorderLinkMutation = (
   )>>> }
 );
 
+export type CreateEventMutationVariables = Exact<{
+  type?: Maybe<Event_Type>;
+}>;
+
+
+export type CreateEventMutation = (
+  { __typename?: 'Mutation' }
+  & { createEvent?: Maybe<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'id' | 'type' | 'created_at'>
+  )> }
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -193,6 +233,17 @@ export type FindLinkByIdQuery = (
     { __typename?: 'Link' }
     & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
   )> }
+);
+
+export type FetchOverviewQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchOverviewQuery = (
+  { __typename?: 'Query' }
+  & { fetchOverview?: Maybe<Array<Maybe<(
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'views' | 'clicks' | 'date'>
+  )>>> }
 );
 
 
@@ -420,6 +471,41 @@ export function useReorderLinkMutation(baseOptions?: Apollo.MutationHookOptions<
 export type ReorderLinkMutationHookResult = ReturnType<typeof useReorderLinkMutation>;
 export type ReorderLinkMutationResult = Apollo.MutationResult<ReorderLinkMutation>;
 export type ReorderLinkMutationOptions = Apollo.BaseMutationOptions<ReorderLinkMutation, ReorderLinkMutationVariables>;
+export const CreateEventDocument = gql`
+    mutation createEvent($type: EVENT_TYPE) {
+  createEvent(type: $type) {
+    id
+    type
+    created_at
+  }
+}
+    `;
+export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation, CreateEventMutationVariables>;
+
+/**
+ * __useCreateEventMutation__
+ *
+ * To run a mutation, you first call `useCreateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
+ *   variables: {
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutation, CreateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(CreateEventDocument, options);
+      }
+export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
+export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
 export const HelloDocument = gql`
     query hello {
   hello
@@ -529,3 +615,39 @@ export function useFindLinkByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type FindLinkByIdQueryHookResult = ReturnType<typeof useFindLinkByIdQuery>;
 export type FindLinkByIdLazyQueryHookResult = ReturnType<typeof useFindLinkByIdLazyQuery>;
 export type FindLinkByIdQueryResult = Apollo.QueryResult<FindLinkByIdQuery, FindLinkByIdQueryVariables>;
+export const FetchOverviewDocument = gql`
+    query fetchOverview {
+  fetchOverview {
+    views
+    clicks
+    date
+  }
+}
+    `;
+
+/**
+ * __useFetchOverviewQuery__
+ *
+ * To run a query within a React component, call `useFetchOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchOverviewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchOverviewQuery(baseOptions?: Apollo.QueryHookOptions<FetchOverviewQuery, FetchOverviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchOverviewQuery, FetchOverviewQueryVariables>(FetchOverviewDocument, options);
+      }
+export function useFetchOverviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchOverviewQuery, FetchOverviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchOverviewQuery, FetchOverviewQueryVariables>(FetchOverviewDocument, options);
+        }
+export type FetchOverviewQueryHookResult = ReturnType<typeof useFetchOverviewQuery>;
+export type FetchOverviewLazyQueryHookResult = ReturnType<typeof useFetchOverviewLazyQuery>;
+export type FetchOverviewQueryResult = Apollo.QueryResult<FetchOverviewQuery, FetchOverviewQueryVariables>;

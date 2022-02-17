@@ -73,3 +73,11 @@ mutation reorderLink($id: Int!, $newIndex: Int!, $oldIndex: Int!) {
         type
     }
 }
+
+mutation createEvent($type: EVENT_TYPE) {
+    createEvent(type: $type) {
+        id
+        type
+        created_at
+    }
+}

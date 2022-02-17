@@ -1,4 +1,5 @@
 import Link from "../../../../lib/models/Link";
+import Event from "../../../../lib/models/Event";
 import { MutationLoginArgs } from "../../src/generated-types";
 
 const jwt = require("jsonwebtoken");
@@ -44,5 +45,9 @@ export const Mutation = {
             if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
             const links = await Link.reorder(id, newIndex, oldIndex)
             return links
-        }
+    },
+    createEvent: async(_: any, { type } : { type: 'view' | 'click' }, context: {isAuthorized: boolean}) => {
+        const event = await Event.create(type)
+        return event
+    }
 }

@@ -21,3 +21,11 @@ query findLinkById($id: Int!) {
         position
     }
 }
+
+query fetchOverview {
+    fetchOverview {
+        views
+        clicks
+        date
+    }
+}

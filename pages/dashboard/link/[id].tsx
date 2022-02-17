@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Dashboard from '../../../components/dashboard'
@@ -67,6 +68,9 @@ const LinkDetail = () => {
 
     return (
         <Dashboard>
+            <Head>
+                <title>Edit link | Singlelink</title>
+            </Head>
             <h1 className='h1'>Edit link</h1>
             {!loading &&
             <><div className='flex flex-col space-y-2 mb-6'>

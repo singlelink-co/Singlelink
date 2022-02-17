@@ -18,5 +18,6 @@ export const mutations = gql`
         ): Link
         deleteLinkById(id: Int!): Link
         reorderLink(id: Int!, newIndex: Int!, oldIndex: Int!): [Link]
+        createEvent(type: EVENT_TYPE): Event
     }
 `

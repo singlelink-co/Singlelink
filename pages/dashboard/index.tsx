@@ -74,6 +74,9 @@ const DashboardLinks = () => {
 
     return (
         <Dashboard>
+            <Head>
+                <title>Dashboard - Singlelink</title>
+            </Head>
             <div className='flex flex-row items-center justify-between w-full mb-8 h1-row'>
                 <h1 className='h1'>Links</h1>
                 <Link href="/dashboard/link/create" passHref>
