@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Dashboard from '../../components/dashboard'
@@ -26,6 +27,9 @@ const Analytics = () => {
 
     return (
         <Dashboard>
+            <Head>
+                <title>Analytics - Singlelink</title>
+            </Head>
             <h1 className='h1'>Analytics</h1>
             {overview.data &&
                 <>

@@ -32,7 +32,7 @@ const Home: NextPage = () => {
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-screen bg-gray-100'>
       <Head>
-        <title>Login to Singlelink</title>
+        <title>Login - Singlelink</title>
         <meta name="description" content="Login to your Singlelink dashboard." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
