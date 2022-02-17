@@ -2,24 +2,28 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Dashboard from '../../components/dashboard'
-import { useFetchOverviewQuery, Event as EventType } from '../../hooks-generated'
+import { useFetchOverviewQuery, Event as EventType, FetchOverviewQuery, Overview } from '../../hooks-generated'
 
 
 const Analytics = () => {
-
+    const [todayViews, setTodayViews] = useState<number>()
+    const [todayClicks, setTodayClicks] = useState<number>()
     const [weeklyViews, setWeeklyViews] = useState<number>()
     const [weeklyClicks, setWeeklyClicks] = useState<number>()
 
     const overview = useFetchOverviewQuery({
-        onCompleted: (data: { fetchOverview: EventType[] }) => {
+        onCompleted: (data: FetchOverviewQuery) => {
             let weekly = {
                 views: 0,
                 clicks: 0
             }
-            data.fetchOverview.map((analytics: EventType) => {
+            if(!data.fetchOverview) throw Error('Fetch Overview not found')
+            data.fetchOverview.map((analytics: any) => {
                 weekly.views+=analytics.views
                 weekly.clicks+=analytics.clicks
             })
+            setTodayViews((data.fetchOverview[data.fetchOverview.length - 1] as Overview).views)
+            setTodayClicks((data.fetchOverview[data.fetchOverview.length - 1] as Overview).clicks)
             setWeeklyViews(weekly.views)
             setWeeklyClicks(weekly.clicks)
         }
@@ -40,23 +44,24 @@ const Analytics = () => {
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3 mb-3'>
                     <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
                         <div className='text-gray-600 font-medium'>Today&#39;s views</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length - 1].views}</div>
+                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{(todayViews ?? 0).toLocaleString("en-US")}</div>
                     </div>
                     <div className='bg-white rounded-lg shadow p-6 flex flex-col'>
                         <div className='text-gray-600 font-medium'>Today&#39;s clicks</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length - 1].clicks}</div>
+                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{(todayClicks ?? 0).toLocaleString("en-US")}</div>
                     </div>
                 </div>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3'>
                         <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
                             <div className='text-gray-600 font-medium'>Weekly views</div>
-                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyViews}</div>
+                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{(weeklyViews ?? 0).toLocaleString("en-US")}</div>
                         </div>
                         <div className='bg-white rounded-lg shadow p-6 flex flex-col'>
                             <div className='text-gray-600 font-medium'>Weekly clicks</div>
-                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyClicks}</div>
+                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{(weeklyClicks ?? 0).toLocaleString("en-US")}</div>
                         </div>
-                    </div></>
+                    </div>
+                </>
             }
         </Dashboard>
     )
