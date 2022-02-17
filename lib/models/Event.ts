@@ -1,8 +1,8 @@
 import client from '../connection'
 
 const Event = {
-    create: async(type: 'click' | 'view') => {
-        const event = await client.query(`insert into events (type) values($1)`, [type])
+    create: async(type: 'click' | 'view', link_id?: string) => {
+        const event = !link_id ? await client.query(`insert into events (type) values($1)`, [type]) : await client.query(`insert into events (type, link_id) values($1, $2)`, ['click', link_id])
         if(!event || !event.rows) throw Error('Failed to create link')
         return event.rows[0]
     },

@@ -28,24 +28,31 @@ const Analytics = () => {
         <Dashboard>
             <h1 className='h1'>Analytics</h1>
             {overview.data &&
-                <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3'>
+                <>
+                <div className='mb-3 w-full bg-white rounded-lg shadow p-6 flex flex-col'>
+                    <div className='text-gray-600 font-medium'>Click-through rate (CTR)</div>
+                    {weeklyClicks && weeklyViews && <div className='font-semibold text-3xl mt-2 text-indigo-600'>{((weeklyClicks/weeklyViews)*100).toFixed(2)}%</div>}
+                </div>
+                <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3 mb-3'>
                     <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
                         <div className='text-gray-600 font-medium'>Today&#39;s views</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length-1].views}</div>
+                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length - 1].views}</div>
                     </div>
-                    {/*<div className='bg-white rounded-lg shadow p-6 flex flex-col'>
+                    <div className='bg-white rounded-lg shadow p-6 flex flex-col'>
                         <div className='text-gray-600 font-medium'>Today&#39;s clicks</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length-1].clicks}</div>
-                    </div>*/}
-                    <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
-                        <div className='text-gray-600 font-medium'>Weekly views</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyViews}</div>
+                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{overview.data.fetchOverview[overview.data.fetchOverview.length - 1].clicks}</div>
                     </div>
-                    {/*<div className='bg-white rounded-lg shadow p-6 flex flex-col'>
-                        <div className='text-gray-600 font-medium'>Weekly clicks</div>
-                        <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyClicks}</div>
-                    </div>*/}
                 </div>
+                <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3'>
+                        <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
+                            <div className='text-gray-600 font-medium'>Weekly views</div>
+                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyViews}</div>
+                        </div>
+                        <div className='bg-white rounded-lg shadow p-6 flex flex-col'>
+                            <div className='text-gray-600 font-medium'>Weekly clicks</div>
+                            <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyClicks}</div>
+                        </div>
+                    </div></>
             }
         </Dashboard>
     )

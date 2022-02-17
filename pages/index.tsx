@@ -57,7 +57,7 @@ const Home = ({ links }: { links: LinkType[]}) => {
             <h2 className='text-xl text-gray-600'>{link?.content}</h2>
           </div>)
         if(link?.type === 'vanilla')
-          return (<a href={link.content ?? '#'} className='shadow hover:scale-105 duration-300 ease-in-out flex flex-col w-full text-center px-3 py-5 mb-3 bg-white text-black text-lg font-medium rounded-lg' key={link?.id}>{link?.label}</a>)
+          return (<a href={`/api/link/${link?.id}` ?? '#'} className='shadow hover:scale-105 duration-300 ease-in-out flex flex-col w-full text-center px-3 py-5 mb-3 bg-white text-black text-lg font-medium rounded-lg' key={link?.id}>{link?.label}</a>)
         if(link?.type === 'avatar')
           return (<div className='flex items-center justify-center overflow-hidden w-24 h-24 rounded-full mb-6' key={link?.id}>
             <img alt="User" src={link.content ?? '#'} width='100%' height='auto' />
