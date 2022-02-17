@@ -9,6 +9,7 @@ import Logo from '../../components/logo'
 import LogoLong from '../../components/logo-long'
 import { useVerifyMutation } from '../../hooks-generated'
 import { useListLinksQuery } from '../../hooks-generated'
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 const DashboardLinks = () => {
     const router = useRouter()
@@ -28,6 +29,18 @@ const DashboardLinks = () => {
         }
     })
 
+    const reorderLinks = async(result: DropResult) => {
+        const id=Number.parseInt(result.draggableId ?? '')
+        const newIndex = result.destination?.index
+        const oldIndex = result.source.index
+        console.log(`Dragging link ${id} to ${newIndex} from ${oldIndex}`)
+        console.log(result)
+        if(id && newIndex && oldIndex) {
+            // Attempt reorder
+
+        }
+    }
+
     useEffect(() => {
         if(!localStorage.getItem('jwt')) {
             router.push('/login')
@@ -45,22 +58,34 @@ const DashboardLinks = () => {
                     </button>
                 </Link>
             </div>
-            {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
-                if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
-                if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
-                return 0
-            }).map((link, i) => (
-                <Link key={i} href={`/dashboard/link/${link?.id}`} passHref>
-                    <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-pointer max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
-                        {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
-                        <div className='flex flex-row items-center justify-start space-x-4'>
-                            <span className='capitalize'>{link?.type}</span>
-                            <span>|</span>
-                            <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
-                        </div>
-                    </div>
-                </Link>
-            ))}
+            <DragDropContext onDragEnd={reorderLinks}>
+                <Droppable droppableId="links">
+                    {(provided: any) => (
+                    <ul className='links' {...provided.droppableProps} ref={provided.innerRef} style={{width: '100%'}}>
+                        {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
+                            if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
+                            if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
+                            return 0
+                        }).map((link, i) => (
+                            <Draggable draggableId={(link?.id ?? 0).toString()} key={link?.id} index={i}>
+                                {(provided: any) => (
+                                    <li {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} onClick={() => router.push(`/dashboard/link/${link?.id}`)}>
+                                        <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
+                                            {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
+                                            <div className='flex flex-row items-center justify-start space-x-4'>
+                                                <span className='capitalize'>{link?.type}</span>
+                                                <span>|</span>
+                                                <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                )}
+                            </Draggable>
+                        ))}
+                    </ul>
+                    )}
+                </Droppable> 
+            </DragDropContext>
         </Dashboard>
     )
 }
