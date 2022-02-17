@@ -17,5 +17,6 @@ export const mutations = gql`
             type: String!
         ): Link
         deleteLinkById(id: Int!): Link
+        reorderLink(id: Int!, newIndex: Int!, oldIndex: Int!): [Link]
     }
 `

@@ -2,19 +2,25 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Dashboard from '../../components/dashboard'
 import Logo from '../../components/logo'
 import LogoLong from '../../components/logo-long'
-import { useVerifyMutation } from '../../hooks-generated'
-import { useListLinksQuery } from '../../hooks-generated'
+import { Link as LinkType, useReorderLinkMutation, useVerifyMutation, useListLinksQuery } from '../../hooks-generated'
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 const DashboardLinks = () => {
+    const [links, setLinks] = useState<LinkType[]>()
     const router = useRouter()
 
     const listLinks = useListLinksQuery({
-        fetchPolicy: 'no-cache'
+        fetchPolicy: 'no-cache',
+        onCompleted: (data) => {
+            if(!data.listLinks) return
+            setLinks(data.listLinks as LinkType[])
+        }
     })
 
     const verify = useVerifyMutation({
@@ -27,6 +33,38 @@ const DashboardLinks = () => {
             }
         }
     })
+
+    const reorder = useReorderLinkMutation({
+        onCompleted: (data) => {
+            console.log(data)
+            // Sync data with remote
+            if(!data.reorderLink) return
+            setLinks(data.reorderLink as LinkType[])
+            // Reload IFrame
+            if(!document.getElementById('singlelink-preview')) return
+            let iframe: HTMLIFrameElement = document.getElementById('singlelink-preview') as HTMLIFrameElement
+            iframe.src = iframe.src
+        }
+    })
+
+    const reorderLinks = async(result: DropResult) => {
+        const id=Number.parseInt(result.draggableId ?? '')
+        const newIndex = result.destination?.index ?? -1
+        const oldIndex = result.source.index
+        console.log(`Dragging link ${id} to ${newIndex} from ${oldIndex}`)
+        console.log(result)
+        if(id && newIndex >=0 && oldIndex >= 0) {
+            // Attempt reorder
+            console.log('Attempting reorder...')
+            reorder[0]({
+                variables: {
+                    id,
+                    newIndex,
+                    oldIndex
+                }
+            })
+        }
+    }
 
     useEffect(() => {
         if(!localStorage.getItem('jwt')) {
@@ -45,22 +83,32 @@ const DashboardLinks = () => {
                     </button>
                 </Link>
             </div>
-            {[...listLinks.data?.listLinks ?? []].sort((a,b) => {
-                if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
-                if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
-                return 0
-            }).map((link, i) => (
-                <Link key={i} href={`/dashboard/link/${link?.id}`} passHref>
-                    <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden cursor-pointer max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
-                        {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
-                        <div className='flex flex-row items-center justify-start space-x-4'>
-                            <span className='capitalize'>{link?.type}</span>
-                            <span>|</span>
-                            <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
-                        </div>
-                    </div>
-                </Link>
-            ))}
+            {!reorder[1].loading ?
+                <DragDropContext onDragEnd={reorderLinks}>
+                    <Droppable droppableId="links">
+                        {(provided: any) => (
+                        <ul className='links' {...provided.droppableProps} ref={provided.innerRef} style={{width: '100%'}}>
+                            {(links ?? []).map((link, i) => (
+                                <Draggable draggableId={(link?.id ?? 0).toString()} key={link?.id} index={i}>
+                                    {(provided: any) => (
+                                        <li {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps} onClick={() => router.push(`/dashboard/link/${link?.id}`)}>
+                                            <div className='w-full mb-4 p-6 bg-white shadow rounded-xl overflow-hidden max-w-4xl' style={{borderLeft: 'solid 12px rgba(0,0,0,.15)'}}>
+                                                {link?.label && <div className='text-xl font-medium mb-2'>{link?.label}</div>}
+                                                <div className='flex flex-row items-center justify-start space-x-4'>
+                                                    <span className='capitalize'>{link?.type}</span>
+                                                    <span>|</span>
+                                                    <a className='hover:underline hover:text-indigo-600' href={link?.content ?? '#'}>{link?.content?.substring(0, 32) + '...' ?? 'N/A'}</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    )}
+                                </Draggable>
+                            ))}
+                        </ul>
+                        )}
+                    </Droppable> 
+                </DragDropContext> : <p className='text-gray-700 text-lg'>Loading links...</p>
+            }
         </Dashboard>
     )
 }

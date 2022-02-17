@@ -49,11 +49,7 @@ const Home = ({ links }: { links: LinkType[]}) => {
       <meta property="twitter:image" content={process.env.META_IMG} />
     </Head>
     <div className='flex flex-col items-center justify-center w-full max-w-md mx-auto py-16 px-4'>
-      {[...links].sort((a,b) => {
-        if ((a?.position ?? 0) > (b?.position ?? 0)) return 1
-        if ((a?.position ?? 0) < (b?.position ?? 0)) return -1
-        return 0
-      }).map(link => {
+      {[...links].map(link => {
         if(link?.type === 'text')
           return (<div className='text-center flex flex-col items-center justify-center mb-4' key={link?.id}>
             <h1 className="text-3xl mb-4 font-semibold">{link?.label}</h1>
