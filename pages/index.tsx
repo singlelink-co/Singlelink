@@ -91,7 +91,7 @@ export async function getServerSideProps({ req }: { req: any}) {
   const links: LinkType[] = data.data.listLinks
   if(req.url.substr(req.url.length-9) != 'demo=true') {
     // Create view if viewed by guest
-    await fetch("http://localhost:3000/api/graphql", {
+    await fetch("/api/graphql", {
       "headers": {
         "accept": "application/json",
         "accept-language": "en-US,en;q=0.9",
