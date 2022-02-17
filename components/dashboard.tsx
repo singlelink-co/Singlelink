@@ -48,14 +48,18 @@ const Dashboard = ({ children }: { children: any}) => {
                                 <svg className="w-6 h-6" fill="none" stroke="rgba(255,255,255,.65)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>                            <span className='text-white text-lg ml-4'>Logout</span>
                                 </div>
                             </Link>
+
                         </ul>
+                        
                     </div>
                     {/* TODO: Update link with Discount, and check if BRANDING is true before displaying */}
-                    {/*<Link href="https://singlelink.co" passHref>
-                        <a target="_blank" rel="noopener noreferrer" className='p-4 flex flex-col items-center justify-start mt-auto w-full text-white text-sm cursor-pointer hover:underline' style={{borderTop: 'solid 1px rgba(0,0,0,.15)', backgroundColor: 'rgba(0,0,0,.10)'}}>
-                            🎁 Sign up for Singlelink Cloud and save 15%!
-                        </a>
-                    </Link>*/}
+                    {/*
+                        <Link href="https://singlelink.co" passHref>
+                            <a target="_blank" rel="noopener noreferrer" className='p-4 flex flex-col items-center justify-start mt-auto w-full text-white text-sm cursor-pointer hover:underline' style={{borderTop: 'solid 1px rgba(255,255,255,.1)', backgroundColor: 'rgba(255,255,255,.05)'}}>
+                                Sign up for Singlelink Cloud for only $5/mo!
+                            </a>
+                        </Link>
+                    */}
                 </div>
                 <div className="min-h-screen flex flex-col px-12 py-16" style={{width: 'calc(100% - 800px)', marginLeft: 350}}>
                     {children}
