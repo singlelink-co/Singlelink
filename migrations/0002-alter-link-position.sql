@@ -1,0 +1,1 @@
+ALTER TABLE links DROP CONSTRAINT links_position_key;
