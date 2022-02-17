@@ -5,5 +5,6 @@ export const queries = gql`
 		hello: String
 		listLinks: [Link]
 		findLinkById(id: Int!): Link
+		fetchOverview: [Overview]
 	}
 `

@@ -27,14 +27,12 @@ const Dashboard = ({ children }: { children: any}) => {
                                     <span className='text-white text-lg ml-4'>Links</span>
                                 </div>
                             </Link>
-                            {/*
                             <Link href='/dashboard/analytics'>
                                 <div className='cursor-pointer p-3 rounded-lg hover:bg-indigo-600 flex flex-row items-center justify-start'>
                                 <svg className="w-6 h-6" fill="none" stroke="rgba(255,255,255,.65)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 <span className='text-white text-lg ml-4'>Analytics</span>
                                 </div>
                             </Link>
-                            */}
                             {/*
                             <Link href='/dashboard/settings'>
                                 <div className='cursor-pointer p-3 rounded-lg hover:bg-indigo-600 flex flex-row items-center justify-start'>
@@ -71,7 +69,7 @@ const Dashboard = ({ children }: { children: any}) => {
                     </div>
                     <div className='flex items-center justify-center' style={{width:375, height:812, transform: 'scale(.8)', borderRadius: 65, backgroundColor: '#000'}}>
                         <div style={{width:347, height: 767, borderRadius: 50, overflow: 'hidden'}}>
-                            <iframe id="singlelink-preview" width={347} height={767} src={domain}></iframe>
+                            {domain && <iframe id="singlelink-preview" width={347} height={767} src={domain + '?demo=true'}></iframe>}
                         </div>
                     </div>
                     <div className='flex flex-row items-center justify-center w-full text-center p-4' style={{borderTop: 'solid 1px rgba(0,0,0,.15)'}}>

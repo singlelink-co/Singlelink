@@ -12,6 +12,19 @@ export type Scalars = {
   Float: number;
 };
 
+export enum Event_Type {
+  Click = 'click',
+  View = 'view'
+}
+
+export type Event = {
+  __typename?: 'Event';
+  created_at: Scalars['String'];
+  id: Scalars['Int'];
+  link_id: Scalars['Int'];
+  type: Event_Type;
+};
+
 export type Link = {
   __typename?: 'Link';
   content?: Maybe<Scalars['String']>;
@@ -23,12 +36,18 @@ export type Link = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createEvent?: Maybe<Event>;
   createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
   reorderLink?: Maybe<Array<Maybe<Link>>>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateEventArgs = {
+  type?: Maybe<Event_Type>;
 };
 
 
@@ -69,8 +88,16 @@ export type MutationVerifyArgs = {
   jwt?: Maybe<Scalars['String']>;
 };
 
+export type Overview = {
+  __typename?: 'Overview';
+  clicks: Scalars['Int'];
+  date: Scalars['String'];
+  views: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  fetchOverview?: Maybe<Array<Maybe<Overview>>>;
   findLinkById?: Maybe<Link>;
   hello?: Maybe<Scalars['String']>;
   listLinks?: Maybe<Array<Maybe<Link>>>;

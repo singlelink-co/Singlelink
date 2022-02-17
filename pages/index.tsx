@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import absoluteUrl from 'next-absolute-url'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import Logo from '../components/logo'
 import { Link as LinkType }  from '../hooks-generated'
 const parse = require('html-react-parser')
@@ -88,6 +89,27 @@ export async function getServerSideProps({ req }: { req: any}) {
   })
   const data = await res.json()
   const links: LinkType[] = data.data.listLinks
+  if(req.url.substr(req.url.length-9) != 'demo=true') {
+    // Create view if viewed by guest
+    await fetch("http://localhost:3000/api/graphql", {
+      "headers": {
+        "accept": "application/json",
+        "accept-language": "en-US,en;q=0.9",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDQ5MDA1ODB9.XqQEdkcgek6it_BIwfX8OAUEUE40ylW2KTdCE71jcEw",
+        "content-type": "application/json",
+        "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "Referer": "http://localhost:3000/",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      },
+      "body": "{\"operationName\":\"createEvent\",\"variables\":{\"type\":\"view\"},\"query\":\"mutation createEvent($type: EVENT_TYPE) {\\n  createEvent(type: $type) {\\n    id\\n    type\\n    created_at\\n    __typename\\n  }\\n}\\n\"}",
+      "method": "POST"
+    });
+  }
   return { props: { links } }
 
 }
