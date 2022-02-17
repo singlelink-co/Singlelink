@@ -72,7 +72,7 @@ const LinkDetail = () => {
                 <title>Edit link | Singlelink</title>
             </Head>
             <h1 className='h1'>Edit link</h1>
-            {!loading &&
+            {!loading ?
             <><div className='flex flex-col space-y-2 mb-6'>
                     <label className='font-semibold text-lg text-gray-800'>Label</label>
                     <input onChange={(e) => setLabel(e.target.value)} value={label ?? ''} className='px-5 py-3 rounded-lg border border-gray-200 w-full bg-white focus:ring-4 focus:ring-opacity-50 focus:ring-indigo-600 outline-0 ring-offset-2 focus:border-gray-1' type='text' placeholder='e.g. My Instagram profile' />
@@ -93,7 +93,7 @@ const LinkDetail = () => {
                     </div>
                     <button onClick={() => attemptSave()} className='px-8 py-4 bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700 mb-4'>Save changes</button>
                     <button onClick={() => attemptDelete()} className='px-8 py-4 bg-red-100 w-full text-red-600 border border-red-600 font-semibold rounded-xl hover:bg-red-600 hover:text-white'>Delete link</button>
-                    </>
+                    </> : <div className='p-3 text-gray-600'>Loading, please wait...</div>
             }
         </Dashboard>
     )

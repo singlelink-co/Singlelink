@@ -37,7 +37,7 @@ const Analytics = () => {
                 <title>Analytics - Singlelink</title>
             </Head>
             <h1 className='h1'>Analytics</h1>
-            {overview.data &&
+            {overview.data ?
                 <>
                 <div className='mb-3 w-full bg-white rounded-lg shadow p-6 flex flex-col'>
                     <div className='text-gray-600 font-medium'>Click-through rate (CTR)</div>
@@ -63,7 +63,7 @@ const Analytics = () => {
                             <div className='font-semibold text-3xl mt-2 text-indigo-600'>{(weeklyClicks ?? 0).toLocaleString("en-US")}</div>
                         </div>
                     </div>
-                </>
+                </> : <div className='p-3 text-gray-600'>Loading, please wait...</div>
             }
         </Dashboard>
     )
