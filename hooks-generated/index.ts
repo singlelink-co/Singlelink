@@ -28,6 +28,7 @@ export type Mutation = {
   createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
+  reorderLink?: Maybe<Array<Maybe<Link>>>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
 };
@@ -47,6 +48,13 @@ export type MutationDeleteLinkByIdArgs = {
 
 export type MutationLoginArgs = {
   password?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationReorderLinkArgs = {
+  id: Scalars['Int'];
+  newIndex: Scalars['Int'];
+  oldIndex: Scalars['Int'];
 };
 
 
@@ -138,6 +146,21 @@ export type DeleteLinkByIdMutation = (
     { __typename?: 'Link' }
     & Pick<Link, 'id' | 'label' | 'content' | 'type' | 'position'>
   )> }
+);
+
+export type ReorderLinkMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newIndex: Scalars['Int'];
+  oldIndex: Scalars['Int'];
+}>;
+
+
+export type ReorderLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { reorderLink?: Maybe<Array<Maybe<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'label' | 'content' | 'id' | 'position' | 'type'>
+  )>>> }
 );
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
@@ -358,6 +381,45 @@ export function useDeleteLinkByIdMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteLinkByIdMutationHookResult = ReturnType<typeof useDeleteLinkByIdMutation>;
 export type DeleteLinkByIdMutationResult = Apollo.MutationResult<DeleteLinkByIdMutation>;
 export type DeleteLinkByIdMutationOptions = Apollo.BaseMutationOptions<DeleteLinkByIdMutation, DeleteLinkByIdMutationVariables>;
+export const ReorderLinkDocument = gql`
+    mutation reorderLink($id: Int!, $newIndex: Int!, $oldIndex: Int!) {
+  reorderLink(id: $id, newIndex: $newIndex, oldIndex: $oldIndex) {
+    label
+    content
+    id
+    position
+    type
+  }
+}
+    `;
+export type ReorderLinkMutationFn = Apollo.MutationFunction<ReorderLinkMutation, ReorderLinkMutationVariables>;
+
+/**
+ * __useReorderLinkMutation__
+ *
+ * To run a mutation, you first call `useReorderLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReorderLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reorderLinkMutation, { data, loading, error }] = useReorderLinkMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      newIndex: // value for 'newIndex'
+ *      oldIndex: // value for 'oldIndex'
+ *   },
+ * });
+ */
+export function useReorderLinkMutation(baseOptions?: Apollo.MutationHookOptions<ReorderLinkMutation, ReorderLinkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReorderLinkMutation, ReorderLinkMutationVariables>(ReorderLinkDocument, options);
+      }
+export type ReorderLinkMutationHookResult = ReturnType<typeof useReorderLinkMutation>;
+export type ReorderLinkMutationResult = Apollo.MutationResult<ReorderLinkMutation>;
+export type ReorderLinkMutationOptions = Apollo.BaseMutationOptions<ReorderLinkMutation, ReorderLinkMutationVariables>;
 export const HelloDocument = gql`
     query hello {
   hello

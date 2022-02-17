@@ -63,3 +63,13 @@ mutation deleteLinkById($id: Int!) {
         position
     }
 }
+
+mutation reorderLink($id: Int!, $newIndex: Int!, $oldIndex: Int!) {
+    reorderLink(id: $id, newIndex: $newIndex, oldIndex: $oldIndex) {
+        label
+        content
+        id
+        position
+        type
+    }
+}

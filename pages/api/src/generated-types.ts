@@ -26,6 +26,7 @@ export type Mutation = {
   createLink?: Maybe<Link>;
   deleteLinkById?: Maybe<Link>;
   login?: Maybe<Scalars['String']>;
+  reorderLink?: Maybe<Array<Maybe<Link>>>;
   updateLinkById?: Maybe<Link>;
   verify?: Maybe<Scalars['String']>;
 };
@@ -45,6 +46,13 @@ export type MutationDeleteLinkByIdArgs = {
 
 export type MutationLoginArgs = {
   password?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationReorderLinkArgs = {
+  id: Scalars['Int'];
+  newIndex: Scalars['Int'];
+  oldIndex: Scalars['Int'];
 };
 
 

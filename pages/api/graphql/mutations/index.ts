@@ -38,4 +38,11 @@ export const Mutation = {
             const link = Link.deleteById(id)
             return link
     },
+    reorderLink: async(_: any,
+        { id, newIndex, oldIndex }: { id: number, newIndex: number, oldIndex: number },
+        { isAuthorized }: {isAuthorized: boolean}) => {
+            if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
+            const links = await Link.reorder(id, newIndex, oldIndex)
+            return links
+        }
 }
