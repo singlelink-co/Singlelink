@@ -1,1 +1,0 @@
-CREATE TYPE event_type AS ENUM('view', 'click')
