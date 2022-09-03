@@ -41,7 +41,7 @@ const Analytics = () => {
                 <>
                 <div className='mb-3 w-full bg-white rounded-lg shadow p-6 flex flex-col'>
                     <div className='text-gray-600 font-medium'>Click-through rate (CTR)</div>
-                    <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyViews>1 ? `${((weeklyClicks/weeklyViews)*100).toFixed(2)} %` : 'N/A'}</div>
+                    <div className='font-semibold text-3xl mt-2 text-indigo-600'>{weeklyViews>1 ? `${((weeklyClicks/weeklyViews)*100).toFixed(2)} %` : '0%'}</div>
                 </div>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-2 gap-3 mb-3'>
                     <div className='w-full bg-white rounded-lg shadow p-6 flex flex-col'>
