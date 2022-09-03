@@ -108,7 +108,6 @@ export async function getServerSideProps({ req }: { req: any}) {
       "body": "{\"operationName\":\"createEvent\",\"variables\":{\"type\":\"view\"},\"query\":\"mutation createEvent($type: EVENT_TYPE) {\\n  createEvent(type: $type) {\\n    id\\n    type\\n    created_at\\n    __typename\\n  }\\n}\\n\"}",
       "method": "POST"
     });
-    console.log((await createView.json()).data)
   }
   return { props: { links } }
 
