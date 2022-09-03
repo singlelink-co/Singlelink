@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:docker": "docker build -t singlelink ./docker",
     "start": "next start",
     "lint": "next lint",
     "generate": "graphql-codegen --config codegen.yml --watch",
     "postinstall": "npx migrate-mysql",
     "db:migrate": "npx migrate-mysql",
+    "boot:app": "docker pull singlelink | docker run --name singlelink-app -p 3000:3000 singlelink",
     "boot:db": "docker pull mysql | docker run --name singlelink-mysql -e MYSQL_DATABASE=singlelink -p 3306:3306 -e MYSQL_ROOT_PASSWORD=single-my-links -d mysql:latest"
   },
   "dependencies": {
@@ -25,11 +27,11 @@
     "micro-cors": "^0.1.1",
     "mysql-await": "^2.1.8",
     "mysql2": "^2.3.3",
-    "next": "12.0.10",
+    "next": "latest",
     "next-absolute-url": "^1.2.2",
-    "react": "17.0.2",
+    "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
-    "react-dom": "17.0.2",
+    "react-dom": "^17.0.2",
     "ts-node": "^10.5.0"
   },
   "devDependencies": {
@@ -45,7 +47,6 @@
     "camelize-ts": "^1.0.8",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
-    "graphql": "^15.7.2",
     "graphql-codegen": "^0.4.0",
     "migrate-mysql": "^0.4.0",
     "postcss": "^8.4.6",
