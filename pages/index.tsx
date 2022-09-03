@@ -52,24 +52,24 @@ const Home = ({ links }: { links: LinkType[]}) => {
     <div className='flex flex-col items-center justify-center w-full max-w-md mx-auto py-16 px-4'>
       {[...links].map(link => {
         if(link?.type === 'text')
-          return (<div className='text-center flex flex-col items-center justify-center mb-4' key={link?.id}>
+          return (<div id={`link-${link.id}`} className='text-center flex flex-col items-center justify-center mb-4' key={link?.id}>
             <h1 className="text-3xl mb-4 font-semibold">{link?.label}</h1>
             <h2 className='text-xl text-gray-600'>{link?.content}</h2>
           </div>)
         if(link?.type === 'vanilla')
-          return (<a href={`/api/link/${link?.id}` ?? '#'} className='shadow hover:scale-105 duration-300 ease-in-out flex flex-col w-full text-center px-3 py-5 mb-3 bg-white text-black text-lg font-medium rounded-lg' key={link?.id}>{link?.label}</a>)
+          return (<a id={`link-${link.id}`} href={`/api/link/${link?.id}` ?? '#'} className='shadow hover:scale-105 duration-300 ease-in-out flex flex-col w-full text-center px-3 py-5 mb-3 bg-white text-black text-lg font-medium rounded-lg' key={link?.id}>{link?.label}</a>)
         if(link?.type === 'avatar')
-          return (<div className='flex items-center justify-center overflow-hidden w-24 h-24 rounded-full mb-6' key={link?.id}>
+          return (<div id={`link-${link.id}`} className='flex items-center justify-center overflow-hidden w-24 h-24 rounded-full mb-6' key={link?.id}>
             <img alt="User" src={link.content ?? '#'} width='100%' height='auto' />
           </div>)
         if(link?.type === 'youtube')
-          return (<div key={link.id} className='embed-container rounded-lg'>
+          return (<div id={`link-${link.id}`} key={link.id} className='embed-container rounded-lg'>
             <iframe src={link.content ?? '#'} frameBorder='0' allowFullScreen></iframe>
           </div>)
         if(link?.type === 'image')
-          return (<img key={link.id} src={link.content ?? '#'} alt={link.label ?? ''} style={{width: '100%', height: 'auto'}} />)
+          return (<img id={`link-${link.id}`} key={link.id} src={link.content ?? '#'} alt={link.label ?? ''} style={{width: '100%', height: 'auto', marginBottom: 6}} />)
         if(link?.type === 'html')
-          return (<div key={link.id}>{parse(link.content)}</div>)
+          return (<div id={`link-${link.id}`} key={link.id}>{parse(link.content)}</div>)
       })}
       {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>}
     </div>
@@ -95,7 +95,6 @@ export async function getServerSideProps({ req }: { req: any}) {
       "headers": {
         "accept": "application/json",
         "accept-language": "en-US,en;q=0.9",
-        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDQ5MDA1ODB9.XqQEdkcgek6it_BIwfX8OAUEUE40ylW2KTdCE71jcEw",
         "content-type": "application/json",
         "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"",
         "sec-ch-ua-mobile": "?0",

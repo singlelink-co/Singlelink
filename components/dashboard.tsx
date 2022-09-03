@@ -21,7 +21,7 @@ const Dashboard = ({ children }: { children: any}) => {
                     <div className='flex flex-col'>
                         <div className='py-8 bg-black px-8 w-full flex flex-row items-center justify-start' style={{borderBottom: 'solid 1px #222222'}}>
                             <div style={{width:170}}><LogoLong/></div>
-                            <div className='ml-4 text-white opacity-60 text-sm'>v4.0.0</div>
+                            <div className='ml-4 text-white opacity-60 text-sm'>v4.1.0</div>
                         </div>
                         <ul className='m-0 space-y-2 p-8'>
                             <Link href='/dashboard/'>
