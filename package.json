@@ -24,6 +24,7 @@
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "mysql-await": "^2.1.8",
+    "mysql2": "^2.3.3",
     "next": "12.0.10",
     "next-absolute-url": "^1.2.2",
     "pg": "^8.7.3",

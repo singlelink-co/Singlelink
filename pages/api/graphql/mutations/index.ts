@@ -24,7 +24,7 @@ export const Mutation = {
     createLink: async(_: any,
         params: { label: string, content: string, type: string}, { isAuthorized }: { isAuthorized: boolean }) => {
             if(!isAuthorized) throw Error('Must be authorized to use the Dashboard.')
-            const link = Link.create(params)
+            const link = await Link.create(params)
             return link
     },
     updateLinkById: async(_: any,
