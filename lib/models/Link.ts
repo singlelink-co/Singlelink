@@ -1,4 +1,4 @@
-import { Link, Link as LinkType } from '../../hooks-generated'
+import { Link as LinkType } from '../../hooks-generated'
 import client from '../connection'
 
 const Link = {
