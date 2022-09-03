@@ -36,9 +36,11 @@ const Link = {
     create: async(params: {label: string, content: string, type: string}): Promise<LinkType> => {
         const nextPosition = await Link.findNextPosition()
         console.log(`Inserting new link at position ${nextPosition}`)
-        const [link] = await client.execute(`insert into links (label, content, type, position) values(?, ?, ?, ?)`, [params.label, params.content, params.type,nextPosition])
-        if(!link || !link[0]) throw Error('Failed to create link')
-        return link[0]
+        const [inserted] = await client.execute(`insert into links (label, content, type, position) values(?, ?, ?, ?)`, [params.label, params.content, params.type,nextPosition])
+        if(!inserted || inserted.affectedRows < 1) throw Error('Failed to create link')
+        const link = Link.findById(inserted.insertId)
+        if(!link) throw Error('Failed to find new link.')
+        return link
     },
     reorder: async(id: number, newIndex: number, oldIndex: number): Promise<LinkType[]> => {
         let [queryResult] = await client.execute("select * from links order by position");
