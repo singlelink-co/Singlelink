@@ -12,7 +12,7 @@
     <img src="https://github.com/Neutron-Creative/Singlelink/actions/workflows/build-lint.yml/badge.svg" alt="Build & lint">
   </a>
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
-        <img src="https://img.shields.io/badge/%20Beta-4.0.0-%2303d2d4" alt="Version">
+        <img src="https://img.shields.io/badge/%20Beta-4.1.0-%2303d2d4" alt="Version">
     </a>
     <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
         <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
@@ -43,9 +43,11 @@
 
 <h2 id="getting-started">Getting started</h2>
 
-The easiest way to get started is to deploy your [Singlelink](https://singlelink.co) site with [Railway](https://railway.app). You can get started with one-click using the button below and build up to three Singlelink pages, each with custom domains, 100% free & no credit card required, thanks to their $5/mo credit system.
+The easiest way to get started is to deploy your [Singlelink](https://singlelink.co) site with [Railway](https://railway.app). You can get started with one-click using the button below and build up to three Singlelink pages, each with custom domains, 100% free, thanks to their $5/mo credit system.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink&plugins=MySQL&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
+
+We also recommend connecting [Vercel](https://vercel.com) and [Planetscale](https://planetscale.com) for a free self-hosted Singlelink environment.
 
 <h2 id="local-development">Local development</h2>
 
@@ -53,7 +55,7 @@ Singlelink is a [NodeJS](#) project built on [Next.js](https://nodejs.org/en/), 
 
 If you haven't already, you'll need to install NodeJS and MySQL before being able to host or work on Singelink.
 - [NodeJS installation guide](https://nodejs.dev/learn/how-to-install-nodejs)
-- [MySQL installation guide](https://www.MySQL.org/download/)
+- To install MySQL with Docker, run `npm run db:boot` from the project root.
 
 Once you've installed NodeJS & MySQL, you can download Singlelink locally with:
 ```bash
@@ -66,6 +68,7 @@ cp .env.template .env
 ```
 
 Then, set the following **mandatory** environment variables to your preferences:
+- `DB_URL`: Optionally, override the remaining DB ENV variables with an all-in-one connection URL
 - `DB_DATABASE`: The name of the MySQL database you'll connect to (ex: railway)
 - `DB_PORT`: The port for the MySQL database you'll connect to (ex: 3306)
 - `DB_HOST`: The host url for your MySQL database (ex: containers-us-east-13.railway.app)
