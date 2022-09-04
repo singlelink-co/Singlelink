@@ -16,7 +16,7 @@ export const Mutation = {
             // Return jwt
             return token
         } else {
-            throw Error(`Incorrect password provided, please try again. Expected: ${process.env.PASSWORD}`)
+            throw Error(`Incorrect password provided, please try again.`)
         }
     },
     verify: async(_: any,
