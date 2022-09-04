@@ -9,7 +9,10 @@ export const Mutation = {
         { password }: MutationLoginArgs,
         _context: any) => {
         if(password===process.env.PASSWORD) {
-            const token = jwt.sign({}, process.env.SECRET)
+            const token = jwt.sign({}, process.env.SECRET,
+                {
+                    expiresIn: '24h'
+                })
             // Return jwt
             return token
         } else {
