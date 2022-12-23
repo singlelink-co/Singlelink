@@ -22,7 +22,7 @@
     "dotenv-run-script": "^0.2.0",
     "graphql": "15.7.2",
     "html-react-parser": "^1.4.8",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "mysql-await": "^2.1.8",
