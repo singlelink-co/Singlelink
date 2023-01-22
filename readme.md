@@ -45,7 +45,7 @@
 
 The easiest way to get started is to deploy your [Singlelink](https://singlelink.co) site with [Railway](https://railway.app). You can get started with one-click using the button below and build up to three Singlelink pages, each with custom domains, 100% free, thanks to their $5/mo credit system.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FNeutron-Creative%2FSinglelink&plugins=MySQL&envs=SECRET%2CPASSWORD%2CMETA_TITLE%2CMETA_DESC%2CMETA_IMG&optionalEnvs=META_TITLE%2CMETA_DESC%2CMETA_IMG&SECRETDesc=The+secret+used+when+signing+JWTs.&PASSWORDDesc=The+password+you%27ll+use+to+login+to+your+Singlelink+dashboard.&META_TITLEDesc=Your+page+%26+meta+title%2C+seen+in+Google+search+results&META_DESCDesc=Your+page+description+seen+in+Google+Search+results.&META_IMGDesc=The+OG+image+thumbnail+shown+when+sharing+your+Singlelink+on+social+media.&referralCode=singlelink)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/R7HMcu)
 
 We also recommend connecting [Vercel](https://vercel.com) and [Planetscale](https://planetscale.com) for a free self-hosted Singlelink environment.
 
