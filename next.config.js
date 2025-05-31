@@ -7,16 +7,14 @@ const nextConfig = {
     DB_DATABASE: process.env.DB_DATABASE,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_PORT: process.env.DB_PORT,
-    META_TITLE: (process.env.BRANDING !== 'false') ? (process.env.META_TITLE ?? 'Under construction') + ' - Singlelink' : (process.env.META_TITLE ?? 'Under construction'),
-    META_DESC: (process.env.BRANDING !== 'false') ? (process.env.META_DESC ?? 'Another micro-site waiting to be built!') + ' Built with Singlelink.' : (process.env.META_DESC ?? 'Another micro-site waiting to be built!'),
-    META_IMG: process.env.META_IMG ?? 'https://singlelink.co/og-image-updated.jDB_',
-    BRANDING: (process. env.BRANDING !== 'false') ?? true,
+    META_TITLE: (process.env.BRANDING !== 'false') ? (process.env.META_TITLE ?? 'Under construction') + ' - LaunchLinks' : (process.env.META_TITLE ?? 'Under construction'),
+    META_DESC: (process.env.BRANDING !== 'false') ? (process.env.META_DESC ?? 'Another micro-site waiting to be built!') + ' Built with LaunchLinks.' : (process.env.META_DESC ?? 'Another micro-site waiting to be built!'),
+    META_IMG: process.env.META_IMG ?? 'https://launchlinks.com/default-og-image.png', // Changed to a generic LaunchLinks OG image
+    BRANDING: (process.env.BRANDING !== 'false') ?? true, // Corrected space: process. env -> process.env
     SECRET: process.env.SECRET,
     PASSWORD: process.env.PASSWORD
   },
-  experimental: {
-    outputStandalone: true
-  },
+  output: 'standalone', // Updated from experimental.outputStandalone
   // TODO: TEMPORARY SOLUTION FOR COMPONENT _APP.TSX BUILD ERRORS REMOVE
   typescript: {
     ignoreBuildErrors: true

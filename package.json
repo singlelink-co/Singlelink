@@ -1,24 +1,29 @@
 {
-  "name": "singlelink",
+  "name": "launchlinks",
   "private": false,
   "version": "4.1.0",
-  "homepage": "https://singlelink.co",
+  "homepage": "https://launchlinks.com",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:docker": "docker build -t jimbisenius/singlelink ./docker",
+    "build:docker": "docker build -t launchlinks-app ./docker", # Updated image name
     "start": "next start",
+    "test": "jest",
     "lint": "next lint",
     "generate": "graphql-codegen --config codegen.yml --watch",
-    "postinstall": "npx migrate-mysql",
+    "postinstall": "",
+    "migrate": "npx migrate-mysql",
     "db:migrate": "npx migrate-mysql",
-    "boot:app": "docker pull singlelink | docker run --name singlelink-app -p 3000:3000 singlelink",
-    "boot:db": "docker pull mysql | docker run --name singlelink-mysql -e MYSQL_DATABASE=singlelink -p 3306:3306 -e MYSQL_ROOT_PASSWORD=single-my-links -d mysql:latest"
+    "boot:app": "docker run --name launchlinks-app -p 3000:3000 launchlinks-app", # Simplified, assumes local image launchlinks-app
+    "boot:db": "docker pull mysql | docker run --name launchlinks-mysql -e MYSQL_DATABASE=launchlinks -p 3306:3306 -e MYSQL_ROOT_PASSWORD=launchlinks-secret -d mysql:latest" # Changed DB name and example password
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
+    "@stripe/stripe-js": "^7.3.0",
+    "@types/bcryptjs": "^3.0.0",
     "apollo-server-micro": "^3.6.3",
+    "bcryptjs": "^3.0.2",
     "dotenv-run-script": "^0.2.0",
     "graphql": "15.7.2",
     "html-react-parser": "^1.4.8",
@@ -29,9 +34,11 @@
     "mysql2": "^2.3.3",
     "next": "latest",
     "next-absolute-url": "^1.2.2",
+    "next-auth": "^4.24.11",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
+    "stripe": "^18.1.1",
     "ts-node": "^10.5.0"
   },
   "devDependencies": {
@@ -40,6 +47,10 @@
     "@graphql-codegen/typescript-operations": "1.17.16",
     "@graphql-codegen/typescript-react-apollo": "^3.2.2",
     "@graphql-codegen/typescript-resolvers": "1.18.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^17.0.17",
     "@types/react": "17.0.39",
     "@types/react-beautiful-dnd": "^13.1.2",
@@ -48,22 +59,25 @@
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
     "graphql-codegen": "^0.4.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.0-beta.3",
     "migrate-mysql": "^0.4.0",
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.21",
+    "ts-jest": "^29.3.4",
     "typescript": "4.5.5"
   },
   "bugs": {
-    "url": "https://github.com/Neutron-Creative/Singlelink/issues",
-    "email": "jim@neutroncreative.com"
+    "url": "https://github.com/your-repo/launchlinks/issues",
+    "email": "support@launchlinks.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Neutron-Creative/Singlelink.git"
+    "url": "git+https://github.com/your-repo/launchlinks.git"
   },
   "author": {
-    "name": "Jim Bisenius",
-    "email": "jim@neutroncreative.com",
-    "url": "https://twitter.com/jim_bisenius"
+    "name": "LaunchLinks Team",
+    "email": "support@launchlinks.com",
+    "url": "https://launchlinks.com"
   }
 }

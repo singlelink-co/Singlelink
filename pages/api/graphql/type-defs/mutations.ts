@@ -2,8 +2,6 @@ import { gql } from 'apollo-server-micro'
 
 export const mutations = gql`
     type Mutation {
-        login(password: String): String
-        verify(jwt: String): String
         createLink(
             label: String
             content: String
@@ -18,6 +16,6 @@ export const mutations = gql`
         ): Link
         deleteLinkById(id: Int!): Link
         reorderLink(id: Int!, newIndex: Int!, oldIndex: Int!): [Link]
-        createEvent(type: EVENT_TYPE): Event
+        createEvent(type: EVENT_TYPE!, link_id: Int, user_id_on_public_page: ID): Event
     }
 `

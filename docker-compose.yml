@@ -2,21 +2,21 @@
 version: '3.1'
 
 services:
-  singlelink:
+  launchlinks: # Renamed service to launchlinks
     ports:
       - 3000:3000
-    image: jimbisenius/singlelink
+    image: launchlinks # Placeholder image name, user should build their own
     depends_on:
       - mysql
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
-      DB_DATABASE: singlelink
+      DB_DATABASE: launchlinks # Changed DB_DATABASE to launchlinks for consistency
       DB_USER: root
-      DB_PASS: single-my-links
-      META_TITLE: Singlelink
-      META_DESC: My Singlelink Docker Instance.
-      META_IMG:
+      DB_PASS: single-my-links # User should change this
+      META_TITLE: LaunchLinks
+      META_DESC: My LaunchLinks Docker Instance.
+      META_IMG: # User should set this
       BRANDING: "true"
 
       SECRET: jwt_secret
@@ -29,5 +29,5 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: single-my-links
-      MYSQL_DATABASE: singlelink
+      MYSQL_ROOT_PASSWORD: single-my-links # User should change this
+      MYSQL_DATABASE: launchlinks # Changed DB_DATABASE to launchlinks for consistency

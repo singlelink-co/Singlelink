@@ -13,20 +13,20 @@ const Home = ({ links }: { links: LinkType[]}) => {
     return (
       <div className='flex flex-col items-center justify-center w-full min-h-screen bg-gray-100'>
         <Head>
-          <title>Singlelink under construction</title>
-          <meta name="description" content="This Singlelink is under construction!" />
+          <title>LaunchLinks under construction</title>
+          <meta name="description" content="This LaunchLinks is under construction!" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <div className='flex flex-col items-center justify-center w-full max-w-md p-8 rounded-xl text-center'>
         <div className='mb-6' style={{width: 44}}><Logo/></div>
           <h1 className='font-semibold text-2xl mb-4'>Under construction</h1>
-          <p className=' mb-6 text-gray-600'>This <a href='https://singlelink.co' target="_blank" className='font-semibold text-indigo-600 hover:underline hover:text-indigo-700' rel="noreferrer">Singlelink</a> page is currently under construction. Be sure to check back soon!</p>
+          <p className=' mb-6 text-gray-600'>This <a href='https://launchlinks.com' target="_blank" className='font-semibold text-indigo-600 hover:underline hover:text-indigo-700' rel="noreferrer">LaunchLinks</a> page is currently under construction. Be sure to check back soon!</p>
           <Link passHref href="/login">
-            <button className='px-8 py-4 w-full bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Log in to my Singlelink dashboard</button>
+            <button className='px-8 py-4 w-full bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Log in to my LaunchLinks dashboard</button>
           </Link>
         </div>
-        <div className='text-gray-600 mt-12 text-xs'>Copyright ©{new Date().getFullYear()} Neutron Creative Inc. All rights reserved.</div>
+        <div className='text-gray-600 mt-12 text-xs'>Copyright ©{new Date().getFullYear()} LaunchLinks Inc. All rights reserved.</div>
 
       </div>
     )
@@ -38,13 +38,13 @@ const Home = ({ links }: { links: LinkType[]}) => {
       <meta name="description" content={process.env.META_DESC} />
 
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://singlelink.co/" />
+      <meta property="og:url" content="https://launchlinks.com/" />
       <meta property="og:title" content={process.env.META_TITLE} />
       <meta property="og:description" content={process.env.META_DESC} />
       <meta property="og:image" content={process.env.META_IMG} />
 
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content="https://singlelink.co/" />
+      <meta property="twitter:url" content="https://launchlinks.com/" />
       <meta property="twitter:title" content={process.env.META_TITLE} />
       <meta property="twitter:description" content={process.env.META_DESC} />
       <meta property="twitter:image" content={process.env.META_IMG} />
@@ -71,46 +71,88 @@ const Home = ({ links }: { links: LinkType[]}) => {
         if(link?.type === 'html')
           return (<div id={`link-${link.id}`} key={link.id}>{parse(link.content)}</div>)
       })}
-      {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://singlelink.co" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>Singlelink</a></div>}
+      {process.env.BRANDING && <div className='text-gray-600 mt-auto mt-10 text-center'>Build your free micro-site in seconds with <a href="https://launchlinks.com" className='font-medium text-indigo-600 hover:underline hover:text-indigo-700'>LaunchLinks</a></div>}
     </div>
     </>
   )
 }
 
-export async function getServerSideProps({ req }: { req: any}) {
-  const { origin } = absoluteUrl(req)
-  const res = await fetch(`${origin}/api/graphql`, {
-     "headers": {
-        "accept": "application/json",
-        "content-type": "application/json",
-      },
-    "body": "{\"operationName\":\"listLinks\",\"variables\":{},\"query\":\"query listLinks {\\n  listLinks {\\n    id\\n    label\\n    content\\n    type\\n    position\\n    __typename\\n  }\\n}\\n\"}",
-    "method": "POST"
-  })
-  const data = await res.json()
-  const links: LinkType[] = data.data.listLinks
-  if(req.url.substr(req.url.length-9) != 'demo=true') {
-    // Create view if viewed by guest
-    await fetch(`${origin}/api/graphql`, {
-      "headers": {
-        "accept": "application/json",
-        "accept-language": "en-US,en;q=0.9",
-        "content-type": "application/json",
-        "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"",
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": "\"Windows\"",
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "Referer": "http://localhost:3000/",
-        "Referrer-Policy": "strict-origin-when-cross-origin"
-      },
-      "body": "{\"operationName\":\"createEvent\",\"variables\":{\"type\":\"view\"},\"query\":\"mutation createEvent($type: EVENT_TYPE) {\\n  createEvent(type: $type) {\\n    id\\n    type\\n    created_at\\n    __typename\\n  }\\n}\\n\"}",
-      "method": "POST"
-    });
-  }
-  return { props: { links } }
+import { getFirstUserId } from '../lib/db'; // Import the new function
 
+export async function getServerSideProps({ req }: { req: any}) {
+  const { origin } = absoluteUrl(req);
+  let links: LinkType[] = [];
+  let pageUserId: string | null = null;
+
+  try {
+    // Attempt to get a user ID for the public page.
+    // This is a placeholder: in a real app, this would come from the URL (e.g., /user/[userId])
+    pageUserId = await getFirstUserId();
+
+    if (pageUserId) {
+      const res = await fetch(`${origin}/api/graphql`, {
+        method: "POST",
+        headers: {
+          "accept": "application/json", // It's good practice to include accept header
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          operationName: "listPublicLinks", // Use the new query
+          variables: { userId: pageUserId },
+          query: `query listPublicLinks($userId: ID!) {
+            listPublicLinks(userId: $userId) {
+              id
+              label
+              content
+              type
+              position
+              __typename
+            }
+          }`,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.data && data.data.listPublicLinks) {
+          links = data.data.listPublicLinks;
+        } else {
+          console.error("GraphQL query for listPublicLinks succeeded but returned no data:", data.errors || data);
+        }
+      } else {
+        console.error("GraphQL request for listPublicLinks failed:", res.status, await res.text());
+      }
+
+      // Create 'view' event if not a demo and a pageUserId was determined
+      if(req.url?.substr(req.url.length-9) !== 'demo=true') {
+        await fetch(`${origin}/api/graphql`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            operationName: "createEvent",
+            variables: { type: "view", user_id_on_public_page: pageUserId }, // Pass the pageUserId
+            query: `mutation createEvent($type: EVENT_TYPE!, $link_id: Int, $user_id_on_public_page: ID) {
+              createEvent(type: $type, link_id: $link_id, user_id_on_public_page: $user_id_on_public_page) {
+                id
+                type
+                created_at
+                __typename
+              }
+            }`,
+          }),
+        });
+      }
+    } else {
+      console.log("No user ID found to display a public page. The page will show as 'under construction'.");
+    }
+  } catch (error) {
+    console.error("Error in getServerSideProps for public page:", error);
+    // links will remain empty, leading to the "under construction" page
+  }
+
+  return { props: { links } }; // Pass fetched links (or empty array)
 }
 
-export default Home
+export default Home;

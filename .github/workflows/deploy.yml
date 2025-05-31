@@ -1,0 +1,85 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main # Trigger deployment on pushes to the main branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Updated to v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4 # Updated to v4
+        with:
+          node-version: '20.x' # Specify a current LTS Node.js version
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps # Using --legacy-peer-deps as it was needed locally
+
+      - name: Run Linter # Optional: Add this if you have a lint script
+        run: npm run lint
+        continue-on-error: true # Optional: Allow workflow to continue if linting has warnings but not errors
+
+      # Optional: Add tests if you have them configured
+      # - name: Run Tests
+      #   run: npm test
+      #   continue-on-error: true
+
+      - name: Build Application
+        run: npm run build
+        env:
+          # Vercel automatically injects NEXT_PUBLIC_ variables during its build.
+          # For other build-time env vars needed by `next build` that are NOT prefixed with NEXT_PUBLIC_,
+          # they would need to be set here if they are not available in the Vercel project settings.
+          # Example:
+          # DB_HOST: ${{ secrets.DB_HOST_BUILD_TIME_ONLY }} # If needed for some reason during build
+          # However, for LaunchLinks, most DB interactions are runtime.
+          # NEXTAUTH_URL is important for builds if it's used to construct absolute URLs during build time.
+          # Vercel provides its own system environment variables like VERCEL_URL which can be used.
+          # For production builds triggered by merge to main, Vercel uses production env vars.
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL_PROD }} # Recommended to set production URL via secrets for builds
+          # The following are mostly runtime, but if any are used at build time:
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          META_TITLE: "LaunchLinks" # Default or from secrets
+          META_DESC: "Your Links, One Place" # Default or from secrets
+          META_IMG: ${{ secrets.META_IMG_URL }} # Default or from secrets
+          BRANDING: "true" # Default or from secrets
+          SECRET: ${{ secrets.SECRET }} # Legacy
+          PASSWORD: ${{ secrets.PASSWORD }} # Legacy
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }} # Not typically needed for frontend build
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }} # Not for frontend build
+          # NEXT_PUBLIC_ vars are automatically handled by Vercel if set in Vercel project settings.
+
+      - name: Deploy to Vercel
+        uses: vercel/vercel-action@v3.0.0-beta.6 # Using a recent version
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          # Alias to production domain for pushes to the main branch
+          # Vercel automatically handles production aliasing for the connected Git production branch.
+          # Use `alias-domains` for specific preview or production aliases if needed.
+          production: true # This flag ensures it's a production deployment
+          # Optional: specify environment variables for Vercel deployment if not set in Vercel UI
+          # envs: |
+          #   DB_DATABASE=${{ secrets.DB_DATABASE }}
+          #   DB_USER=${{ secrets.DB_USER }}
+          #   ... and so on for all required runtime envs
+          # It's generally better to manage these in Vercel's project settings.
+        env:
+          # Required for Vercel CLI to link the project correctly during the action.
+          # These are the same secrets used above, ensuring Vercel CLI has context.
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        # If your Vercel project is not automatically linked to your Git repo's production branch (main),
+        # you might need to specify the alias explicitly or configure it in Vercel.
+        # For most setups, `production: true` is sufficient for main branch deployments.
