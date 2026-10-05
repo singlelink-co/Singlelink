@@ -1,4 +1,6 @@
 <h1 align="center">
+
+[![Deploy to Railyard](https://app.railyard.run/deploy/badge)](https://app.railyard.run/deploy?repo=https://github.com/singlelink-co/Singlelink)
   <a href="https://singlelink.io">
     <img alt="Singlelink logo" height="150" src="https://uploads-ssl.webflow.com/61adc63433f2df05fde531f0/6208a997bb1f010bd2fc014f_singlelink-badge-padded.svg">
   </a>
