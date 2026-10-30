@@ -26,7 +26,7 @@ const Home = ({ links }: { links: LinkType[]}) => {
             <button className='px-8 py-4 w-full bg-indigo-600 w-full text-white font-semibold rounded-xl hover:bg-indigo-700'>Log in to my Singlelink dashboard</button>
           </Link>
         </div>
-        <div className='text-gray-600 mt-12 text-xs'>Copyright ©{new Date().getFullYear()} Neutron Creative Inc. All rights reserved.</div>
+        <div className='text-gray-600 mt-12 text-xs'>Copyright ©{new Date().getFullYear()} Neutron Creative Inc.</div>
 
       </div>
     )

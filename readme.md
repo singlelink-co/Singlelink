@@ -14,8 +14,8 @@
     <a href="https://github.com/Neutron-Creative/Singlelink/projects/1">
         <img src="https://img.shields.io/badge/%20Beta-4.1.0-%2303d2d4" alt="Version">
     </a>
-    <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
-        <img src="https://img.shields.io/badge/License-GPL-%236ab04c" alt="License"/>
+    <a href="https://opensource.org/license/mit">
+      <img src="https://img.shields.io/badge/License-MIT-%236ab04c" alt="License"/>
     </a>
     <a href="https://app.singlelink.co/analytics"/>
         <img src="https://img.shields.io/badge/dynamic/json?color=FF4081&label=Hosted%20Users&query=users&url=https%3A%2F%2Fapi.singlelink.co%2Fanalytics" alt="Users"/>
