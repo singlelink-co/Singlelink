@@ -117,7 +117,7 @@ Consider checking out <a href="https://singlelink.co">Singlelink Cloud</a>, with
 
 <h2 id="credits">Credits</h2>
 
-Singlelink was built by the following team full-time from August 2020-2021 our mission to to *open-source the world* at [Neutron Creative](https://neutroncreative.com).
+Singlelink was initially built by the following team full-time from August 2020-2021 our mission to to *open-source the world* at [Neutron Creative](https://neutroncreative.com).
 <br><br>
 <ul>
     <li>Jim Bisenius (Co-founder & former CEO, <a target="_blank" href="https://twitter.com/jim_bisenius">@jim_bisenius</a>)</li>
@@ -125,4 +125,4 @@ Singlelink was built by the following team full-time from August 2020-2021 our m
     <li>Andrew Boyle (Co-founder & former CMO)</li>
 </ul><br>
 
-Today, Singlelink is maintained soley by me, Jim Bisenius on nights & weekends. If you'd like to assist in my development efforts, I'd love your help. Please [join our Discord](https://discord.gg/DDGnXCcgsu) or [create a pull request](https://github.com/Neutron-Creative/Singlelink/pulls)!
+Today, Singlelink is maintained soley by me, [Saras Paudel](github.com/saraspaudel) on nights & weekends. If you'd like to assist in my development efforts, I'd love your help. Please [join our Discord](https://discord.gg/DDGnXCcgsu) or [create a pull request](github.com/singlelink-co/Singlelink)!
